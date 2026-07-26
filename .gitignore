@@ -1,0 +1,115 @@
+# Byte-compiled / optimized
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+*.egg
+MANIFEST
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.settings/
+
+# pytest
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+
+# mypy
+.mypy_cache/
+
+# ruff
+.ruff_cache/
+
+# bandit
+bandit-report.json
+
+# Type stubs
+.pytype/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Secrets & credentials
+*.key
+*.pem
+*.cert
+*.p12
+*.pfx
+credentials.json
+service-account*.json
+**/secrets/
+.aws/
+.gcloud/
+.kube/config
+
+# Logs
+logs/
+*.log
+
+# Data output
+output/
+!output/.gitkeep
+output500/
+
+# Runtime data cache
+data/*.json
+data/*.csv
+!data/.gitkeep
+
+# Database files (project generates these)
+*.db
+*.sqlite
+*.sqlite3
+
+# Hypothesis (property-based testing cache)
+.hypothesis/
+
+# Build artifacts
+*.whl
+*.tar.gz
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Benchmarks
+benchmark/.benchmarks/

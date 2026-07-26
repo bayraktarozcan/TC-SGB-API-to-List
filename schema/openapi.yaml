@@ -1,0 +1,640 @@
+openapi: 3.1.0
+info:
+  title: Threat Connect SGB API — IOC List
+  description: >
+    REST API for retrieving, querying, and managing indicators of compromise
+    (IOCs) from the Threat Connect SGB intelligence platform.
+  version: "1.0.0"
+  contact:
+    name: TC-SGB Support
+    url: https://github.com/bayra/TC-SGB-API-to-List
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: https://api.threatconnect.com/v3
+    description: Production
+  - url: https://sandbox-api.threatconnect.com/v3
+    description: Sandbox
+
+tags:
+  - name: addresses
+    description: IP address IOCs
+  - name: hosts
+    description: Hostname IOCs
+  - name: indicators
+    description: Generic indicator search
+  - name: groups
+    description: Threat intelligence groups
+  - name: tags
+    description: IOC tagging
+
+paths:
+  /indicators/addresses:
+    get:
+      operationId: listAddresses
+      summary: List address IOCs
+      description: Retrieve a paginated list of IP address indicators.
+      tags: [addresses, indicators]
+      parameters:
+        - $ref: "#/components/parameters/TokenHeader"
+        - $ref: "#/components/parameters/ResultLimit"
+        - $ref: "#/components/parameters/ResultStart"
+        - name: tql
+          in: query
+          description: TQL filter expression.
+          schema:
+            type: string
+          example: "tag.name eq 'apt28'"
+        - name: fields
+          in: query
+          description: Comma-separated list of fields to return.
+          schema:
+            type: string
+          example: "id,value,confidence,tags"
+      responses:
+        "200":
+          description: Paginated list of address IOCs.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AddressListResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "429":
+          $ref: "#/components/responses/RateLimited"
+        "500":
+          $ref: "#/components/responses/ServerError"
+    post:
+      operationId: createAddress
+      summary: Create an address IOC
+      description: Create a new IP address indicator of compromise.
+      tags: [addresses, indicators]
+      parameters:
+        - $ref: "#/components/parameters/TokenHeader"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddressCreate"
+      responses:
+        "201":
+          description: IOC created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AddressResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "409":
+          description: IOC already exists.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /indicators/addresses/{id}:
+    get:
+      operationId: getAddress
+      summary: Get an address IOC by ID
+      tags: [addresses, indicators]
+      parameters:
+        - $ref: "#/components/parameters/TokenHeader"
+        - $ref: "#/components/parameters/IdPath"
+        - name: fields
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Single address IOC.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AddressResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    put:
+      operationId: updateAddress
+      summary: Update an address IOC
+      tags: [addresses, indicators]
+      parameters:
+        - $ref: "#/components/parameters/TokenHeader"
+        - $ref: "#/components/parameters/IdPath"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddressUpdate"
+      responses:
+        "200":
+          description: IOC updated.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AddressResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    delete:
+      operationId: deleteAddress
+      summary: Delete an address IOC
+      tags: [addresses, indicators]
+      parameters:
+        - $ref: "#/components/parameters/TokenHeader"
+        - $ref: "#/components/parameters/IdPath"
+      responses:
+        "204":
+          description: IOC deleted.
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /indicators/hosts:
+    get:
+      operationId: listHosts
+      summary: List host IOCs
+      description: Retrieve a paginated list of hostname indicators.
+      tags: [hosts, indicators]
+      parameters:
+        - $ref: "#/components/parameters/TokenHeader"
+        - $ref: "#/components/parameters/ResultLimit"
+        - $ref: "#/components/parameters/ResultStart"
+        - name: tql
+          in: query
+          schema:
+            type: string
+        - name: fields
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Paginated list of host IOCs.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HostListResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "429":
+          $ref: "#/components/responses/RateLimited"
+        "500":
+          $ref: "#/components/responses/ServerError"
+
+  /indicators/hosts/{id}:
+    get:
+      operationId: getHost
+      summary: Get a host IOC by ID
+      tags: [hosts, indicators]
+      parameters:
+        - $ref: "#/components/parameters/TokenHeader"
+        - $ref: "#/components/parameters/IdPath"
+      responses:
+        "200":
+          description: Single host IOC.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HostResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    put:
+      operationId: updateHost
+      summary: Update a host IOC
+      tags: [hosts, indicators]
+      parameters:
+        - $ref: "#/components/parameters/TokenHeader"
+        - $ref: "#/components/parameters/IdPath"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/HostCreate"
+      responses:
+        "200":
+          description: IOC updated.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HostResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    delete:
+      operationId: deleteHost
+      summary: Delete a host IOC
+      tags: [hosts, indicators]
+      parameters:
+        - $ref: "#/components/parameters/TokenHeader"
+        - $ref: "#/components/parameters/IdPath"
+      responses:
+        "204":
+          description: IOC deleted.
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /groups/threats:
+    get:
+      operationId: listThreatGroups
+      summary: List threat groups
+      tags: [groups]
+      parameters:
+        - $ref: "#/components/parameters/TokenHeader"
+        - $ref: "#/components/parameters/ResultLimit"
+        - $ref: "#/components/parameters/ResultStart"
+        - name: tql
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Paginated list of threat groups.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GroupListResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/ServerError"
+
+  /groups/threats/{id}:
+    get:
+      operationId: getThreatGroup
+      summary: Get a threat group by ID
+      tags: [groups]
+      parameters:
+        - $ref: "#/components/parameters/TokenHeader"
+        - $ref: "#/components/parameters/IdPath"
+      responses:
+        "200":
+          description: Single threat group.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GroupResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /tags:
+    get:
+      operationId: listTags
+      summary: List tags
+      tags: [tags]
+      parameters:
+        - $ref: "#/components/parameters/TokenHeader"
+        - $ref: "#/components/parameters/ResultLimit"
+        - $ref: "#/components/parameters/ResultStart"
+      responses:
+        "200":
+          description: List of available tags.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TagListResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+components:
+  parameters:
+    TokenHeader:
+      name: Authorization
+      in: header
+      required: true
+      description: "TC API key + secret: `TC {key}:{secret}`"
+      schema:
+        type: string
+        example: "TC abc123:def456"
+    ResultLimit:
+      name: resultLimit
+      in: query
+      description: Maximum number of results per page.
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 1000
+        default: 100
+    ResultStart:
+      name: resultStart
+      in: query
+      description: Offset for pagination.
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
+    IdPath:
+      name: id
+      in: path
+      required: true
+      description: Numeric or UUID identifier.
+      schema:
+        type: string
+
+  schemas:
+    Address:
+      type: object
+      required: [id, value, type]
+      properties:
+        id:
+          type: integer
+          description: Numeric IOC ID.
+        ownerName:
+          type: string
+        type:
+          type: string
+          enum: [Address]
+          default: Address
+        value:
+          type: string
+          format: ipv4
+          description: IPv4 address.
+        confidenceScore:
+          type: integer
+          minimum: 0
+          maximum: 100
+        tags:
+          $ref: "#/components/schemas/TagList"
+        threatTypes:
+          type: array
+          items:
+            type: string
+        createdDate:
+          type: string
+          format: date-time
+        lastModified:
+          type: string
+          format: date-time
+        lastSeen:
+          type: string
+          format: date-time
+
+    AddressCreate:
+      type: object
+      required: [value]
+      properties:
+        value:
+          type: string
+          format: ipv4
+        confidenceScore:
+          type: integer
+          minimum: 0
+          maximum: 100
+          default: 50
+        tags:
+          $ref: "#/components/schemas/TagList"
+        threatTypes:
+          type: array
+          items:
+            type: string
+
+    AddressUpdate:
+      type: object
+      properties:
+        confidenceScore:
+          type: integer
+          minimum: 0
+          maximum: 100
+        tags:
+          $ref: "#/components/schemas/TagList"
+        threatTypes:
+          type: array
+          items:
+            type: string
+
+    Host:
+      type: object
+      required: [id, value, type]
+      properties:
+        id:
+          type: integer
+        ownerName:
+          type: string
+        type:
+          type: string
+          enum: [Host]
+          default: Host
+        value:
+          type: string
+          description: Hostname.
+        dnsResolution:
+          type: string
+          format: ipv4
+        confidenceScore:
+          type: integer
+        tags:
+          $ref: "#/components/schemas/TagList"
+        createdDate:
+          type: string
+          format: date-time
+        lastModified:
+          type: string
+          format: date-time
+
+    HostCreate:
+      type: object
+      required: [value]
+      properties:
+        value:
+          type: string
+        confidenceScore:
+          type: integer
+          minimum: 0
+          maximum: 100
+          default: 50
+        tags:
+          $ref: "#/components/schemas/TagList"
+
+    Tag:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        lastModified:
+          type: string
+          format: date-time
+
+    TagList:
+      type: array
+      items:
+        $ref: "#/components/schemas/Tag"
+
+    Group:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        type:
+          type: string
+          enum:
+            - Adversary
+            - Campaign
+            - Document
+            - Email
+            - Incident
+            - Indicator
+            - Signature
+            - Threat
+        ownerName:
+          type: string
+        createdDate:
+          type: string
+          format: date-time
+        lastModified:
+          type: string
+          format: date-time
+
+    PaginationMeta:
+      type: object
+      properties:
+        count:
+          type: integer
+        next:
+          type: string
+          format: uri
+          nullable: true
+        prev:
+          type: string
+          format: uri
+          nullable: true
+
+    AddressListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Address"
+        pagination:
+          $ref: "#/components/schemas/PaginationMeta"
+
+    AddressResponse:
+      type: object
+      properties:
+        data:
+          $ref: "#/components/schemas/Address"
+
+    HostListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Host"
+        pagination:
+          $ref: "#/components/schemas/PaginationMeta"
+
+    HostResponse:
+      type: object
+      properties:
+        data:
+          $ref: "#/components/schemas/Host"
+
+    GroupListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Group"
+        pagination:
+          $ref: "#/components/schemas/PaginationMeta"
+
+    GroupResponse:
+      type: object
+      properties:
+        data:
+          $ref: "#/components/schemas/Group"
+
+    TagListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Tag"
+
+    ErrorResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              errorCode:
+                type: string
+              errorMessage:
+                type: string
+
+  responses:
+    BadRequest:
+      description: Invalid request parameters.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+    Unauthorized:
+      description: Missing or invalid API credentials.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+    NotFound:
+      description: Resource not found.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+    RateLimited:
+      description: Rate limit exceeded.
+      headers:
+        Retry-After:
+          description: Seconds to wait before retrying.
+          schema:
+            type: integer
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+    ServerError:
+      description: Internal server error.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"

@@ -1,0 +1,134 @@
+[build-system]
+requires = ["setuptools>=68.0", "setuptools-scm>=8.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tc-sgb-api-list"
+version = "1.0.0"
+description = "Threat Connect SGB API List — IOC intelligence fetcher and validator"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.11"
+authors = [
+    { name = "bayra" },
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Information Technology",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Security",
+    "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+]
+dependencies = [
+    "httpx>=0.27,<1",
+    "pydantic>=2.0,<3",
+    "rich>=13.0,<14",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0,<9",
+    "pytest-cov>=5.0,<6",
+    "ruff>=0.5,<1",
+    "mypy>=1.10,<2",
+    "bandit>=1.7,<2",
+    "pip-audit>=2.7,<3",
+    "hypothesis>=6.100,<7",
+]
+
+[project.scripts]
+tc-sgb = "scripts.src.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["scripts*"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+src = ["scripts", "tests", "."]
+
+[tool.ruff.lint]
+select = [
+    "E",     # pycodestyle errors
+    "W",     # pycodestyle warnings
+    "F",     # pyflakes
+    "I",     # isort
+    "N",     # pep8-naming
+    "UP",    # pyupgrade
+    "B",     # flake8-bugbear
+    "A",     # flake8-builtins
+    "S",     # flake8-bandit
+    "T20",   # flake8-print
+    "SIM",   # flake8-simplify
+    "TCH",   # flake8-type-checking
+    "RUF",   # ruff-specific
+    "C4",    # flake8-comprehensions
+    "PT",    # flake8-pytest-style
+    "RET",   # flake8-return
+    "ARG",   # flake8-unused-arguments
+    "PTH",   # flake8-use-pathlib
+]
+ignore = [
+    "T201",   # allow print() in CLI
+    "RUF002", # allow unicode in docstrings (→ arrows)
+    "RUF003", # allow unicode in comments
+    "UP042",  # StrEnum — wait for Python 3.11+ baseline
+    "SIM105", # contextlib.suppress — prefer try/except for clarity
+    "SIM110", # use any/all instead of for-loop
+    "SIM102", # collapsible if
+    "SIM108", # if-else instead of ternary
+    "B904",   # raise from inside except
+    "S110",   # try-except-pass
+    "S104",   # hardcoded bind all interfaces (0.0.0.0)
+    "N815",   # mixedCase variable in class scope (Pydantic compat)
+    "ARG",    # unused arguments (test fixtures)
+    "TC003",  # typing-only imports
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101", "ARG", "T20", "S311", "F841", "E741", "RUF059", "RUF001"]
+"scripts/main.py" = ["E402"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "lf"
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+show_error_codes = true
+pretty = true
+
+[[tool.mypy.overrides]]
+module = ["tests.*"]
+disallow_untyped_defs = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "-ra",
+    "--strict-markers",
+    "--strict-config",
+    "-v",
+]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests that hit external APIs",
+]
