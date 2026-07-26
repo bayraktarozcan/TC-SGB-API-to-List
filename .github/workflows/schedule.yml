@@ -81,7 +81,7 @@ jobs:
 
       - name: Create release
         if: steps.tag.outputs.new_commits == 'true'
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: release-${{ github.run_number }}
           name: "IOC Data Update #${{ github.run_number }}"
