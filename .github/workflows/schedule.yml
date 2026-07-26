@@ -13,7 +13,7 @@ jobs:
     name: Fetch & Validate IOCs
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
@@ -63,7 +63,7 @@ jobs:
     needs: fetch
     if: success()
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
