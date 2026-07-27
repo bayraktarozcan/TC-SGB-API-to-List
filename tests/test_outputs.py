@@ -61,7 +61,7 @@ def scored_iocs() -> list[ScoredIOC]:
             false_positive_risk="low",
         ),
         ScoredIOC(
-            value="85.214.132.117",
+            value="192.0.2.1",
             ioc_type=IOCType.IP,
             desc=DescriptionCategory.CYBER_ATTACK,
             source=Source.RSA,
@@ -93,7 +93,7 @@ class TestNextDNS:
         out = generate_nextdns(scored_iocs)
         lines = [line for line in out.split("\n") if line.strip()]
         for line in lines:
-            assert line != "85.214.132.117"
+            assert line != "192.0.2.1"
 
     def test_ends_with_newline(self, scored_iocs):
         out = generate_nextdns(scored_iocs)
@@ -191,12 +191,12 @@ class TestMikroTik:
 
     def test_ip_in_address_list(self, scored_iocs):
         out = generate_mikrotik(scored_iocs)
-        assert "85.214.132.117" in out
+        assert "192.0.2.1" in out
 
     def test_all_types(self, scored_iocs):
         out = generate_mikrotik(scored_iocs)
         assert "evil-phish.com" in out
-        assert "85.214.132.117" in out
+        assert "192.0.2.1" in out
         # URL should not be in output (only domain and IP)
         assert "drop.evil.top" not in out
 
@@ -218,7 +218,7 @@ class TestIpset:
 
     def test_add_ips(self, scored_iocs):
         out = generate_ipset(scored_iocs)
-        assert "add threat_intel 85.214.132.117" in out
+        assert "add threat_intel 192.0.2.1" in out
 
     def test_domains_excluded(self, scored_iocs):
         out = generate_ipset(scored_iocs)
@@ -236,7 +236,7 @@ class TestSuricata:
 
     def test_ip_present(self, scored_iocs):
         out = generate_suricata(scored_iocs)
-        assert "85.214.132.117" in out
+        assert "192.0.2.1" in out
 
     def test_event_type(self, scored_iocs):
         out = generate_suricata(scored_iocs)
@@ -246,7 +246,7 @@ class TestSuricata:
 class TestCrowdSec:
     def test_ip_list(self, scored_iocs):
         out = generate_crowdsec(scored_iocs)
-        assert "85.214.132.117" in out
+        assert "192.0.2.1" in out
 
     def test_no_domains(self, scored_iocs):
         out = generate_crowdsec(scored_iocs)

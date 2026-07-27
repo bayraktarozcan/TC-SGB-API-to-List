@@ -20,7 +20,7 @@ Use GitHub's built-in **Private vulnerability reporting** feature:
 
 ### Alternative: Email
 
-If the above is unavailable, email: **[INSERT YOUR EMAIL HERE]**
+If the above is unavailable, open a **private** issue describing the vulnerability.
 
 ### What to Include / Neler Dahil Etmeli
 

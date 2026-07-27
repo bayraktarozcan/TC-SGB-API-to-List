@@ -49,7 +49,7 @@ def stable_iocs() -> list[ScoredIOC]:
             flags=[],
         ),
         ScoredIOC(
-            value="85.214.132.117",
+            value="192.0.2.1",
             ioc_type=IOCType.IP,
             desc=DescriptionCategory.CYBER_ATTACK,
             source=Source.RSA,

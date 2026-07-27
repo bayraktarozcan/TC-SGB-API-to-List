@@ -220,7 +220,7 @@ async def test_fetch_addresses_pagination():
         "models": [
             {
                 "id": 3,
-                "url": "85.214.132.117",
+                "url": "192.0.2.1",
                 "type": "ip",
                 "desc": "CA",
                 "source": "RS",
