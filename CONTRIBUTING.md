@@ -19,9 +19,7 @@ Thank you for considering contributing to TC-SGB-API-to-List!
 ```bash
 git clone https://github.com/bayraktarozcan/TC-SGB-API-to-List.git
 cd TC-SGB-API-to-List
-python -m venv .venv
-.venv\Scripts\activate          # Windows
-# source .venv/bin/activate     # macOS/Linux
+pip install -e .
 pip install -r requirements.txt
 ```
 
@@ -139,9 +137,7 @@ TC-SGB-API-to-List projesine katkıda bulunmayı düşünmeniz bizleri memnun et
 ```bash
 git clone https://github.com/bayraktarozcan/TC-SGB-API-to-List.git
 cd TC-SGB-API-to-List
-python -m venv .venv
-.venv\Scripts\activate          # Windows
-# source .venv/bin/activate     # macOS/Linux
+pip install -e .
 pip install -r requirements.txt
 ```
 
