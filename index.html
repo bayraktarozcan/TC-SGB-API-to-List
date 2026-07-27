@@ -14,7 +14,7 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://bayraktarozcan.github.io/TC-SGB-API-to-List/">
     <meta name="twitter:card" content="summary_large_image">
-    <title>TC-SGB-API-to-List — IOC Tehdit İstihbaratı Hattı</title>
+    <title data-i18n="page_title">TC-SGB-API-to-List — IOC Tehdit İstihbaratı Hattı</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%23ef4444'/><stop offset='100%25' stop-color='%233b82f6'/></linearGradient></defs><rect width='100' height='100' rx='20' fill='%2309090b'/><path d='M50 10 L90 30 L90 70 L50 90 L10 70 L10 30 Z' fill='url(%23g)' opacity='0.9'/><path d='M50 25 L50 55 M35 40 L65 40' stroke='white' stroke-width='6' stroke-linecap='round'/></svg>">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -399,8 +399,8 @@
                             <div class="terminal-line" id="term-7"><span class="text-yellow-400">[ENRICH]</span> 12,847 duplicates removed</div>
                             <div class="terminal-line" id="term-8"><span class="text-zinc-500">[INFO]</span> Generating output formats...</div>
                             <div class="terminal-line" id="term-9"><span class="text-green-400">[OUTPUT]</span> CSV, JSON, MISP, STIX, Sigma, YARA</div>
-                            <div class="terminal-line" id="term-10"><span class="text-green-400">[OUTPUT]</span> Splunk, QRadar, Elastic, CSV, Nginx</div>
-                            <div class="terminal-line" id="term-11"><span class="text-green-400">[OUTPUT]</span> Apache, CEF, GCS, OpenIOC, Suricata</div>
+                            <div class="terminal-line" id="term-10"><span class="text-green-400">[OUTPUT]</span> NextDNS, AdGuard, Pi-hole, dnsmasq</div>
+                            <div class="terminal-line" id="term-11"><span class="text-green-400">[OUTPUT]</span> nftables, ipset, Suricata, CrowdSec</div>
                             <div class="terminal-line" id="term-12"><span class="text-green-400">[DONE]</span> 17 formats generated in 4.2s</div>
                             <div class="terminal-line" id="term-13"><span class="text-green-400">$</span> <span class="animate-pulse">_</span></div>
                         </div>
@@ -658,16 +658,17 @@
                 <div class="format-item"><i data-lucide="lock" class="w-4 h-4 mx-auto mb-1 text-secondary"></i>STIX 2.1</div>
                 <div class="format-item"><i data-lucide="alert-triangle" class="w-4 h-4 mx-auto mb-1 text-yellow-400"></i>Sigma</div>
                 <div class="format-item"><i data-lucide="file-code" class="w-4 h-4 mx-auto mb-1 text-green-500"></i>YARA</div>
-                <div class="format-item"><i data-lucide="terminal" class="w-4 h-4 mx-auto mb-1 text-green-400"></i>Splunk</div>
-                <div class="format-item"><i data-lucide="server" class="w-4 h-4 mx-auto mb-1 text-blue-400"></i>QRadar</div>
-                <div class="format-item"><i data-lucide="database" class="w-4 h-4 mx-auto mb-1 text-cyan-400"></i>Elastic</div>
-                <div class="format-item"><i data-lucide="file" class="w-4 h-4 mx-auto mb-1 text-zinc-400"></i>CEF</div>
-                <div class="format-item"><i data-lucide="globe" class="w-4 h-4 mx-auto mb-1 text-green-600"></i>Nginx</div>
-                <div class="format-item"><i data-lucide="server" class="w-4 h-4 mx-auto mb-1 text-orange-400"></i>Apache</div>
-                <div class="format-item"><i data-lucide="cloud" class="w-4 h-4 mx-auto mb-1 text-blue-500"></i>GCS</div>
-                <div class="format-item"><i data-lucide="search" class="w-4 h-4 mx-auto mb-1 text-purple-400"></i>OpenIOC</div>
-                <div class="format-item"><i data-lucide="activity" class="w-4 h-4 mx-auto mb-1 text-red-400"></i>Suricata</div>
-                <div class="format-item"><i data-lucide="file-plus" class="w-4 h-4 mx-auto mb-1 text-indigo-400"></i>+ More</div>
+                <div class="format-item"><i data-lucide="terminal" class="w-4 h-4 mx-auto mb-1 text-green-400"></i>NextDNS</div>
+                <div class="format-item"><i data-lucide="shield-check" class="w-4 h-4 mx-auto mb-1 text-blue-400"></i>AdGuard</div>
+                <div class="format-item"><i data-lucide="server" class="w-4 h-4 mx-auto mb-1 text-cyan-400"></i>Pi-hole</div>
+                <div class="format-item"><i data-lucide="file" class="w-4 h-4 mx-auto mb-1 text-zinc-400"></i>dnsmasq</div>
+                <div class="format-item"><i data-lucide="globe" class="w-4 h-4 mx-auto mb-1 text-green-600"></i>Unbound</div>
+                <div class="format-item"><i data-lucide="refresh-cw" class="w-4 h-4 mx-auto mb-1 text-orange-400"></i>RPZ</div>
+                <div class="format-item"><i data-lucide="database" class="w-4 h-4 mx-auto mb-1 text-blue-500"></i>Technitium</div>
+                <div class="format-item"><i data-lucide="router" class="w-4 h-4 mx-auto mb-1 text-purple-400"></i>MikroTik</div>
+                <div class="format-item"><i data-lucide="activity" class="w-4 h-4 mx-auto mb-1 text-red-400"></i>nftables</div>
+                <div class="format-item"><i data-lucide="list" class="w-4 h-4 mx-auto mb-1 text-emerald-400"></i>ipset</div>
+                <div class="format-item"><i data-lucide="search" class="w-4 h-4 mx-auto mb-1 text-indigo-400"></i>Suricata</div>
             </div>
         </div>
     </section>
@@ -756,32 +757,32 @@
 
             <div class="max-w-4xl mx-auto">
                 <div class="bg-dark-700 border border-zinc-800 rounded-xl overflow-hidden">
-                    <div class="grid grid-cols-3 gap-4 p-4 border-b border-zinc-800 text-sm font-bold text-zinc-400">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4 border-b border-zinc-800 text-sm font-bold text-zinc-400">
                         <div data-i18n="sec_col_concern">Concern</div>
                         <div data-i18n="sec_col_approach">TC-SGB-API-to-List Approach</div>
                         <div data-i18n="sec_col_status">Status</div>
                     </div>
-                    <div class="security-row grid grid-cols-3 gap-4 p-4 text-sm">
+                    <div class="security-row grid grid-cols-1 sm:grid-cols-3 gap-4 p-4 text-sm">
                         <div class="text-zinc-300" data-i18n="sec_row1_title">External Network Calls</div>
                         <div class="text-zinc-400" data-i18n="sec_row1_desc">Only T.C. Siber Güvenlik Başkanlığı API. No analytics, no telemetry, no phone-home.</div>
                         <div><span class="badge badge-green" data-i18n="sec_status_mitigated">Mitigated</span></div>
                     </div>
-                    <div class="security-row grid grid-cols-3 gap-4 p-4 text-sm">
+                    <div class="security-row grid grid-cols-1 sm:grid-cols-3 gap-4 p-4 text-sm">
                         <div class="text-zinc-300" data-i18n="sec_row2_title">Credential Storage</div>
                         <div class="text-zinc-400" data-i18n="sec_row2_desc">Environment variables only. Never stored in code or config files.</div>
                         <div><span class="badge badge-green" data-i18n="sec_status_mitigated">Mitigated</span></div>
                     </div>
-                    <div class="security-row grid grid-cols-3 gap-4 p-4 text-sm">
+                    <div class="security-row grid grid-cols-1 sm:grid-cols-3 gap-4 p-4 text-sm">
                         <div class="text-zinc-300" data-i18n="sec_row3_title">Data Leakage</div>
                         <div class="text-zinc-400" data-i18n="sec_row3_desc">All IOCs processed locally. No data sent to third parties.</div>
                         <div><span class="badge badge-green" data-i18n="sec_status_mitigated">Mitigated</span></div>
                     </div>
-                    <div class="security-row grid grid-cols-3 gap-4 p-4 text-sm">
+                    <div class="security-row grid grid-cols-1 sm:grid-cols-3 gap-4 p-4 text-sm">
                         <div class="text-zinc-300" data-i18n="sec_row4_title">Supply Chain</div>
                         <div class="text-zinc-400" data-i18n="sec_row4_desc">Minimal dependencies. All pinned in requirements.txt with hashes.</div>
                         <div><span class="badge badge-green" data-i18n="sec_status_mitigated">Mitigated</span></div>
                     </div>
-                    <div class="security-row grid grid-cols-3 gap-4 p-4 text-sm">
+                    <div class="security-row grid grid-cols-1 sm:grid-cols-3 gap-4 p-4 text-sm">
                         <div class="text-zinc-300" data-i18n="sec_row5_title">Input Validation</div>
                         <div class="text-zinc-400" data-i18n="sec_row5_desc">Schema-based validation for all IOC inputs and API responses.</div>
                         <div><span class="badge badge-green" data-i18n="sec_status_mitigated">Mitigated</span></div>
@@ -895,10 +896,11 @@
         <i data-lucide="arrow-up" class="w-5 h-5"></i>
     </button>
 
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/lucide@0.460.0"></script>
     <script>
         const translations = {
             en: {
+                page_title: "TC-SGB-API-to-List — IOC Threat Intelligence Pipeline",
                 nav_about: "About", nav_features: "Features", nav_architecture: "Architecture",
                 nav_formats: "Formats", nav_quickstart: "Quick Start", nav_security: "Security",
                 hero_title: "IOC Threat", hero_title2: "Intelligence Pipeline",
@@ -960,6 +962,7 @@
                 footer_copy: "Copyright &copy; 2026 T.C. Siber Güvenlik Başkanlığı. All rights reserved.",
             },
             tr: {
+                page_title: "TC-SGB-API-to-List — IOC Tehdit İstihbaratı Hattı",
                 nav_about: "Hakkında", nav_features: "Özellikler", nav_architecture: "Mimari",
                 nav_formats: "Formatlar", nav_quickstart: "Hızlı Başlangıç", nav_security: "Güvenlik",
                 hero_title: "IOC Tehdit", hero_title2: "İstihbarat Hattı",
@@ -1046,6 +1049,13 @@
                 if (translations[lang] && translations[lang][key]) {
                     if (el.tagName === "TITLE") {
                         document.title = translations[lang][key];
+                    } else if (el.querySelector("svg")) {
+                        const svg = el.querySelector("svg");
+                        const span = document.createElement("span");
+                        span.textContent = translations[lang][key];
+                        el.textContent = "";
+                        el.appendChild(svg);
+                        el.appendChild(span);
                     } else {
                         el.textContent = translations[lang][key];
                     }

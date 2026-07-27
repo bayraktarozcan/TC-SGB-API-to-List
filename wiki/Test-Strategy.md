@@ -549,7 +549,7 @@ Bu belge, TC-SGB-API-to-List projesi için kapsamlı test stratejisini tanımlar
 | normalizer.py | test_normalizer.py | ~12 | Türe özgü normalizasyon |
 | deduplicator.py | test_deduplicator.py | ~10 | Kesin, anlamsal, alt alan adı tekrar kontrolü |
 | quality.py | test_quality.py | ~8 | İstatistikler, yanlış pozitif algılama, puanlama |
-| outputs.py | test_outputs.py | ~20 | Tüm 16+ çıkış biçimi |
+| outputs.py | test_outputs.py | ~20 | Tüm 17 çıkış biçimi |
 | pipeline.py | test_pipeline.py | ~5 | Orkestrasyon, hata işleme |
 
 **Örnek Birim Testi**:

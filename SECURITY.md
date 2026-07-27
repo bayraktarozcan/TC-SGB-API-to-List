@@ -8,8 +8,8 @@
 
 | Version | Supported |
 |---------|-----------|
-| 0.1.x   | Yes       |
-| < 0.1   | No        |
+| 1.x     | Yes       |
+| < 1.0   | No        |
 
 ## Reporting a Vulnerability
 
@@ -83,8 +83,8 @@ When using this tool:
 
 | Sürüm | Destekleniyor |
 |-------|---------------|
-| 0.1.x | Evet         |
-| < 0.1 | Hayır        |
+| 1.x   | Evet         |
+| < 1.0 | Hayır        |
 
 ## Güvenlik Açığı Bildirme
 

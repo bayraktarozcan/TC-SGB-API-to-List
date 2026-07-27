@@ -41,7 +41,7 @@ This document describes the complete data flow through the TC-SGB-API-to-List th
 | Dedup    |-->| False    |-->| Output   |---->| Quality  |
 |          |   | Positive |   | Generate |     | Tests    |
 | Hash     |   | Control  |   |          |     |          |
-| Content  |   |          |   | 16+ Fmt  |     | Valid    |
+| Content  |   |          |   | 17 Fmt  |     | Valid    |
 | Seen Map |   | Benign   |   |          |     | Schema   |
 |          |   | Whitelist|   |          |     | Stats    |
 +----------+   +----------+   +----------+     +----------+
@@ -505,7 +505,7 @@ Bu belge, TC-SGB-API-to-List tehdit istihbaratı hattındaki API alımından nih
 | Dedup    |-->| False    |-->| Output   |---->| Quality  |
 |          |   | Positive |   | Generate |     | Tests    |
 | Hash     |   | Control  |   |          |     |          |
-| Content  |   |          |   | 16+ Fmt  |     | Valid    |
+| Content  |   |          |   | 17 Fmt  |     | Valid    |
 | Seen Map |   | Benign   |   |          |     | Schema   |
 |          |   | Whitelist|   |          |     | Stats    |
 +----------+   +----------+   +----------+     +----------+
