@@ -32,14 +32,12 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run fetch
-        run: python -m scripts.src.fetch
+        run: python scripts/main.py fetch
         env:
           TC_SGB_API_BASE_URL: ${{ vars.TC_SGB_API_BASE_URL }}
-          TC_SGB_API_KEY: ${{ secrets.TC_SGB_API_KEY }}
-          TC_SGB_API_SECRET: ${{ secrets.TC_SGB_API_SECRET }}
 
       - name: Validate outputs
-        run: python -m scripts.src.validate
+        run: python scripts/main.py validate
 
       - name: Run tests
         run: pytest tests/ -v --tb=short

@@ -38,6 +38,7 @@ dev = [
     "bandit>=1.7,<2",
     "pip-audit>=2.7,<3",
     "hypothesis>=6.100,<7",
+    "types-PyYAML>=6.0,<7",
 ]
 
 [project.scripts]
@@ -69,7 +70,6 @@ select = [
     "C4",    # flake8-comprehensions
     "PT",    # flake8-pytest-style
     "RET",   # flake8-return
-    "ARG",   # flake8-unused-arguments
     "PTH",   # flake8-use-pathlib
 ]
 ignore = [
@@ -85,7 +85,6 @@ ignore = [
     "S110",   # try-except-pass
     "S104",   # hardcoded bind all interfaces (0.0.0.0)
     "N815",   # mixedCase variable in class scope (Pydantic compat)
-    "ARG",    # unused arguments (test fixtures)
     "TC003",  # typing-only imports
 ]
 
