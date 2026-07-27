@@ -185,9 +185,10 @@ class TestMikroTik:
         out = generate_mikrotik(scored_iocs)
         assert "/ip firewall address-list" in out
 
-    def test_no_dns_static(self, scored_iocs):
+    def test_domains_use_dns_static(self, scored_iocs):
         out = generate_mikrotik(scored_iocs)
-        assert "/ip dns static" not in out
+        assert "/ip dns static add name=evil-phish.com" in out
+        assert "/ip dns static add name=malware-cnc.evil.net" in out
 
     def test_ip_in_address_list(self, scored_iocs):
         out = generate_mikrotik(scored_iocs)

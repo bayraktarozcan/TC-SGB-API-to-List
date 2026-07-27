@@ -37,7 +37,7 @@ This document defines the distribution and publishing strategy for the TC-SGB-AP
   |                   |     |                   |     |  .stix.json   |
   +-------------------+     +-------------------+     |  .html        |
                                                        |  .md          |
-                                                       |  ...16+       |
+                                                       |  ...17       |
                                                        +---------------+
 ```
 
@@ -434,7 +434,7 @@ Bu belge, TC-SGB-API-to-List projesi için dağıtım ve yayın stratejisini, Gi
   |                   |     |                   |     |  .stix.json   |
   +-------------------+     +-------------------+     |  .html        |
                                                        |  .md          |
-                                                       |  ...16+       |
+                                                       |  ...17       |
                                                        +---------------+
 ```
 

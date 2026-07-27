@@ -128,7 +128,7 @@ class TestBehavioralRegression:
         assert 0.02 <= result.invalid_records / result.total_records <= 0.05
 
     def test_output_file_count_stable(self):
-        """Should always generate 16+ output files."""
+        """Should always generate 17 output files."""
         records = load_test_dataset("output_test_data.json")
         files = output_engine.generate_all(records, tmp_path)
         assert len(files) >= 16
@@ -460,7 +460,7 @@ class TestBehavioralRegression:
         assert 0.02 <= result.invalid_records / result.total_records <= 0.05
 
     def test_output_file_count_stable(self):
-        """Should always generate 16+ output files."""
+        """Should always generate 17 output files."""
         records = load_test_dataset("output_test_data.json")
         files = output_engine.generate_all(records, tmp_path)
         assert len(files) >= 16

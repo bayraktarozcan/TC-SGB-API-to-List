@@ -188,7 +188,7 @@ def generate_mikrotik(iocs: Sequence[ScoredIOC], path: str | Path | None = None)
         "# Import with: /import file-name=threat_intel.rsc\n"
     ]
     for ioc in iocs:
-        if ioc.ioc_type in (IOCType.DOMAIN, IOCType.IP):
+        if ioc.ioc_type == IOCType.IP:
             lines.append(
                 f"/ip firewall address-list add list=threat_intel"
                 f' address={ioc.value} comment="SGB-Intel"'
@@ -198,6 +198,8 @@ def generate_mikrotik(iocs: Sequence[ScoredIOC], path: str | Path | None = None)
                 f"/ipv6 firewall address-list add list=threat_intel"
                 f' address={ioc.value} comment="SGB-Intel"'
             )
+        elif ioc.ioc_type == IOCType.DOMAIN:
+            lines.append(f'/ip dns static add name={ioc.value} address=0.0.0.0 comment="SGB-Intel"')
     content = "\n".join(lines) + "\n"
     if path:
         Path(path).write_text(content, encoding="utf-8")
@@ -272,10 +274,15 @@ def generate_nftables(iocs: Sequence[ScoredIOC], path: str | Path | None = None)
 
 def generate_ipset(iocs: Sequence[ScoredIOC], path: str | Path | None = None) -> str:
     """Generate ipset list format."""
-    lines = ["create threat_intel hash:ip hashsize 4096 maxelem 500000"]
+    lines = [
+        "create threat_intel hash:ip family inet hashsize 4096 maxelem 500000",
+        "create threat_intel6 hash:ip family inet6 hashsize 4096 maxelem 500000",
+    ]
     for ioc in iocs:
-        if ioc.ioc_type in (IOCType.IP, IOCType.IP6):
+        if ioc.ioc_type == IOCType.IP:
             lines.append(f"add threat_intel {ioc.value}")
+        elif ioc.ioc_type == IOCType.IP6:
+            lines.append(f"add threat_intel6 {ioc.value}")
     content = "\n".join(lines) + ("\n" if lines else "")
     if path:
         Path(path).write_text(content, encoding="utf-8")

@@ -62,7 +62,7 @@ The TC-SGB-API-to-List system is an automated threat intelligence pipeline that 
 |          | |          | |         | |         | |         |
 | client.py| | models.py| |pipeline | |quality.py| |outputs.py|
 |          | |          | |  .py    | |         | |         |
-| - httpx  | | - Pydantic| |         | | - Tests | | - 16+   |
+| - httpx  | | - Pydantic| |         | | - Tests | | - 17   |
 | - Async  | | - Enums  | | - valid | | - Stats | |   formats|
 | - Retry  | | - Schema | | - norm  | | - Score | | - File  |
 | - Rate   | | - Types  | | - dedup | | - Report| |   I/O   |
@@ -88,7 +88,7 @@ The TC-SGB-API-to-List system is an automated threat intelligence pipeline that 
 | Content  | -------> | Benign   | -------> | STIX      |
 | Seen Map |          | Whitelist|          | CSV       |
 +----------+          | Stats    |          | MISP      |
-                      +----------+          | ...16+    |
+                      +----------+          | ...17    |
                                             +-----------+
 ```
 
@@ -277,7 +277,7 @@ TC-SGB-API-to-List sistemi, Türkiye Ulusal Siber Güvenlik Direktörlüğü (TC
 |          | |          | |         | |         | |         |
 | client.py| | models.py| |pipeline | |quality.py| |outputs.py|
 |          | |          | |  .py    | |         | |         |
-| - httpx  | | - Pydantic| |         | | - Tests | | - 16+   |
+| - httpx  | | - Pydantic| |         | | - Tests | | - 17   |
 | - Async  | | - Enums  | | - valid | | - Stats | |   formats|
 | - Retry  | | - Schema | | - norm  | | - Score | | - File  |
 | - Rate   | | - Types  | | - dedup | | - Report| |   I/O   |
@@ -303,7 +303,7 @@ TC-SGB-API-to-List sistemi, Türkiye Ulusal Siber Güvenlik Direktörlüğü (TC
 | Content  | -------> | Benign   | -------> | STIX      |
 | Seen Map |          | Whitelist|          | CSV       |
 +----------+          | Stats    |          | MISP      |
-                      +----------+          | ...16+    |
+                      +----------+          | ...17    |
                                             +-----------+
 ```
 

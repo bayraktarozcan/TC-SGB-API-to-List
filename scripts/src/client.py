@@ -142,7 +142,11 @@ class AsyncAPIClient:
                 if attempt < self.max_retries - 1:
                     await asyncio.sleep(2**attempt)
                 else:
-                    raise
+                    raise APIError(
+                        status_code=0,
+                        detail=str(e),
+                        url=url,
+                    ) from e
             except ValueError as e:
                 logger.error(f"Invalid JSON response from {endpoint}: {e}")
                 if attempt < self.max_retries - 1:

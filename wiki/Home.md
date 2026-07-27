@@ -18,7 +18,7 @@ TC-SGB-API-to-List is an automated threat intelligence pipeline that ingests Ind
 | **API Source** | TC SGB Threat Intelligence API (`https://threatintel.sgbsg.gov.tr/api/v1`) |
 | **Auth Required** | None (public API) |
 | **Pipeline Stages** | Fetch → Validate → Normalize → Dedup → Score → Output |
-| **Output Formats** | 16+ (JSON, CSV, STIX 2.1, MISP, Sigma, YARA, nftables, MikroTik, Suricata, etc.) |
+| **Output Formats** | 17 (JSON, CSV, STIX 2.1, MISP, Sigma, YARA, nftables, MikroTik, Suricata, etc.) |
 | **Python Version** | 3.11+ |
 | **License** | MIT |
 | **Test Suite** | 330 tests, 73% coverage |
@@ -102,7 +102,7 @@ TC-SGB-API-to-List, T.C. Siber Güvenlik Başkanlığı (TC SGB) kamu API'sinden
 | **API Kaynağı** | TC SGB Tehdit İstihbaratı API'si (`https://threatintel.sgbsg.gov.tr/api/v1`) |
 | **Kimlik Doğrulama** | Gerekli değil (kamu API'si) |
 | **Hat Aşamaları** | Çekme → Doğrulama → Normalleştirme → Yineleme Kaldırma → Puanlama → Çıktı |
-| **Çıktı Formatları** | 16+ (JSON, CSV, STIX 2.1, MISP, Sigma, YARA, nftables, MikroTik, Suricata, vb.) |
+| **Çıktı Formatları** | 17 (JSON, CSV, STIX 2.1, MISP, Sigma, YARA, nftables, MikroTik, Suricata, vb.) |
 | **Python Sürümü** | 3.11+ |
 | **Lisans** | MIT |
 | **Test Takımı** | 330 test, %73 kapsama |
