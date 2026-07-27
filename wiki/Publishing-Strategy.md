@@ -74,7 +74,7 @@ Each GitHub release includes:
    └── Publish to PyPI
 
 3. Release is live
-   ├── GitHub: github.com/owner/repo/releases/tag/v1.1.0
+   ├── GitHub: github.com/bayraktarozcan/TC-SGB-API-to-List/releases/tag/v0.1.0.0
    ├── PyPI: pypi.org/project/tc-sgb-api-list/1.1.0/
    └── Artifacts: Downloadable from release page
 ```
@@ -95,7 +95,7 @@ Each GitHub release includes:
 pip install tc-sgb-api-list==1.1.0
 
 ### From Source
-git clone https://github.com/owner/tc-sgb-api-list.git
+git clone https://github.com/bayraktarozcan/TC-SGB-API-to-List.git
 cd tc-sgb-api-list
 git checkout v1.1.0
 pip install -e .
@@ -111,7 +111,7 @@ pip install -e .
 - See wiki/Migration.md for details
 
 ## Full Changelog
-https://github.com/owner/tc-sgb-api-list/compare/v1.0.0...v1.1.0
+https://github.com/bayraktarozcan/TC-SGB-API-to-List/compare/v0.1.0.0...v0.1.1.0
 ```
 
 ---
@@ -155,11 +155,11 @@ dependencies = [
 tc-sgb = "scripts.main:main"
 
 [project.urls]
-Homepage = "https://github.com/owner/tc-sgb-api-list"
-Documentation = "https://github.com/owner/tc-sgb-api-list/tree/main/wiki"
-Repository = "https://github.com/owner/tc-sgb-api-list"
-Issues = "https://github.com/owner/tc-sgb-api-list/issues"
-Changelog = "https://github.com/owner/tc-sgb-api-list/blob/main/CHANGELOG.md"
+Homepage = "https://github.com/bayraktarozcan/TC-SGB-API-to-List"
+Documentation = "https://github.com/bayraktarozcan/TC-SGB-API-to-List/tree/main/wiki"
+Repository = "https://github.com/bayraktarozcan/TC-SGB-API-to-List"
+Issues = "https://github.com/bayraktarozcan/TC-SGB-API-to-List/issues"
+Changelog = "https://github.com/bayraktarozcan/TC-SGB-API-to-List/blob/main/CHANGELOG.md"
 ```
 
 ### Build & Publish Commands
@@ -192,10 +192,10 @@ pip install tc-sgb-api-list
 pip install tc-sgb-api-list==1.1.0
 
 # Method 3: pip install from GitHub
-pip install git+https://github.com/owner/tc-sgb-api-list.git@v1.1.0
+pip install git+https://github.com/bayraktarozcan/TC-SGB-API-to-List.git@v0.1.0.0
 
 # Method 4: pip install from source
-git clone https://github.com/owner/tc-sgb-api-list.git
+git clone https://github.com/bayraktarozcan/TC-SGB-API-to-List.git
 cd tc-sgb-api-list
 pip install -e .
 
@@ -471,7 +471,7 @@ Her GitHub sürümü şunları içerir:
    └── PyPI'ya yayınlar
 
 3. Yayın canlıya geçer
-   ├── GitHub: github.com/owner/repo/releases/tag/v1.1.0
+   ├── GitHub: github.com/bayraktarozcan/TC-SGB-API-to-List/releases/tag/v0.1.0.0
    ├── PyPI: pypi.org/project/tc-sgb-api-list/1.1.0/
    └── Artifactlar: Yayın sayfasından indirilebilir
 ```
@@ -492,7 +492,7 @@ Her GitHub sürümü şunları içerir:
 pip install tc-sgb-api-list==1.1.0
 
 ### From Source
-git clone https://github.com/owner/tc-sgb-api-list.git
+git clone https://github.com/bayraktarozcan/TC-SGB-API-to-List.git
 cd tc-sgb-api-list
 git checkout v1.1.0
 pip install -e .
@@ -508,7 +508,7 @@ pip install -e .
 - See wiki/Migration.md for details
 
 ## Full Changelog
-https://github.com/owner/tc-sgb-api-list/compare/v1.0.0...v1.1.0
+https://github.com/bayraktarozcan/TC-SGB-API-to-List/compare/v0.1.0.0...v0.1.1.0
 ```
 
 ---
@@ -552,11 +552,11 @@ dependencies = [
 tc-sgb = "scripts.main:main"
 
 [project.urls]
-Homepage = "https://github.com/owner/tc-sgb-api-list"
-Documentation = "https://github.com/owner/tc-sgb-api-list/tree/main/wiki"
-Repository = "https://github.com/owner/tc-sgb-api-list"
-Issues = "https://github.com/owner/tc-sgb-api-list/issues"
-Changelog = "https://github.com/owner/tc-sgb-api-list/blob/main/CHANGELOG.md"
+Homepage = "https://github.com/bayraktarozcan/TC-SGB-API-to-List"
+Documentation = "https://github.com/bayraktarozcan/TC-SGB-API-to-List/tree/main/wiki"
+Repository = "https://github.com/bayraktarozcan/TC-SGB-API-to-List"
+Issues = "https://github.com/bayraktarozcan/TC-SGB-API-to-List/issues"
+Changelog = "https://github.com/bayraktarozcan/TC-SGB-API-to-List/blob/main/CHANGELOG.md"
 ```
 
 ### Derleme ve Yayın Komutları
@@ -589,10 +589,10 @@ pip install tc-sgb-api-list
 pip install tc-sgb-api-list==1.1.0
 
 # Yöntem 3: GitHub'dan pip install
-pip install git+https://github.com/owner/tc-sgb-api-list.git@v1.1.0
+pip install git+https://github.com/bayraktarozcan/TC-SGB-API-to-List.git@v0.1.0.0
 
 # Yöntem 4: Kaynaktan pip install
-git clone https://github.com/owner/tc-sgb-api-list.git
+git clone https://github.com/bayraktarozcan/TC-SGB-API-to-List.git
 cd tc-sgb-api-list
 pip install -e .
 

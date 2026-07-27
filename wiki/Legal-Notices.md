@@ -177,7 +177,7 @@ For questions about the legal terms of the TC SGB API:
 
 For questions about the TC-SGB-API-to-List project:
 
-- **GitHub Issues**: https://github.com/owner/tc-sgb-api-list/issues
+- **GitHub Issues**: https://github.com/bayraktarozcan/TC-SGB-API-to-List/issues
 - **Email**: [project email]
 
 <a id="-türkçe"></a>
@@ -356,5 +356,5 @@ TC SGB API'nin yasal şartlarıyla ilgili sorularınız için:
 
 TC-SGB-API-to-List projesiyle ilgili sorularınız için:
 
-- **GitHub Sorunları**: https://github.com/owner/tc-sgb-api-list/issues
+- **GitHub Sorunları**: https://github.com/bayraktarozcan/TC-SGB-API-to-List/issues
 - **E-posta**: [proje e-postası]

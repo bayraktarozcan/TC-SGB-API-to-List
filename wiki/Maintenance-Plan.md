@@ -402,7 +402,7 @@ pip install tc-sgb-api-list==1.0.0  # Install previous version
 gh run rerun <failed-run-id>  # Re-run failed pipeline
 
 # Full recovery from scratch
-git clone https://github.com/owner/tc-sgb-api-list.git
+git clone https://github.com/bayraktarozcan/TC-SGB-API-to-List.git
 cd tc-sgb-api-list
 pip install -e .
 pytest  # Verify everything works
@@ -442,7 +442,7 @@ python -m tc_sgb  # Run pipeline
 **Upgrade**:
 pip install --upgrade tc-sgb-api-list
 
-**Full notes**: https://github.com/owner/tc-sgb-api-list/releases/tag/v1.1.0
+**Full notes**: https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/tag/v0.1.0.0
 ```
 
 <a id="-türkçe"></a>
@@ -849,7 +849,7 @@ pip install tc-sgb-api-list==1.0.0  # Önceki sürümü yükle
 gh run rerun <failed-run-id>  # Başarısız hattı yeniden çalıştır
 
 # Sıfırdan tam kurtarma
-git clone https://github.com/owner/tc-sgb-api-list.git
+git clone https://github.com/bayraktarozcan/TC-SGB-API-to-List.git
 cd tc-sgb-api-list
 pip install -e .
 pytest  # Her şeyin çalıştığını doğrula
@@ -889,5 +889,5 @@ python -m tc_sgb  # Hattı çalıştır
 **Upgrade**:
 pip install --upgrade tc-sgb-api-list
 
-**Full notes**: https://github.com/owner/tc-sgb-api-list/releases/tag/v1.1.0
+**Full notes**: https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/tag/v0.1.0.0
 ```
