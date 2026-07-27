@@ -38,7 +38,7 @@ dev = [
     "bandit>=1.7,<2",
     "pip-audit>=2.7,<3",
     "hypothesis>=6.100,<7",
-    "types-PyYAML>=6.0,<7",
+    "types-PyYAML>=6.0.12.20260724,<7",
 ]
 
 [project.scripts]
