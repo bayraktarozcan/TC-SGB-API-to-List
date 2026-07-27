@@ -1,6 +1,7 @@
-[English](#english) | [Türkçe](#turkish)
+> **Language / Dil** &nbsp;
+> [EN English](#-english) &nbsp;·&nbsp; [TR Türkçe](#-türkçe)
 
-<a id="english"></a>
+<a id="-english"></a>
 
 # Threat Model
 
@@ -229,7 +230,7 @@ This document presents a STRIDE-based threat model for the TC-SGB-API-to-List th
 
 ---
 
-<a id="turkish"></a>
+<a id="-türkçe"></a>
 
 # Tehdit Modeli
 

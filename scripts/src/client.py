@@ -59,7 +59,7 @@ class AsyncAPIClient:
     async def _get_client(self) -> httpx.AsyncClient:
         """Get or create a persistent httpx.AsyncClient."""
         if self._client is None or self._client.is_closed:
-            self._client = httpx.AsyncClient(timeout=self.timeout)
+            self._client = httpx.AsyncClient(timeout=self.timeout, follow_redirects=True)
         return self._client
 
     async def close(self) -> None:
@@ -93,6 +93,7 @@ class AsyncAPIClient:
         """Make a single HTTP GET request with retries and exponential backoff."""
         url = f"{self.base_url}{endpoint}"
         params = params or {}
+        last_response: httpx.Response | None = None
 
         for attempt in range(self.max_retries):
             await self._rate_limit_wait()
@@ -104,18 +105,20 @@ class AsyncAPIClient:
                 if response.status_code == 200:
                     return response.json()  # type: ignore[no-any-return]
                 if response.status_code == 429:
-                    # Rate limited — back off exponentially
+                    last_response = response
                     wait = 2 ** (attempt + 1)
                     logger.warning(f"Rate limited (429). Waiting {wait}s before retry...")
                     await asyncio.sleep(wait)
                     continue
                 if response.status_code >= 500:
-                    # Server error — retry with backoff
-                    wait = 2 ** attempt
+                    last_response = response
+                    wait = 2**attempt
                     logger.warning(
                         "Server error %s. Waiting %ss (attempt %d/%d)",
-                        response.status_code, wait,
-                        attempt + 1, self.max_retries,
+                        response.status_code,
+                        wait,
+                        attempt + 1,
+                        self.max_retries,
                     )
                     await asyncio.sleep(wait)
                     continue
@@ -125,24 +128,25 @@ class AsyncAPIClient:
                     url=url,
                 )
             except httpx.TimeoutException:
-                wait = 2 ** attempt
+                wait = 2**attempt
                 logger.warning(
                     "Timeout on %s. Waiting %ss (attempt %d/%d)",
-                    endpoint, wait,
-                    attempt + 1, self.max_retries,
+                    endpoint,
+                    wait,
+                    attempt + 1,
+                    self.max_retries,
                 )
                 await asyncio.sleep(wait)
             except httpx.NetworkError as e:
                 logger.error(f"Network error: {e}")
                 if attempt < self.max_retries - 1:
-                    await asyncio.sleep(2 ** attempt)
+                    await asyncio.sleep(2**attempt)
                 else:
                     raise
             except ValueError as e:
-                # JSON decode error
                 logger.error(f"Invalid JSON response from {endpoint}: {e}")
                 if attempt < self.max_retries - 1:
-                    await asyncio.sleep(2 ** attempt)
+                    await asyncio.sleep(2**attempt)
                 else:
                     raise APIError(
                         status_code=0,
@@ -150,11 +154,14 @@ class AsyncAPIClient:
                         url=url,
                     )
 
-        raise APIError(
-            status_code=0,
-            detail=f"Failed after {self.max_retries} attempts",
-            url=url,
+        # All retries exhausted on 429/5xx — preserve the last HTTP status.
+        status = last_response.status_code if last_response else 0
+        detail = (
+            last_response.text[:500]
+            if last_response
+            else f"Failed after {self.max_retries} attempts"
         )
+        raise APIError(status_code=status, detail=detail, url=url)
 
     async def _fetch_paginated(
         self,

@@ -1,6 +1,7 @@
-[English](#english) | [Türkçe](#turkish)
+> **Language / Dil** &nbsp;
+> [EN English](#-english) &nbsp;·&nbsp; [TR Türkçe](#-türkçe)
 
-<a id="english"></a>
+<a id="-english"></a>
 
 # Risk Analysis
 
@@ -256,7 +257,7 @@ Monthly Review Checklist:
 |--------------|-------------|------|--------|-----|
 | 2025-01-20 | 30 | 4 | 16 | 10 |
 
-<a id="turkish"></a>
+<a id="-türkçe"></a>
 
 # Risk Analizi
 
@@ -446,7 +447,7 @@ Yanıt Planı:
 Yanıt Planı:
 1. Tespit
    - Dependabot güvenlik uyarıları
-   - pip-audit açlık raporları
+   - pip-audit zafiyet raporları
    - Manuel bağımlılık incelemesi
 
 2. Acil Yanıt

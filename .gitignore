@@ -1,4 +1,4 @@
-# Byte-compiled / optimized
+# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
@@ -21,17 +21,21 @@ parts/
 sdist/
 var/
 wheels/
+share/
 *.egg-info/
 *.egg
 MANIFEST
+.installed.cfg
 
 # Virtual environments
 .venv/
 venv/
 ENV/
 env/
+.conda/
+.pyenv/
 
-# IDE
+# IDEs and editors
 .idea/
 .vscode/
 *.swp
@@ -39,6 +43,10 @@ env/
 *~
 .project
 .settings/
+.classpath
+*.sublime-project
+*.sublime-workspace
+*.code-workspace
 
 # pytest
 .pytest_cache/
@@ -59,10 +67,16 @@ bandit-report.json
 # Type stubs
 .pytype/
 
-# OS
+# OS generated files
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
 Thumbs.db
+ehthumbs.db
 desktop.ini
+Icon?
 
 # Environment variables
 .env
@@ -90,6 +104,7 @@ logs/
 output/
 !output/.gitkeep
 output500/
+test-output/
 
 # Runtime data cache
 data/*.json
@@ -107,9 +122,49 @@ data/*.csv
 # Build artifacts
 *.whl
 *.tar.gz
+*.zip
+*.tar.bz2
+*.tar.xz
 
 # Jupyter
 .ipynb_checkpoints/
 
 # Benchmarks
 benchmark/.benchmarks/
+
+# tox
+.tox/
+.nox/
+
+# pyright
+pyrightconfig.json
+
+# PyInstaller
+*.manifest
+*.spec
+
+# pip
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / reports
+xmlreport/
+*.xml
+
+# Coverage
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+cache/
+
+# Rope
+.ropeproject/
+
+# mkdocs
+site/
+
+# Editor backups
+*.bak
+*.orig
+*.tmp

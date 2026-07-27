@@ -1,0 +1,15 @@
+extends: default
+
+rules:
+  line-length:
+    max: 120
+    level: warning
+  document-start:
+    present: false
+  truthy:
+    level: warning
+  new-lines:
+    type: unix
+    level: warning
+  comments:
+    min-spaces-from-content: 1

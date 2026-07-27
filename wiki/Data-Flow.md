@@ -1,6 +1,7 @@
-[English](#english) | [Türkçe](#turkish)
+> **Language / Dil** &nbsp;
+> [EN English](#-english) &nbsp;·&nbsp; [TR Türkçe](#-türkçe)
 
-<a id="english"></a>
+<a id="-english"></a>
 
 # Data Flow
 
@@ -464,7 +465,7 @@ Every record carries provenance metadata through the pipeline:
 }
 ```
 
-<a id="turkish"></a>
+<a id="-türkçe"></a>
 
 # Veri Akışı
 
@@ -894,7 +895,7 @@ Bu belge, TC-SGB-API-to-List tehdit istihbaratı hattındaki API alımından nih
        +------+ +------+   +----------+
 ```
 
-## Veri Soy Ağacı
+## Veri Kökeni
 
 Her kayıt, hat boyunca köken meta verilerini taşır:
 

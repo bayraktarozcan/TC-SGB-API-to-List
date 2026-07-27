@@ -1,6 +1,7 @@
-[English](#english) | [Türkçe](#turkish)
+> **Language / Dil** &nbsp;
+> [EN English](#-english) &nbsp;·&nbsp; [TR Türkçe](#-türkçe)
 
-<a id="english"></a>
+<a id="-english"></a>
 
 # Security Analysis
 
@@ -18,22 +19,20 @@ This document provides a comprehensive security analysis of the TC-SGB-API-to-Li
 |---------|---------|---------|------------|
 | httpx | 0.27+ | Async HTTP client | LOW |
 | pydantic | 2.9+ | Data validation | LOW |
-| orjson | 3.10+ | Fast JSON codec | LOW |
-| pyyaml | 6.0+ | YAML parsing | MEDIUM |
-| click/typer | latest | CLI framework | LOW |
-| jinja2 | 3.1+ | HTML templating | MEDIUM |
-| idna | 3.x | IDN/punycode | LOW |
+| rich | 13.0+ | Terminal formatting | LOW |
 
 #### Development Dependencies
 
 | Package | Version | Purpose | Risk Level |
 |---------|---------|---------|------------|
 | pytest | 8.x | Testing | LOW |
-| pytest-asyncio | 0.24+ | Async tests | LOW |
-| mypy | 1.x | Type checking | LOW |
-| ruff | 0.6+ | Linting | LOW |
-| hypothesis | 6.x | Property testing | LOW |
-| coverage | 7.x | Coverage | LOW |
+| pytest-asyncio | 0.23+ | Async tests | LOW |
+| pytest-cov | 5.x | Coverage | LOW |
+| mypy | 1.10+ | Type checking | LOW |
+| ruff | 0.5+ | Linting | LOW |
+| bandit | 1.7+ | Security linting | LOW |
+| pip-audit | 2.7+ | Dependency auditing | LOW |
+| hypothesis | 6.100+ | Property testing | LOW |
 
 ### Dependency Risks
 
@@ -44,7 +43,7 @@ This document provides a comprehensive security analysis of the TC-SGB-API-to-Li
 
   Risk Factor              Assessment
   +------------------+     +------------------------------------------+
-  | Dependency Count |     | LOW  (~15 direct, ~50 transitive)        |
+  | Dependency Count |     | LOW  (~3 direct, ~20 transitive)         |
   +------------------+     +------------------------------------------+
   | Known Vulns       |     | LOW  ( Dependabot monitors)             |
   +------------------+     +------------------------------------------+
@@ -54,7 +53,7 @@ This document provides a comprehensive security analysis of the TC-SGB-API-to-Li
   +------------------+     +------------------------------------------+
   | Update Frequency  |     | LOW  (automated via Dependabot)         |
   +------------------+     +------------------------------------------+
-  | Attack Surface    |     | MEDIUM (Jinja2, PyYAML have history)    |
+  | Attack Surface    |     | LOW  (minimal dependency set)           |
   +------------------+     +------------------------------------------+
 ```
 
@@ -64,17 +63,22 @@ This document provides a comprehensive security analysis of the TC-SGB-API-to-Li
 # pyproject.toml - Recommended pinning strategy
 [project]
 dependencies = [
-    "httpx>=0.27,<0.28",
-    "pydantic>=2.9,<3.0",
-    "orjson>=3.10,<4.0",
-    "pyyaml>=6.0,<7.0",
-    "jinja2>=3.1,<4.0",
+    "httpx>=0.27,<1",
+    "pydantic>=2.0,<3",
+    "rich>=13.0,<14",
 ]
 
-[tool.hatch.envs.dev.dependencies]
-pytest = ">=8.0,<9.0"
-mypy = ">=1.0,<2.0"
-ruff = ">=0.6,<1.0"
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0,<9",
+    "pytest-asyncio>=0.23,<1",
+    "pytest-cov>=5.0,<6",
+    "ruff>=0.5,<1",
+    "mypy>=1.10,<2",
+    "bandit>=1.7,<2",
+    "pip-audit>=2.7,<3",
+    "hypothesis>=6.100,<7",
+]
 ```
 
 ### Mitigation: Lock File
@@ -111,8 +115,8 @@ pip install -r requirements.lock
 # Recommended minimal permissions
 permissions:
   contents: read          # Read repository
-  contents: write         # Create releases (release.yml only)
-  packages: write         # Publish to PyPI (release.yml only)
+  contents: write         # Create releases (release.yaml only)
+  packages: write         # Publish to PyPI (release.yaml only)
   security-events: write  # Upload SARIF results
 ```
 
@@ -121,7 +125,7 @@ permissions:
 | Workflow | Trigger | Permissions | Risk |
 |----------|---------|-------------|------|
 | `ci.yml` | push, PR | contents: read | LOW |
-| `release.yml` | tag push | contents: write, packages: write | MEDIUM |
+| `release.yaml` | tag push | contents: write, packages: write | MEDIUM |
 | `scheduled.yml` | cron | contents: read, write | MEDIUM |
 
 ### Potential Attack Vectors
@@ -167,7 +171,7 @@ permissions:
 +---------------------------------------------------+
 |                                                   |
 |  Required Secrets:                                |
-|  - PYPI_API_TOKEN          (release.yml)          |
+|  - PYPI_API_TOKEN          (release.yaml)          |
 |  - (No other secrets required)                    |
 |                                                   |
 |  Best Practices:                                  |
@@ -213,13 +217,13 @@ jobs:
           pip install -r requirements.lock
 
       - name: Lint
-        run: ruff check src/ tests/
+        run: ruff check scripts/ tests/
 
       - name: Type check
-        run: mypy src/
+        run: mypy scripts/
 
       - name: Test
-        run: pytest tests/ --cov=tc_sgb --cov-report=xml
+        run: pytest tests/ --cov=scripts --cov-report=xml
 
       - name: Upload coverage
         uses: codecov/codecov-action@v3
@@ -319,6 +323,7 @@ logger.info(f"Processing {len(records)} records from {url}")  # Prefer structure
 # All input validation happens through Pydantic
 from pydantic import BaseModel, Field, field_validator
 
+
 class IOCRecord(BaseModel):
     @field_validator("value")
     @classmethod
@@ -405,7 +410,7 @@ class IOCRecord(BaseModel):
 
 ---
 
-<a id="turkish"></a>
+<a id="-türkçe"></a>
 
 # Güvenlik Analizi
 
@@ -423,22 +428,20 @@ Bu belge, TC-SGB-API-to-List sisteminin kapsamlı bir güvenlik analizini sunmak
 |-------|-------|------|---------------|
 | httpx | 0.27+ | Eşzamansız HTTP istemcisi | DÜŞÜK |
 | pydantic | 2.9+ | Veri doğrulama | DÜŞÜK |
-| orjson | 3.10+ | Hızlı JSON kodlayıcı | DÜŞÜK |
-| pyyaml | 6.0+ | YAML ayrıştırma | ORTA |
-| click/typer | en son | CLI çerçevesi | DÜŞÜK |
-| jinja2 | 3.1+ | HTML şablonlama | ORTA |
-| idna | 3.x | IDN/punycode | DÜŞÜK |
+| rich | 13.0+ | Terminal biçimlendirme | DÜŞÜK |
 
 #### Geliştirme Bağımlılıkları
 
 | Paket | Sürüm | Amaç | Risk Seviyesi |
 |-------|-------|------|---------------|
 | pytest | 8.x | Test | DÜŞÜK |
-| pytest-asyncio | 0.24+ | Eşzamansız testler | DÜŞÜK |
-| mypy | 1.x | Tür kontrolü | DÜŞÜK |
-| ruff | 0.6+ | Kod denetleme | DÜŞÜK |
-| hypothesis | 6.x | Özellik testi | DÜŞÜK |
-| coverage | 7.x | Kod kapsama | DÜŞÜK |
+| pytest-asyncio | 0.23+ | Eşzamansız testler | DÜŞÜK |
+| pytest-cov | 5.x | Kod kapsama | DÜŞÜK |
+| mypy | 1.10+ | Tür kontrolü | DÜŞÜK |
+| ruff | 0.5+ | Kod denetleme | DÜŞÜK |
+| bandit | 1.7+ | Güvenlik denetimi | DÜŞÜK |
+| pip-audit | 2.7+ | Bağımlılık denetimi | DÜŞÜK |
+| hypothesis | 6.100+ | Özellik testi | DÜŞÜK |
 
 ### Bağımlılık Riskleri
 
@@ -449,7 +452,7 @@ Bu belge, TC-SGB-API-to-List sisteminin kapsamlı bir güvenlik analizini sunmak
 
   Risk Faktörü             Değerlendirme
   +------------------+     +------------------------------------------+
-  | Bağımlılık Sayısı|     | DÜŞÜK  (~15 doğrudan, ~50 geçişli)      |
+  | Bağımlılık Sayısı|     | DÜŞÜK  (~3 doğrudan, ~20 geçişli)       |
   +------------------+     +------------------------------------------+
   | Bilinen Zafiyetler|    | DÜŞÜK  ( Dependabot izler)             |
   +------------------+     +------------------------------------------+
@@ -459,7 +462,7 @@ Bu belge, TC-SGB-API-to-List sisteminin kapsamlı bir güvenlik analizini sunmak
   +------------------+     +------------------------------------------+
   | Güncelleme Sıklığı |   | DÜŞÜK  (Dependabot ile otomatik)       |
   +------------------+     +------------------------------------------+
-  | Saldırı Yüzeyi    |    | ORTA   (Jinja2, PyYAML geçmişe sahip)  |
+  | Saldırı Yüzeyi    |    | DÜŞÜK  (minimal bağımlılık kümesi)     |
   +------------------+     +------------------------------------------+
 ```
 
@@ -469,17 +472,22 @@ Bu belge, TC-SGB-API-to-List sisteminin kapsamlı bir güvenlik analizini sunmak
 # pyproject.toml - Önerilen sabitleme stratejisi
 [project]
 dependencies = [
-    "httpx>=0.27,<0.28",
-    "pydantic>=2.9,<3.0",
-    "orjson>=3.10,<4.0",
-    "pyyaml>=6.0,<7.0",
-    "jinja2>=3.1,<4.0",
+    "httpx>=0.27,<1",
+    "pydantic>=2.0,<3",
+    "rich>=13.0,<14",
 ]
 
-[tool.hatch.envs.dev.dependencies]
-pytest = ">=8.0,<9.0"
-mypy = ">=1.0,<2.0"
-ruff = ">=0.6,<1.0"
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0,<9",
+    "pytest-asyncio>=0.23,<1",
+    "pytest-cov>=5.0,<6",
+    "ruff>=0.5,<1",
+    "mypy>=1.10,<2",
+    "bandit>=1.7,<2",
+    "pip-audit>=2.7,<3",
+    "hypothesis>=6.100,<7",
+]
 ```
 
 ### Azaltma: Kilitleme Dosyası
@@ -516,8 +524,8 @@ pip install -r requirements.lock
 # Önerilen minimum izinler
 permissions:
   contents: read          # Depoyu oku
-  contents: write         # Sürüm oluştur (yalnızca release.yml)
-  packages: write         # PyPI'ya yayınla (yalnızca release.yml)
+  contents: write         # Sürüm oluştur (yalnızca release.yaml)
+  packages: write         # PyPI'ya yayınla (yalnızca release.yaml)
   security-events: write  # SARIF sonuçlarını yükle
 ```
 
@@ -526,7 +534,7 @@ permissions:
 | İş Akışı | Tetikleyici | İzinler | Risk |
 |----------|-------------|---------|------|
 | `ci.yml` | push, PR | contents: read | DÜŞÜK |
-| `release.yml` | etiket push | contents: write, packages: write | ORTA |
+| `release.yaml` | etiket push | contents: write, packages: write | ORTA |
 | `scheduled.yml` | cron | contents: read, write | ORTA |
 
 ### Olası Saldırı Vektörleri
@@ -572,7 +580,7 @@ permissions:
 +---------------------------------------------------+
 |                                                   |
 |  Gerekli Gizli Anahtarlar:                        |
-|  - PYPI_API_TOKEN          (release.yml)          |
+|  - PYPI_API_TOKEN          (release.yaml)          |
 |  - (Diğer gizli anahtar gerekmez)                |
 |                                                   |
 |  En İyi Uygulamalar:                              |
@@ -619,13 +627,13 @@ jobs:
           pip install -r requirements.lock
 
       - name: Lint
-        run: ruff check src/ tests/
+        run: ruff check scripts/ tests/
 
       - name: Type check
-        run: mypy src/
+        run: mypy scripts/
 
       - name: Test
-        run: pytest tests/ --cov=tc_sgb --cov-report=xml
+        run: pytest tests/ --cov=scripts --cov-report=xml
 
       - name: Upload coverage
         uses: codecov/codecov-action@v3
@@ -715,7 +723,7 @@ logger.info("fetched_page", page=page_num, records=len(records))
 # GÜVENLİSİZ: Ham IOC verisini kaydetme
 logger.debug(f"IOC data: {record}")  # BUNU ASLA YAPMAYIN
 
-# GÜVENLİSİZ: f-string插值 ile kayıt
+# GÜVENLİSİZ: f-string ile kayıt
 logger.info(f"Processing {len(records)} records from {url}")  # Yapılandırılmış tercih edin
 ```
 
@@ -724,6 +732,7 @@ logger.info(f"Processing {len(records)} records from {url}")  # Yapılandırılm
 ```python
 # Tüm giriş doğrulaması Pydantic aracılığıyla yapılır
 from pydantic import BaseModel, Field, field_validator
+
 
 class IOCRecord(BaseModel):
     @field_validator("value")
@@ -754,7 +763,7 @@ class IOCRecord(BaseModel):
 - [ ] Gizli anahtarlar GitHub Secrets'ta saklanıyor (kodda değil)
 - [ ] Ana dalda dal koruması etkinleştirilmiş
 - [ ] Birleştirmeden önce PR incelemeleri gerekli
-- [ } Tür kontrolü geçiyor (`mypy --strict`)
+- [ ] Tür kontrolü geçiyor (`mypy --strict`)
 - [ ] Kod denetleme geçiyor (`ruff check`)
 - [ ] Tüm testler geçiyor (`pytest`)
 - [ ] Güvenlik taraması geçiyor (CodeQL/Snyk)

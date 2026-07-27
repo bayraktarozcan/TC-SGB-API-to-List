@@ -41,28 +41,44 @@ from scripts.src.outputs import (
 def scored_iocs() -> list[ScoredIOC]:
     return [
         ScoredIOC(
-            value="evil-phish.com", ioc_type=IOCType.DOMAIN,
-            desc=DescriptionCategory.PHISHING, source=Source.USOM,
-            criticality_level=3, connectiontype=ConnectionType.PHISHING,
-            quality_score=93.0, false_positive_risk="low",
+            value="evil-phish.com",
+            ioc_type=IOCType.DOMAIN,
+            desc=DescriptionCategory.PHISHING,
+            source=Source.USOM,
+            criticality_level=3,
+            connectiontype=ConnectionType.PHISHING,
+            quality_score=93.0,
+            false_positive_risk="low",
         ),
         ScoredIOC(
-            value="malware-cnc.evil.net", ioc_type=IOCType.DOMAIN,
-            desc=DescriptionCategory.MALWARE_CMD_CENTER, source=Source.SOME,
-            criticality_level=1, connectiontype=ConnectionType.BOTNET_CNC,
-            quality_score=95.0, false_positive_risk="low",
+            value="malware-cnc.evil.net",
+            ioc_type=IOCType.DOMAIN,
+            desc=DescriptionCategory.MALWARE_CMD_CENTER,
+            source=Source.SOME,
+            criticality_level=1,
+            connectiontype=ConnectionType.BOTNET_CNC,
+            quality_score=95.0,
+            false_positive_risk="low",
         ),
         ScoredIOC(
-            value="85.214.132.117", ioc_type=IOCType.IP,
-            desc=DescriptionCategory.CYBER_ATTACK, source=Source.RSA,
-            criticality_level=2, connectiontype=ConnectionType.APT_CNC,
-            quality_score=88.0, false_positive_risk="low",
+            value="85.214.132.117",
+            ioc_type=IOCType.IP,
+            desc=DescriptionCategory.CYBER_ATTACK,
+            source=Source.RSA,
+            criticality_level=2,
+            connectiontype=ConnectionType.APT_CNC,
+            quality_score=88.0,
+            false_positive_risk="low",
         ),
         ScoredIOC(
-            value="https://drop.evil.top/mal.exe", ioc_type=IOCType.URL,
-            desc=DescriptionCategory.MALWARE_DIST_URL, source=Source.IHBAR,
-            criticality_level=4, connectiontype=ConnectionType.MALWARE_DOWNLOAD,
-            quality_score=82.0, false_positive_risk="low",
+            value="https://drop.evil.top/mal.exe",
+            ioc_type=IOCType.URL,
+            desc=DescriptionCategory.MALWARE_DIST_URL,
+            source=Source.IHBAR,
+            criticality_level=4,
+            connectiontype=ConnectionType.MALWARE_DOWNLOAD,
+            quality_score=82.0,
+            false_positive_risk="low",
         ),
     ]
 
@@ -321,7 +337,7 @@ class TestSQLite:
         db_path = temp_dir / "test.db"
         generate_sqlite(scored_iocs, db_path)
         conn = sqlite3.connect(str(db_path))
-        count = conn.execute("SELECT COUNT(*) FROM ioCs").fetchone()[0]
+        count = conn.execute("SELECT COUNT(*) FROM iocs").fetchone()[0]
         conn.close()
         assert count == 4
 
@@ -329,7 +345,7 @@ class TestSQLite:
         db_path = temp_dir / "test.db"
         generate_sqlite(scored_iocs, db_path)
         conn = sqlite3.connect(str(db_path))
-        columns = [row[1] for row in conn.execute("PRAGMA table_info(ioCs)")]
+        columns = [row[1] for row in conn.execute("PRAGMA table_info(iocs)")]
         conn.close()
         assert "value" in columns
         assert "type" in columns
@@ -341,7 +357,7 @@ class TestSQLite:
         generate_sqlite(scored_iocs, db_path)
         conn = sqlite3.connect(str(db_path))
         row = conn.execute(
-            "SELECT value, quality_score FROM ioCs WHERE value = ?",
+            "SELECT value, quality_score FROM iocs WHERE value = ?",
             ("evil-phish.com",),
         ).fetchone()
         conn.close()
@@ -352,7 +368,7 @@ class TestSQLite:
         db_path = temp_dir / "empty.db"
         generate_sqlite([], db_path)
         conn = sqlite3.connect(str(db_path))
-        count = conn.execute("SELECT COUNT(*) FROM ioCs").fetchone()[0]
+        count = conn.execute("SELECT COUNT(*) FROM iocs").fetchone()[0]
         conn.close()
         assert count == 0
 

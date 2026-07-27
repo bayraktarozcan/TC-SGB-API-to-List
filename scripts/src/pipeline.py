@@ -142,9 +142,7 @@ class Pipeline:
         logger.info(f"Normalized {len(normalized)} IOCs")
         return normalized
 
-    def _stage_dedup(
-        self, normalized: list[NormalizedIOC]
-    ) -> tuple[list[NormalizedIOC], int]:
+    def _stage_dedup(self, normalized: list[NormalizedIOC]) -> tuple[list[NormalizedIOC], int]:
         """Stage 4: Remove duplicates.
 
         Note: deduplicate() expects ScoredIOC, but we're passing NormalizedIOC.
@@ -162,9 +160,7 @@ class Pipeline:
         logger.info(f"Dedup: {len(unique)} unique (removed {removed} duplicates)")
         return unique, removed
 
-    def _stage_quality(
-        self, deduped: list[NormalizedIOC]
-    ) -> tuple[list[ScoredIOC], int]:
+    def _stage_quality(self, deduped: list[NormalizedIOC]) -> tuple[list[ScoredIOC], int]:
         """Stage 5: Score quality and filter."""
         logger.info("Stage 5/5: Quality scoring...")
         scored: list[ScoredIOC] = []

@@ -33,8 +33,12 @@ def _make_ioc(
     connectiontype: ConnectionType | None = ConnectionType.PHISHING,
 ) -> NormalizedIOC:
     return NormalizedIOC(
-        value=value, ioc_type=ioc_type, desc=desc, source=source,
-        date=date, criticality_level=criticality_level,
+        value=value,
+        ioc_type=ioc_type,
+        desc=desc,
+        source=source,
+        date=date,
+        criticality_level=criticality_level,
         connectiontype=connectiontype,
     )
 
@@ -42,6 +46,7 @@ def _make_ioc(
 # ---------------------------------------------------------------------------
 # _extract_domain
 # ---------------------------------------------------------------------------
+
 
 class TestExtractDomain:
     def test_plain_domain(self):
@@ -60,6 +65,7 @@ class TestExtractDomain:
 # ---------------------------------------------------------------------------
 # _is_benign_domain
 # ---------------------------------------------------------------------------
+
 
 class TestIsBenignDomain:
     def test_google(self):
@@ -85,6 +91,7 @@ class TestIsBenignDomain:
 # _is_benign_ip
 # ---------------------------------------------------------------------------
 
+
 class TestIsBenignIP:
     def test_cloudflare(self):
         assert _is_benign_ip("1.1.1.1") is True
@@ -102,6 +109,7 @@ class TestIsBenignIP:
 # ---------------------------------------------------------------------------
 # _is_private_ip
 # ---------------------------------------------------------------------------
+
 
 class TestIsPrivateIP:
     def test_loopback(self):
@@ -129,6 +137,7 @@ class TestIsPrivateIP:
 # ---------------------------------------------------------------------------
 # _has_suspicious_patterns
 # ---------------------------------------------------------------------------
+
 
 class TestHasSuspiciousPatterns:
     def test_ip_in_domain(self):
@@ -160,6 +169,7 @@ class TestHasSuspiciousPatterns:
 # ---------------------------------------------------------------------------
 # score_ioc
 # ---------------------------------------------------------------------------
+
 
 class TestScoreIOC:
     def test_malicious_domain_high_score(self):
@@ -208,14 +218,19 @@ class TestScoreIOC:
         assert scored.quality_score < 90
 
     def test_score_clamped_to_100(self):
-        ioc = _make_ioc("very-evil.net", criticality_level=1,
-                        source=Source.USOM, desc=DescriptionCategory.PHISHING)
+        ioc = _make_ioc(
+            "very-evil.net",
+            criticality_level=1,
+            source=Source.USOM,
+            desc=DescriptionCategory.PHISHING,
+        )
         scored = score_ioc(ioc)
         assert scored.quality_score <= 100.0
 
     def test_score_clamped_to_0(self):
-        ioc = _make_ioc("google.com", ioc_type=IOCType.IP,
-                        source=None, desc=None, criticality_level=10)
+        ioc = _make_ioc(
+            "google.com", ioc_type=IOCType.IP, source=None, desc=None, criticality_level=10
+        )
         # Override to make it an IP
         ioc.value = "8.8.8.8"
         scored = score_ioc(ioc)
@@ -234,8 +249,7 @@ class TestScoreIOC:
 
     def test_medium_risk_boundary(self):
         # Score ~40 -> medium risk
-        ioc = _make_ioc("no-source.com", source=None, desc=None,
-                        criticality_level=8)
+        ioc = _make_ioc("no-source.com", source=None, desc=None, criticality_level=8)
         scored = score_ioc(ioc)
         # Should be low or medium
         assert scored.false_positive_risk in ("low", "medium")
@@ -244,6 +258,7 @@ class TestScoreIOC:
 # ---------------------------------------------------------------------------
 # filter_false_positives
 # ---------------------------------------------------------------------------
+
 
 class TestFilterFalsePositives:
     def test_all_pass(self):

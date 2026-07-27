@@ -54,9 +54,7 @@ RESERVED_DOMAINS: set[str] = {
 MAX_LABEL_LEN = 63
 MAX_DOMAIN_LEN = 253
 
-_DOMAIN_RE = re.compile(
-    r"^(?!-)[A-Za-z0-9-]{1,63}(?<!-)(\.[A-Za-z0-9-]{1,63})*\.[A-Za-z]{2,}$"
-)
+_DOMAIN_RE = re.compile(r"^(?!-)[A-Za-z0-9-]{1,63}(?<!-)(\.[A-Za-z0-9-]{1,63})*\.[A-Za-z]{2,}$")
 
 
 def _is_valid_ip(value: str) -> bool:
@@ -79,9 +77,11 @@ def _is_rfc6761(domain: str) -> bool:
     lower = domain.lower()
     if lower in RFC6761_DOMAINS:
         return True
+    # Check if the TLD (last label) is a reserved TLD — exact match only.
     parts = lower.split(".")
-    for i in range(len(parts)):
-        if ".".join(parts[i:]) in RFC6761_DOMAINS:
+    if len(parts) >= 2:
+        tld = parts[-1]
+        if tld in RFC6761_DOMAINS:
             return True
     return False
 
@@ -93,7 +93,17 @@ def _has_private_suffix(domain: str) -> bool:
 
 def _is_reserved_domain(domain: str) -> bool:
     lower = domain.lower()
-    return lower in RESERVED_DOMAINS or any(lower.endswith(f".{r}") for r in RESERVED_DOMAINS)
+    if lower in RESERVED_DOMAINS:
+        return True
+    # Check direct subdomains only (not arbitrary string suffixes).
+    for r in RESERVED_DOMAINS:
+        suffix = f".{r}"
+        if lower.endswith(suffix):
+            # Ensure it's a label-boundary match, not e.g. "evil.schemas.microsoft.com.evil.com"
+            prefix = lower[: -len(suffix)]
+            if prefix:
+                return True
+    return False
 
 
 def _is_valid_domain(domain: str) -> list[str]:
@@ -165,6 +175,7 @@ def validate_ioc(record: AddressRecord) -> ValidatedIOC | None:
     else:
         ioc_type = _infer_ioc_type(value)
     if ioc_type is None:
+        # Can't infer type — default to DOMAIN so validation catches it.
         ioc_type = IOCType.DOMAIN
 
     # Map string fields to enums
@@ -223,6 +234,7 @@ def validate_ioc(record: AddressRecord) -> ValidatedIOC | None:
     if record.date:
         try:
             from datetime import datetime
+
             # Handle ISO format dates like "2024-01-15T10:30:00"
             date_str = record.date.replace("Z", "+00:00")
             parsed_date = datetime.fromisoformat(date_str)

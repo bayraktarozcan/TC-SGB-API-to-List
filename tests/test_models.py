@@ -29,8 +29,11 @@ from scripts.src.models import (
 class TestIOCType:
     def test_all_values(self):
         assert set(IOCType) == {
-            IOCType.DOMAIN, IOCType.URL, IOCType.IP,
-            IOCType.IP6, IOCType.IP6NET,
+            IOCType.DOMAIN,
+            IOCType.URL,
+            IOCType.IP,
+            IOCType.IP6,
+            IOCType.IP6NET,
         }
 
     def test_string_values(self):
@@ -115,8 +118,7 @@ class TestSourceRecord:
 
 class TestIncidentRecord:
     def test_valid(self):
-        r = IncidentRecord(id=1, title="Incident", desc="desc",
-                           date="2024-01-01")
+        r = IncidentRecord(id=1, title="Incident", desc="desc", date="2024-01-01")
         assert r.title == "Incident"
         assert r.desc == "desc"
 
@@ -128,16 +130,13 @@ class TestIncidentRecord:
 
 class TestAnnouncementRecord:
     def test_valid(self):
-        r = AnnouncementRecord(id=1, title="Title", desc="Desc",
-                               date="2024-01-01")
+        r = AnnouncementRecord(id=1, title="Title", desc="Desc", date="2024-01-01")
         assert r.desc == "Desc"
 
 
 class TestPaginatedResponse:
     def test_basic(self):
-        p = PaginatedResponse[AddressRecord](
-            models=[], totalCount=0, page=0, pageCount=0
-        )
+        p = PaginatedResponse[AddressRecord](models=[], totalCount=0, page=0, pageCount=0)
         assert p.models == []
         assert p.totalCount == 0
 
@@ -163,10 +162,14 @@ class TestValidatedIOC:
 
     def test_with_all_fields(self):
         v = ValidatedIOC(
-            raw_url="evil.com", ioc_type=IOCType.DOMAIN,
-            desc=DescriptionCategory.PHISHING, source=Source.USOM,
-            date=datetime(2024, 1, 1), criticality_level=1,
-            connectiontype=ConnectionType.PHISHING, original_id=1,
+            raw_url="evil.com",
+            ioc_type=IOCType.DOMAIN,
+            desc=DescriptionCategory.PHISHING,
+            source=Source.USOM,
+            date=datetime(2024, 1, 1),
+            criticality_level=1,
+            connectiontype=ConnectionType.PHISHING,
+            original_id=1,
             validation_errors=["warn"],
         )
         assert v.desc == DescriptionCategory.PHISHING
@@ -181,7 +184,8 @@ class TestNormalizedIOC:
 
     def test_with_notes(self):
         n = NormalizedIOC(
-            value="evil.com", ioc_type=IOCType.DOMAIN,
+            value="evil.com",
+            ioc_type=IOCType.DOMAIN,
             normalization_notes=["lowercased", "trimmed"],
         )
         assert len(n.normalization_notes) == 2
@@ -189,8 +193,9 @@ class TestNormalizedIOC:
 
 class TestScoredIOC:
     def test_valid(self):
-        s = ScoredIOC(value="evil.com", ioc_type=IOCType.DOMAIN,
-                      quality_score=85.0, false_positive_risk="low")
+        s = ScoredIOC(
+            value="evil.com", ioc_type=IOCType.DOMAIN, quality_score=85.0, false_positive_risk="low"
+        )
         assert s.quality_score == 85.0
         assert s.false_positive_risk == "low"
 
@@ -210,9 +215,14 @@ class TestPipelineStats:
 
     def test_summary(self):
         ps = PipelineStats(
-            total_fetched=100, after_validation=80, validation_rejected=20,
-            after_normalization=75, after_dedup=60, duplicates_removed=15,
-            after_quality=50, quality_rejected=10,
+            total_fetched=100,
+            after_validation=80,
+            validation_rejected=20,
+            after_normalization=75,
+            after_dedup=60,
+            duplicates_removed=15,
+            after_quality=50,
+            quality_rejected=10,
             by_type={"domain": 40, "ip": 10},
             fetch_duration_seconds=5.3,
             pipeline_duration_seconds=12.1,
@@ -237,8 +247,10 @@ class TestPipelineStats:
 class TestSerialization:
     def test_validated_ioc_roundtrip(self):
         v = ValidatedIOC(
-            raw_url="evil.com", ioc_type=IOCType.DOMAIN,
-            desc=DescriptionCategory.PHISHING, source=Source.USOM,
+            raw_url="evil.com",
+            ioc_type=IOCType.DOMAIN,
+            desc=DescriptionCategory.PHISHING,
+            source=Source.USOM,
         )
         data = v.model_dump()
         v2 = ValidatedIOC.model_validate(data)
@@ -247,8 +259,10 @@ class TestSerialization:
 
     def test_scored_ioc_json_roundtrip(self):
         s = ScoredIOC(
-            value="evil.com", ioc_type=IOCType.DOMAIN,
-            quality_score=95.0, flags=["benign_domain"],
+            value="evil.com",
+            ioc_type=IOCType.DOMAIN,
+            quality_score=95.0,
+            flags=["benign_domain"],
         )
         j = s.model_dump_json()
         s2 = ScoredIOC.model_validate_json(j)

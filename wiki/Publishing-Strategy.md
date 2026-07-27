@@ -1,6 +1,7 @@
-[English](#english) | [Türkçe](#turkish)
+> **Language / Dil** &nbsp;
+> [EN English](#-english) &nbsp;·&nbsp; [TR Türkçe](#-türkçe)
 
-<a id="english"></a>
+<a id="-english"></a>
 
 # Publishing Strategy
 
@@ -64,7 +65,7 @@ Each GitHub release includes:
    git tag -a v1.1.0 -m "Release v1.1.0"
    git push origin v1.1.0
 
-2. GitHub Actions triggers release.yml
+2. GitHub Actions triggers release.yaml
    ├── Run full test suite
    ├── Build package (sdist + wheel)
    ├── Generate release notes
@@ -107,7 +108,7 @@ pip install -e .
 
 ## Migration Notes
 - Config files now require `version: 2` key
-- See docs/MIGRATION.md for details
+- See wiki/Migration.md for details
 
 ## Full Changelog
 https://github.com/owner/tc-sgb-api-list/compare/v1.0.0...v1.1.0
@@ -122,8 +123,8 @@ https://github.com/owner/tc-sgb-api-list/compare/v1.0.0...v1.1.0
 ```toml
 # pyproject.toml
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "tc-sgb-api-list"
@@ -145,19 +146,17 @@ classifiers = [
     "Topic :: Security",
 ]
 dependencies = [
-    "httpx>=0.27,<0.28",
-    "pydantic>=2.9,<3.0",
-    "orjson>=3.10,<4.0",
-    "pyyaml>=6.0,<7.0",
-    "jinja2>=3.1,<4.0",
+    "httpx>=0.27,<1",
+    "pydantic>=2.0,<3",
+    "rich>=13.0,<14",
 ]
 
 [project.scripts]
-tc-sgb = "tc_sgb.__main__:main"
+tc-sgb = "scripts.main:main"
 
 [project.urls]
 Homepage = "https://github.com/owner/tc-sgb-api-list"
-Documentation = "https://github.com/owner/tc-sgb-api-list/tree/main/docs"
+Documentation = "https://github.com/owner/tc-sgb-api-list/tree/main/wiki"
 Repository = "https://github.com/owner/tc-sgb-api-list"
 Issues = "https://github.com/owner/tc-sgb-api-list/issues"
 Changelog = "https://github.com/owner/tc-sgb-api-list/blob/main/CHANGELOG.md"
@@ -239,6 +238,7 @@ output/
 ```python
 import hashlib
 from pathlib import Path
+
 
 def generate_checksums(output_dir: Path) -> Path:
     """Generate SHA-256 checksums for all output files."""
@@ -387,18 +387,18 @@ git push origin v1.1.1
 ### Documentation Versioning
 
 ```
-docs/
+wiki/
 ├── v1.0/
-│   ├── architecture.md
+│   ├── Architecture.md
 │   └── ...
 ├── v1.1/
-│   ├── architecture.md
+│   ├── Architecture.md
 │   └── ...
 ├── latest -> v1.1/    # Symlink to latest
 └── index.html          # Redirect to latest
 ```
 
-<a id="turkish"></a>
+<a id="-türkçe"></a>
 
 # Yayın Stratejisi
 
@@ -462,7 +462,7 @@ Her GitHub sürümü şunları içerir:
    git tag -a v1.1.0 -m "Release v1.1.0"
    git push origin v1.1.0
 
-2. GitHub Actions release.yml'yi tetikler
+2. GitHub Actions release.yaml'yi tetikler
    ├── Tüm test paketini çalıştırır
    ├── Paketi oluşturur (sdist + wheel)
    ├── Sürüm notlarını oluşturur
@@ -505,7 +505,7 @@ pip install -e .
 
 ## Migration Notes
 - Config files now require `version: 2` key
-- See docs/MIGRATION.md for details
+- See wiki/Migration.md for details
 
 ## Full Changelog
 https://github.com/owner/tc-sgb-api-list/compare/v1.0.0...v1.1.0
@@ -520,8 +520,8 @@ https://github.com/owner/tc-sgb-api-list/compare/v1.0.0...v1.1.0
 ```toml
 # pyproject.toml
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "tc-sgb-api-list"
@@ -543,19 +543,17 @@ classifiers = [
     "Topic :: Security",
 ]
 dependencies = [
-    "httpx>=0.27,<0.28",
-    "pydantic>=2.9,<3.0",
-    "orjson>=3.10,<4.0",
-    "pyyaml>=6.0,<7.0",
-    "jinja2>=3.1,<4.0",
+    "httpx>=0.27,<1",
+    "pydantic>=2.0,<3",
+    "rich>=13.0,<14",
 ]
 
 [project.scripts]
-tc-sgb = "tc_sgb.__main__:main"
+tc-sgb = "scripts.main:main"
 
 [project.urls]
 Homepage = "https://github.com/owner/tc-sgb-api-list"
-Documentation = "https://github.com/owner/tc-sgb-api-list/tree/main/docs"
+Documentation = "https://github.com/owner/tc-sgb-api-list/tree/main/wiki"
 Repository = "https://github.com/owner/tc-sgb-api-list"
 Issues = "https://github.com/owner/tc-sgb-api-list/issues"
 Changelog = "https://github.com/owner/tc-sgb-api-list/blob/main/CHANGELOG.md"
@@ -637,6 +635,7 @@ output/
 ```python
 import hashlib
 from pathlib import Path
+
 
 def generate_checksums(output_dir: Path) -> Path:
     """Generate SHA-256 checksums for all output files."""
@@ -785,12 +784,12 @@ git push origin v1.1.1
 ### Belgeleme Sürümleme
 
 ```
-docs/
+wiki/
 ├── v1.0/
-│   ├── architecture.md
+│   ├── Architecture.md
 │   └── ...
 ├── v1.1/
-│   ├── architecture.md
+│   ├── Architecture.md
 │   └── ...
 ├── latest -> v1.1/    # En son sürüme sembolik bağ
 └── index.html          # En son sürüme yönlendirme

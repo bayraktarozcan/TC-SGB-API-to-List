@@ -15,6 +15,7 @@ from scripts.src.normalizer import (
 # _normalize_domain
 # ---------------------------------------------------------------------------
 
+
 class TestNormalizeDomain:
     def test_lowercase(self):
         val, notes = _normalize_domain("EVIL.COM")
@@ -60,6 +61,7 @@ class TestNormalizeDomain:
 # _normalize_url
 # ---------------------------------------------------------------------------
 
+
 class TestNormalizeUrl:
     def test_adds_scheme(self):
         val, notes = _normalize_url("evil.com/path")
@@ -73,6 +75,7 @@ class TestNormalizeUrl:
 
     def test_hostname_is_parsed_lowercase(self):
         from urllib.parse import urlparse
+
         val, _notes = _normalize_url("https://EVIL.COM/path")
         parsed = urlparse(val)
         assert parsed.hostname == "evil.com"
@@ -96,6 +99,7 @@ class TestNormalizeUrl:
 # _normalize_ip
 # ---------------------------------------------------------------------------
 
+
 class TestNormalizeIP:
     def test_trim(self):
         val, notes = _normalize_ip("  8.8.8.8  ")
@@ -110,6 +114,7 @@ class TestNormalizeIP:
 # ---------------------------------------------------------------------------
 # normalize_ioc (integration)
 # ---------------------------------------------------------------------------
+
 
 class TestNormalizeIOC:
     def test_domain_normalization(self):
@@ -142,8 +147,10 @@ class TestNormalizeIOC:
 
     def test_preserves_metadata(self):
         v = ValidatedIOC(
-            raw_url="EVIL.COM", ioc_type=IOCType.DOMAIN,
-            criticality_level=3, original_id=42,
+            raw_url="EVIL.COM",
+            ioc_type=IOCType.DOMAIN,
+            criticality_level=3,
+            original_id=42,
         )
         result = normalize_ioc(v)
         assert result is not None
@@ -178,6 +185,7 @@ class TestNormalizeIOC:
 # ---------------------------------------------------------------------------
 # normalize_batch
 # ---------------------------------------------------------------------------
+
 
 class TestNormalizeBatch:
     def test_filters_invalid(self):

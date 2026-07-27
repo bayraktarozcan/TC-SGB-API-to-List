@@ -1,6 +1,7 @@
-[English](#english) | [Türkçe](#turkish)
+> **Language / Dil** &nbsp;
+> [EN English](#-english) &nbsp;·&nbsp; [TR Türkçe](#-türkçe)
 
-<a id="english"></a>
+<a id="-english"></a>
 
 # Repository Structure
 
@@ -11,14 +12,15 @@ TC-SGB-API-to-List/
 ├── .github/
 │   ├── workflows/
 │   │   ├── ci.yml                  # Main CI pipeline
-│   │   ├── release.yml             # Release automation
+│   │   ├── release.yaml             # Release automation
 │   │   └── scheduled.yml           # Scheduled data fetch
 │   └── dependabot.yml              # Dependency updates
 │
-├── src/
-│   └── tc_sgb/
-│       ├── __init__.py             # Package init, version
-│       ├── __main__.py             # CLI entry point
+├── scripts/
+│   ├── __init__.py                 # Package init
+│   ├── main.py                     # CLI entry point
+│   └── src/
+│       ├── __init__.py             # Source package init
 │       ├── client.py               # API client (httpx)
 │       ├── models.py               # Pydantic data models
 │       ├── validator.py            # Input validation
@@ -26,9 +28,7 @@ TC-SGB-API-to-List/
 │       ├── deduplicator.py         # Deduplication engine
 │       ├── quality.py              # Quality assurance
 │       ├── outputs.py              # Output generation (16+ formats)
-│       ├── pipeline.py             # Pipeline orchestrator
-│       ├── config.py               # Configuration management
-│       └── logging_config.py       # Structured logging setup
+│       └── pipeline.py             # Pipeline orchestrator
 │
 ├── tests/
 │   ├── __init__.py
@@ -95,30 +95,25 @@ TC-SGB-API-to-List/
 │   ├── elastic/
 │   └── grafana/
 │
-├── docs/
-│   ├── 01-architecture.md
-│   ├── 02-data-flow.md
-│   ├── 03-module-architecture.md
-│   ├── 04-repository-structure.md
-│   ├── 05-api-analysis.md
-│   ├── 06-data-model.md
-│   ├── 07-threat-model.md
-│   ├── 08-security-analysis.md
-│   ├── 09-license-analysis.md
-│   ├── 10-test-strategy.md
-│   ├── 11-regression-strategy.md
-│   ├── 12-performance-strategy.md
-│   ├── 13-versioning-strategy.md
-│   ├── 14-publishing-strategy.md
-│   ├── 15-maintenance-plan.md
-│   ├── 16-risk-analysis.md
-│   ├── 17-roadmap.md
-│   └── LEGAL_NOTICES.md
-│
-├── scripts/
-│   ├── fetch_iocs.py               # Standalone fetch script
-│   ├── validate_outputs.py         # Output validation
-│   └── generate_report.py          # Report generation
+├── wiki/
+│   ├── Architecture.md
+│   ├── Data-Flow.md
+│   ├── Module-Architecture.md
+│   ├── Repository-Structure.md
+│   ├── API-Analysis.md
+│   ├── Data-Model.md
+│   ├── Threat-Model.md
+│   ├── Security-Analysis.md
+│   ├── License-Analysis.md
+│   ├── Test-Strategy.md
+│   ├── Regression-Strategy.md
+│   ├── Performance-Strategy.md
+│   ├── Versioning-Strategy.md
+│   ├── Publishing-Strategy.md
+│   ├── Maintenance-Plan.md
+│   ├── Risk-Analysis.md
+│   ├── Roadmap.md
+│   └── Legal-Notices.md
 │
 ├── pyproject.toml                  # Project metadata & build config
 ├── README.md                       # Project overview
@@ -131,12 +126,11 @@ TC-SGB-API-to-List/
 
 ## Key Files Description
 
-### Source Code (`src/tc_sgb/`)
+### Source Code (`scripts/src/`)
 
 | File | Lines (est.) | Purpose |
 |------|-------------|---------|
-| `__init__.py` | ~20 | Package metadata, `__version__` |
-| `__main__.py` | ~50 | CLI entry point (`python -m tc_sgb`) |
+| `__init__.py` | ~5 | Package init |
 | `client.py` | ~250 | Async HTTP client with retry logic |
 | `models.py` | ~300 | Pydantic models, enums, schemas |
 | `validator.py` | ~400 | 12 validation rules, batch processing |
@@ -145,8 +139,6 @@ TC-SGB-API-to-List/
 | `quality.py` | ~400 | Statistics, FP detection, scoring |
 | `outputs.py` | ~800 | 16+ output format generators |
 | `pipeline.py` | ~350 | End-to-end orchestration |
-| `config.py` | ~150 | YAML config loading, validation |
-| `logging_config.py` | ~80 | Structured JSON logging |
 
 ### Configuration (`config/`)
 
@@ -174,7 +166,7 @@ TC-SGB-API-to-List/
 |------|---------|
 | `pyproject.toml` | Package metadata, dependencies, tool config |
 | `.github/workflows/ci.yml` | Lint, type check, test on PR |
-| `.github/workflows/release.yml` | Build and publish on tag |
+| `.github/workflows/release.yaml` | Build and publish on tag |
 | `.github/workflows/scheduled.yml` | Daily automated data fetch |
 | `.github/dependabot.yml` | Automated dependency updates |
 
@@ -182,19 +174,18 @@ TC-SGB-API-to-List/
 
 ```python
 # Top-level imports (pipeline.py)
-from tc_sgb.client import SGBAPIClient
-from tc_sgb.validator import IOCValidator
-from tc_sgb.normalizer import IOCNormalizer
-from tc_sgb.deduplicator import IOCDeduplicator
-from tc_sgb.quality import QualityEngine
-from tc_sgb.outputs import OutputEngine
-from tc_sgb.models import IOCRecord, PipelineConfig
-from tc_sgb.config import load_config
+from scripts.src.client import SGBAPIClient
+from scripts.src.validator import IOCValidator
+from scripts.src.normalizer import IOCNormalizer
+from scripts.src.deduplicator import IOCDeduplicator
+from scripts.src.quality import QualityEngine
+from scripts.src.outputs import OutputEngine
+from scripts.src.models import IOCRecord, PipelineConfig
 
 # client.py imports
 import httpx
 import asyncio
-from tc_sgb.models import APIResponse, IOCRecord, ClientConfig
+from scripts.src.models import APIResponse, IOCRecord, ClientConfig
 
 # models.py imports
 from pydantic import BaseModel, Field, ConfigDict
@@ -202,26 +193,23 @@ from enum import Enum
 from datetime import datetime
 
 # validator.py imports
-from tc_sgb.models import IOCRecord, ValidationError, ValidationConfig
+from scripts.src.models import IOCRecord, ValidationError, ValidationConfig
 
 # normalizer.py imports
-from tc_sgb.models import NormalizedIOC, IOCType
-import idna  # IDN/punycode
+from scripts.src.models import NormalizedIOC, IOCType
 import ipaddress
 
 # deduplicator.py imports
-from tc_sgb.models import NormalizedIOC, DedupResult, DedupConfig
+from scripts.src.models import NormalizedIOC, DedupResult, DedupConfig
 import hashlib
 
 # quality.py imports
-from tc_sgb.models import NormalizedIOC, QualityReport, QualityConfig
+from scripts.src.models import NormalizedIOC, QualityReport, QualityConfig
 
 # outputs.py imports
-from tc_sgb.models import NormalizedIOC, OutputFile, OutputConfig
+from scripts.src.models import NormalizedIOC, OutputFile, OutputConfig
 import json
 import csv
-import orjson
-from jinja2 import Template
 ```
 
 ## Build Configuration
@@ -229,8 +217,8 @@ from jinja2 import Template
 ```toml
 # pyproject.toml
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+requires = ["setuptools>=68.0", "setuptools-scm>=8.0"]
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "tc-sgb-api-list"
@@ -240,7 +228,7 @@ requires-python = ">=3.11"
 license = "MIT"
 
 [project.scripts]
-tc-sgb = "tc_sgb.__main__:main"
+tc-sgb = "scripts.main:main"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -255,11 +243,11 @@ python_version = "3.11"
 strict = true
 
 [tool.coverage.run]
-source = ["tc_sgb"]
+source = ["scripts"]
 branch = true
 ```
 
-<a id="turkish"></a>
+<a id="-türkçe"></a>
 
 # Depo Yapısı
 
@@ -270,14 +258,15 @@ TC-SGB-API-to-List/
 ├── .github/
 │   ├── workflows/
 │   │   ├── ci.yml                  # Ana CI hattı
-│   │   ├── release.yml             # Sürüm otomasyonu
+│   │   ├── release.yaml             # Sürüm otomasyonu
 │   │   └── scheduled.yml           # Zamanlanmış veri çekme
 │   └── dependabot.yml              # Bağımlılık güncellemeleri
 │
-├── src/
-│   └── tc_sgb/
-│       ├── __init__.py             # Paket başlatma, sürüm
-│       ├── __main__.py             # CLI giriş noktası
+├── scripts/
+│   ├── __init__.py                 # Paket başlatma
+│   ├── main.py                     # CLI giriş noktası
+│   └── src/
+│       ├── __init__.py             # Kaynak paket başlatma
 │       ├── client.py               # API istemcisi (httpx)
 │       ├── models.py               # Pydantic veri modelleri
 │       ├── validator.py            # Girdi doğrulama
@@ -285,9 +274,7 @@ TC-SGB-API-to-List/
 │       ├── deduplicator.py         # Tekilleştirme motoru
 │       ├── quality.py              # Kalite güvencesi
 │       ├── outputs.py              # Çıktı üretimi (16+ format)
-│       ├── pipeline.py             # Boru hattı orkestratörü
-│       ├── config.py               # Yapılandırma yönetimi
-│       └── logging_config.py       # Yapılandırılmış günlük ayarı
+│       └── pipeline.py             # Hat orkestratörü
 │
 ├── tests/
 │   ├── __init__.py
@@ -354,48 +341,42 @@ TC-SGB-API-to-List/
 │   ├── elastic/
 │   └── grafana/
 │
-├── docs/
-│   ├── 01-architecture.md
-│   ├── 02-data-flow.md
-│   ├── 03-module-architecture.md
-│   ├── 04-repository-structure.md
-│   ├── 05-api-analysis.md
-│   ├── 06-data-model.md
-│   ├── 07-threat-model.md
-│   ├── 08-security-analysis.md
-│   ├── 09-license-analysis.md
-│   ├── 10-test-strategy.md
-│   ├── 11-regression-strategy.md
-│   ├── 12-performance-strategy.md
-│   ├── 13-versioning-strategy.md
-│   ├── 14-publishing-strategy.md
-│   ├── 15-maintenance-plan.md
-│   ├── 16-risk-analysis.md
-│   ├── 17-roadmap.md
-│   └── LEGAL_NOTICES.md
-│
-├── scripts/
-│   ├── fetch_iocs.py               # Bağımsız çekme betiği
-│   ├── validate_outputs.py         # Çıktı doğrulama
-│   └── generate_report.py          # Rapor üretimi
+├── wiki/
+│   ├── Architecture.md
+│   ├── Data-Flow.md
+│   ├── Module-Architecture.md
+│   ├── Repository-Structure.md
+│   ├── API-Analysis.md
+│   ├── Data-Model.md
+│   ├── Threat-Model.md
+│   ├── Security-Analysis.md
+│   ├── License-Analysis.md
+│   ├── Test-Strategy.md
+│   ├── Regression-Strategy.md
+│   ├── Performance-Strategy.md
+│   ├── Versioning-Strategy.md
+│   ├── Publishing-Strategy.md
+│   ├── Maintenance-Plan.md
+│   ├── Risk-Analysis.md
+│   ├── Roadmap.md
+│   └── Legal-Notices.md
 │
 ├── pyproject.toml                  # Proje meta verileri ve derleme yapılandırması
 ├── README.md                       # Proje genel bakışı
 ├── CHANGELOG.md                    # Sürüm değişiklik günlüğü
 ├── LICENSE                         # Lisans dosyası
-├── SECURITY.md                     // Güvenlik politikası
+├── SECURITY.md                     # Güvenlik politikası
 ├── CONTRIBUTING.md                 # Katkı yönergeleri
 └── .gitignore                      # Git yok sayma kuralları
 ```
 
 ## Temel Dosya Açıklamaları
 
-### Kaynak Kodu (`src/tc_sgb/`)
+### Kaynak Kodu (`scripts/src/`)
 
 | Dosya | Satır (tahmini) | Amaç |
 |-------|-----------------|------|
-| `__init__.py` | ~20 | Paket meta verileri, `__version__` |
-| `__main__.py` | ~50 | CLI giriş noktası (`python -m tc_sgb`) |
+| `__init__.py` | ~5 | Paket başlatma |
 | `client.py` | ~250 | Yeniden deneme mantığı olan asenkron HTTP istemcisi |
 | `models.py` | ~300 | Pydantic modelleri, enum'lar, şemalar |
 | `validator.py` | ~400 | 12 doğrulama kuralı, toplu işleme |
@@ -404,8 +385,6 @@ TC-SGB-API-to-List/
 | `quality.py` | ~400 | İstatistikler, FP tespiti, puanlama |
 | `outputs.py` | ~800 | 16+ çıktı formatı üreteçleri |
 | `pipeline.py` | ~350 | Uçtan uca orkestrasyon |
-| `config.py` | ~150 | YAML yapılandırma yükleme, doğrulama |
-| `logging_config.py` | ~80 | Yapılandırılmış JSON günlük kaydı |
 
 ### Yapılandırma (`config/`)
 
@@ -433,7 +412,7 @@ TC-SGB-API-to-List/
 |-------|------|
 | `pyproject.toml` | Paket meta verileri, bağımlılıklar, araç yapılandırması |
 | `.github/workflows/ci.yml` | PR üzerinde lint, tür kontrolü, test |
-| `.github/workflows/release.yml` | Etiketleme üzerinde derleme ve yayımlama |
+| `.github/workflows/release.yaml` | Etiketleme üzerinde derleme ve yayımlama |
 | `.github/workflows/scheduled.yml` | Günlük otomatik veri çekme |
 | `.github/dependabot.yml` | Otomatik bağımlılık güncellemeleri |
 
@@ -441,19 +420,18 @@ TC-SGB-API-to-List/
 
 ```python
 # Top-level imports (pipeline.py)
-from tc_sgb.client import SGBAPIClient
-from tc_sgb.validator import IOCValidator
-from tc_sgb.normalizer import IOCNormalizer
-from tc_sgb.deduplicator import IOCDeduplicator
-from tc_sgb.quality import QualityEngine
-from tc_sgb.outputs import OutputEngine
-from tc_sgb.models import IOCRecord, PipelineConfig
-from tc_sgb.config import load_config
+from scripts.src.client import SGBAPIClient
+from scripts.src.validator import IOCValidator
+from scripts.src.normalizer import IOCNormalizer
+from scripts.src.deduplicator import IOCDeduplicator
+from scripts.src.quality import QualityEngine
+from scripts.src.outputs import OutputEngine
+from scripts.src.models import IOCRecord, PipelineConfig
 
 # client.py imports
 import httpx
 import asyncio
-from tc_sgb.models import APIResponse, IOCRecord, ClientConfig
+from scripts.src.models import APIResponse, IOCRecord, ClientConfig
 
 # models.py imports
 from pydantic import BaseModel, Field, ConfigDict
@@ -461,26 +439,23 @@ from enum import Enum
 from datetime import datetime
 
 # validator.py imports
-from tc_sgb.models import IOCRecord, ValidationError, ValidationConfig
+from scripts.src.models import IOCRecord, ValidationError, ValidationConfig
 
 # normalizer.py imports
-from tc_sgb.models import NormalizedIOC, IOCType
-import idna  # IDN/punycode
+from scripts.src.models import NormalizedIOC, IOCType
 import ipaddress
 
 # deduplicator.py imports
-from tc_sgb.models import NormalizedIOC, DedupResult, DedupConfig
+from scripts.src.models import NormalizedIOC, DedupResult, DedupConfig
 import hashlib
 
 # quality.py imports
-from tc_sgb.models import NormalizedIOC, QualityReport, QualityConfig
+from scripts.src.models import NormalizedIOC, QualityReport, QualityConfig
 
 # outputs.py imports
-from tc_sgb.models import NormalizedIOC, OutputFile, OutputConfig
+from scripts.src.models import NormalizedIOC, OutputFile, OutputConfig
 import json
 import csv
-import orjson
-from jinja2 import Template
 ```
 
 ## Derleme Yapılandırması
@@ -488,8 +463,8 @@ from jinja2 import Template
 ```toml
 # pyproject.toml
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+requires = ["setuptools>=68.0", "setuptools-scm>=8.0"]
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "tc-sgb-api-list"
@@ -499,7 +474,7 @@ requires-python = ">=3.11"
 license = "MIT"
 
 [project.scripts]
-tc-sgb = "tc_sgb.__main__:main"
+tc-sgb = "scripts.main:main"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -514,6 +489,6 @@ python_version = "3.11"
 strict = true
 
 [tool.coverage.run]
-source = ["tc_sgb"]
+source = ["scripts"]
 branch = true
 ```

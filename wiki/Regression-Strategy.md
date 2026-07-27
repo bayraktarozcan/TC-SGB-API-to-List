@@ -1,6 +1,7 @@
-[English](#english) | [Türkçe](#turkish)
+> **Language / Dil** &nbsp;
+> [EN English](#-english) &nbsp;·&nbsp; [TR Türkçe](#-türkçe)
 
-<a id="english"></a>
+<a id="-english"></a>
 
 # Regression Testing Strategy
 
@@ -183,6 +184,7 @@ class TestFormatCompatibility:
     def test_stix_validates_against_schema(self):
         """STIX output must validate against STIX 2.1 schema."""
         import stix2
+
         output = generate_stix_output()
         bundle = stix2.parse(output)
         assert bundle.type == "bundle"
@@ -191,6 +193,7 @@ class TestFormatCompatibility:
         """CSV output must be valid and Excel-compatible."""
         output = generate_csv_output()
         import csv
+
         reader = csv.reader(io.StringIO(output))
         rows = list(reader)
         assert len(rows) > 1  # Header + data
@@ -200,6 +203,7 @@ class TestFormatCompatibility:
         """JSON output must be valid JSON."""
         output = generate_json_output()
         import json
+
         parsed = json.loads(output)
         assert "data" in parsed
         assert "meta" in parsed
@@ -329,7 +333,7 @@ git commit -m "chore: update regression snapshots for v1.1.0"
 3. **Output monitoring** — Alert on unexpected changes
 4. **Version comparison** — Diff reports between versions
 
-<a id="turkish"></a>
+<a id="-türkçe"></a>
 
 # Regresyon Test Stratejisi
 
@@ -512,6 +516,7 @@ class TestFormatCompatibility:
     def test_stix_validates_against_schema(self):
         """STIX output must validate against STIX 2.1 schema."""
         import stix2
+
         output = generate_stix_output()
         bundle = stix2.parse(output)
         assert bundle.type == "bundle"
@@ -520,6 +525,7 @@ class TestFormatCompatibility:
         """CSV output must be valid and Excel-compatible."""
         output = generate_csv_output()
         import csv
+
         reader = csv.reader(io.StringIO(output))
         rows = list(reader)
         assert len(rows) > 1  # Header + data
@@ -529,6 +535,7 @@ class TestFormatCompatibility:
         """JSON output must be valid JSON."""
         output = generate_json_output()
         import json
+
         parsed = json.loads(output)
         assert "data" in parsed
         assert "meta" in parsed

@@ -24,16 +24,13 @@ from scripts.src.validator import (
 
 # Printable ASCII strings that could be domains
 domain_chars = st.text(
-    alphabet=st.characters(whitelist_categories=("Lu", "Ll", "Nd"),
-                           whitelist_characters="-_."),
+    alphabet=st.characters(whitelist_categories=("Lu", "Ll", "Nd"), whitelist_characters="-_."),
     min_size=1,
     max_size=100,
 )
 
 # Realistic-ish domain names
-realistic_domains = st.from_regex(
-    r"[a-z]{2,20}\.[a-z]{2,10}", fullmatch=True
-)
+realistic_domains = st.from_regex(r"[a-z]{2,20}\.[a-z]{2,10}", fullmatch=True)
 
 # IP addresses
 ipv4_strategy = st.from_type(ipaddress.IPv4Address)
@@ -41,8 +38,9 @@ ipv6_strategy = st.from_type(ipaddress.IPv6Address)
 
 # Random strings
 any_text = st.text(
-    alphabet=st.characters(whitelist_categories=("L", "N", "P", "S"),
-                           whitelist_characters=" :/@#&="),
+    alphabet=st.characters(
+        whitelist_categories=("L", "N", "P", "S"), whitelist_characters=" :/@#&="
+    ),
     min_size=0,
     max_size=200,
 )
@@ -61,6 +59,7 @@ unicode_text = st.text(
 # ---------------------------------------------------------------------------
 # Domain validation fuzz tests
 # ---------------------------------------------------------------------------
+
 
 class TestDomainValidationFuzz:
     @given(value=domain_chars)
@@ -97,6 +96,7 @@ class TestDomainValidationFuzz:
 # IP validation fuzz tests
 # ---------------------------------------------------------------------------
 
+
 class TestIPValidationFuzz:
     @given(addr=ipv4_strategy)
     @settings(max_examples=100)
@@ -108,9 +108,11 @@ class TestIPValidationFuzz:
     def test_valid_ipv6_detected(self, addr):
         assert _is_valid_ip(str(addr)) is True
 
-    @given(value=st.text(min_size=1, max_size=50).filter(
-        lambda x: not re.match(r"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$", x)
-    ))
+    @given(
+        value=st.text(min_size=1, max_size=50).filter(
+            lambda x: not re.match(r"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$", x)
+        )
+    )
     @settings(max_examples=100)
     def test_non_ip_strings_rejected(self, value):
         assume(value and not any(c in value for c in "abcdefABCDEF:"))
@@ -127,6 +129,7 @@ class TestIPValidationFuzz:
 # ---------------------------------------------------------------------------
 # IOC type inference fuzz tests
 # ---------------------------------------------------------------------------
+
 
 class TestIOCTypeInferenceFuzz:
     @given(addr=ipv4_strategy)
@@ -163,6 +166,7 @@ class TestIOCTypeInferenceFuzz:
 # Normalization fuzz tests
 # ---------------------------------------------------------------------------
 
+
 class TestNormalizationFuzz:
     @given(value=domain_chars)
     @settings(max_examples=200, suppress_health_check=[HealthCheck.too_slow])
@@ -177,6 +181,7 @@ class TestNormalizationFuzz:
     @settings(max_examples=100)
     def test_normalize_ip_never_crashes(self, value):
         from scripts.src.normalizer import _normalize_ip
+
         result, _notes = _normalize_ip(value)
         assert isinstance(result, str)
 
@@ -206,6 +211,7 @@ class TestNormalizationFuzz:
 # ---------------------------------------------------------------------------
 # Quality scoring fuzz tests
 # ---------------------------------------------------------------------------
+
 
 class TestQualityScoringFuzz:
     @given(domain=realistic_domains)
@@ -240,11 +246,10 @@ class TestQualityScoringFuzz:
 # End-to-end fuzz: validate → normalize → score
 # ---------------------------------------------------------------------------
 
+
 class TestEndToEndFuzz:
     @given(
-        url=st.from_regex(
-            r"[a-z]{2,15}\.[a-z]{2,10}", fullmatch=True
-        ),
+        url=st.from_regex(r"[a-z]{2,15}\.[a-z]{2,10}", fullmatch=True),
     )
     @settings(max_examples=150, suppress_health_check=[HealthCheck.too_slow])
     def test_full_pipeline_never_crashes(self, url):

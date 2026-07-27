@@ -1,6 +1,7 @@
-[English](#english) | [Türkçe](#turkish)
+> **Language / Dil** &nbsp;
+> [EN English](#-english) &nbsp;·&nbsp; [TR Türkçe](#-türkçe)
 
-<a id="english"></a>
+<a id="-english"></a>
 
 # Versioning Strategy
 
@@ -115,7 +116,7 @@ git push origin v1.1.0
 ### 3. Automated Release Pipeline
 
 ```yaml
-# .github/workflows/release.yml
+# .github/workflows/release.yaml
 name: Release
 on:
   push:
@@ -379,6 +380,7 @@ git tag -v v1.1.0
 ```python
 import warnings
 
+
 def deprecated_option():
     warnings.warn(
         "The '--legacy' option is deprecated since v1.1.0 "
@@ -398,7 +400,7 @@ v1.2.0  Feature still deprecated (warning persists)
 v2.0.0  Feature removed
 ```
 
-<a id="turkish"></a>
+<a id="-türkçe"></a>
 
 # Sürüm Numaralandırma Stratejisi
 
@@ -452,7 +454,7 @@ MAJOR.MINOR.PATCH-rc.N       # Aday yayın
   +----------+        +----------+         +----------+       +----------+
   |          |        |          |         |          |       |          |
   | 0.1.0    |------->| 1.0.0    |-------->| 1.0.x    |------>| 1.0.x    |
-  | (dev)    |        | -alpha.N |  kararlı | (yama)  | EOL  | (arşivlenmis)|
+  | (dev)    |        | -alpha.N |  kararlı | (yama)  | EOL  | (arşivlenmiş)|
   |          |        | -beta.N  |         |          |       |          |
   |          |        | -rc.N    |         |          |       |          |
   +----------+        +----------+         +----------+       +----------+
@@ -513,7 +515,7 @@ git push origin v1.1.0
 ### 3. Otomatik Yayın Hattı
 
 ```yaml
-# .github/workflows/release.yml
+# .github/workflows/release.yaml
 name: Release
 on:
   push:
@@ -776,6 +778,7 @@ git tag -v v1.1.0
 
 ```python
 import warnings
+
 
 def deprecated_option():
     warnings.warn(

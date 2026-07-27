@@ -30,16 +30,56 @@ def pipeline(client: AsyncAPIClient) -> Pipeline:
 @pytest.fixture
 def records() -> list[AddressRecord]:
     return [
-        AddressRecord(id=1, url="evil-phish.com", type="domain", desc="PH", source="US",
-                      date="2024-01-01", criticality_level=3, connectiontype="PH"),
-        AddressRecord(id=2, url="malware-cnc.net", type="domain", desc="MC", source="SO",
-                      date="2024-01-02", criticality_level=1, connectiontype="BC"),
-        AddressRecord(id=3, url="85.214.132.117", type="ip", desc="CA", source="RS",
-                      date="2024-01-03", criticality_level=2, connectiontype="AC"),
-        AddressRecord(id=4, url="spam.xyz", type="domain", desc="MD", source="IH",
-                      date="2024-01-04", criticality_level=5, connectiontype="MF"),
-        AddressRecord(id=5, url="", type="", desc="", source="",
-                      date="", criticality_level=10, connectiontype=""),
+        AddressRecord(
+            id=1,
+            url="evil-phish.com",
+            type="domain",
+            desc="PH",
+            source="US",
+            date="2024-01-01",
+            criticality_level=3,
+            connectiontype="PH",
+        ),
+        AddressRecord(
+            id=2,
+            url="malware-cnc.net",
+            type="domain",
+            desc="MC",
+            source="SO",
+            date="2024-01-02",
+            criticality_level=1,
+            connectiontype="BC",
+        ),
+        AddressRecord(
+            id=3,
+            url="85.214.132.117",
+            type="ip",
+            desc="CA",
+            source="RS",
+            date="2024-01-03",
+            criticality_level=2,
+            connectiontype="AC",
+        ),
+        AddressRecord(
+            id=4,
+            url="spam.xyz",
+            type="domain",
+            desc="MD",
+            source="IH",
+            date="2024-01-04",
+            criticality_level=5,
+            connectiontype="MF",
+        ),
+        AddressRecord(
+            id=5,
+            url="",
+            type="",
+            desc="",
+            source="",
+            date="",
+            criticality_level=10,
+            connectiontype="",
+        ),
     ]
 
 
@@ -151,11 +191,13 @@ class TestPipelineQuality:
         iocs = [
             NormalizedIOC(
                 value="known-benign.com",
-                ioc_type=IOCType.DOMAIN, criticality_level=10,
+                ioc_type=IOCType.DOMAIN,
+                criticality_level=10,
             ),
             NormalizedIOC(
                 value="totally-malicious.xyz",
-                ioc_type=IOCType.DOMAIN, criticality_level=1,
+                ioc_type=IOCType.DOMAIN,
+                criticality_level=1,
             ),
         ]
         scored, _rejected = pipeline._stage_quality(iocs)
@@ -186,10 +228,26 @@ class TestPipelineRun:
     @pytest.mark.asyncio
     async def test_run_with_all_stages(self, pipeline):
         records = [
-            AddressRecord(id=1, url="evil.com", type="domain", desc="PH", source="US",
-                         date="2024-01-01", criticality_level=3, connectiontype="PH"),
-            AddressRecord(id=2, url="bad.net", type="domain", desc="MC", source="SO",
-                         date="2024-01-02", criticality_level=1, connectiontype="BC"),
+            AddressRecord(
+                id=1,
+                url="evil.com",
+                type="domain",
+                desc="PH",
+                source="US",
+                date="2024-01-01",
+                criticality_level=3,
+                connectiontype="PH",
+            ),
+            AddressRecord(
+                id=2,
+                url="bad.net",
+                type="domain",
+                desc="MC",
+                source="SO",
+                date="2024-01-02",
+                criticality_level=1,
+                connectiontype="BC",
+            ),
         ]
         with patch.object(pipeline, "_stage_fetch", new_callable=AsyncMock) as mock_fetch:
             mock_fetch.return_value = (records, 0.5)
@@ -209,9 +267,14 @@ class TestPipelineRun:
 class TestPipelineStats:
     def test_stats_summary(self):
         stats = PipelineStats(
-            total_fetched=100, after_validation=80, validation_rejected=20,
-            after_normalization=75, after_dedup=60, duplicates_removed=15,
-            after_quality=50, quality_rejected=10,
+            total_fetched=100,
+            after_validation=80,
+            validation_rejected=20,
+            after_normalization=75,
+            after_dedup=60,
+            duplicates_removed=15,
+            after_quality=50,
+            quality_rejected=10,
             by_type={"domain": 40, "ip": 10},
             fetch_duration_seconds=5.3,
             pipeline_duration_seconds=12.1,

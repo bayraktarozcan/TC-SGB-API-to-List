@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "tc-sgb-api-list"
 version = "1.0.0"
-description = "Threat Connect SGB API List — IOC intelligence fetcher and validator"
+description = "Threat Intelligence Pipeline for TC SGB API — IOC fetcher, validator, and multi-format exporter"
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.11"
@@ -31,6 +31,7 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "pytest>=8.0,<9",
+    "pytest-asyncio>=0.23,<1",
     "pytest-cov>=5.0,<6",
     "ruff>=0.5,<1",
     "mypy>=1.10,<2",
@@ -40,7 +41,7 @@ dev = [
 ]
 
 [project.scripts]
-tc-sgb = "scripts.src.cli:main"
+tc-sgb = "scripts.main:main"
 
 [tool.setuptools.packages.find]
 include = ["scripts*"]
@@ -131,4 +132,5 @@ addopts = [
 markers = [
     "slow: marks tests as slow (deselect with '-m \"not slow\"')",
     "integration: marks tests that hit external APIs",
+    "asyncio: marks tests as async (managed by pytest-asyncio)",
 ]

@@ -1,6 +1,7 @@
-[English](#english) | [Türkçe](#turkish)
+> **Language / Dil** &nbsp;
+> [EN English](#-english) &nbsp;·&nbsp; [TR Türkçe](#-türkçe)
 
-<a id="english"></a>
+<a id="-english"></a>
 
 # API Analysis
 
@@ -259,13 +260,13 @@ Since no rate limit is documented, we apply conservative defaults:
 
 ```python
 RATE_LIMIT_CONFIG = {
-    "max_concurrent_requests": 5,     # Simultaneous connections
-    "min_request_interval": 0.1,      # 100ms between requests
-    "max_requests_per_second": 10,    # Hard ceiling
-    "backoff_base_delay": 0.5,        # Initial retry delay
-    "backoff_max_delay": 30.0,        # Maximum retry delay
-    "backoff_multiplier": 2.0,        # Exponential multiplier
-    "max_retries": 3,                 # Maximum retry attempts
+    "max_concurrent_requests": 5,  # Simultaneous connections
+    "min_request_interval": 0.1,  # 100ms between requests
+    "max_requests_per_second": 10,  # Hard ceiling
+    "backoff_base_delay": 0.5,  # Initial retry delay
+    "backoff_max_delay": 30.0,  # Maximum retry delay
+    "backoff_multiplier": 2.0,  # Exponential multiplier
+    "max_retries": 3,  # Maximum retry attempts
 }
 ```
 
@@ -329,7 +330,7 @@ Target platforms include:
 - Elastic Security
 - Open-source tools (Suricata, Zeek, Security Onion)
 
-<a id="turkish"></a>
+<a id="-türkçe"></a>
 
 # API Analizi
 
@@ -472,7 +473,7 @@ API sağlık durumunu döndürür.
 
 ### Sayfalama
 
-API_ofset tabanlı sayfalama kullanır:
+API, ofset tabanlı sayfalama kullanır:
 
 ```
 GET /ioc?page=1&per_page=500    # İlk sayfa
@@ -588,13 +589,13 @@ Hız sınırı belgelenmediğinden, muhafazakar varsayılanlar uyguluyoruz:
 
 ```python
 RATE_LIMIT_CONFIG = {
-    "max_concurrent_requests": 5,     # Eşzamanlı bağlantılar
-    "min_request_interval": 0.1,      # İstekler arası 100ms
-    "max_requests_per_second": 10,    # Sert tavan
-    "backoff_base_delay": 0.5,        # İlk yeniden deneme gecikmesi
-    "backoff_max_delay": 30.0,        # Maksimum yeniden deneme gecikmesi
-    "backoff_multiplier": 2.0,        # Üstel çarpan
-    "max_retries": 3,                 # Maksimum yeniden deneme sayısı
+    "max_concurrent_requests": 5,  # Eşzamanlı bağlantılar
+    "min_request_interval": 0.1,  # İstekler arası 100ms
+    "max_requests_per_second": 10,  # Sert tavan
+    "backoff_base_delay": 0.5,  # İlk yeniden deneme gecikmesi
+    "backoff_max_delay": 30.0,  # Maksimum yeniden deneme gecikmesi
+    "backoff_multiplier": 2.0,  # Üstel çarpan
+    "max_retries": 3,  # Maksimum yeniden deneme sayısı
 }
 ```
 

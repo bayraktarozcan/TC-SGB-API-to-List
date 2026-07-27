@@ -1,6 +1,7 @@
-[English](#english) | [Türkçe](#turkish)
+> **Language / Dil** &nbsp;
+> [EN English](#-english) &nbsp;·&nbsp; [TR Türkçe](#-türkçe)
 
-<a id="english"></a>
+<a id="-english"></a>
 
 # Legal Notices
 
@@ -179,7 +180,7 @@ For questions about the TC-SGB-API-to-List project:
 - **GitHub Issues**: https://github.com/owner/tc-sgb-api-list/issues
 - **Email**: [project email]
 
-<a id="turkish"></a>
+<a id="-türkçe"></a>
 
 # Yasal Bildirimler
 
@@ -306,8 +307,8 @@ TC-SGB-API-to-List projesi:
 #### Kuruluşlar İçin
 
 1. **Dahili kullanım**: Kuruluşunuz içinde özgürce dağıtın ve kullanın
-2. **Güvenlik entegrasyonu**: IOCs'leri güvenlik yığınınıza besleyin
-3. **Dış paylaşımsızlık**: İzinsiz IOC verisini harici taraflarla paylaşmayın
+2. **Güvenlik entegrasyonu**: IOC'leri güvenlik yığınınıza besleyin
+3. **Harici Paylaşım Yasak**: İzinsiz IOC verisini harici taraflarla paylaşmayın
 4. **Denetim izi**: Uyumluluk için veri işleme kayıtlarını tutun
 5. **Hukuki inceleme**: Belirli kullanım durumları için hukuki danışmana başvurun
 

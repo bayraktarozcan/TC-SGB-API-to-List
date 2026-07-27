@@ -16,9 +16,12 @@ def _make_scored_ioc(
     source: Source | None = None,
 ) -> ScoredIOC:
     return ScoredIOC(
-        value=value, ioc_type=ioc_type,
+        value=value,
+        ioc_type=ioc_type,
         criticality_level=criticality_level,
-        original_id=original_id, desc=desc, source=source,
+        original_id=original_id,
+        desc=desc,
+        source=source,
         quality_score=quality_score,
     )
 

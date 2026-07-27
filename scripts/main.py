@@ -34,6 +34,7 @@ from scripts.src.pipeline import Pipeline
 # Logging setup
 # ---------------------------------------------------------------------------
 
+
 def _setup_logging(verbose: bool = False) -> None:
     level = logging.DEBUG if verbose else logging.INFO
     logging.basicConfig(
@@ -49,6 +50,7 @@ def _setup_logging(verbose: bool = False) -> None:
 # ---------------------------------------------------------------------------
 # Sub-commands
 # ---------------------------------------------------------------------------
+
 
 async def cmd_fetch(args: argparse.Namespace) -> None:
     """Fetch all IOCs from the SGB API and save raw data."""
@@ -122,18 +124,20 @@ async def cmd_generate(args: argparse.Namespace) -> None:
             ct = ConnectionType(item["connectiontype"]) if item.get("connectiontype") else None
             date = datetime.fromisoformat(item["date"]) if item.get("date") else None
 
-            scored.append(ScoredIOC(
-                value=item["value"],
-                ioc_type=ioc_type,
-                desc=desc,
-                source=source,
-                date=date,
-                criticality_level=item.get("criticality_level", 10),
-                connectiontype=ct,
-                original_id=item.get("id", 0),
-                quality_score=item.get("quality_score", 0.0),
-                false_positive_risk=item.get("false_positive_risk", "low"),
-            ))
+            scored.append(
+                ScoredIOC(
+                    value=item["value"],
+                    ioc_type=ioc_type,
+                    desc=desc,
+                    source=source,
+                    date=date,
+                    criticality_level=item.get("criticality_level", 10),
+                    connectiontype=ct,
+                    original_id=item.get("id", 0),
+                    quality_score=item.get("quality_score", 0.0),
+                    false_positive_risk=item.get("false_positive_risk", "low"),
+                )
+            )
         except Exception as e:
             print(f"Warning: Skipping record: {e}", file=sys.stderr)
             continue
@@ -200,14 +204,20 @@ async def cmd_validate(args: argparse.Namespace) -> None:
         records = [AddressRecord.model_validate(r) for r in raw_data]
     else:
         print("Fetching from API...")
+        max_pages = (
+            math.ceil(args.max_records / args.per_page)
+            if args.max_records and args.max_records > 0
+            else 0
+        )
         records = await client.fetch_addresses(
             per_page=args.per_page,
-            max_pages=math.ceil(args.max_records / args.per_page) if args.max_records else 0,
+            max_pages=max_pages,
         )
 
     print(f"Validating {len(records)} records...")
 
     from scripts.src.validator import validate_ioc
+
     valid_count = 0
     rejected: list[tuple[AddressRecord, list[str]]] = []
     type_counts: dict[str, int] = {}
@@ -262,6 +272,7 @@ async def cmd_health(args: argparse.Namespace) -> None:
 # Argument parser
 # ---------------------------------------------------------------------------
 
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="tc-sgb-intel",
@@ -277,37 +288,48 @@ def build_parser() -> argparse.ArgumentParser:
     # --- Shared arguments ---
     def add_common_args(p: argparse.ArgumentParser) -> None:
         p.add_argument(
-            "--output", "-o", default="output",
+            "--output",
+            "-o",
+            default="output",
             help="Output directory (default: output).",
         )
         p.add_argument(
-            "--per-page", type=int, default=9999,
+            "--per-page",
+            type=int,
+            default=9999,
             help="Records per API page (max 9999).",
         )
         p.add_argument(
-            "--rps", type=float, default=5.0,
+            "--rps",
+            type=float,
+            default=5.0,
             help="Requests per second to the API.",
         )
         p.add_argument(
-            "--timeout", type=float, default=60.0,
+            "--timeout",
+            type=float,
+            default=60.0,
             help="HTTP request timeout in seconds.",
         )
         p.add_argument(
-            "--retries", type=int, default=5,
+            "--retries",
+            type=int,
+            default=5,
             help="Max retries per request.",
         )
         p.add_argument(
-            "--max-records", type=int, default=None,
+            "--max-records",
+            type=int,
+            default=None,
             help="Limit number of records to fetch.",
         )
 
     # fetch
-    p_fetch = subparsers.add_parser(
-        "fetch", help="Fetch IOCs and generate all output formats."
-    )
+    p_fetch = subparsers.add_parser("fetch", help="Fetch IOCs and generate all output formats.")
     add_common_args(p_fetch)
     p_fetch.add_argument(
-        "--formats", default=None,
+        "--formats",
+        default=None,
         help="Comma-separated format names (default: all).",
     )
 
@@ -316,14 +338,15 @@ def build_parser() -> argparse.ArgumentParser:
         "generate", help="Generate outputs from previously saved raw data."
     )
     p_gen.add_argument(
-        "--input", "-i", required=True,
+        "--input",
+        "-i",
+        required=True,
         help="Path to raw JSON file from fetch.",
     )
+    p_gen.add_argument("--output", "-o", default="output", help="Output directory.")
     p_gen.add_argument(
-        "--output", "-o", default="output", help="Output directory."
-    )
-    p_gen.add_argument(
-        "--formats", default=None,
+        "--formats",
+        default=None,
         help="Comma-separated format names (default: all).",
     )
 
@@ -332,11 +355,11 @@ def build_parser() -> argparse.ArgumentParser:
     add_common_args(p_stats)
 
     # validate
-    p_val = subparsers.add_parser(
-        "validate", help="Validate IOCs from file or API."
-    )
+    p_val = subparsers.add_parser("validate", help="Validate IOCs from file or API.")
     p_val.add_argument(
-        "--input", "-i", default=None,
+        "--input",
+        "-i",
+        default=None,
         help="Path to raw JSON file (omit to fetch from API).",
     )
     add_common_args(p_val)
@@ -353,6 +376,7 @@ def build_parser() -> argparse.ArgumentParser:
 # ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
+
 
 def main() -> None:
     parser = build_parser()

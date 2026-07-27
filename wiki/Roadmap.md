@@ -1,6 +1,7 @@
-[English](#english) | [Türkçe](#turkish)
+> **Language / Dil** &nbsp;
+> [EN English](#-english) &nbsp;·&nbsp; [TR Türkçe](#-türkçe)
 
-<a id="english"></a>
+<a id="-english"></a>
 
 # Roadmap
 
@@ -309,17 +310,23 @@ class SourcePlugin:
         """Get source metadata."""
         ...
 
+
 # Example plugins
 class TCSGBPlugin(SourcePlugin):
     """TC SGB API plugin."""
+
     ...
+
 
 class CISAKeVPlugin(SourcePlugin):
     """CISA KEV catalog plugin."""
+
     ...
+
 
 class URLhausPlugin(SourcePlugin):
     """URLhaus feed plugin."""
+
     ...
 ```
 
@@ -449,7 +456,7 @@ class URLhausPlugin(SourcePlugin):
 | Test coverage | 90% | 92% | 95% | 98% |
 | Response time | <20min | <15min | <5min | <1min |
 
-<a id="turkish"></a>
+<a id="-türkçe"></a>
 
 # Yol Haritası
 
@@ -759,17 +766,23 @@ class SourcePlugin:
         """Get source metadata."""
         ...
 
+
 # Example plugins
 class TCSGBPlugin(SourcePlugin):
     """TC SGB API plugin."""
+
     ...
+
 
 class CISAKeVPlugin(SourcePlugin):
     """CISA KEV catalog plugin."""
+
     ...
+
 
 class URLhausPlugin(SourcePlugin):
     """URLhaus feed plugin."""
+
     ...
 ```
 

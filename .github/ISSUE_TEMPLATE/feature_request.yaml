@@ -1,0 +1,88 @@
+name: "Feature Request / Özellik Talebi"
+description: "Suggest an idea for TC-SGB-API-to-List"
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Feature Request / Özellik Talebi
+
+        Before opening, please search existing issues to see if your idea has
+        already been proposed.
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: "Category / Kategori"
+      options:
+        - New Output Format / Yeni Çıktı Formatı
+        - New IOC Source / Yeni IoC Kaynağı
+        - Pipeline Enhancement / Hat İyileştirmesi
+        - Documentation / Dokümantasyon
+        - CI/CD / Automation / Otomasyon
+        - Security / Güvenlik
+        - Translation / Çeviri
+        - Infrastructure / Altyapı
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: "Priority / Öncelik"
+      options:
+        - Low (nice-to-have)
+        - Medium (important)
+        - High (blocker)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: contribution
+    attributes:
+      label: "Contribution / Katkı"
+      options:
+        - I want to implement this / Bunu uygulamak istiyorum
+        - I need help implementing / Uygulama için yardım lazım
+        - Just an idea / Sadece bir fikir
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: "Problem / Sorun"
+      description: "What problem does this feature solve?"
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: "Proposed Solution / Önerilen Çözüm"
+      description: "How should this feature work?"
+    validations:
+      required: true
+
+  - type: textarea
+    id: references
+    attributes:
+      label: "References / Referanslar"
+      description: "Links to docs, API references, discussions, etc."
+    validations:
+      required: false
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: "Alternatives Considered / Değerlendirilen Alternatifler"
+      description: "What else have you considered?"
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: "Additional Context / Ek Bilgi"
+    validations:
+      required: false

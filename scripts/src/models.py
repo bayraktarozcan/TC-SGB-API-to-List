@@ -12,6 +12,7 @@ from pydantic import BaseModel, Field
 # Enums
 # ---------------------------------------------------------------------------
 
+
 class IOCType(str, Enum):
     DOMAIN = "domain"
     URL = "url"
@@ -147,6 +148,7 @@ class AnnouncementRecord(BaseModel):
 # ---------------------------------------------------------------------------
 # Internal / pipeline models
 # ---------------------------------------------------------------------------
+
 
 class ValidatedIOC(BaseModel):
     """An IOC that has passed validation."""

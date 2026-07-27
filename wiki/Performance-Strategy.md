@@ -1,6 +1,7 @@
-[English](#english) | [Türkçe](#turkish)
+> **Language / Dil** &nbsp;
+> [EN English](#-english) &nbsp;·&nbsp; [TR Türkçe](#-türkçe)
 
-<a id="english"></a>
+<a id="-english"></a>
 
 # Performance Strategy
 
@@ -89,6 +90,7 @@ from tc_sgb.deduplicator import IOCDeduplicator
 from tc_sgb.outputs import OutputEngine
 from tc_sgb.pipeline import ThreatIntelPipeline
 
+
 @pytest.mark.performance
 class TestBenchmarks:
     """Performance benchmarks for all pipeline stages."""
@@ -159,6 +161,7 @@ class TestBenchmarks:
 ```python
 from memory_profiler import profile
 
+
 @profile
 def benchmark_memory_usage():
     """Profile memory usage during pipeline execution."""
@@ -174,6 +177,7 @@ def benchmark_memory_usage():
 import cProfile
 import pstats
 
+
 def benchmark_cpu_usage():
     """Profile CPU usage during pipeline execution."""
     profiler = cProfile.Profile()
@@ -185,7 +189,7 @@ def benchmark_cpu_usage():
 
     profiler.disable()
     stats = pstats.Stats(profiler)
-    stats.sort_stats('cumulative')
+    stats.sort_stats("cumulative")
     stats.print_stats(20)
     return result
 ```
@@ -195,6 +199,7 @@ def benchmark_cpu_usage():
 ```python
 import asyncio
 from tc_sgb.client import SGBAPIClient
+
 
 async def benchmark_concurrent_fetch():
     """Benchmark concurrent API fetch performance."""
@@ -302,7 +307,7 @@ async def benchmark_concurrent_fetch():
 ```python
 # Use connection pooling
 client = httpx.AsyncClient(
-    http2=True,                    # HTTP/2 multiplexing
+    http2=True,  # HTTP/2 multiplexing
     limits=httpx.Limits(
         max_connections=10,
         max_keepalive_connections=5,
@@ -312,6 +317,7 @@ client = httpx.AsyncClient(
 
 # Use bounded concurrency
 semaphore = asyncio.Semaphore(5)
+
 
 async def fetch_with_semaphore(page):
     async with semaphore:
@@ -330,11 +336,12 @@ async def process_records_streaming(records):
             normalized = normalizer.normalize(validated.record)
             yield normalized
 
+
 # Use chunked processing for large datasets
 def process_in_chunks(records, chunk_size=1000):
     """Process records in chunks."""
     for i in range(0, len(records), chunk_size):
-        chunk = records[i:i + chunk_size]
+        chunk = records[i : i + chunk_size]
         yield process_chunk(chunk)
 ```
 
@@ -343,6 +350,7 @@ def process_in_chunks(records, chunk_size=1000):
 ```python
 # Use Bloom filter for probabilistic dedup
 from pybloom_live import BloomFilter
+
 
 class OptimizedDeduplicator:
     def __init__(self, expected_items=500_000, error_rate=0.001):
@@ -363,16 +371,18 @@ class OptimizedDeduplicator:
 ### 4. Output Optimization
 
 ```python
-# Use orjson for fast JSON serialization
-import orjson
+# Use stdlib json for fast JSON serialization
+import json
+
 
 def generate_json_fast(records):
-    """Generate JSON using orjson for speed."""
+    """Generate JSON using stdlib json for speed."""
     data = {
         "data": [r.model_dump() for r in records],
         "meta": {"count": len(records)},
     }
-    return orjson.dumps(data).decode("utf-8")
+    return json.dumps(data, ensure_ascii=False).encode("utf-8")
+
 
 # Use buffered writing
 def write_output_buffered(path, data, buffer_size=8192):
@@ -386,6 +396,7 @@ def write_output_buffered(path, data, buffer_size=8192):
 
 ```python
 import asyncio
+
 
 async def generate_outputs_parallel(records, output_dir):
     """Generate all output formats in parallel."""
@@ -446,7 +457,7 @@ jobs:
           path: benchmark.json
 ```
 
-<a id="turkish"></a>
+<a id="-türkçe"></a>
 
 # Performans Stratejisi
 
@@ -535,6 +546,7 @@ from tc_sgb.deduplicator import IOCDeduplicator
 from tc_sgb.outputs import OutputEngine
 from tc_sgb.pipeline import ThreatIntelPipeline
 
+
 @pytest.mark.performance
 class TestBenchmarks:
     """Performance benchmarks for all pipeline stages."""
@@ -605,6 +617,7 @@ class TestBenchmarks:
 ```python
 from memory_profiler import profile
 
+
 @profile
 def benchmark_memory_usage():
     """Profile memory usage during pipeline execution."""
@@ -620,6 +633,7 @@ def benchmark_memory_usage():
 import cProfile
 import pstats
 
+
 def benchmark_cpu_usage():
     """Profile CPU usage during pipeline execution."""
     profiler = cProfile.Profile()
@@ -631,7 +645,7 @@ def benchmark_cpu_usage():
 
     profiler.disable()
     stats = pstats.Stats(profiler)
-    stats.sort_stats('cumulative')
+    stats.sort_stats("cumulative")
     stats.print_stats(20)
     return result
 ```
@@ -641,6 +655,7 @@ def benchmark_cpu_usage():
 ```python
 import asyncio
 from tc_sgb.client import SGBAPIClient
+
 
 async def benchmark_concurrent_fetch():
     """Benchmark concurrent API fetch performance."""
@@ -748,7 +763,7 @@ async def benchmark_concurrent_fetch():
 ```python
 # Use connection pooling
 client = httpx.AsyncClient(
-    http2=True,                    # HTTP/2 multiplexing
+    http2=True,  # HTTP/2 multiplexing
     limits=httpx.Limits(
         max_connections=10,
         max_keepalive_connections=5,
@@ -758,6 +773,7 @@ client = httpx.AsyncClient(
 
 # Use bounded concurrency
 semaphore = asyncio.Semaphore(5)
+
 
 async def fetch_with_semaphore(page):
     async with semaphore:
@@ -776,11 +792,12 @@ async def process_records_streaming(records):
             normalized = normalizer.normalize(validated.record)
             yield normalized
 
+
 # Use chunked processing for large datasets
 def process_in_chunks(records, chunk_size=1000):
     """Process records in chunks."""
     for i in range(0, len(records), chunk_size):
-        chunk = records[i:i + chunk_size]
+        chunk = records[i : i + chunk_size]
         yield process_chunk(chunk)
 ```
 
@@ -789,6 +806,7 @@ def process_in_chunks(records, chunk_size=1000):
 ```python
 # Use Bloom filter for probabilistic dedup
 from pybloom_live import BloomFilter
+
 
 class OptimizedDeduplicator:
     def __init__(self, expected_items=500_000, error_rate=0.001):
@@ -809,16 +827,18 @@ class OptimizedDeduplicator:
 ### 4. Çıktı Optimizasyonu
 
 ```python
-# Use orjson for fast JSON serialization
-import orjson
+# Use stdlib json for fast JSON serialization
+import json
+
 
 def generate_json_fast(records):
-    """Generate JSON using orjson for speed."""
+    """Generate JSON using stdlib json for speed."""
     data = {
         "data": [r.model_dump() for r in records],
         "meta": {"count": len(records)},
     }
-    return orjson.dumps(data).decode("utf-8")
+    return json.dumps(data, ensure_ascii=False).encode("utf-8")
+
 
 # Use buffered writing
 def write_output_buffered(path, data, buffer_size=8192):
@@ -832,6 +852,7 @@ def write_output_buffered(path, data, buffer_size=8192):
 
 ```python
 import asyncio
+
 
 async def generate_outputs_parallel(records, output_dir):
     """Generate all output formats in parallel."""

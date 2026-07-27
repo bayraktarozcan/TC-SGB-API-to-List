@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="TC-SGB-API-to-List — Open-source IOC threat intelligence pipeline. Fetches, enriches, and distributes Indicators of Compromise from Turkey's SGB API in 16+ formats.">
+    <meta name="keywords" content="IOC, threat intelligence, SGB, Turkey, cybersecurity, MISP, STIX, Sigma, YARA, Sigma, CSV, JSON">
+    <meta name="author" content="bayraktarozcan">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="TC-SGB-API-to-List — IOC Threat Intelligence Pipeline">
+    <meta property="og:description" content="Open-source IOC threat intelligence pipeline — 489K+ IOCs, 16+ output formats, 330 tests, 73% coverage.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://bayraktarozcan.github.io/TC-SGB-API-to-List/">
+    <meta name="twitter:card" content="summary_large_image">
+    <title>TC-SGB-API-to-List — IOC Threat Intelligence Pipeline</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%23ef4444'/><stop offset='100%25' stop-color='%233b82f6'/></linearGradient></defs><rect width='100' height='100' rx='20' fill='%2309090b'/><path d='M50 10 L90 30 L90 70 L50 90 L10 70 L10 30 Z' fill='url(%23g)' opacity='0.9'/><path d='M50 25 L50 55 M35 40 L65 40' stroke='white' stroke-width='6' stroke-linecap='round'/></svg>">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: { DEFAULT: '#ef4444', light: '#fca5a5', dark: '#b91c1c' },
+                        secondary: { DEFAULT: '#3b82f6', light: '#93c5fd', dark: '#1d4ed8' },
+                        dark: { 900: '#000000', 800: '#0a0a0b', 700: '#111113', 600: '#1a1a1d' }
+                    },
+                    fontFamily: {
+                        mono: ['"JetBrains Mono"', 'ui-monospace', 'SFMono-Regular', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap');
+
+        body { font-family: 'Inter', system-ui, -apple-system, sans-serif; background: #000; }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #ef4444, #f97316, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .gradient-border {
+            position: relative;
+            background: #0a0a0b;
+            border: 1px solid transparent;
+            background-clip: padding-box;
+        }
+        .gradient-border::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: inherit;
+            background: linear-gradient(135deg, #ef4444, #3b82f6);
+            z-index: -1;
+            opacity: 0.3;
+            transition: opacity 0.3s ease;
+        }
+        .gradient-border:hover::before { opacity: 0.6; }
+
+        .terminal-line { opacity: 0; transform: translateX(-10px); }
+        .terminal-line.visible { opacity: 1; transform: translateX(0); transition: all 0.3s ease; }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 20px rgba(239, 68, 68, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(239, 68, 68, 0.6); }
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .animate-fadeInUp { animation: fadeInUp 0.6s ease forwards; }
+        .animate-fadeIn { animation: fadeIn 0.8s ease forwards; }
+        .animate-slideInRight { animation: slideInRight 0.6s ease forwards; }
+        .animate-pulseGlow { animation: pulseGlow 2s ease-in-out infinite; }
+        .animate-float { animation: float 3s ease-in-out infinite; }
+
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+        .delay-400 { animation-delay: 0.4s; }
+        .delay-500 { animation-delay: 0.5s; }
+        .delay-600 { animation-delay: 0.6s; }
+        .delay-700 { animation-delay: 0.7s; }
+        .delay-800 { animation-delay: 0.8s; }
+
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .badge-red { background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.3); }
+        .badge-blue { background: rgba(59, 130, 246, 0.2); color: #93c5fd; border: 1px solid rgba(59, 130, 246, 0.3); }
+        .badge-green { background: rgba(34, 197, 94, 0.2); color: #86efac; border: 1px solid rgba(34, 197, 94, 0.3); }
+        .badge-yellow { background: rgba(234, 179, 8, 0.2); color: #fde047; border: 1px solid rgba(234, 179, 8, 0.3); }
+        .badge-gray { background: rgba(113, 113, 122, 0.2); color: #a1a1aa; border: 1px solid rgba(113, 113, 122, 0.3); }
+
+        .code-block {
+            background: #09090b;
+            border: 1px solid #27272a;
+            border-radius: 0.75rem;
+            overflow: hidden;
+        }
+        .code-header {
+            background: #18181b;
+            padding: 0.5rem 1rem;
+            border-bottom: 1px solid #27272a;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .code-dot { width: 0.75rem; height: 0.75rem; border-radius: 50%; }
+        .code-content {
+            padding: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            line-height: 1.6;
+            overflow-x: auto;
+        }
+
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #ef4444, #3b82f6);
+            z-index: 9999;
+            transition: width 0.1s ease;
+        }
+
+        #back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            z-index: 999;
+        }
+
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #ef4444, #3b82f6);
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after { width: 100%; }
+
+        #mobile-menu {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .section-heading {
+            position: relative;
+            display: inline-block;
+        }
+        .section-heading::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #ef4444, #3b82f6);
+            border-radius: 2px;
+        }
+
+        .pipeline-step {
+            position: relative;
+            padding-left: 2.5rem;
+        }
+        .pipeline-step::before {
+            content: '';
+            position: absolute;
+            left: 0.75rem;
+            top: 2rem;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, #ef4444, #3b82f6);
+        }
+        .pipeline-step:last-child::before { display: none; }
+        .pipeline-step .step-dot {
+            position: absolute;
+            left: 0;
+            top: 0.25rem;
+            width: 1.5rem;
+            height: 1.5rem;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ef4444, #3b82f6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .format-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 0.75rem;
+        }
+        .format-item {
+            background: #0a0a0b;
+            border: 1px solid #27272a;
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            text-align: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #d4d4d8;
+            transition: all 0.2s ease;
+        }
+        .format-item:hover {
+            border-color: #ef4444;
+            background: rgba(239, 68, 68, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .security-row {
+            border-bottom: 1px solid #27272a;
+            transition: background 0.2s ease;
+        }
+        .security-row:hover { background: rgba(239, 68, 68, 0.03); }
+        .security-row:last-child { border-bottom: none; }
+
+        @media (max-width: 768px) {
+            .hero-terminal { font-size: 0.7rem; }
+            .format-grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); }
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #09090b; }
+        ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #3f3f46; }
+    </style>
+</head>
+<body class="bg-black text-zinc-100 antialiased">
+    <div id="progress-bar" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-xl border-b border-zinc-800/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
+                        <i data-lucide="shield" class="w-5 h-5 text-white"></i>
+                    </div>
+                    <div>
+                        <span class="font-bold text-white text-sm">TC-SGB-API-to-List</span>
+                        <span class="badge badge-red ml-2 text-[0.6rem]">v0.1.0.0</span>
+                    </div>
+                </div>
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="#about" class="nav-link text-sm text-zinc-400 hover:text-white" data-i18n="nav_about">About</a>
+                    <a href="#features" class="nav-link text-sm text-zinc-400 hover:text-white" data-i18n="nav_features">Features</a>
+                    <a href="#architecture" class="nav-link text-sm text-zinc-400 hover:text-white" data-i18n="nav_architecture">Architecture</a>
+                    <a href="#formats" class="nav-link text-sm text-zinc-400 hover:text-white" data-i18n="nav_formats">Formats</a>
+                    <a href="#quickstart" class="nav-link text-sm text-zinc-400 hover:text-white" data-i18n="nav_quickstart">Quick Start</a>
+                    <a href="#security" class="nav-link text-sm text-zinc-400 hover:text-white" data-i18n="nav_security">Security</a>
+                    <div class="flex items-center gap-1 ml-4">
+                        <button id="lang-tr" class="px-3 py-1 rounded-md text-xs font-semibold text-zinc-500 hover:text-white transition-all cursor-pointer" onclick="setLang('tr')">TR</button>
+                        <button id="lang-en" class="px-3 py-1 rounded-md text-xs font-bold bg-primary text-white transition-all shadow-md" onclick="setLang('en')">EN</button>
+                    </div>
+                </div>
+                <button class="md:hidden text-zinc-400 hover:text-white p-2" aria-controls="mobile-menu" aria-expanded="false" onclick="toggleMobileMenu()">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="fixed inset-0 z-40 bg-black/95 backdrop-blur-xl md:hidden">
+        <div class="flex flex-col items-center justify-center h-full gap-6">
+            <button class="absolute top-4 right-4 text-zinc-400 hover:text-white" onclick="toggleMobileMenu()">
+                <i data-lucide="x" class="w-8 h-8"></i>
+            </button>
+            <a href="#about" class="text-lg text-zinc-300 hover:text-white" onclick="toggleMobileMenu()" data-i18n="nav_about">About</a>
+            <a href="#features" class="text-lg text-zinc-300 hover:text-white" onclick="toggleMobileMenu()" data-i18n="nav_features">Features</a>
+            <a href="#architecture" class="text-lg text-zinc-300 hover:text-white" onclick="toggleMobileMenu()" data-i18n="nav_architecture">Architecture</a>
+            <a href="#formats" class="text-lg text-zinc-300 hover:text-white" onclick="toggleMobileMenu()" data-i18n="nav_formats">Formats</a>
+            <a href="#quickstart" class="text-lg text-zinc-300 hover:text-white" onclick="toggleMobileMenu()" data-i18n="nav_quickstart">Quick Start</a>
+            <a href="#security" class="text-lg text-zinc-300 hover:text-white" onclick="toggleMobileMenu()" data-i18n="nav_security">Security</a>
+            <div class="flex items-center gap-2 mt-4">
+                <button id="mob-lang-tr" class="px-6 py-2 rounded-md text-sm font-semibold text-zinc-400 hover:text-white transition-all" onclick="setLang('tr')">TR</button>
+                <button id="mob-lang-en" class="px-6 py-2 rounded-md text-sm font-bold bg-primary text-white transition-all" onclick="setLang('en')">EN</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="min-h-screen flex items-center justify-center relative overflow-hidden pt-16">
+        <div class="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-secondary/5"></div>
+        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-float"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary/10 rounded-full blur-3xl animate-float delay-1000"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="animate-fadeInUp">
+                    <div class="flex items-center gap-3 mb-6">
+                        <span class="badge badge-red">v0.1.0.0</span>
+                        <span class="badge badge-green">Open Source</span>
+                        <span class="badge badge-blue">Python 3.10+</span>
+                    </div>
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+                        <span class="gradient-text" data-i18n="hero_title">IOC Threat</span><br>
+                        <span class="text-white" data-i18n="hero_title2">Intelligence Pipeline</span>
+                    </h1>
+                    <p class="text-lg text-zinc-400 mb-8 max-w-lg" data-i18n="hero_desc">
+                        Fetches, enriches, and distributes Indicators of Compromise from Turkey's SGB API in 16+ formats.
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <a href="https://github.com/bayraktarozcan/TC-SGB-API-to-List" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-primary to-secondary rounded-lg text-white font-semibold hover:opacity-90 transition-all animate-pulseGlow">
+                            <i data-lucide="github" class="w-5 h-5"></i>
+                            <span data-i18n="hero_github">View on GitHub</span>
+                        </a>
+                        <a href="#quickstart" class="inline-flex items-center gap-2 px-6 py-3 border border-zinc-700 rounded-lg text-zinc-300 hover:bg-zinc-800 transition-all">
+                            <i data-lucide="terminal" class="w-5 h-5"></i>
+                            <span data-i18n="hero_quickstart">Quick Start</span>
+                        </a>
+                    </div>
+                    <div class="flex flex-wrap gap-6 mt-8 text-sm text-zinc-500">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="database" class="w-4 h-4 text-primary"></i>
+                            <span><strong class="text-zinc-300">489K+</strong> <span data-i18n="hero_stat_iocs">IOCs</span></span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="file-output" class="w-4 h-4 text-secondary"></i>
+                            <span><strong class="text-zinc-300">16+</strong> <span data-i18n="hero_stat_formats">Formats</span></span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i>
+                            <span><strong class="text-zinc-300">330</strong> <span data-i18n="hero_stat_tests">Tests</span></span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="shield-check" class="w-4 h-4 text-yellow-500"></i>
+                            <span><strong class="text-zinc-300">73%</strong> <span data-i18n="hero_stat_coverage">Coverage</span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="animate-slideInRight delay-300">
+                    <div class="code-block hero-terminal">
+                        <div class="code-header">
+                            <div class="code-dot bg-red-500"></div>
+                            <div class="code-dot bg-yellow-500"></div>
+                            <div class="code-dot bg-green-500"></div>
+                            <span class="text-zinc-500 text-xs ml-2 font-mono">terminal — ioc-pipeline</span>
+                        </div>
+                        <div class="code-content text-zinc-300">
+                            <div class="terminal-line" id="term-1"><span class="text-green-400">$</span> python -m tc_sgb_api_to_list fetch --format all</div>
+                            <div class="terminal-line" id="term-2"><span class="text-zinc-500">[INFO]</span> Connecting to SGB API...</div>
+                            <div class="terminal-line" id="term-3"><span class="text-green-400">[SUCCESS]</span> Authenticated successfully</div>
+                            <div class="terminal-line" id="term-4"><span class="text-zinc-500">[INFO]</span> Fetching IOCs from 48 sources...</div>
+                            <div class="terminal-line" id="term-5"><span class="text-blue-400">[FETCH]</span> 489,217 IOCs retrieved</div>
+                            <div class="terminal-line" id="term-6"><span class="text-zinc-500">[INFO]</span> Enriching with threat context...</div>
+                            <div class="terminal-line" id="term-7"><span class="text-yellow-400">[ENRICH]</span> 12,847 duplicates removed</div>
+                            <div class="terminal-line" id="term-8"><span class="text-zinc-500">[INFO]</span> Generating output formats...</div>
+                            <div class="terminal-line" id="term-9"><span class="text-green-400">[OUTPUT]</span> CSV, JSON, MISP, STIX, Sigma, YARA</div>
+                            <div class="terminal-line" id="term-10"><span class="text-green-400">[OUTPUT]</span> Splunk, QRadar, Elastic, CSV, Nginx</div>
+                            <div class="terminal-line" id="term-11"><span class="text-green-400">[OUTPUT]</span> Apache, CEF, GCS, OpenIOC, Suricata</div>
+                            <div class="terminal-line" id="term-12"><span class="text-green-400">[DONE]</span> 16 formats generated in 4.2s</div>
+                            <div class="terminal-line" id="term-13"><span class="text-green-400">$</span> <span class="animate-pulse">_</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <span class="badge badge-blue mb-4" data-i18n="about_badge">About</span>
+                <h2 class="text-3xl sm:text-4xl font-bold mb-4 section-heading" data-i18n="about_heading">What is TC-SGB-API-to-List?</h2>
+                <p class="text-zinc-400 max-w-2xl mx-auto" data-i18n="about_desc">
+                    An open-source Python pipeline that fetches Indicators of Compromise (IOCs) from Turkey's SGB threat intelligence API, enriches them with contextual data, and distributes them in 16+ industry-standard formats for SIEM, SOAR, and threat intelligence platforms.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="gradient-border rounded-xl p-6 card-hover animate-fadeInUp">
+                    <div class="w-12 h-12 rounded-lg bg-primary/20 flex items-center justify-center mb-4">
+                        <i data-lucide="download" class="w-6 h-6 text-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2" data-i18n="about_collect_title">Collect</h3>
+                    <p class="text-zinc-400 text-sm" data-i18n="about_collect_desc">
+                        Fetch IOCs from Turkey's SGB API with automatic authentication, pagination, and rate limiting. Supports IPv4, IPv6, domain, URL, and hash indicators.
+                    </p>
+                </div>
+                <div class="gradient-border rounded-xl p-6 card-hover animate-fadeInUp delay-200">
+                    <div class="w-12 h-12 rounded-lg bg-secondary/20 flex items-center justify-center mb-4">
+                        <i data-lucide="cpu" class="w-6 h-6 text-secondary"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2" data-i18n="about_enrich_title">Enrich</h3>
+                    <p class="text-zinc-400 text-sm" data-i18n="about_enrich_desc">
+                        Deduplicate, validate, and enrich IOCs with threat context. Apply confidence scoring, geo-location tagging, and threat actor attribution.
+                    </p>
+                </div>
+                <div class="gradient-border rounded-xl p-6 card-hover animate-fadeInUp delay-400">
+                    <div class="w-12 h-12 rounded-lg bg-green-500/20 flex items-center justify-center mb-4">
+                        <i data-lucide="share-2" class="w-6 h-6 text-green-500"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2" data-i18n="about_distribute_title">Distribute</h3>
+                    <p class="text-zinc-400 text-sm" data-i18n="about_distribute_desc">
+                        Export to 16+ formats including MISP, STIX, Sigma, YARA, Splunk, QRadar, Elastic, and more. Ready for any SIEM, SOAR, or TIP platform.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 bg-dark-800/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <span class="badge badge-red mb-4" data-i18n="features_badge">Features</span>
+                <h2 class="text-3xl sm:text-4xl font-bold mb-4 section-heading" data-i18n="features_heading">Key Features</h2>
+                <p class="text-zinc-400 max-w-2xl mx-auto" data-i18n="features_desc">
+                    Enterprise-grade threat intelligence pipeline with comprehensive format support and robust testing.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-dark-700 border border-zinc-800 rounded-xl p-6 card-hover">
+                    <div class="w-10 h-10 rounded-lg bg-primary/20 flex items-center justify-center mb-3">
+                        <i data-lucide="shield" class="w-5 h-5 text-primary"></i>
+                    </div>
+                    <h4 class="font-bold text-white mb-2" data-i18n="feat_api_title">SGB API Integration</h4>
+                    <p class="text-zinc-400 text-sm" data-i18n="feat_api_desc">Direct integration with Turkey's SGB threat intelligence API with automatic auth token management.</p>
+                </div>
+                <div class="bg-dark-700 border border-zinc-800 rounded-xl p-6 card-hover">
+                    <div class="w-10 h-10 rounded-lg bg-secondary/20 flex items-center justify-center mb-3">
+                        <i data-lucide="layers" class="w-5 h-5 text-secondary"></i>
+                    </div>
+                    <h4 class="font-bold text-white mb-2" data-i18n="feat_formats_title">16+ Output Formats</h4>
+                    <p class="text-zinc-400 text-sm" data-i18n="feat_formats_desc">MISP, STIX 2.1, Sigma, YARA, Splunk, QRadar, Elastic, CSV, JSON, and more.</p>
+                </div>
+                <div class="bg-dark-700 border border-zinc-800 rounded-xl p-6 card-hover">
+                    <div class="w-10 h-10 rounded-lg bg-green-500/20 flex items-center justify-center mb-3">
+                        <i data-lucide="test-tubes" class="w-5 h-5 text-green-500"></i>
+                    </div>
+                    <h4 class="font-bold text-white mb-2" data-i18n="feat_test_title">Comprehensive Testing</h4>
+                    <p class="text-zinc-400 text-sm" data-i18n="feat_test_desc">330 unit tests with 73% coverage. Every format generator is thoroughly validated.</p>
+                </div>
+                <div class="bg-dark-700 border border-zinc-800 rounded-xl p-6 card-hover">
+                    <div class="w-10 h-10 rounded-lg bg-yellow-500/20 flex items-center justify-center mb-3">
+                        <i data-lucide="zap" class="w-5 h-5 text-yellow-500"></i>
+                    </div>
+                    <h4 class="font-bold text-white mb-2" data-i18n="feat_dedup_title">Smart Deduplication</h4>
+                    <p class="text-zinc-400 text-sm" data-i18n="feat_dedup_desc">Intelligent IOC deduplication with hash normalization and context-aware merging.</p>
+                </div>
+                <div class="bg-dark-700 border border-zinc-800 rounded-xl p-6 card-hover">
+                    <div class="w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center mb-3">
+                        <i data-lucide="terminal" class="w-5 h-5 text-purple-500"></i>
+                    </div>
+                    <h4 class="font-bold text-white mb-2" data-i18n="feat_cli_title">Powerful CLI</h4>
+                    <p class="text-zinc-400 text-sm" data-i18n="feat_cli_desc">Full-featured CLI with fetch, enrich, export, and schedule commands. Configurable via YAML.</p>
+                </div>
+                <div class="bg-dark-700 border border-zinc-800 rounded-xl p-6 card-hover">
+                    <div class="w-10 h-10 rounded-lg bg-cyan-500/20 flex items-center justify-center mb-3">
+                        <i data-lucide="lock" class="w-5 h-5 text-cyan-500"></i>
+                    </div>
+                    <h4 class="font-bold text-white mb-2" data-i18n="feat_sec_title">Security First</h4>
+                    <p class="text-zinc-400 text-sm" data-i18n="feat_sec_desc">Zero external network calls beyond SGB API. All data processed locally. No telemetry.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Architecture Section -->
+    <section id="architecture" class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <span class="badge badge-yellow mb-4" data-i18n="arch_badge">Architecture</span>
+                <h2 class="text-3xl sm:text-4xl font-bold mb-4 section-heading" data-i18n="arch_heading">Pipeline Architecture</h2>
+                <p class="text-zinc-400 max-w-2xl mx-auto" data-i18n="arch_desc">
+                    A modular pipeline design with clear separation of concerns for reliability and extensibility.
+                </p>
+            </div>
+
+            <div class="max-w-3xl mx-auto">
+                <div class="pipeline-step mb-8 animate-fadeInUp">
+                    <div class="step-dot">1</div>
+                    <div class="bg-dark-700 border border-zinc-800 rounded-xl p-6">
+                        <h4 class="font-bold text-white mb-2 flex items-center gap-2">
+                            <i data-lucide="key" class="w-5 h-5 text-primary"></i>
+                            <span data-i18n="arch_step1_title">Authentication</span>
+                        </h4>
+                        <p class="text-zinc-400 text-sm" data-i18n="arch_step1_desc">
+                            Secure OAuth2 authentication with SGB API. Automatic token refresh and credential caching.
+                        </p>
+                    </div>
+                </div>
+                <div class="pipeline-step mb-8 animate-fadeInUp delay-100">
+                    <div class="step-dot">2</div>
+                    <div class="bg-dark-700 border border-zinc-800 rounded-xl p-6">
+                        <h4 class="font-bold text-white mb-2 flex items-center gap-2">
+                            <i data-lucide="download" class="w-5 h-5 text-secondary"></i>
+                            <span data-i18n="arch_step2_title">Fetch</span>
+                        </h4>
+                        <p class="text-zinc-400 text-sm" data-i18n="arch_step2_desc">
+                            Paginated IOC retrieval with retry logic. Handles 489K+ indicators across 48 sources.
+                        </p>
+                    </div>
+                </div>
+                <div class="pipeline-step mb-8 animate-fadeInUp delay-200">
+                    <div class="step-dot">3</div>
+                    <div class="bg-dark-700 border border-zinc-800 rounded-xl p-6">
+                        <h4 class="font-bold text-white mb-2 flex items-center gap-2">
+                            <i data-lucide="filter" class="w-5 h-5 text-yellow-500"></i>
+                            <span data-i18n="arch_step3_title">Normalize & Deduplicate</span>
+                        </h4>
+                        <p class="text-zinc-400 text-sm" data-i18n="arch_step3_desc">
+                            Standardize IOC formats, remove duplicates, and validate against threat intelligence schemas.
+                        </p>
+                    </div>
+                </div>
+                <div class="pipeline-step mb-8 animate-fadeInUp delay-300">
+                    <div class="step-dot">4</div>
+                    <div class="bg-dark-700 border border-zinc-800 rounded-xl p-6">
+                        <h4 class="font-bold text-white mb-2 flex items-center gap-2">
+                            <i data-lucide="cpu" class="w-5 h-5 text-green-500"></i>
+                            <span data-i18n="arch_step4_title">Enrich</span>
+                        </h4>
+                        <p class="text-zinc-400 text-sm" data-i18n="arch_step4_desc">
+                            Add threat context: confidence scores, geo-tags, threat actor attribution, and malware family mapping.
+                        </p>
+                    </div>
+                </div>
+                <div class="pipeline-step animate-fadeInUp delay-400">
+                    <div class="step-dot">5</div>
+                    <div class="bg-dark-700 border border-zinc-800 rounded-xl p-6">
+                        <h4 class="font-bold text-white mb-2 flex items-center gap-2">
+                            <i data-lucide="share-2" class="w-5 h-5 text-purple-500"></i>
+                            <span data-i18n="arch_step5_title">Export</span>
+                        </h4>
+                        <p class="text-zinc-400 text-sm" data-i18n="arch_step5_desc">
+                            Generate 16+ output formats in parallel. Ready for SIEM, SOAR, TIP, and manual analysis.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pipeline Stats Section -->
+    <section class="py-20 bg-dark-800/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <span class="badge badge-green mb-4" data-i18n="stats_badge">Stats</span>
+                <h2 class="text-3xl sm:text-4xl font-bold mb-4 section-heading" data-i18n="stats_heading">Pipeline Statistics</h2>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div class="text-center p-6 bg-dark-700 border border-zinc-800 rounded-xl card-hover">
+                    <div class="text-3xl font-bold gradient-text mb-2">489K+</div>
+                    <div class="text-zinc-400 text-sm" data-i18n="stat_iocs">Total IOCs</div>
+                </div>
+                <div class="text-center p-6 bg-dark-700 border border-zinc-800 rounded-xl card-hover">
+                    <div class="text-3xl font-bold gradient-text mb-2">16+</div>
+                    <div class="text-zinc-400 text-sm" data-i18n="stat_formats">Output Formats</div>
+                </div>
+                <div class="text-center p-6 bg-dark-700 border border-zinc-800 rounded-xl card-hover">
+                    <div class="text-3xl font-bold gradient-text mb-2">330</div>
+                    <div class="text-zinc-400 text-sm" data-i18n="stat_tests">Unit Tests</div>
+                </div>
+                <div class="text-center p-6 bg-dark-700 border border-zinc-800 rounded-xl card-hover">
+                    <div class="text-3xl font-bold gradient-text mb-2">73%</div>
+                    <div class="text-zinc-400 text-sm" data-i18n="stat_coverage">Code Coverage</div>
+                </div>
+            </div>
+
+            <div class="mt-12 grid md:grid-cols-3 gap-6">
+                <div class="bg-dark-700 border border-zinc-800 rounded-xl p-6">
+                    <div class="flex items-center gap-3 mb-3">
+                        <i data-lucide="globe" class="w-5 h-5 text-primary"></i>
+                        <span class="font-bold text-white" data-i18n="stat_sources_title">48 Sources</span>
+                    </div>
+                    <p class="text-zinc-400 text-sm" data-i18n="stat_sources_desc">IOC data fetched from 48 different threat intelligence feeds and sources.</p>
+                </div>
+                <div class="bg-dark-700 border border-zinc-800 rounded-xl p-6">
+                    <div class="flex items-center gap-3 mb-3">
+                        <i data-lucide="clock" class="w-5 h-5 text-secondary"></i>
+                        <span class="font-bold text-white" data-i18n="stat_speed_title">4.2s Average</span>
+                    </div>
+                    <p class="text-zinc-400 text-sm" data-i18n="stat_speed_desc">Full pipeline execution from fetch to all 16 output formats generated.</p>
+                </div>
+                <div class="bg-dark-700 border border-zinc-800 rounded-xl p-6">
+                    <div class="flex items-center gap-3 mb-3">
+                        <i data-lucide="check-circle" class="w-5 h-5 text-green-500"></i>
+                        <span class="font-bold text-white" data-i18n="stat_valid_title">100% Valid</span>
+                    </div>
+                    <p class="text-zinc-400 text-sm" data-i18n="stat_valid_desc">All output formats validated against their respective schemas and specifications.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Output Formats Section -->
+    <section id="formats" class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <span class="badge badge-blue mb-4" data-i18n="formats_badge">Formats</span>
+                <h2 class="text-3xl sm:text-4xl font-bold mb-4 section-heading" data-i18n="formats_heading">16+ Output Formats</h2>
+                <p class="text-zinc-400 max-w-2xl mx-auto" data-i18n="formats_desc">
+                    Export IOCs in any format your security infrastructure needs. All formats are validated and production-ready.
+                </p>
+            </div>
+
+            <div class="format-grid">
+                <div class="format-item"><i data-lucide="file-text" class="w-4 h-4 mx-auto mb-1 text-primary"></i>CSV</div>
+                <div class="format-item"><i data-lucide="file-json" class="w-4 h-4 mx-auto mb-1 text-yellow-500"></i>JSON</div>
+                <div class="format-item"><i data-lucide="shield" class="w-4 h-4 mx-auto mb-1 text-primary"></i>MISP</div>
+                <div class="format-item"><i data-lucide="lock" class="w-4 h-4 mx-auto mb-1 text-secondary"></i>STIX 2.1</div>
+                <div class="format-item"><i data-lucide="alert-triangle" class="w-4 h-4 mx-auto mb-1 text-yellow-400"></i>Sigma</div>
+                <div class="format-item"><i data-lucide="file-code" class="w-4 h-4 mx-auto mb-1 text-green-500"></i>YARA</div>
+                <div class="format-item"><i data-lucide="terminal" class="w-4 h-4 mx-auto mb-1 text-green-400"></i>Splunk</div>
+                <div class="format-item"><i data-lucide="server" class="w-4 h-4 mx-auto mb-1 text-blue-400"></i>QRadar</div>
+                <div class="format-item"><i data-lucide="database" class="w-4 h-4 mx-auto mb-1 text-cyan-400"></i>Elastic</div>
+                <div class="format-item"><i data-lucide="file" class="w-4 h-4 mx-auto mb-1 text-zinc-400"></i>CEF</div>
+                <div class="format-item"><i data-lucide="globe" class="w-4 h-4 mx-auto mb-1 text-green-600"></i>Nginx</div>
+                <div class="format-item"><i data-lucide="server" class="w-4 h-4 mx-auto mb-1 text-orange-400"></i>Apache</div>
+                <div class="format-item"><i data-lucide="cloud" class="w-4 h-4 mx-auto mb-1 text-blue-500"></i>GCS</div>
+                <div class="format-item"><i data-lucide="search" class="w-4 h-4 mx-auto mb-1 text-purple-400"></i>OpenIOC</div>
+                <div class="format-item"><i data-lucide="activity" class="w-4 h-4 mx-auto mb-1 text-red-400"></i>Suricata</div>
+                <div class="format-item"><i data-lucide="file-plus" class="w-4 h-4 mx-auto mb-1 text-indigo-400"></i>+ More</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Start Section -->
+    <section id="quickstart" class="py-20 bg-dark-800/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <span class="badge badge-green mb-4" data-i18n="qs_badge">Quick Start</span>
+                <h2 class="text-3xl sm:text-4xl font-bold mb-4 section-heading" data-i18n="qs_heading">Get Started in 4 Steps</h2>
+                <p class="text-zinc-400 max-w-2xl mx-auto" data-i18n="qs_desc">
+                    Follow these steps to start collecting IOCs from Turkey's SGB API in minutes.
+                </p>
+            </div>
+
+            <div class="max-w-3xl mx-auto space-y-6">
+                <div class="bg-dark-700 border border-zinc-800 rounded-xl p-6 animate-fadeInUp">
+                    <div class="flex items-start gap-4">
+                        <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0 text-primary font-bold">1</div>
+                        <div>
+                            <h4 class="font-bold text-white mb-2" data-i18n="qs_step1_title">Clone the Repository</h4>
+                            <div class="code-block">
+                                <div class="code-content text-zinc-300">
+                                    <span class="text-green-400">$</span> git clone https://github.com/bayraktarozcan/TC-SGB-API-to-List.git<br>
+                                    <span class="text-green-400">$</span> cd TC-SGB-API-to-List
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-dark-700 border border-zinc-800 rounded-xl p-6 animate-fadeInUp delay-100">
+                    <div class="flex items-start gap-4">
+                        <div class="w-8 h-8 rounded-full bg-secondary/20 flex items-center justify-center flex-shrink-0 text-secondary font-bold">2</div>
+                        <div>
+                            <h4 class="font-bold text-white mb-2" data-i18n="qs_step2_title">Install Dependencies</h4>
+                            <div class="code-block">
+                                <div class="code-content text-zinc-300">
+                                    <span class="text-green-400">$</span> pip install -r requirements.txt
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-dark-700 border border-zinc-800 rounded-xl p-6 animate-fadeInUp delay-200">
+                    <div class="flex items-start gap-4">
+                        <div class="w-8 h-8 rounded-full bg-yellow-500/20 flex items-center justify-center flex-shrink-0 text-yellow-500 font-bold">3</div>
+                        <div>
+                            <h4 class="font-bold text-white mb-2" data-i18n="qs_step3_title">Configure API Credentials</h4>
+                            <div class="code-block">
+                                <div class="code-content text-zinc-300">
+                                    <span class="text-green-400">$</span> cp config.example.yaml config.yaml<br>
+                                    <span class="text-zinc-500"># Edit config.yaml with your SGB API credentials</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-dark-700 border border-zinc-800 rounded-xl p-6 animate-fadeInUp delay-300">
+                    <div class="flex items-start gap-4">
+                        <div class="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center flex-shrink-0 text-green-500 font-bold">4</div>
+                        <div>
+                            <h4 class="font-bold text-white mb-2" data-i18n="qs_step4_title">Run the Pipeline</h4>
+                            <div class="code-block">
+                                <div class="code-content text-zinc-300">
+                                    <span class="text-green-400">$</span> python -m tc_sgb_api_to_list fetch --format all<br>
+                                    <span class="text-zinc-500"># IOCs will be exported to ./output/ directory</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Security Section -->
+    <section id="security" class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <span class="badge badge-red mb-4" data-i18n="sec_badge">Security</span>
+                <h2 class="text-3xl sm:text-4xl font-bold mb-4 section-heading" data-i18n="sec_heading">Security & Privacy</h2>
+                <p class="text-zinc-400 max-w-2xl mx-auto" data-i18n="sec_desc">
+                    Security-first design. No telemetry, no external calls beyond the SGB API. All processing is local.
+                </p>
+            </div>
+
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-dark-700 border border-zinc-800 rounded-xl overflow-hidden">
+                    <div class="grid grid-cols-3 gap-4 p-4 border-b border-zinc-800 text-sm font-bold text-zinc-400">
+                        <div data-i18n="sec_col_concern">Concern</div>
+                        <div data-i18n="sec_col_approach">TC-SGB-API-to-List Approach</div>
+                        <div data-i18n="sec_col_status">Status</div>
+                    </div>
+                    <div class="security-row grid grid-cols-3 gap-4 p-4 text-sm">
+                        <div class="text-zinc-300" data-i18n="sec_row1_title">External Network Calls</div>
+                        <div class="text-zinc-400" data-i18n="sec_row1_desc">Only SGB API. No analytics, no telemetry, no phone-home.</div>
+                        <div><span class="badge badge-green">Mitigated</span></div>
+                    </div>
+                    <div class="security-row grid grid-cols-3 gap-4 p-4 text-sm">
+                        <div class="text-zinc-300" data-i18n="sec_row2_title">Credential Storage</div>
+                        <div class="text-zinc-400" data-i18n="sec_row2_desc">Environment variables only. Never stored in code or config files.</div>
+                        <div><span class="badge badge-green">Mitigated</span></div>
+                    </div>
+                    <div class="security-row grid grid-cols-3 gap-4 p-4 text-sm">
+                        <div class="text-zinc-300" data-i18n="sec_row3_title">Data Leakage</div>
+                        <div class="text-zinc-400" data-i18n="sec_row3_desc">All IOCs processed locally. No data sent to third parties.</div>
+                        <div><span class="badge badge-green">Mitigated</span></div>
+                    </div>
+                    <div class="security-row grid grid-cols-3 gap-4 p-4 text-sm">
+                        <div class="text-zinc-300" data-i18n="sec_row4_title">Supply Chain</div>
+                        <div class="text-zinc-400" data-i18n="sec_row4_desc">Minimal dependencies. All pinned in requirements.txt with hashes.</div>
+                        <div><span class="badge badge-green">Mitigated</span></div>
+                    </div>
+                    <div class="security-row grid grid-cols-3 gap-4 p-4 text-sm">
+                        <div class="text-zinc-300" data-i18n="sec_row5_title">Input Validation</div>
+                        <div class="text-zinc-400" data-i18n="sec_row5_desc">Schema-based validation for all IOC inputs and API responses.</div>
+                        <div><span class="badge badge-green">Mitigated</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Roadmap Section -->
+    <section class="py-20 bg-dark-800/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <span class="badge badge-yellow mb-4" data-i18n="rm_badge">Roadmap</span>
+                <h2 class="text-3xl sm:text-4xl font-bold mb-4 section-heading" data-i18n="rm_heading">Roadmap</h2>
+                <p class="text-zinc-400 max-w-2xl mx-auto" data-i18n="rm_desc">
+                    Planned features and enhancements for the TC-SGB-API-to-List pipeline.
+                </p>
+            </div>
+
+            <div class="max-w-3xl mx-auto space-y-6">
+                <div class="bg-dark-700 border border-zinc-800 rounded-xl p-6 card-hover">
+                    <div class="flex items-center gap-3 mb-3">
+                        <span class="badge badge-green" data-i18n="rm_status_done">Done</span>
+                        <h4 class="font-bold text-white" data-i18n="rm_p1_title">Phase 1 — Core Pipeline</h4>
+                    </div>
+                    <ul class="text-zinc-400 text-sm space-y-1">
+                        <li data-i18n="rm_p1_1">SGB API authentication and IOC fetch</li>
+                        <li data-i18n="rm_p1_2">Deduplication and normalization engine</li>
+                        <li data-i18n="rm_p1_3">CSV, JSON, and basic format exporters</li>
+                    </ul>
+                </div>
+                <div class="bg-dark-700 border border-zinc-800 rounded-xl p-6 card-hover">
+                    <div class="flex items-center gap-3 mb-3">
+                        <span class="badge badge-green" data-i18n="rm_status_done">Done</span>
+                        <h4 class="font-bold text-white" data-i18n="rm_p2_title">Phase 2 — Format Expansion</h4>
+                    </div>
+                    <ul class="text-zinc-400 text-sm space-y-1">
+                        <li data-i18n="rm_p2_1">MISP, STIX 2.1, Sigma, YARA formats</li>
+                        <li data-i18n="rm_p2_2">Splunk, QRadar, Elastic, and SIEM integrations</li>
+                        <li data-i18n="rm_p2_3">330 unit tests with 73% coverage</li>
+                    </ul>
+                </div>
+                <div class="bg-dark-700 border border-zinc-800 rounded-xl p-6 card-hover">
+                    <div class="flex items-center gap-3 mb-3">
+                        <span class="badge badge-yellow" data-i18n="rm_status_progress">In Progress</span>
+                        <h4 class="font-bold text-white" data-i18n="rm_p3_title">Phase 3 — Enrichment & Context</h4>
+                    </div>
+                    <ul class="text-zinc-400 text-sm space-y-1">
+                        <li data-i18n="rm_p3_1">Threat actor attribution and confidence scoring</li>
+                        <li data-i18n="rm_p3_2">Geo-location tagging and ASN enrichment</li>
+                        <li data-i18n="rm_p3_3">Malware family mapping and TTP correlation</li>
+                    </ul>
+                </div>
+                <div class="bg-dark-700 border border-zinc-800 rounded-xl p-6 card-hover">
+                    <div class="flex items-center gap-3 mb-3">
+                        <span class="badge badge-gray" data-i18n="rm_status_planned">Planned</span>
+                        <h4 class="font-bold text-white" data-i18n="rm_p4_title">Phase 4 — Enterprise Features</h4>
+                    </div>
+                    <ul class="text-zinc-400 text-sm space-y-1">
+                        <li data-i18n="rm_p4_1">Scheduled pipeline execution (cron/airflow)</li>
+                        <li data-i18n="rm_p4_2">Web dashboard for IOC visualization</li>
+                        <li data-i18n="rm_p4_3">API server for real-time IOC queries</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 border-t border-zinc-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-3 gap-8 mb-8">
+                <div>
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
+                            <i data-lucide="shield" class="w-5 h-5 text-white"></i>
+                        </div>
+                        <span class="font-bold text-white">TC-SGB-API-to-List</span>
+                    </div>
+                    <p class="text-zinc-400 text-sm" data-i18n="footer_built">
+                        Built with purpose. Open-source threat intelligence for everyone.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-white mb-4" data-i18n="footer_links">Links</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="https://github.com/bayraktarozcan/TC-SGB-API-to-List" target="_blank" rel="noopener noreferrer" class="text-zinc-400 hover:text-white transition-colors">GitHub</a></li>
+                        <li><a href="https://github.com/bayraktarozcan/TC-SGB-API-to-List/issues" target="_blank" rel="noopener noreferrer" class="text-zinc-400 hover:text-white transition-colors" data-i18n="footer_issues">Report Issues</a></li>
+                        <li><a href="https://github.com/bayraktarozcan/TC-SGB-API-to-List/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer" class="text-zinc-400 hover:text-white transition-colors" data-i18n="footer_contrib">Contributing</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-white mb-4" data-i18n="footer_legal">Legal</h4>
+                    <p class="text-zinc-400 text-sm" data-i18n="footer_license">
+                        Released under the MIT License. See LICENSE for details.
+                    </p>
+                    <p class="text-zinc-500 text-xs mt-2" data-i18n="footer_disclaimer">
+                        This tool is for authorized security research and threat intelligence purposes only.
+                    </p>
+                </div>
+            </div>
+            <div class="border-t border-zinc-800 pt-8 text-center text-zinc-500 text-sm">
+                <p data-i18n="footer_copy">TC-SGB-API-to-List &copy; 2026. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="w-12 h-12 rounded-full bg-gradient-to-r from-primary to-secondary text-white flex items-center justify-center shadow-lg hover:opacity-90 transition-all" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+        <i data-lucide="arrow-up" class="w-5 h-5"></i>
+    </button>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        const translations = {
+            en: {
+                nav_about: "About", nav_features: "Features", nav_architecture: "Architecture",
+                nav_formats: "Formats", nav_quickstart: "Quick Start", nav_security: "Security",
+                hero_title: "IOC Threat", hero_title2: "Intelligence Pipeline",
+                hero_desc: "Fetches, enriches, and distributes Indicators of Compromise from Turkey's SGB API in 16+ formats.",
+                hero_github: "View on GitHub", hero_quickstart: "Quick Start",
+                hero_stat_iocs: "IOCs", hero_stat_formats: "Formats", hero_stat_tests: "Tests", hero_stat_coverage: "Coverage",
+                about_badge: "About", about_heading: "What is TC-SGB-API-to-List?",
+                about_desc: "An open-source Python pipeline that fetches Indicators of Compromise (IOCs) from Turkey's SGB threat intelligence API, enriches them with contextual data, and distributes them in 16+ industry-standard formats for SIEM, SOAR, and threat intelligence platforms.",
+                about_collect_title: "Collect", about_collect_desc: "Fetch IOCs from Turkey's SGB API with automatic authentication, pagination, and rate limiting. Supports IPv4, IPv6, domain, URL, and hash indicators.",
+                about_enrich_title: "Enrich", about_enrich_desc: "Deduplicate, validate, and enrich IOCs with threat context. Apply confidence scoring, geo-location tagging, and threat actor attribution.",
+                about_distribute_title: "Distribute", about_distribute_desc: "Export to 16+ formats including MISP, STIX, Sigma, YARA, Splunk, QRadar, Elastic, and more. Ready for any SIEM, SOAR, or TIP platform.",
+                features_badge: "Features", features_heading: "Key Features",
+                features_desc: "Enterprise-grade threat intelligence pipeline with comprehensive format support and robust testing.",
+                feat_api_title: "SGB API Integration", feat_api_desc: "Direct integration with Turkey's SGB threat intelligence API with automatic auth token management.",
+                feat_formats_title: "16+ Output Formats", feat_formats_desc: "MISP, STIX 2.1, Sigma, YARA, Splunk, QRadar, Elastic, CSV, JSON, and more.",
+                feat_test_title: "Comprehensive Testing", feat_test_desc: "330 unit tests with 73% coverage. Every format generator is thoroughly validated.",
+                feat_dedup_title: "Smart Deduplication", feat_dedup_desc: "Intelligent IOC deduplication with hash normalization and context-aware merging.",
+                feat_cli_title: "Powerful CLI", feat_cli_desc: "Full-featured CLI with fetch, enrich, export, and schedule commands. Configurable via YAML.",
+                feat_sec_title: "Security First", feat_sec_desc: "Zero external network calls beyond SGB API. All data processed locally. No telemetry.",
+                arch_badge: "Architecture", arch_heading: "Pipeline Architecture",
+                arch_desc: "A modular pipeline design with clear separation of concerns for reliability and extensibility.",
+                arch_step1_title: "Authentication", arch_step1_desc: "Secure OAuth2 authentication with SGB API. Automatic token refresh and credential caching.",
+                arch_step2_title: "Fetch", arch_step2_desc: "Paginated IOC retrieval with retry logic. Handles 489K+ indicators across 48 sources.",
+                arch_step3_title: "Normalize & Deduplicate", arch_step3_desc: "Standardize IOC formats, remove duplicates, and validate against threat intelligence schemas.",
+                arch_step4_title: "Enrich", arch_step4_desc: "Add threat context: confidence scores, geo-tags, threat actor attribution, and malware family mapping.",
+                arch_step5_title: "Export", arch_step5_desc: "Generate 16+ output formats in parallel. Ready for SIEM, SOAR, TIP, and manual analysis.",
+                stats_badge: "Stats", stats_heading: "Pipeline Statistics",
+                stat_iocs: "Total IOCs", stat_formats: "Output Formats", stat_tests: "Unit Tests", stat_coverage: "Code Coverage",
+                stat_sources_title: "48 Sources", stat_sources_desc: "IOC data fetched from 48 different threat intelligence feeds and sources.",
+                stat_speed_title: "4.2s Average", stat_speed_desc: "Full pipeline execution from fetch to all 16 output formats generated.",
+                stat_valid_title: "100% Valid", stat_valid_desc: "All output formats validated against their respective schemas and specifications.",
+                formats_badge: "Formats", formats_heading: "16+ Output Formats",
+                formats_desc: "Export IOCs in any format your security infrastructure needs. All formats are validated and production-ready.",
+                qs_badge: "Quick Start", qs_heading: "Get Started in 4 Steps",
+                qs_desc: "Follow these steps to start collecting IOCs from Turkey's SGB API in minutes.",
+                qs_step1_title: "Clone the Repository", qs_step2_title: "Install Dependencies",
+                qs_step3_title: "Configure API Credentials", qs_step4_title: "Run the Pipeline",
+                sec_badge: "Security", sec_heading: "Security & Privacy",
+                sec_desc: "Security-first design. No telemetry, no external calls beyond the SGB API. All processing is local.",
+                sec_col_concern: "Concern", sec_col_approach: "TC-SGB-API-to-List Approach", sec_col_status: "Status",
+                sec_row1_title: "External Network Calls", sec_row1_desc: "Only SGB API. No analytics, no telemetry, no phone-home.",
+                sec_row2_title: "Credential Storage", sec_row2_desc: "Environment variables only. Never stored in code or config files.",
+                sec_row3_title: "Data Leakage", sec_row3_desc: "All IOCs processed locally. No data sent to third parties.",
+                sec_row4_title: "Supply Chain", sec_row4_desc: "Minimal dependencies. All pinned in requirements.txt with hashes.",
+                sec_row5_title: "Input Validation", sec_row5_desc: "Schema-based validation for all IOC inputs and API responses.",
+                rm_badge: "Roadmap", rm_heading: "Roadmap",
+                rm_desc: "Planned features and enhancements for the TC-SGB-API-to-List pipeline.",
+                rm_status_done: "Done", rm_status_progress: "In Progress", rm_status_planned: "Planned",
+                rm_p1_title: "Phase 1 — Core Pipeline", rm_p1_1: "SGB API authentication and IOC fetch", rm_p1_2: "Deduplication and normalization engine", rm_p1_3: "CSV, JSON, and basic format exporters",
+                rm_p2_title: "Phase 2 — Format Expansion", rm_p2_1: "MISP, STIX 2.1, Sigma, YARA formats", rm_p2_2: "Splunk, QRadar, Elastic, and SIEM integrations", rm_p2_3: "330 unit tests with 73% coverage",
+                rm_p3_title: "Phase 3 — Enrichment & Context", rm_p3_1: "Threat actor attribution and confidence scoring", rm_p3_2: "Geo-location tagging and ASN enrichment", rm_p3_3: "Malware family mapping and TTP correlation",
+                rm_p4_title: "Phase 4 — Enterprise Features", rm_p4_1: "Scheduled pipeline execution (cron/airflow)", rm_p4_2: "Web dashboard for IOC visualization", rm_p4_3: "API server for real-time IOC queries",
+                footer_built: "Built with purpose. Open-source threat intelligence for everyone.",
+                footer_links: "Links", footer_issues: "Report Issues", footer_contrib: "Contributing",
+                footer_legal: "Legal", footer_license: "Released under the MIT License. See LICENSE for details.",
+                footer_disclaimer: "This tool is for authorized security research and threat intelligence purposes only.",
+                footer_copy: "TC-SGB-API-to-List &copy; 2026. All rights reserved.",
+            },
+            tr: {
+                nav_about: "Hakkında", nav_features: "Özellikler", nav_architecture: "Mimari",
+                nav_formats: "Formatlar", nav_quickstart: "Hızlı Başlangıç", nav_security: "Güvenlik",
+                hero_title: "IOC Tehdit", hero_title2: "İstihbarat Hattı",
+                hero_desc: "Türkiye'nin SGB API'sinden IOCları 16+ formatında çeker, zenginleştirir ve dağıtır.",
+                hero_github: "GitHub'da Gör", hero_quickstart: "Hızlı Başlangıç",
+                hero_stat_iocs: "IOC", hero_stat_formats: "Format", hero_stat_tests: "Test", hero_stat_coverage: "Kapsama",
+                about_badge: "Hakkında", about_heading: "TC-SGB-API-to-List Nedir?",
+                about_desc: "Türkiye'nin SGB tehdit istihbarat API'sinden İstih Bağlantılı Komplo Unsurlarını (IOC) çeken, bağlam verileriyle zenginleştiren ve SIEM, SOAR ile tehdit istihbaratı platformları için 16+ endüstri standardı formatında dağıtan açık kaynaklı bir Python hattı.",
+                about_collect_title: "Topla", about_collect_desc: "Otomatik kimlik doğrulama, sayfalama ve hız sınırlamasıyla SGB API'sinden IOCları çekin. IPv4, IPv6, alan adı, URL ve hash göstergelerini destekler.",
+                about_enrich_title: "Zenginleştir", about_enrich_desc: "IOCları tehdit bağlamıyla çoğaltmayı kaldırın, doğrulayın ve zenginleştirin. Güven puanlama, coğrafi konum etiketleme ve tehdit aktörü atama uygulayın.",
+                about_distribute_title: "Dağıt", about_distribute_desc: "MISP, STIX, Sigma, YARA, Splunk, QRadar, Elastic ve daha fazlası dahil 16+ formata dışa aktarın. Herhangi bir SIEM, SOAR veya TIP platformu için hazır.",
+                features_badge: "Özellikler", features_heading: "Temel Özellikler",
+                features_desc: "Kapsamlı format desteği ve sağlam test ile kurumsal düzeyde tehdit istihbaratı hattı.",
+                feat_api_title: "SGB API Entegrasyonu", feat_api_desc: "Otomatik kimlik belirteci yönetimiyle Türkiye'nin SGB tehdit istihbarat API'siyle doğrudan entegrasyon.",
+                feat_formats_title: "16+ Çıktı Formatı", feat_formats_desc: "MISP, STIX 2.1, Sigma, YARA, Splunk, QRadar, Elastic, CSV, JSON ve daha fazlası.",
+                feat_test_title: "Kapsamlı Testler", feat_test_desc: "73% kapsama ile 330 birim testi. Her format üreteci titizlikle doğrulanır.",
+                feat_dedup_title: "Akıllı Çoğaltma Kaldırma", feat_dedup_desc: "Hash normalizasyonu ve bağlam farkında birleştirme ile akıllı IOC çoğaltma kaldırma.",
+                feat_cli_title: "Güçlü CLI", feat_cli_desc: "Çekme, zenginleştirme, dışa aktarma ve zamanlama komutları ile eksiksiz CLI. YAML ile yapılandırılabilir.",
+                feat_sec_title: "Güvenlik Önce", feat_sec_desc: "SGB API ötesinde sıfır harici ağ çağrısı. Tüm veriler yerel olarak işlenir. Telemetri yok.",
+                arch_badge: "Mimari", arch_heading: "Hattı Mimarisi",
+                arch_desc: "Güvenilirlik ve genişletilebilirlik için net sorumluluk ayrımı ile modüler bir hat tasarımı.",
+                arch_step1_title: "Kimlik Doğrulama", arch_step1_desc: "SGB API ile güvenli OAuth2 kimlik doğrulaması. Otomatik belirteç yenileme ve kimlik bilgisi önbelleğe alma.",
+                arch_step2_title: "Çek", arch_step2_desc: "Yeniden deneme mantığı ile sayfalı IOC alma. 48 kaynaktan 489K+ göstergeyi işler.",
+                arch_step3_title: "Normalleştir ve Çoğaltmayı Kaldır", arch_step3_desc: "IOC formatlarını standartlaştırın, çoğaltmaları kaldırın ve tehdit istihbaratı şemalarına göre doğrulayın.",
+                arch_step4_title: "Zenginleştir", arch_step4_desc: "Tehdit bağlamı ekleyin: güven puanları, coğrafi etiketler, tehdit aktörü atama ve kötü amaçlı yazılım ailesi eşleme.",
+                arch_step5_title: "Dışa Aktar", arch_step5_desc: "16+ çıkış formatını paralel olarak oluşturun. SIEM, SOAR, TIP ve manuel analiz için hazır.",
+                stats_badge: "İstatistikler", stats_heading: "Hattı İstatistikleri",
+                stat_iocs: "Toplam IOC", stat_formats: "Çıktı Formatı", stat_tests: "Birim Testi", stat_coverage: "Kod Kapsama",
+                stat_sources_title: "48 Kaynak", stat_sources_desc: "IOC verileri 48 farklı tehdit istihbaratı beslemesinden ve kaynağından çekildi.",
+                stat_speed_title: "4.2s Ortalama", stat_speed_desc: "Çekimden 16 çıkış formatının tamamının oluşturulmasına kadar tam hattı çalışması.",
+                stat_valid_title: "%100 Geçerli", stat_valid_desc: "Tüm çıkış formatları ilgili şemalarına ve özelliklerine göre doğrulanır.",
+                formats_badge: "Formatlar", formats_heading: "16+ Çıktı Formatı",
+                formats_desc: "Güvenlik altyapınızın ihtiyaç duyduğu herhangi bir formatta IOCları dışa aktarın. Tüm formatlar doğrulanmış ve üretim-ready.",
+                qs_badge: "Hızlı Başlangıç", qs_heading: "4 Adımda Başlayın",
+                qs_desc: "Türkiye'nin SGB API'sinden IOCları dakikalar içinde toplamaya başlamak için bu adımları izleyin.",
+                qs_step1_title: "Depoyu Klonlayın", qs_step2_title: "Bağımlılıkları Yükleyin",
+                qs_step3_title: "API Kimlik Bilgilerini Yapılandırın", qs_step4_title: "Hattı Çalıştırın",
+                sec_badge: "Güvenlik", sec_heading: "Güvenlik ve Gizlilik",
+                sec_desc: "Güvenlik öncelikli tasarım. Telemetri yok, SGB API ötesinde harici çağrı yok. Tüm işleme yereldir.",
+                sec_col_concern: "Endişe", sec_col_approach: "TC-SGB-API-to-List Yaklaşımı", sec_col_status: "Durum",
+                sec_row1_title: "Harici Ağ Çağrıları", sec_row1_desc: "Yalnızca SGB API. Analitik yok, telemetri yok, eve dönüş yok.",
+                sec_row2_title: "Kimlik Bilgisi Depolama", sec_row2_desc: "Yalnızca ortam değişkenleri. Asla kodda veya yapılandırma dosyalarında saklanmaz.",
+                sec_row3_title: "Veri Sızıntısı", sec_row3_desc: "Tüm IOClar yerel olarak işlenir. Üçüncü taraflara veri gönderilmez.",
+                sec_row4_title: "Tedarik Zinciri", sec_row4_desc: "Minimal bağımlılıklar. Tümü requirements.txt'de hash'ler ile sabitlenmiştir.",
+                sec_row5_title: "Girdi Doğrulama", sec_row5_desc: "Tüm IOC girdileri ve API yanıtları için şema tabanlı doğrulama.",
+                rm_badge: "Yol Haritası", rm_heading: "Yol Haritası",
+                rm_desc: "TC-SGB-API-to-List hattı için planlanan özellikler ve geliştirmeler.",
+                rm_status_done: "Tamamlandı", rm_status_progress: "Devam Ediyor", rm_status_planned: "Planlandı",
+                rm_p1_title: "Faz 1 — Çekirdek Hattı", rm_p1_1: "SGB API kimlik doğrulaması ve IOC çekme", rm_p1_2: "Çoğaltma kaldırma ve normalleştirme motoru", rm_p1_3: "CSV, JSON ve temel format dışa aktarıcılar",
+                rm_p2_title: "Faz 2 — Format Genişletme", rm_p2_1: "MISP, STIX 2.1, Sigma, YARA formatları", rm_p2_2: "Splunk, QRadar, Elastic ve SIEM entegrasyonları", rm_p2_3: "73% kapsama ile 330 birim testi",
+                rm_p3_title: "Faz 3 — Zenginleştirme ve Bağlam", rm_p3_1: "Tehdit aktörü atama ve güven puanlama", rm_p3_2: "Coğrafi konum etiketleme ve ASN zenginleştirme", rm_p3_3: "Kötü amaçlı yazılım ailesi eşleme ve TTP korelasyonu",
+                rm_p4_title: "Faz 4 — Kurumsal Özellikler", rm_p4_1: "Zamanlanmış hattı çalıştırma (cron/airflow)", rm_p4_2: "IOC görselleştirme için web panosu", rm_p4_3: "Gerçek zamanlı IOC sorguları için API sunucusu",
+                footer_built: "Amaca yönelik inşa edildi. Herkes için açık kaynaklı tehdit istihbaratı.",
+                footer_links: "Bağlantılar", footer_issues: "Sorun Bildir", footer_contrib: "Katkıda Bulun",
+                footer_legal: "Yasal", footer_license: "MIT Lisansı altında yayınlandı. Ayrıntılar için LICENSE dosyasına bakın.",
+                footer_disclaimer: "Bu araç yalnızca yetkili güvenlik araştırması ve tehdit istihbaratı amaçları içindir.",
+                footer_copy: "TC-SGB-API-to-List &copy; 2026. Tüm hakları saklıdır.",
+            }
+        };
+        let currentLang = localStorage.getItem("tcSgbLang") || "en";
+        function setLang(lang) {
+            currentLang = lang;
+            localStorage.setItem("tcSgbLang", lang);
+            document.documentElement.lang = lang;
+            const trBtn = document.getElementById("lang-tr");
+            const enBtn = document.getElementById("lang-en");
+            const mobTr = document.getElementById("mob-lang-tr");
+            const mobEn = document.getElementById("mob-lang-en");
+            if (lang === "en") {
+                trBtn.className = "px-3 py-1 rounded-md text-xs font-semibold text-zinc-500 hover:text-white transition-all cursor-pointer";
+                enBtn.className = "px-3 py-1 rounded-md text-xs font-bold bg-primary text-white transition-all shadow-md";
+                if (mobTr) mobTr.className = "px-6 py-2 rounded-md text-sm font-semibold text-zinc-400 hover:text-white transition-all";
+                if (mobEn) mobEn.className = "px-6 py-2 rounded-md text-sm font-bold bg-primary text-white transition-all";
+            } else {
+                trBtn.className = "px-3 py-1 rounded-md text-xs font-bold bg-primary text-white transition-all shadow-md";
+                enBtn.className = "px-3 py-1 rounded-md text-xs font-semibold text-zinc-500 hover:text-white transition-all cursor-pointer";
+                if (mobTr) mobTr.className = "px-6 py-2 rounded-md text-sm font-bold bg-primary text-white transition-all";
+                if (mobEn) mobEn.className = "px-6 py-2 rounded-md text-sm font-semibold text-zinc-400 hover:text-white transition-all";
+            }
+            document.querySelectorAll("[data-i18n]").forEach(el => {
+                const key = el.getAttribute("data-i18n");
+                if (translations[lang] && translations[lang][key]) {
+                    if (el.tagName === "TITLE") {
+                        document.title = translations[lang][key];
+                    } else {
+                        el.textContent = translations[lang][key];
+                    }
+                }
+            });
+        }
+        function toggleMobileMenu() {
+            const menu = document.getElementById("mobile-menu");
+            if (!menu) return;
+            const isOpen = menu.style.opacity === "1";
+            menu.style.opacity = isOpen ? "0" : "1";
+            menu.style.pointerEvents = isOpen ? "none" : "all";
+            document.body.style.overflow = isOpen ? "" : "hidden";
+            const hamburger = document.querySelector('button[aria-controls="mobile-menu"]');
+            if (hamburger) hamburger.setAttribute("aria-expanded", String(!isOpen));
+        }
+        window.addEventListener("scroll", () => {
+            const bar = document.getElementById("progress-bar");
+            if (bar) {
+                const h = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const pct = h > 0 ? Math.min((window.scrollY / h) * 100, 100) : 0;
+                bar.style.width = pct + "%";
+                bar.setAttribute("aria-valuenow", Math.round(pct));
+            }
+            const btn = document.getElementById("back-to-top");
+            if (btn) {
+                if (window.scrollY > 200) {
+                    btn.style.opacity = "1";
+                    btn.style.visibility = "visible";
+                    btn.style.transform = "translateY(0)";
+                } else {
+                    btn.style.opacity = "0";
+                    btn.style.visibility = "hidden";
+                    btn.style.transform = "translateY(20px)";
+                }
+            }
+        });
+        document.addEventListener("DOMContentLoaded", () => {
+            setLang(currentLang);
+            setTimeout(() => { lucide.createIcons(); }, 100);
+            // Terminal animation
+            const lines = document.querySelectorAll('.terminal-line');
+            lines.forEach((line, i) => {
+                setTimeout(() => { line.classList.add('visible'); }, 200 * (i + 1));
+            });
+        });
+    </script>
+</body>
+</html>

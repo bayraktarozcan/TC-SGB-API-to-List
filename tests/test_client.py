@@ -14,6 +14,7 @@ from scripts.src.client import APIError, AsyncAPIClient
 # Helpers
 # ---------------------------------------------------------------------------
 
+
 def _make_json_response(
     status_code: int = 200,
     json_data: Any = None,
@@ -21,6 +22,7 @@ def _make_json_response(
     content = b""
     if json_data is not None:
         import json as _json
+
         content = _json.dumps(json_data).encode()
     return httpx.Response(
         status_code=status_code,
@@ -32,6 +34,7 @@ def _make_json_response(
 # ---------------------------------------------------------------------------
 # Construction and configuration
 # ---------------------------------------------------------------------------
+
 
 def test_client_default_config():
     client = AsyncAPIClient()
@@ -63,12 +66,15 @@ def test_client_strips_trailing_slash():
 # Successful requests
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.asyncio
 async def test_request_success():
     resp_data = {
-        "totalCount": 1, "count": 1,
+        "totalCount": 1,
+        "count": 1,
         "models": [{"id": 1, "url": "a.com"}],
-        "page": 0, "pageCount": 1,
+        "page": 0,
+        "pageCount": 1,
     }
     mock_response = _make_json_response(200, resp_data)
 
@@ -83,13 +89,20 @@ async def test_request_success():
 # Retry on server errors
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.asyncio
 async def test_retry_on_server_error():
     error_resp = _make_json_response(500, {"error": "server error"})
-    ok_resp = _make_json_response(200, {
-        "totalCount": 0, "count": 0,
-        "models": [], "page": 0, "pageCount": 0,
-    })
+    ok_resp = _make_json_response(
+        200,
+        {
+            "totalCount": 0,
+            "count": 0,
+            "models": [],
+            "page": 0,
+            "pageCount": 0,
+        },
+    )
 
     call_count = 0
 
@@ -124,6 +137,7 @@ async def test_retry_exhausted():
 # Rate limiting (429)
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.asyncio
 async def test_rate_limit_retries():
     rate_resp = _make_json_response(429, {})
@@ -151,6 +165,7 @@ async def test_rate_limit_retries():
 # Client error (non-retryable, e.g. 400)
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.asyncio
 async def test_client_error_400_raises_immediately():
     resp = _make_json_response(400, {"error": "bad request"})
@@ -166,22 +181,53 @@ async def test_client_error_400_raises_immediately():
 # Pagination
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.asyncio
 async def test_fetch_addresses_pagination():
     page0 = {
-        "totalCount": 3, "count": 2, "page": 0, "pageCount": 2,
+        "totalCount": 3,
+        "count": 2,
+        "page": 0,
+        "pageCount": 2,
         "models": [
-            {"id": 1, "url": "evil.com", "type": "domain", "desc": "PH", "source": "US",
-             "date": "2024-01-01", "criticality_level": 3, "connectiontype": "PH"},
-            {"id": 2, "url": "bad.net", "type": "domain", "desc": "MC", "source": "SO",
-             "date": "2024-01-02", "criticality_level": 1, "connectiontype": "BC"},
+            {
+                "id": 1,
+                "url": "evil.com",
+                "type": "domain",
+                "desc": "PH",
+                "source": "US",
+                "date": "2024-01-01",
+                "criticality_level": 3,
+                "connectiontype": "PH",
+            },
+            {
+                "id": 2,
+                "url": "bad.net",
+                "type": "domain",
+                "desc": "MC",
+                "source": "SO",
+                "date": "2024-01-02",
+                "criticality_level": 1,
+                "connectiontype": "BC",
+            },
         ],
     }
     page1 = {
-        "totalCount": 3, "count": 1, "page": 1, "pageCount": 2,
+        "totalCount": 3,
+        "count": 1,
+        "page": 1,
+        "pageCount": 2,
         "models": [
-            {"id": 3, "url": "85.214.132.117", "type": "ip", "desc": "CA", "source": "RS",
-             "date": "2024-01-03", "criticality_level": 2, "connectiontype": "AC"},
+            {
+                "id": 3,
+                "url": "85.214.132.117",
+                "type": "ip",
+                "desc": "CA",
+                "source": "RS",
+                "date": "2024-01-03",
+                "criticality_level": 2,
+                "connectiontype": "AC",
+            },
         ],
     }
 
@@ -219,6 +265,7 @@ async def test_fetch_addresses_empty():
 # Health check
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.asyncio
 async def test_health_check_success():
     resp_data = {"totalCount": 483690, "models": [{"id": 1}], "page": 0, "pageCount": 1}
@@ -244,6 +291,7 @@ async def test_health_check_failure():
 # ---------------------------------------------------------------------------
 # Stats
 # ---------------------------------------------------------------------------
+
 
 def test_stats():
     client = AsyncAPIClient()

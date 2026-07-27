@@ -1,6 +1,7 @@
-[English](#english) | [Türkçe](#turkish)
+> **Language / Dil** &nbsp;
+> [EN English](#-english) &nbsp;·&nbsp; [TR Türkçe](#-türkçe)
 
-<a id="english"></a>
+<a id="-english"></a>
 
 # Test Strategy
 
@@ -57,8 +58,9 @@ This document defines the comprehensive testing strategy for the TC-SGB-API-to-L
 
 ```python
 import pytest
-from tc_sgb.validator import IOCValidator
-from tc_sgb.models import IOCRecord, IOCType, IOCStatus
+from scripts.src.validator import IOCValidator
+from scripts.src.models import IOCRecord, IOCType, IOCStatus
+
 
 class TestIOCValidator:
     def setup_method(self):
@@ -127,8 +129,9 @@ class TestIOCValidator:
 
 ```python
 import pytest
-from tc_sgb.pipeline import ThreatIntelPipeline
-from tc_sgb.config import load_config
+from scripts.src.pipeline import ThreatIntelPipeline
+from scripts.src.config import load_config
+
 
 @pytest.mark.integration
 class TestEndToEnd:
@@ -139,19 +142,21 @@ class TestEndToEnd:
     @pytest.fixture
     def mock_api_response(self, httpserver):
         """Mock API server for testing."""
-        httpserver.expect_request("/api/v1/ioc").respond_with_json({
-            "data": [
-                {
-                    "id": 1,
-                    "type": "domain",
-                    "value": "evil.com",
-                    "first_seen": "2025-01-15T10:00:00Z",
-                    "last_seen": "2025-01-20T10:00:00Z",
-                    "status": "active",
-                }
-            ],
-            "meta": {"total": 1, "page": 1, "per_page": 500},
-        })
+        httpserver.expect_request("/api/v1/ioc").respond_with_json(
+            {
+                "data": [
+                    {
+                        "id": 1,
+                        "type": "domain",
+                        "value": "evil.com",
+                        "first_seen": "2025-01-15T10:00:00Z",
+                        "last_seen": "2025-01-20T10:00:00Z",
+                        "status": "active",
+                    }
+                ],
+                "meta": {"total": 1, "page": 1, "per_page": 500},
+            }
+        )
         return httpserver
 
     @pytest.mark.asyncio
@@ -201,7 +206,8 @@ See [11-regression-strategy.md](11-regression-strategy.md) for details.
 
 ```python
 from hypothesis import given, strategies as st
-from tc_sgb.normalizer import IOCNormalizer
+from scripts.src.normalizer import IOCNormalizer
+
 
 class TestNormalizationProperties:
     @given(st.text(min_size=1, max_size=2048))
@@ -238,7 +244,8 @@ class TestNormalizationProperties:
 
 ```python
 from hypothesis import given, strategies as st, settings
-from tc_sgb.validator import IOCValidator
+from scripts.src.validator import IOCValidator
+
 
 class TestValidatorFuzz:
     @given(st.binary(min_size=0, max_size=10000))
@@ -251,7 +258,7 @@ class TestValidatorFuzz:
             record = IOCRecord.model_validate_json(data)
             result = validator.validate_record(record)
             # Should always produce a valid result
-            assert hasattr(result, 'is_valid')
+            assert hasattr(result, "is_valid")
         except (ValidationError, JSONDecodeError):
             # Expected for invalid input - should not crash
             pass
@@ -285,7 +292,6 @@ See [12-performance-strategy.md](12-performance-strategy.md) for details.
 # pyproject.toml
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-asyncio_mode = "auto"
 markers = [
     "unit: Unit tests",
     "integration: Integration tests",
@@ -298,7 +304,8 @@ markers = [
 addopts = [
     "-ra",          # Show extra summary for all except passed
     "--strict-markers",
-    "--tb=short",   # Short traceback format
+    "--strict-config",
+    "-v",
 ]
 ```
 
@@ -307,9 +314,9 @@ addopts = [
 ```toml
 # pyproject.toml
 [tool.coverage.run]
-source = ["tc_sgb"]
+source = ["scripts"]
 branch = true
-omit = ["tests/*", "scripts/*"]
+omit = ["tests/*"]
 
 [tool.coverage.report]
 fail_under = 90
@@ -326,7 +333,8 @@ exclude_lines = [
 ```python
 # tests/conftest.py
 import pytest
-from tc_sgb.models import IOCRecord, IOCType, IOCStatus
+from scripts.src.models import IOCRecord, IOCType, IOCStatus
+
 
 @pytest.fixture
 def sample_ioc_record():
@@ -339,6 +347,7 @@ def sample_ioc_record():
         last_seen="2025-01-20T14:30:00Z",
         status=IOCStatus.ACTIVE,
     )
+
 
 @pytest.fixture
 def sample_ioc_batch():
@@ -354,6 +363,7 @@ def sample_ioc_batch():
         )
         for i in range(1, 101)
     ]
+
 
 @pytest.fixture
 def sample_api_response():
@@ -385,7 +395,7 @@ pytest
 pytest -m unit
 
 # Run with coverage
-pytest --cov=tc_sgb --cov-report=html
+pytest --cov=scripts --cov-report=html
 
 # Run specific test file
 pytest tests/unit/test_validator.py
@@ -405,7 +415,7 @@ pytest -m performance --benchmark-only
 ```yaml
 # .github/workflows/ci.yml
 - name: Run unit tests
-  run: pytest -m unit --cov=tc_sgb --cov-report=xml
+  run: pytest -m unit --cov=scripts --cov-report=xml
 
 - name: Run integration tests
   run: pytest -m integration
@@ -481,6 +491,7 @@ def test_output_generation(tmp_path):
 # Use freezegun for deterministic timestamps
 from freezegun import freeze_time
 
+
 @freeze_time("2025-01-20T12:00:00Z")
 def test_processing_timestamp():
     pipeline = ThreatIntelPipeline(config)
@@ -488,7 +499,7 @@ def test_processing_timestamp():
     assert result.end_time == datetime(2025, 1, 20, 12, 0, 0)
 ```
 
-<a id="turkish"></a>
+<a id="-türkçe"></a>
 
 # Test Stratejisi
 
@@ -545,8 +556,9 @@ Bu belge, TC-SGB-API-to-List projesi için kapsamlı test stratejisini tanımlar
 
 ```python
 import pytest
-from tc_sgb.validator import IOCValidator
-from tc_sgb.models import IOCRecord, IOCType, IOCStatus
+from scripts.src.validator import IOCValidator
+from scripts.src.models import IOCRecord, IOCType, IOCStatus
+
 
 class TestIOCValidator:
     def setup_method(self):
@@ -615,8 +627,9 @@ class TestIOCValidator:
 
 ```python
 import pytest
-from tc_sgb.pipeline import ThreatIntelPipeline
-from tc_sgb.config import load_config
+from scripts.src.pipeline import ThreatIntelPipeline
+from scripts.src.config import load_config
+
 
 @pytest.mark.integration
 class TestEndToEnd:
@@ -627,19 +640,21 @@ class TestEndToEnd:
     @pytest.fixture
     def mock_api_response(self, httpserver):
         """Mock API server for testing."""
-        httpserver.expect_request("/api/v1/ioc").respond_with_json({
-            "data": [
-                {
-                    "id": 1,
-                    "type": "domain",
-                    "value": "evil.com",
-                    "first_seen": "2025-01-15T10:00:00Z",
-                    "last_seen": "2025-01-20T10:00:00Z",
-                    "status": "active",
-                }
-            ],
-            "meta": {"total": 1, "page": 1, "per_page": 500},
-        })
+        httpserver.expect_request("/api/v1/ioc").respond_with_json(
+            {
+                "data": [
+                    {
+                        "id": 1,
+                        "type": "domain",
+                        "value": "evil.com",
+                        "first_seen": "2025-01-15T10:00:00Z",
+                        "last_seen": "2025-01-20T10:00:00Z",
+                        "status": "active",
+                    }
+                ],
+                "meta": {"total": 1, "page": 1, "per_page": 500},
+            }
+        )
         return httpserver
 
     @pytest.mark.asyncio
@@ -689,7 +704,8 @@ Ayrıntılar için [11-regression-strategy.md](11-regression-strategy.md) belges
 
 ```python
 from hypothesis import given, strategies as st
-from tc_sgb.normalizer import IOCNormalizer
+from scripts.src.normalizer import IOCNormalizer
+
 
 class TestNormalizationProperties:
     @given(st.text(min_size=1, max_size=2048))
@@ -726,7 +742,8 @@ class TestNormalizationProperties:
 
 ```python
 from hypothesis import given, strategies as st, settings
-from tc_sgb.validator import IOCValidator
+from scripts.src.validator import IOCValidator
+
 
 class TestValidatorFuzz:
     @given(st.binary(min_size=0, max_size=10000))
@@ -739,7 +756,7 @@ class TestValidatorFuzz:
             record = IOCRecord.model_validate_json(data)
             result = validator.validate_record(record)
             # Should always produce a valid result
-            assert hasattr(result, 'is_valid')
+            assert hasattr(result, "is_valid")
         except (ValidationError, JSONDecodeError):
             # Expected for invalid input - should not crash
             pass
@@ -773,7 +790,6 @@ Ayrıntılar için [12-performance-strategy.md](12-performance-strategy.md) belg
 # pyproject.toml
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-asyncio_mode = "auto"
 markers = [
     "unit: Unit tests",
     "integration: Integration tests",
@@ -786,7 +802,8 @@ markers = [
 addopts = [
     "-ra",          # Show extra summary for all except passed
     "--strict-markers",
-    "--tb=short",   # Short traceback format
+    "--strict-config",
+    "-v",
 ]
 ```
 
@@ -795,9 +812,9 @@ addopts = [
 ```toml
 # pyproject.toml
 [tool.coverage.run]
-source = ["tc_sgb"]
+source = ["scripts"]
 branch = true
-omit = ["tests/*", "scripts/*"]
+omit = ["tests/*"]
 
 [tool.coverage.report]
 fail_under = 90
@@ -814,7 +831,8 @@ exclude_lines = [
 ```python
 # tests/conftest.py
 import pytest
-from tc_sgb.models import IOCRecord, IOCType, IOCStatus
+from scripts.src.models import IOCRecord, IOCType, IOCStatus
+
 
 @pytest.fixture
 def sample_ioc_record():
@@ -827,6 +845,7 @@ def sample_ioc_record():
         last_seen="2025-01-20T14:30:00Z",
         status=IOCStatus.ACTIVE,
     )
+
 
 @pytest.fixture
 def sample_ioc_batch():
@@ -842,6 +861,7 @@ def sample_ioc_batch():
         )
         for i in range(1, 101)
     ]
+
 
 @pytest.fixture
 def sample_api_response():
@@ -873,7 +893,7 @@ pytest
 pytest -m unit
 
 # Run with coverage
-pytest --cov=tc_sgb --cov-report=html
+pytest --cov=scripts --cov-report=html
 
 # Run specific test file
 pytest tests/unit/test_validator.py
@@ -893,7 +913,7 @@ pytest -m performance --benchmark-only
 ```yaml
 # .github/workflows/ci.yml
 - name: Run unit tests
-  run: pytest -m unit --cov=tc_sgb --cov-report=xml
+  run: pytest -m unit --cov=scripts --cov-report=xml
 
 - name: Run integration tests
   run: pytest -m integration
@@ -968,6 +988,7 @@ def test_output_generation(tmp_path):
 ```python
 # Use freezegun for deterministic timestamps
 from freezegun import freeze_time
+
 
 @freeze_time("2025-01-20T12:00:00Z")
 def test_processing_timestamp():

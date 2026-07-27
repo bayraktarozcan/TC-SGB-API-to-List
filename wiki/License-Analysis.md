@@ -1,6 +1,7 @@
-[English](#english) | [Türkçe](#turkish)
+> **Language / Dil** &nbsp;
+> [EN English](#-english) &nbsp;·&nbsp; [TR Türkçe](#-türkçe)
 
-<a id="english"></a>
+<a id="-english"></a>
 
 # License and Redistribution Analysis
 
@@ -263,7 +264,7 @@ You must NOT:
 
 ---
 
-<a id="turkish"></a>
+<a id="-türkçe"></a>
 
 # Lisans ve Yeniden Dağıtım Analizi
 
@@ -304,7 +305,7 @@ TC SGB tarafından yayınlanan tüm içerik aşağıdaki kısıtlamalara tabidir
 
 | Faaliyet | Durum | Koşullar |
 |----------|-------|----------|
-| API'ye erişim | **İZNİN VAR** | Herkese açık uç nokta, kimlik doğrulama gerekmez |
+| API'ye erişim | **İZİN VERİLMİŞTİR** | Herkese açık uç nokta, kimlik doğrulama gerekmez |
 | Güvenlik sistemleriyle entegrasyon | **İZİN VERİLMİŞTİR** | API açıklamasında açıkça belirtildiği şekilde |
 | Güvenlik amaçlı yerel işleme | **İZİN VERİLMİŞTİR** | Güvenlik duvarları, SIEM vb. ile entegrasyon |
 | TXT beslemesinin (url-list.txt) kullanılması | **İZİN VERİLMİŞTİR** | API ile birlikte hâlâ yayınlanmaktadır |

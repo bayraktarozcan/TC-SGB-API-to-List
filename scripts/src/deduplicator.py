@@ -18,10 +18,12 @@ logger = logging.getLogger(__name__)
 # Helpers
 # ---------------------------------------------------------------------------
 
+
 def _extract_domain_from_url(url: str) -> str | None:
     """Extract the hostname from a URL IOC for cross-type dedup."""
     try:
         from urllib.parse import urlparse
+
         parsed = urlparse(url)
         host = parsed.hostname
         if host:
@@ -45,6 +47,7 @@ def _make_dedup_key(value: str, ioc_type: IOCType) -> str:
 # ---------------------------------------------------------------------------
 # Deduplication
 # ---------------------------------------------------------------------------
+
 
 class DeduplicationResult:
     """Result of deduplicating a list of scored IOCs."""
@@ -117,16 +120,12 @@ def deduplicate(
                 existing_key = domain_index[domain]
                 domain_existing: ScoredIOC | None = primary.get(existing_key)
                 if domain_existing and ioc.quality_score > domain_existing.quality_score:
-                    merge_log.append(
-                        f"URL {ioc.value} replaced domain {domain} (higher score)"
-                    )
+                    merge_log.append(f"URL {ioc.value} replaced domain {domain} (higher score)")
                     del primary[existing_key]
                     primary[pkey] = ioc
                     domain_index[domain] = pkey
                 else:
-                    merge_log.append(
-                        f"URL {ioc.value} dropped — domain {domain} already present"
-                    )
+                    merge_log.append(f"URL {ioc.value} dropped — domain {domain} already present")
                 continue
 
         primary[pkey] = ioc
@@ -137,7 +136,9 @@ def deduplicate(
     removed_count = len(scored_iocs) - len(kept)
     logger.info(
         "Deduplication: %d → %d (removed %d)",
-        len(scored_iocs), len(kept), removed_count,
+        len(scored_iocs),
+        len(kept),
+        removed_count,
     )
 
     return DeduplicationResult(

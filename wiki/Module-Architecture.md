@@ -1,6 +1,7 @@
-[English](#english) | [Türkçe](#turkish)
+> **Language / Dil** &nbsp;
+> [EN English](#-english) &nbsp;·&nbsp; [TR Türkçe](#-türkçe)
 
-<a id="english"></a>
+<a id="-english"></a>
 
 # Module Architecture
 
@@ -97,10 +98,12 @@ class IOCType(str, Enum):
     IP6NET = "ip6net"
     URL = "url"
 
+
 class IOCStatus(str, Enum):
     ACTIVE = "active"
     INACTIVE = "inactive"
     UNKNOWN = "unknown"
+
 
 class IOCRecord(BaseModel):
     id: int
@@ -110,9 +113,11 @@ class IOCRecord(BaseModel):
     last_seen: datetime
     status: IOCStatus
 
+
 class APIResponse(BaseModel):
     data: list[IOCRecord]
     meta: PaginationMeta
+
 
 class PaginationMeta(BaseModel):
     total: int
@@ -177,7 +182,7 @@ class IOCValidator:
 **Responsibility**: Format canonicalization, type-specific transformations, metadata standardization.
 
 ```python
-class IO normalizer:
+class IOCNormalizer:
     """Type-aware IOC record normalizer."""
 
     def normalize(self, record: IOCRecord) -> NormalizedIOC:
@@ -295,8 +300,7 @@ class OutputEngine:
 
     def __init__(self, config: OutputConfig) -> None: ...
 
-    def generate_all(self, records: list[NormalizedIOC],
-                     output_dir: Path) -> list[OutputFile]:
+    def generate_all(self, records: list[NormalizedIOC], output_dir: Path) -> list[OutputFile]:
         """Generate all configured output formats."""
 
     def generate_json(self, records, path) -> OutputFile: ...
@@ -471,7 +475,7 @@ class PipelineConfig:
   +------------------+     +---------------------------+
 ```
 
-<a id="turkish"></a>
+<a id="-türkçe"></a>
 
 # Modül Mimarisi
 
@@ -568,10 +572,12 @@ class IOCType(str, Enum):
     IP6NET = "ip6net"
     URL = "url"
 
+
 class IOCStatus(str, Enum):
     ACTIVE = "active"
     INACTIVE = "inactive"
     UNKNOWN = "unknown"
+
 
 class IOCRecord(BaseModel):
     id: int
@@ -581,9 +587,11 @@ class IOCRecord(BaseModel):
     last_seen: datetime
     status: IOCStatus
 
+
 class APIResponse(BaseModel):
     data: list[IOCRecord]
     meta: PaginationMeta
+
 
 class PaginationMeta(BaseModel):
     total: int
@@ -648,7 +656,7 @@ class IOCValidator:
 **Sorumluluk**: Format kanonikleştirme, türe özgü dönüştürmeler, meta veri standartlaştırma.
 
 ```python
-class IO normalizer:
+class IOCNormalizer:
     """Type-aware IOC record normalizer."""
 
     def normalize(self, record: IOCRecord) -> NormalizedIOC:
@@ -674,7 +682,7 @@ class IO normalizer:
 | ip | Doğrula, boşlukları temizle | ` 192.168.1.1 ` | `192.168.1.1` |
 | ip6 | En kısa forma sıkıştır | `2001:0db8:...` | `2001:db8::1` |
 | ip6net | CIDR doğrula, normalleştir | `2001:db8::/32` | `2001:db8::/32` |
-| url | Şema/anahatayı küçük harfe çevir | `HTTP://EVIL.COM/path` | `http://evil.com/path` |
+| url | Şema/ana bilgisayarı küçük harfe çevir | `HTTP://EVIL.COM/path` | `http://evil.com/path` |
 | url | Varsayılan portları kaldır | `http://evil.com:80/` | `http://evil.com/` |
 | url | Parçacıkları kaldır | `http://evil.com/#track` | `http://evil.com/` |
 | url | İzleme parametrelerini kaldır | `http://evil.com/?utm_source=x` | `http://evil.com/` |
@@ -766,8 +774,7 @@ class OutputEngine:
 
     def __init__(self, config: OutputConfig) -> None: ...
 
-    def generate_all(self, records: list[NormalizedIOC],
-                     output_dir: Path) -> list[OutputFile]:
+    def generate_all(self, records: list[NormalizedIOC], output_dir: Path) -> list[OutputFile]:
         """Generate all configured output formats."""
 
     def generate_json(self, records, path) -> OutputFile: ...

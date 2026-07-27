@@ -6,23 +6,23 @@
 
 **Automated Threat Intelligence Pipeline for the Turkish National Cyber Security Directorate (TC SGB) API**
 
-[![CI](https://github.com/user/TC-SGB-API-to-List/actions/workflows/ci.yml/badge.svg)](https://github.com/user/TC-SGB-API-to-List/actions/workflows/ci.yml)
-[![Scheduled Pipeline](https://github.com/user/TC-SGB-API-to-List/actions/workflows/schedule.yml/badge.svg)](https://github.com/user/TC-SGB-API-to-List/actions/workflows/schedule.yml)
-[![CodeQL](https://github.com/user/TC-SGB-API-to-List/actions/workflows/codeql.yml/badge.svg)](https://github.com/user/TC-SGB-API-to-List/actions/workflows/codeql.yml)
+[![CI](https://github.com/bayraktarozcan/TC-SGB-API-to-List/actions/workflows/ci.yml/badge.svg)](https://github.com/bayraktarozcan/TC-SGB-API-to-List/actions/workflows/ci.yml)
+[![Scheduled Pipeline](https://github.com/bayraktarozcan/TC-SGB-API-to-List/actions/workflows/schedule.yml/badge.svg)](https://github.com/bayraktarozcan/TC-SGB-API-to-List/actions/workflows/schedule.yml)
+[![CodeQL](https://github.com/bayraktarozcan/TC-SGB-API-to-List/actions/workflows/codeql.yml/badge.svg)](https://github.com/bayraktarozcan/TC-SGB-API-to-List/actions/workflows/codeql.yml)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
-[![codecov](https://codecov.io/gh/user/TC-SGB-API-to-List/branch/main/graph/badge.svg)](https://codecov.io/gh/user/TC-SGB-API-to-List)
+[![codecov](https://codecov.io/gh/bayraktarozcan/TC-SGB-API-to-List/branch/main/graph/badge.svg)](https://codecov.io/gh/bayraktarozcan/TC-SGB-API-to-List)
 
 ---
 
 ## Overview
 
-TC-SGB-API-to-List fetches IoC (Indicator of Compromise) data from the TC SGB public API (`https://siberguvenlik.gov.tr/api/`), processes it through a robust multi-stage pipeline, and outputs structured threat intelligence in **16+ interoperable formats** compatible with leading DNS filtering and security tools.
+TC-SGB-API-to-List fetches IOC (Indicator of Compromise) data from the TC SGB public API (`https://siberguvenlik.gov.tr/api/`), processes it through a robust multi-stage pipeline, and outputs structured threat intelligence in **16+ interoperable formats** compatible with leading DNS filtering and security tools.
 
 ## Features
 
-- **Automated IOC Fetching** — Paginated retrieval from TC SGB API with retry logic and rate limiting
+- **Automated IOC Fetching** — Paginated retrieval from the TC SGB API with retry logic and rate limiting
 - **Validation & Normalization** — Pydantic-based data models with IOC type inference and format normalization
 - **Deduplication** — Efficient set-based deduplication across fetches
 - **Quality Scoring** — Multi-factor quality assessment for each IOC
@@ -44,7 +44,7 @@ TC-SGB-API-to-List fetches IoC (Indicator of Compromise) data from the TC SGB pu
 ### Installation
 
 ```bash
-git clone https://github.com/user/TC-SGB-API-to-List.git
+git clone https://github.com/bayraktarozcan/TC-SGB-API-to-List.git
 cd TC-SGB-API-to-List
 pip install -r requirements.txt
 ```
@@ -53,13 +53,13 @@ pip install -r requirements.txt
 
 ```bash
 # Run the full pipeline
-python scripts/main.py pipeline --limit 1000 --output-dir ./output
+python scripts/main.py fetch --limit 1000 --output-dir ./output
 
 # Fetch and display health status
 python scripts/main.py health
 
 # Run in headless mode (no display)
-python scripts/main.py pipeline --headless --output-dir ./output
+python scripts/main.py fetch --headless --output-dir ./output
 ```
 
 ## Project Structure
@@ -78,7 +78,7 @@ TC-SGB-API-to-List/
 │       ├── outputs.py           # 16+ output format generators
 │       └── pipeline.py          # Pipeline orchestrator
 ├── tests/                       # Test suite
-├── docs/                        # Documentation (bilingual)
+├── wiki/                        # Documentation (bilingual)
 ├── schema/                      # JSON Schema & OpenAPI spec
 ├── data/                        # Runtime data cache
 ├── output/                      # Generated output files
@@ -92,24 +92,24 @@ TC-SGB-API-to-List/
 
 | Document | Description |
 |----------|-------------|
-| [Architecture](docs/01-architecture.md) | System design and component overview |
-| [Data Flow](docs/02-data-flow.md) | Pipeline data flow and transformations |
-| [Module Architecture](docs/03-module-architecture.md) | Module responsibilities and interfaces |
-| [Repository Structure](docs/04-repository-structure.md) | Directory layout and file purposes |
-| [API Analysis](docs/05-api-analysis.md) | TC SGB API endpoints and capabilities |
-| [Data Model](docs/06-data-model.md) | Pydantic models and schemas |
-| [Threat Model](docs/07-threat-model.md) | STRIDE threat analysis |
-| [Security Analysis](docs/08-security-analysis.md) | Security posture and hardening |
-| [License Analysis](docs/09-license-analysis.md) | Legal and licensing considerations |
-| [Test Strategy](docs/10-test-strategy.md) | Testing approach and coverage |
-| [Regression Strategy](docs/11-regression-strategy.md) | Regression testing methodology |
-| [Performance Strategy](docs/12-performance-strategy.md) | Performance benchmarks and optimization |
-| [Versioning Strategy](docs/13-versioning-strategy.md) | Semantic versioning approach |
-| [Publishing Strategy](docs/14-publishing-strategy.md) | Distribution and publishing |
-| [Maintenance Plan](docs/15-maintenance-plan.md) | Ongoing maintenance procedures |
-| [Risk Analysis](docs/16-risk-analysis.md) | Risk assessment and mitigation |
-| [Roadmap](docs/17-roadmap.md) | Development roadmap |
-| [Legal Notices](docs/LEGAL_NOTICES.md) | Legal and compliance notices |
+| [Architecture](wiki/Architecture.md) | System design and component overview |
+| [Data Flow](wiki/Data-Flow.md) | Pipeline data flow and transformations |
+| [Module Architecture](wiki/Module-Architecture.md) | Module responsibilities and interfaces |
+| [Repository Structure](wiki/Repository-Structure.md) | Directory layout and file purposes |
+| [API Analysis](wiki/API-Analysis.md) | TC SGB API endpoints and capabilities |
+| [Data Model](wiki/Data-Model.md) | Pydantic models and schemas |
+| [Threat Model](wiki/Threat-Model.md) | STRIDE threat analysis |
+| [Security Analysis](wiki/Security-Analysis.md) | Security posture and hardening |
+| [License Analysis](wiki/License-Analysis.md) | Legal and licensing considerations |
+| [Test Strategy](wiki/Test-Strategy.md) | Testing approach and coverage |
+| [Regression Strategy](wiki/Regression-Strategy.md) | Regression testing methodology |
+| [Performance Strategy](wiki/Performance-Strategy.md) | Performance benchmarks and optimization |
+| [Versioning Strategy](wiki/Versioning-Strategy.md) | Semantic versioning approach |
+| [Publishing Strategy](wiki/Publishing-Strategy.md) | Distribution and publishing |
+| [Maintenance Plan](wiki/Maintenance-Plan.md) | Ongoing maintenance procedures |
+| [Risk Analysis](wiki/Risk-Analysis.md) | Risk assessment and mitigation |
+| [Roadmap](wiki/Roadmap.md) | Development roadmap |
+| [Legal Notices](wiki/Legal-Notices.md) | Legal and compliance notices |
 
 ## Configuration
 
@@ -148,11 +148,11 @@ mypy scripts/src/
 
 ## Contributing
 
-Contributions are welcome! Please read our contributing guidelines before submitting a pull request.
+Contributions are welcome! Please read our [contributing guidelines](CONTRIBUTING.md) before submitting a pull request.
 
 ## License
 
-This project is for educational and research purposes. See [LEGAL_NOTICES](docs/LEGAL_NOTICES.md) for important legal information regarding data redistribution.
+This project is licensed under the [MIT License](LICENSE). See [LEGAL_NOTICES](wiki/Legal-Notices.md) for important legal information regarding data redistribution.
 
 ## Disclaimer
 
@@ -166,13 +166,13 @@ This tool is provided as-is for legitimate cybersecurity research and defense pu
 
 **Türkiye Ulusal Siber Güvenlik Direktörlüğü (TC SGB) API'si için Otomatik Tehdit İstihbaratı Hattı**
 
-[![CI](https://github.com/user/TC-SGB-API-to-List/actions/workflows/ci.yml/badge.svg)](https://github.com/user/TC-SGB-API-to-List/actions/workflows/ci.yml)
-[![Scheduled Pipeline](https://github.com/user/TC-SGB-API-to-List/actions/workflows/schedule.yml/badge.svg)](https://github.com/user/TC-SGB-API-to-List/actions/workflows/schedule.yml)
-[![CodeQL](https://github.com/user/TC-SGB-API-to-List/actions/workflows/codeql.yml/badge.svg)](https://github.com/user/TC-SGB-API-to-List/actions/workflows/codeql.yml)
+[![CI](https://github.com/bayraktarozcan/TC-SGB-API-to-List/actions/workflows/ci.yml/badge.svg)](https://github.com/bayraktarozcan/TC-SGB-API-to-List/actions/workflows/ci.yml)
+[![Scheduled Pipeline](https://github.com/bayraktarozcan/TC-SGB-API-to-List/actions/workflows/schedule.yml/badge.svg)](https://github.com/bayraktarozcan/TC-SGB-API-to-List/actions/workflows/schedule.yml)
+[![CodeQL](https://github.com/bayraktarozcan/TC-SGB-API-to-List/actions/workflows/codeql.yml/badge.svg)](https://github.com/bayraktarozcan/TC-SGB-API-to-List/actions/workflows/codeql.yml)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
-[![codecov](https://codecov.io/gh/user/TC-SGB-API-to-List/branch/main/graph/badge.svg)](https://codecov.io/gh/user/TC-SGB-API-to-List)
+[![codecov](https://codecov.io/gh/bayraktarozcan/TC-SGB-API-to-List/branch/main/graph/badge.svg)](https://codecov.io/gh/bayraktarozcan/TC-SGB-API-to-List)
 
 ---
 
@@ -182,16 +182,16 @@ TC-SGB-API-to-List, TC SGB kamu API'sinden (`https://siberguvenlik.gov.tr/api/`)
 
 ## Özellikler
 
-- **Otomatik IoC Çekme** — Yeniden deneme mantığı ve hız sınırlaması ile sayfalı retrieve
+- **Otomatik IoC Çekme** — Yeniden deneme mantığı ve hız sınırlaması ile sayfalı veri çekme
 - **Doğrulama ve Normalleştirme** — Pydantic tabanlı veri modelleri ile IoC türü çıkarma ve format normalleştirme
-- **Tekilleştirme** — Çekimler arasında verimli kümeye dayalı tekilleştirme
+- **Tekilleştirme** — Çekimler arasında verimli küme tabanlı tekilleştirme
 - **Kalite Puanlama** — Her IoC için çok faktörlü kalite değerlendirmesi
 - **16+ Çıktı Formatı**:
   - DNS: NextDNS, AdGuard, Pi-hole, dnsmasq, Unbound, RPZ, Technitium, MikroTik
   - Güvenlik Duvarı: nftables, ipset
   - IDS/IPS: Suricata, CrowdSec
   - Veri: CSV, JSON, YAML, SQLite
-- **Zamanlanmış Hat** — Otomatik günlük güncellemeler için GitHub Actions cron
+- **Zamanlanmış Hat** — Otomatik günlük güncellemeler için GitHub Actions cron zamanlayıcısı
 - **Çift Dilli Dokümantasyon** — Tam İngilizce ve Türkçe dokümantasyon
 
 ## Hızlı Başlangıç
@@ -204,7 +204,7 @@ TC-SGB-API-to-List, TC SGB kamu API'sinden (`https://siberguvenlik.gov.tr/api/`)
 ### Kurulum
 
 ```bash
-git clone https://github.com/user/TC-SGB-API-to-List.git
+git clone https://github.com/bayraktarozcan/TC-SGB-API-to-List.git
 cd TC-SGB-API-to-List
 pip install -r requirements.txt
 ```
@@ -213,13 +213,13 @@ pip install -r requirements.txt
 
 ```bash
 # Tam hattı çalıştır
-python scripts/main.py pipeline --limit 1000 --output-dir ./output
+python scripts/main.py fetch --limit 1000 --output-dir ./output
 
 # Sağlık durumunu görüntüle
 python scripts/main.py health
 
 # Başsız modda çalıştır (görüntü olmadan)
-python scripts/main.py pipeline --headless --output-dir ./output
+python scripts/main.py fetch --headless --output-dir ./output
 ```
 
 ## Proje Yapısı
@@ -230,7 +230,7 @@ TC-SGB-API-to-List/
 │   ├── main.py                  # CLI giriş noktası
 │   └── src/
 │       ├── models.py            # Pydantic veri modelleri
-│       ├── client                # Asenkron API istemcisi
+│       ├── client.py             # Asenkron API istemcisi
 │       ├── validator.py         # IoC doğrulama
 │       ├── normalizer.py        # IoC normalleştirme
 │       ├── deduplicator.py      # Tekilleştirme
@@ -238,7 +238,7 @@ TC-SGB-API-to-List/
 │       ├── outputs.py           # 16+ çıktı formatı üreteçleri
 │       └── pipeline.py          # Hat koordinatörü
 ├── tests/                       # Test paketi
-├── docs/                        # Dokümantasyon (çift dilli)
+├── wiki/                        # Dokümantasyon (çift dilli)
 ├── schema/                      # JSON Schema ve OpenAPI belirtimi
 ├── data/                        # Çalışma zamanı veri önbelleği
 ├── output/                      # Üretilen çıktı dosyaları
@@ -252,24 +252,24 @@ TC-SGB-API-to-List/
 
 | Belge | Açıklama |
 |-------|----------|
-| [Mimari](docs/01-architecture.md) | Sistem tasarımı ve bileşen genel bakışı |
-| [Veri Akışı](docs/02-data-flow.md) | Hat veri akışı ve dönüşümleri |
-| [Modül Mimarisi](docs/03-module-architecture.md) | Modül sorumlulukları ve arayüzleri |
-| [Depo Yapısı](docs/04-repository-structure.md) | Dizin yerleşimi ve dosya amaçları |
-| [API Analizi](docs/05-api-analysis.md) | TC SGB API uç noktaları ve yetenekleri |
-| [Veri Modeli](docs/06-data-model.md) | Pydantic modelleri ve şemaları |
-| [Tehdit Modeli](docs/07-threat-model.md) | STRIDE tehdit analizi |
-| [Güvenlik Analizi](docs/08-security-analysis.md) | Güvenlik duruşu ve sertleştirme |
-| [Lisans Analizi](docs/09-license-analysis.md) | Hukuki ve lisanslama hususları |
-| [Test Stratejisi](docs/10-test-strategy.md) | Test yaklaşımı ve kapsama |
-| [Regresyon Stratejisi](docs/11-regression-strategy.md) | Regresyon test metodolojisi |
-| [Performans Stratejisi](docs/12-performance-strategy.md) | Performans karşılaştırmaları ve optimizasyon |
-| [Sürüm Stratejisi](docs/13-versioning-strategy.md) | Semantik sürümleme yaklaşımı |
-| [Yayın Stratejisi](docs/14-publishing-strategy.md) | Dağıtım ve yayınlanma |
-| [Bakım Planı](docs/15-maintenance-plan.md) | Sürekli bakım prosedürleri |
-| [Risk Analizi](docs/16-risk-analysis.md) | Risk değerlendirmesi ve azaltma |
-| [Yol Haritası](docs/17-roadmap.md) | Geliştirme yol haritası |
-| [Yasal Bildirimler](docs/LEGAL_NOTICES.md) | Hukuki ve uyum bildirimleri |
+| [Mimari](wiki/Architecture.md) | Sistem tasarımı ve bileşen genel bakışı |
+| [Veri Akışı](wiki/Data-Flow.md) | Hat veri akışı ve dönüşümleri |
+| [Modül Mimarisi](wiki/Module-Architecture.md) | Modül sorumlulukları ve arayüzleri |
+| [Depo Yapısı](wiki/Repository-Structure.md) | Dizin yerleşimi ve dosya amaçları |
+| [API Analizi](wiki/API-Analysis.md) | TC SGB API uç noktaları ve yetenekleri |
+| [Veri Modeli](wiki/Data-Model.md) | Pydantic modelleri ve şemaları |
+| [Tehdit Modeli](wiki/Threat-Model.md) | STRIDE tehdit analizi |
+| [Güvenlik Analizi](wiki/Security-Analysis.md) | Güvenlik duruşu ve sertleştirme |
+| [Lisans Analizi](wiki/License-Analysis.md) | Hukuki ve lisanslama hususları |
+| [Test Stratejisi](wiki/Test-Strategy.md) | Test yaklaşımı ve kapsama |
+| [Regresyon Stratejisi](wiki/Regression-Strategy.md) | Regresyon test metodolojisi |
+| [Performans Stratejisi](wiki/Performance-Strategy.md) | Performans karşılaştırmaları ve optimizasyon |
+| [Sürüm Stratejisi](wiki/Versioning-Strategy.md) | Semantik sürümleme yaklaşımı |
+| [Yayın Stratejisi](wiki/Publishing-Strategy.md) | Dağıtım ve yayınlanma |
+| [Bakım Planı](wiki/Maintenance-Plan.md) | Sürekli bakım prosedürleri |
+| [Risk Analizi](wiki/Risk-Analysis.md) | Risk değerlendirmesi ve azaltma |
+| [Yol Haritası](wiki/Roadmap.md) | Geliştirme yol haritası |
+| [Yasal Bildirimler](wiki/Legal-Notices.md) | Hukuki ve uyum bildirimleri |
 
 ## Yapılandırma
 
@@ -308,11 +308,11 @@ mypy scripts/src/
 
 ## Katkıda Bulunma
 
-Katkılar hoşa geldi! Lütfen pull request göndermeden önce katkı yönergelerimizi okuyun.
+Katkılar hoşa gelir! Lütfen pull request göndermeden önce [katkı yönergelerimizi](CONTRIBUTING.md) okuyun.
 
 ## Lisans
 
-Bu proje eğitim ve araştırma amaçlıdır. Veri yeniden dağıtımı ile ilgili önemli yasal bilgiler için [YASAL BİLDİRİMLER](docs/LEGAL_NOTICES.md) dosyasına bakın.
+Bu proje [MIT Lisansı](LICENSE) altında lisanslanmıştır. Veri yeniden dağıtımı ile ilgili önemli yasal bilgiler için [YASAL BİLDİRİMLER](wiki/Legal-Notices.md) dosyasına bakın.
 
 ## Sorumluluk Reddi
 

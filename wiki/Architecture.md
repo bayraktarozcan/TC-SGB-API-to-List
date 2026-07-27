@@ -1,6 +1,7 @@
-[English](#english) | [Türkçe](#turkish)
+> **Language / Dil** &nbsp;
+> [EN English](#-english) &nbsp;·&nbsp; [TR Türkçe](#-türkçe)
 
-<a id="english"></a>
+<a id="-english"></a>
 
 # System Architecture
 
@@ -101,10 +102,7 @@ The TC-SGB-API-to-List system is an automated threat intelligence pipeline that 
 | HTTP Client      | httpx          | 0.27+    | Async HTTP with connection pool |
 | Data Validation  | Pydantic       | 2.9+     | Schema validation & serialization |
 | Async Runtime    | asyncio        | stdlib   | Concurrent I/O operations      |
-| CLI Framework    | click/typer    | latest   | Command-line interface         |
-| YAML Parsing     | PyYAML         | 6.0+     | Config and Sigma rule output   |
-| JSON Handling    | orjson         | 3.10+    | High-performance JSON codec    |
-| HTML Generation  | Jinja2         | 3.1+     | Report templates               |
+| CLI Output       | rich           | 13.0+    | Terminal formatting & spinners  |
 
 ### Development & Testing
 
@@ -117,7 +115,7 @@ The TC-SGB-API-to-List system is an automated threat intelligence pipeline that 
 | Linting          | ruff           | Code style and quality         |
 | Formatting       | ruff format    | Code formatting                |
 | Property Testing | Hypothesis     | Fuzz and property-based tests  |
-| Benchmarking     | pytest-bench   | Performance benchmarks         |
+| Benchmarking     | pytest-benchmark | Performance benchmarks       |
 
 ### CI/CD & Deployment
 
@@ -125,7 +123,7 @@ The TC-SGB-API-to-List system is an automated threat intelligence pipeline that 
 |------------------|----------------|--------------------------------|
 | CI/CD            | GitHub Actions | Automated pipeline             |
 | Versioning       | SemVer         | Release management             |
-| Packaging        | hatchling      | Package building               |
+| Packaging        | setuptools     | Package building               |
 | Registry         | PyPI           | Package distribution           |
 
 ## Deployment Model
@@ -218,7 +216,7 @@ The TC-SGB-API-to-List system is an automated threat intelligence pipeline that 
 
 The system uses asyncio with bounded concurrency to respect rate limits while maximizing throughput. Pages are fetched concurrently with a semaphore limiting in-flight requests, then processed sequentially to maintain data integrity.
 
-<a id="turkish"></a>
+<a id="-türkçe"></a>
 
 # Sistem Mimarisi
 
@@ -319,10 +317,7 @@ TC-SGB-API-to-List sistemi, Türkiye Ulusal Siber Güvenlik Direktörlüğü (TC
 | HTTP İstemcisi   | httpx          | 0.27+    | Bağlantı havuzlu asenkron HTTP   |
 | Veri Doğrulama   | Pydantic       | 2.9+     | Şema doğrulama ve serializasyon  |
 | Asenkron Çalışma | asyncio        | stdlib   | Eşzamanlı I/O işlemleri          |
-| CLI Çerçevesi    | click/typer    | en son   | Komut satırı arayüzü             |
-| YAML Ayrıştırma  | PyYAML         | 6.0+     | Yapılandırma ve Sigma kuralı çıktısı |
-| JSON İşleme      | orjson         | 3.10+    | Yüksek performanslı JSON kodlayıcı |
-| HTML Üretimi     | Jinja2         | 3.1+     | Rapor şablonları                 |
+| CLI Çıktısı      | rich           | 13.0+    | Terminal biçimlendirme ve döndürme |
 
 ### Geliştirme ve Test
 
@@ -335,15 +330,15 @@ TC-SGB-API-to-List sistemi, Türkiye Ulusal Siber Güvenlik Direktörlüğü (TC
 | Kod Denetimi     | ruff           | Kod stili ve kalitesi            |
 | Biçimlendirme    | ruff format    | Kod biçimlendirme                |
 | Özellik Testi    | Hypothesis     | Bulanık ve özellik tabanlı testler |
-| Ölçüm           | pytest-bench   | Performans karşılaştırmaları     |
+| Ölçüm           | pytest-benchmark | Performans karşılaştırmaları   |
 
 ### CI/CD ve Dağıtım
 
 | Bileşen          | Teknoloji      | Amaç                            |
 |------------------|----------------|----------------------------------|
-| CI/CD            | GitHub Actions | Otomatik hatt                    |
+| CI/CD            | GitHub Actions | Otomatik hattı                   |
 | Sürümleme        | SemVer         | Yayın yönetimi                   |
-| Paketleme        | hatchling      | Paket oluşturma                  |
+| Paketleme        | setuptools     | Paket oluşturma                  |
 | Kayıt Defteri    | PyPI           | Paket dağıtımı                   |
 
 ## Dağıtım Modeli

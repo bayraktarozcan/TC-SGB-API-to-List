@@ -35,9 +35,7 @@ def _random_domain(length: int = 12) -> str:
     return "".join(random.choices(chars, k=length)) + ".com"
 
 
-def _generate_iocs(
-    count: int, dup_ratio: float = 0.2
-) -> list[NormalizedIOC]:
+def _generate_iocs(count: int, dup_ratio: float = 0.2) -> list[NormalizedIOC]:
     """Generate N NormalizedIOCs with a controlled duplicate ratio (for normalize/quality)."""
     unique_count = int(count * (1 - dup_ratio))
     iocs: list[NormalizedIOC] = []
@@ -46,38 +44,40 @@ def _generate_iocs(
     conns = list(ConnectionType)
 
     for i in range(unique_count):
-        iocs.append(NormalizedIOC(
-            value=_random_domain(),
-            ioc_type=random.choice([IOCType.DOMAIN, IOCType.IP]),
-            desc=random.choice(descs),
-            source=random.choice(sources),
-            date=datetime(2024, 1, 1),
-            criticality_level=random.randint(1, 10),
-            connectiontype=random.choice(conns),
-            original_id=i,
-        ))
+        iocs.append(
+            NormalizedIOC(
+                value=_random_domain(),
+                ioc_type=random.choice([IOCType.DOMAIN, IOCType.IP]),
+                desc=random.choice(descs),
+                source=random.choice(sources),
+                date=datetime(2024, 1, 1),
+                criticality_level=random.randint(1, 10),
+                connectiontype=random.choice(conns),
+                original_id=i,
+            )
+        )
 
     dup_count = count - unique_count
     for _ in range(dup_count):
         original = random.choice(iocs[:unique_count])
-        iocs.append(NormalizedIOC(
-            value=original.value,
-            ioc_type=original.ioc_type,
-            desc=original.desc,
-            source=original.source,
-            date=original.date,
-            criticality_level=random.randint(1, 10),
-            connectiontype=original.connectiontype,
-            original_id=original.original_id,
-        ))
+        iocs.append(
+            NormalizedIOC(
+                value=original.value,
+                ioc_type=original.ioc_type,
+                desc=original.desc,
+                source=original.source,
+                date=original.date,
+                criticality_level=random.randint(1, 10),
+                connectiontype=original.connectiontype,
+                original_id=original.original_id,
+            )
+        )
 
     random.shuffle(iocs)
     return iocs
 
 
-def _generate_scored_for_dedup(
-    count: int, dup_ratio: float = 0.2
-) -> list[ScoredIOC]:
+def _generate_scored_for_dedup(count: int, dup_ratio: float = 0.2) -> list[ScoredIOC]:
     """Generate N ScoredIOCs with controlled duplicate ratio (for dedup tests)."""
     unique_count = int(count * (1 - dup_ratio))
     iocs: list[ScoredIOC] = []
@@ -86,34 +86,38 @@ def _generate_scored_for_dedup(
     conns = list(ConnectionType)
 
     for i in range(unique_count):
-        iocs.append(ScoredIOC(
-            value=_random_domain(),
-            ioc_type=random.choice([IOCType.DOMAIN, IOCType.IP]),
-            desc=random.choice(descs),
-            source=random.choice(sources),
-            date=datetime(2024, 1, 1),
-            criticality_level=random.randint(1, 10),
-            connectiontype=random.choice(conns),
-            original_id=i,
-            quality_score=random.uniform(20, 100),
-            false_positive_risk="low",
-        ))
+        iocs.append(
+            ScoredIOC(
+                value=_random_domain(),
+                ioc_type=random.choice([IOCType.DOMAIN, IOCType.IP]),
+                desc=random.choice(descs),
+                source=random.choice(sources),
+                date=datetime(2024, 1, 1),
+                criticality_level=random.randint(1, 10),
+                connectiontype=random.choice(conns),
+                original_id=i,
+                quality_score=random.uniform(20, 100),
+                false_positive_risk="low",
+            )
+        )
 
     dup_count = count - unique_count
     for _ in range(dup_count):
         original = random.choice(iocs[:unique_count])
-        iocs.append(ScoredIOC(
-            value=original.value,
-            ioc_type=original.ioc_type,
-            desc=original.desc,
-            source=original.source,
-            date=original.date,
-            criticality_level=random.randint(1, 10),
-            connectiontype=original.connectiontype,
-            original_id=original.original_id,
-            quality_score=random.uniform(20, 100),
-            false_positive_risk="low",
-        ))
+        iocs.append(
+            ScoredIOC(
+                value=original.value,
+                ioc_type=original.ioc_type,
+                desc=original.desc,
+                source=original.source,
+                date=original.date,
+                criticality_level=random.randint(1, 10),
+                connectiontype=original.connectiontype,
+                original_id=original.original_id,
+                quality_score=random.uniform(20, 100),
+                false_positive_risk="low",
+            )
+        )
 
     random.shuffle(iocs)
     return iocs
@@ -122,40 +126,45 @@ def _generate_scored_for_dedup(
 def _generate_validated_iocs(count: int) -> list[ValidatedIOC]:
     iocs: list[ValidatedIOC] = []
     for i in range(count):
-        iocs.append(ValidatedIOC(
-            raw_url=_random_domain(),
-            ioc_type=IOCType.DOMAIN,
-            desc=random.choice(list(DescriptionCategory)),
-            source=random.choice(list(Source)),
-            date=datetime(2024, 1, 1),
-            criticality_level=random.randint(1, 10),
-            connectiontype=random.choice(list(ConnectionType)),
-            original_id=i,
-        ))
+        iocs.append(
+            ValidatedIOC(
+                raw_url=_random_domain(),
+                ioc_type=IOCType.DOMAIN,
+                desc=random.choice(list(DescriptionCategory)),
+                source=random.choice(list(Source)),
+                date=datetime(2024, 1, 1),
+                criticality_level=random.randint(1, 10),
+                connectiontype=random.choice(list(ConnectionType)),
+                original_id=i,
+            )
+        )
     return iocs
 
 
 def _generate_scored_iocs(count: int) -> list[ScoredIOC]:
     iocs: list[ScoredIOC] = []
     for i in range(count):
-        iocs.append(ScoredIOC(
-            value=_random_domain(),
-            ioc_type=random.choice([IOCType.DOMAIN, IOCType.IP]),
-            desc=random.choice(list(DescriptionCategory)),
-            source=random.choice(list(Source)),
-            date=datetime(2024, 1, 1),
-            criticality_level=random.randint(1, 10),
-            connectiontype=random.choice(list(ConnectionType)),
-            original_id=i,
-            quality_score=random.uniform(20, 100),
-            false_positive_risk="low",
-        ))
+        iocs.append(
+            ScoredIOC(
+                value=_random_domain(),
+                ioc_type=random.choice([IOCType.DOMAIN, IOCType.IP]),
+                desc=random.choice(list(DescriptionCategory)),
+                source=random.choice(list(Source)),
+                date=datetime(2024, 1, 1),
+                criticality_level=random.randint(1, 10),
+                connectiontype=random.choice(list(ConnectionType)),
+                original_id=i,
+                quality_score=random.uniform(20, 100),
+                false_positive_risk="low",
+            )
+        )
     return iocs
 
 
 # ---------------------------------------------------------------------------
 # Normalization benchmarks
 # ---------------------------------------------------------------------------
+
 
 class TestNormalizationPerf:
     @pytest.mark.slow
@@ -186,6 +195,7 @@ class TestNormalizationPerf:
 # ---------------------------------------------------------------------------
 # Deduplication benchmarks
 # ---------------------------------------------------------------------------
+
 
 class TestDedupPerf:
     @pytest.mark.slow
@@ -218,6 +228,7 @@ class TestDedupPerf:
 # ---------------------------------------------------------------------------
 # Quality scoring benchmarks
 # ---------------------------------------------------------------------------
+
 
 class TestQualityPerf:
     @pytest.mark.slow
@@ -257,6 +268,7 @@ class TestQualityPerf:
 # ---------------------------------------------------------------------------
 # Output generation benchmarks
 # ---------------------------------------------------------------------------
+
 
 class TestOutputPerf:
     @pytest.mark.slow
@@ -306,6 +318,7 @@ class TestOutputPerf:
 # Full pipeline benchmark
 # ---------------------------------------------------------------------------
 
+
 class TestPipelinePerf:
     @pytest.mark.slow
     def test_full_pipeline_100(self):
@@ -314,6 +327,7 @@ class TestPipelinePerf:
         normalized = normalize_batch(validated)
         scored = [score_ioc(ioc) for ioc in normalized]
         from scripts.src.quality import filter_false_positives
+
         filtered, _ = filter_false_positives(scored, min_score=20)
         generate_json(filtered)
         elapsed = time.perf_counter() - t0
@@ -326,6 +340,7 @@ class TestPipelinePerf:
         normalized = normalize_batch(validated)
         scored = [score_ioc(ioc) for ioc in normalized]
         from scripts.src.quality import filter_false_positives
+
         filtered, _ = filter_false_positives(scored, min_score=20)
         generate_json(filtered)
         elapsed = time.perf_counter() - t0
@@ -338,6 +353,7 @@ class TestPipelinePerf:
         normalized = normalize_batch(validated)
         scored = [score_ioc(ioc) for ioc in normalized]
         from scripts.src.quality import filter_false_positives
+
         filtered, _ = filter_false_positives(scored, min_score=20)
         generate_json(filtered)
         elapsed = time.perf_counter() - t0

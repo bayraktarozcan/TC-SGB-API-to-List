@@ -9,13 +9,23 @@ updates:
       timezone: UTC
     open-pull-requests-limit: 10
     reviewers:
-      - bayra
+      - bayraktarozcan
     labels:
       - dependencies
       - python
     commit-message:
       prefix: "deps"
       include: scope
+    groups:
+      dev-dependencies:
+        dependency-type: "development"
+        update-types:
+          - "minor"
+          - "patch"
+      production-dependencies:
+        dependency-type: "production"
+        update-types:
+          - "patch"
 
   - package-ecosystem: github-actions
     directory: /
@@ -26,10 +36,14 @@ updates:
       timezone: UTC
     open-pull-requests-limit: 5
     reviewers:
-      - bayra
+      - bayraktarozcan
     labels:
       - dependencies
       - github-actions
     commit-message:
       prefix: "ci"
       include: scope
+    groups:
+      actions:
+        patterns:
+          - "*"

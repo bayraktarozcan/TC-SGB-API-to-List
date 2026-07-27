@@ -19,6 +19,7 @@ from scripts.src.validator import (
 # _is_valid_ip
 # ---------------------------------------------------------------------------
 
+
 class TestIsValidIP:
     def test_valid_ipv4(self):
         assert _is_valid_ip("8.8.8.8") is True
@@ -49,6 +50,7 @@ class TestIsValidIPNetwork:
 # ---------------------------------------------------------------------------
 # _is_rfc6761
 # ---------------------------------------------------------------------------
+
 
 class TestIsRFC6761:
     def test_localhost(self):
@@ -81,6 +83,7 @@ class TestIsRFC6761:
 # _has_private_suffix
 # ---------------------------------------------------------------------------
 
+
 class TestHasPrivateSuffix:
     def test_local(self):
         assert _has_private_suffix("myhost.local") is True
@@ -105,6 +108,7 @@ class TestHasPrivateSuffix:
 # _is_reserved_domain
 # ---------------------------------------------------------------------------
 
+
 class TestIsReservedDomain:
     def test_w3_org(self):
         assert _is_reserved_domain("www.w3.org") is True
@@ -122,6 +126,7 @@ class TestIsReservedDomain:
 # ---------------------------------------------------------------------------
 # _is_valid_domain
 # ---------------------------------------------------------------------------
+
 
 class TestIsValidDomain:
     def test_valid_simple(self):
@@ -161,6 +166,7 @@ class TestIsValidDomain:
 # _infer_ioc_type
 # ---------------------------------------------------------------------------
 
+
 class TestInferIOCType:
     def test_ipv4(self):
         assert _infer_ioc_type("8.8.8.8") == IOCType.IP
@@ -190,6 +196,7 @@ class TestInferIOCType:
 # ---------------------------------------------------------------------------
 # validate_ioc (integration)
 # ---------------------------------------------------------------------------
+
 
 class TestValidateIOC:
     def test_empty_record(self):

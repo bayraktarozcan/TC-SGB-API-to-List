@@ -1,6 +1,7 @@
-[English](#english) | [Türkçe](#turkish)
+> **Language / Dil** &nbsp;
+> [EN English](#-english) &nbsp;·&nbsp; [TR Türkçe](#-türkçe)
 
-<a id="english"></a>
+<a id="-english"></a>
 
 # Maintenance Plan
 
@@ -156,7 +157,7 @@ pytest -m performance --benchmark-json=monthly-benchmark.json
 |----------|--------------|------------------|
 | README.md | Installation instructions, usage examples | Feature changes |
 | CHANGELOG.md | Release notes completeness | Per release |
-| docs/ | API analysis, data models | API changes |
+| wiki/ | API analysis, data models | API changes |
 | SECURITY.md | Security policy, vulnerability reporting | Quarterly |
 | CONTRIBUTING.md | Contribution guidelines | Process changes |
 
@@ -260,6 +261,7 @@ import logging
 from datetime import datetime
 
 logger = logging.getLogger("tc_sgb.monitor")
+
 
 def check_pipeline_health():
     """Check pipeline health and alert if issues detected."""
@@ -443,7 +445,7 @@ pip install --upgrade tc-sgb-api-list
 **Full notes**: https://github.com/owner/tc-sgb-api-list/releases/tag/v1.1.0
 ```
 
-<a id="turkish"></a>
+<a id="-türkçe"></a>
 
 # Bakım Planı
 
@@ -601,7 +603,7 @@ pytest -m performance --benchmark-json=monthly-benchmark.json
 |-------|----------------|---------------------|
 | README.md | Yükleme talimatları, kullanım örnekleri | Özellik değişiklikleri |
 | CHANGELOG.md | Sürüm notlarının eksiksizliği | Her yayında |
-| docs/ | API analizi, veri modelleri | API değişiklikleri |
+| wiki/ | API analizi, veri modelleri | API değişiklikleri |
 | SECURITY.md | Güvenlik politikası, güvenlik açığı bildirimi | Üç Aylık |
 | CONTRIBUTING.md | Katkı yönergeleri | Süreç değişiklikleri |
 
@@ -705,6 +707,7 @@ import logging
 from datetime import datetime
 
 logger = logging.getLogger("tc_sgb.monitor")
+
 
 def check_pipeline_health():
     """Check pipeline health and alert if issues detected."""
@@ -830,7 +833,7 @@ def check_pipeline_health():
 | Kaynak kodu | Git deposu | Her commit | Süresiz |
 | Yapılandırma | Git deposu | Her değişiklik | Süresiz |
 | Çıkış dosyaları | GitHub Artifactları | Günlük | 30 gün |
-| Hat durumu | Yok (dursuz) | Yok | Yok |
+| Hat durumu | Yok (durumsuz) | Yok | Yok |
 | Günlükler | GitHub Actions | Her çalıştırmada | 30 gün |
 
 ### Kurtarma Prosedürleri

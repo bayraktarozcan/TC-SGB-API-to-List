@@ -1,0 +1,6 @@
+# Default: all changes require owner review
+* @bayraktarozcan
+
+# CI/CD and security config require owner review
+.github/ @bayraktarozcan
+scripts/ @bayraktarozcan

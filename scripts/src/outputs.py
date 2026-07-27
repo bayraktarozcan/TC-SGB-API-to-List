@@ -24,10 +24,7 @@ from .models import IOCType, ScoredIOC
 logger = logging.getLogger(__name__)
 
 # YAML setup — use safe dumper if available.
-try:
-    _yaml_dumper = yaml.SafeDumper
-except AttributeError:
-        _yaml_dumper = yaml.Dumper
+_yaml_dumper: type[yaml.SafeDumper] = yaml.SafeDumper
 
 
 def _domains_only(iocs: Sequence[ScoredIOC]) -> list[ScoredIOC]:
@@ -44,6 +41,7 @@ def _domains_and_urls(iocs: Sequence[ScoredIOC]) -> list[ScoredIOC]:
 # 1. NextDNS — plain domain list
 # ---------------------------------------------------------------------------
 
+
 def generate_nextdns(iocs: Sequence[ScoredIOC], path: str | Path | None = None) -> str:
     """Generate NextDNS-format plain domain list (one per line)."""
     lines = [ioc.value for ioc in _domains_only(iocs)]
@@ -56,6 +54,7 @@ def generate_nextdns(iocs: Sequence[ScoredIOC], path: str | Path | None = None) 
 # ---------------------------------------------------------------------------
 # 2. AdGuard — AdBlock filter format
 # ---------------------------------------------------------------------------
+
 
 def generate_adguard(iocs: Sequence[ScoredIOC], path: str | Path | None = None) -> str:
     """Generate AdGuard blocklist: ||domain^"""
@@ -76,6 +75,7 @@ def generate_adguard(iocs: Sequence[ScoredIOC], path: str | Path | None = None) 
 # 3. Pi-hole — hosts format
 # ---------------------------------------------------------------------------
 
+
 def generate_pihole(iocs: Sequence[ScoredIOC], path: str | Path | None = None) -> str:
     """Generate Pi-hole hosts format: 0.0.0.0 domain"""
     lines = [f"0.0.0.0 {ioc.value}" for ioc in _domains_only(iocs)]
@@ -90,6 +90,7 @@ def generate_pihole(iocs: Sequence[ScoredIOC], path: str | Path | None = None) -
 # 4. dnsmasq
 # ---------------------------------------------------------------------------
 
+
 def generate_dnsmasq(iocs: Sequence[ScoredIOC], path: str | Path | None = None) -> str:
     """Generate dnsmasq config: address=/domain/0.0.0.0"""
     lines = [f"address=/{ioc.value}/0.0.0.0" for ioc in _domains_only(iocs)]
@@ -102,6 +103,7 @@ def generate_dnsmasq(iocs: Sequence[ScoredIOC], path: str | Path | None = None) 
 # ---------------------------------------------------------------------------
 # 5. Unbound
 # ---------------------------------------------------------------------------
+
 
 def generate_unbound(iocs: Sequence[ScoredIOC], path: str | Path | None = None) -> str:
     """Generate Unbound config: local-zone: \"domain\" always_nxdomain"""
@@ -116,6 +118,7 @@ def generate_unbound(iocs: Sequence[ScoredIOC], path: str | Path | None = None) 
 # ---------------------------------------------------------------------------
 # 6. RPZ — Response Policy Zone
 # ---------------------------------------------------------------------------
+
 
 def generate_rpz(iocs: Sequence[ScoredIOC], path: str | Path | None = None) -> str:
     """Generate RPZ zone file with SOA header."""
@@ -143,6 +146,7 @@ def generate_rpz(iocs: Sequence[ScoredIOC], path: str | Path | None = None) -> s
 # ---------------------------------------------------------------------------
 # 7. Technitium — zone file format
 # ---------------------------------------------------------------------------
+
 
 def generate_technitium(iocs: Sequence[ScoredIOC], path: str | Path | None = None) -> str:
     """Generate Technitium DNS Server zone file format."""
@@ -176,6 +180,7 @@ def generate_technitium(iocs: Sequence[ScoredIOC], path: str | Path | None = Non
 # 8. MikroTik — RouterOS address-list script
 # ---------------------------------------------------------------------------
 
+
 def generate_mikrotik(iocs: Sequence[ScoredIOC], path: str | Path | None = None) -> str:
     """Generate MikroTik RouterOS firewall address-list script."""
     lines = [
@@ -183,10 +188,15 @@ def generate_mikrotik(iocs: Sequence[ScoredIOC], path: str | Path | None = None)
         "# Import with: /import file-name=threat_intel.rsc\n"
     ]
     for ioc in iocs:
-        if ioc.ioc_type == IOCType.DOMAIN or ioc.ioc_type in (IOCType.IP, IOCType.IP6):
+        if ioc.ioc_type in (IOCType.DOMAIN, IOCType.IP):
             lines.append(
                 f"/ip firewall address-list add list=threat_intel"
-                f" address={ioc.value} comment=\"SGB-Intel\""
+                f' address={ioc.value} comment="SGB-Intel"'
+            )
+        elif ioc.ioc_type == IOCType.IP6:
+            lines.append(
+                f"/ipv6 firewall address-list add list=threat_intel"
+                f' address={ioc.value} comment="SGB-Intel"'
             )
     content = "\n".join(lines) + "\n"
     if path:
@@ -198,6 +208,7 @@ def generate_mikrotik(iocs: Sequence[ScoredIOC], path: str | Path | None = None)
 # 9. nftables — nft set format
 # ---------------------------------------------------------------------------
 
+
 def generate_nftables(iocs: Sequence[ScoredIOC], path: str | Path | None = None) -> str:
     """Generate nftables set for blocking."""
     header = (
@@ -205,23 +216,36 @@ def generate_nftables(iocs: Sequence[ScoredIOC], path: str | Path | None = None)
         "# Add this to your nftables.conf or import as a set\n\n"
         "table inet filter {\n"
     )
-    ip_lines = []
-    domain_lines = []
+    ipv4_lines: list[str] = []
+    ipv6_lines: list[str] = []
+    domain_lines: list[str] = []
     for ioc in iocs:
-        if ioc.ioc_type in (IOCType.IP, IOCType.IP6):
-            ip_lines.append(f"            {ioc.value},")
+        if ioc.ioc_type == IOCType.IP:
+            ipv4_lines.append(f"            {ioc.value},")
+        elif ioc.ioc_type == IOCType.IP6:
+            ipv6_lines.append(f"            {ioc.value},")
         elif ioc.ioc_type == IOCType.DOMAIN:
             domain_lines.append(f"            {ioc.value},")
 
     content = header
-    if ip_lines:
+    if ipv4_lines:
         content += (
             "    set threat_intel {\n"
             "        type ipv4_addr\n"
             "        flags interval\n"
             "        elements = {\n"
         )
-        content += "\n".join(ip_lines) + "\n"
+        content += "\n".join(ipv4_lines) + "\n"
+        content += "        }\n    }\n"
+
+    if ipv6_lines:
+        content += (
+            "    set threat_intel6 {\n"
+            "        type ipv6_addr\n"
+            "        flags interval\n"
+            "        elements = {\n"
+        )
+        content += "\n".join(ipv6_lines) + "\n"
         content += "        }\n    }\n"
 
     if domain_lines:
@@ -245,6 +269,7 @@ def generate_nftables(iocs: Sequence[ScoredIOC], path: str | Path | None = None)
 # 10. ipset
 # ---------------------------------------------------------------------------
 
+
 def generate_ipset(iocs: Sequence[ScoredIOC], path: str | Path | None = None) -> str:
     """Generate ipset list format."""
     lines = ["create threat_intel hash:ip hashsize 4096 maxelem 500000"]
@@ -260,6 +285,7 @@ def generate_ipset(iocs: Sequence[ScoredIOC], path: str | Path | None = None) ->
 # ---------------------------------------------------------------------------
 # 11. Suricata — EVE JSON IOC format
 # ---------------------------------------------------------------------------
+
 
 def generate_suricata(iocs: Sequence[ScoredIOC], path: str | Path | None = None) -> str:
     """Generate Suricata EVE-format JSON lines for IOCs."""
@@ -281,9 +307,7 @@ def generate_suricata(iocs: Sequence[ScoredIOC], path: str | Path | None = None)
                 "severity": ioc.criticality_level,
                 "category": ioc.desc.value if ioc.desc else "unknown",
                 "signature": (
-                    f"TC-SGB Intel — "
-                    f"{ioc.desc.value if ioc.desc else 'IOC'} — "
-                    f"{ioc.value[:128]}"
+                    f"TC-SGB Intel — {ioc.desc.value if ioc.desc else 'IOC'} — {ioc.value[:128]}"
                 ),
             },
             "metadata": {
@@ -305,30 +329,34 @@ def generate_suricata(iocs: Sequence[ScoredIOC], path: str | Path | None = None)
 # 12. CrowdSec — Decision list YAML
 # ---------------------------------------------------------------------------
 
+
 def generate_crowdsec(iocs: Sequence[ScoredIOC], path: str | Path | None = None) -> str:
     """Generate CrowdSec decision list YAML format."""
     decisions: list[dict[str, Any]] = []
     for ioc in iocs:
         if ioc.ioc_type not in (IOCType.IP, IOCType.IP6):
             continue
-        decisions.append({
-            "decisions": [
-                {
-                    "duration": "168h",  # 7 days
-                    "type": "ban",
-                    "value": ioc.value,
-                    "scope": "IP",
-                    "origin": "TC-SGB-Intel",
-                    "scenario": (
-                        "Threat intelligence: "
-                        f"{ioc.desc.value if ioc.desc else 'malicious'}"
-                    ),
-                }
-            ]
-        })
+        decisions.append(
+            {
+                "decisions": [
+                    {
+                        "duration": "168h",  # 7 days
+                        "type": "ban",
+                        "value": ioc.value,
+                        "scope": "IP",
+                        "origin": "TC-SGB-Intel",
+                        "scenario": (
+                            f"Threat intelligence: {ioc.desc.value if ioc.desc else 'malicious'}"
+                        ),
+                    }
+                ]
+            }
+        )
     content: str = yaml.dump(
-        decisions, Dumper=_yaml_dumper,
-        default_flow_style=False, allow_unicode=True,
+        decisions,
+        Dumper=_yaml_dumper,
+        default_flow_style=False,
+        allow_unicode=True,
     )
     if path:
         Path(path).write_text(content, encoding="utf-8")
@@ -339,27 +367,40 @@ def generate_crowdsec(iocs: Sequence[ScoredIOC], path: str | Path | None = None)
 # 13. CSV
 # ---------------------------------------------------------------------------
 
+
 def generate_csv(iocs: Sequence[ScoredIOC], path: str | Path | None = None) -> str:
     """Generate CSV with all IOC fields."""
     output = io.StringIO()
     writer = csv.writer(output)
-    writer.writerow([
-        "value", "type", "desc", "source", "date", "criticality_level",
-        "connectiontype", "quality_score", "false_positive_risk", "flags",
-    ])
+    writer.writerow(
+        [
+            "value",
+            "type",
+            "desc",
+            "source",
+            "date",
+            "criticality_level",
+            "connectiontype",
+            "quality_score",
+            "false_positive_risk",
+            "flags",
+        ]
+    )
     for ioc in iocs:
-        writer.writerow([
-            ioc.value,
-            ioc.ioc_type.value,
-            ioc.desc.value if ioc.desc else "",
-            ioc.source.value if ioc.source else "",
-            ioc.date.isoformat() if ioc.date else "",
-            ioc.criticality_level,
-            ioc.connectiontype.value if ioc.connectiontype else "",
-            f"{ioc.quality_score:.4f}",
-            ioc.false_positive_risk,
-            "|".join(ioc.flags),
-        ])
+        writer.writerow(
+            [
+                ioc.value,
+                ioc.ioc_type.value,
+                ioc.desc.value if ioc.desc else "",
+                ioc.source.value if ioc.source else "",
+                ioc.date.isoformat() if ioc.date else "",
+                ioc.criticality_level,
+                ioc.connectiontype.value if ioc.connectiontype else "",
+                f"{ioc.quality_score:.4f}",
+                ioc.false_positive_risk,
+                "|".join(ioc.flags),
+            ]
+        )
     content = output.getvalue()
     if path:
         Path(path).write_text(content, encoding="utf-8")
@@ -369,6 +410,7 @@ def generate_csv(iocs: Sequence[ScoredIOC], path: str | Path | None = None) -> s
 # ---------------------------------------------------------------------------
 # 14. JSON
 # ---------------------------------------------------------------------------
+
 
 def generate_json(iocs: Sequence[ScoredIOC], path: str | Path | None = None) -> str:
     """Generate pretty-printed JSON array."""
@@ -397,6 +439,7 @@ def generate_json(iocs: Sequence[ScoredIOC], path: str | Path | None = None) -> 
 # 15. YAML
 # ---------------------------------------------------------------------------
 
+
 def generate_yaml(iocs: Sequence[ScoredIOC], path: str | Path | None = None) -> str:
     """Generate YAML sequence."""
     data = [
@@ -415,8 +458,10 @@ def generate_yaml(iocs: Sequence[ScoredIOC], path: str | Path | None = None) -> 
         for ioc in iocs
     ]
     content: str = yaml.dump(
-        data, Dumper=_yaml_dumper,
-        default_flow_style=False, allow_unicode=True,
+        data,
+        Dumper=_yaml_dumper,
+        default_flow_style=False,
+        allow_unicode=True,
     )
     if path:
         Path(path).write_text(content, encoding="utf-8")
@@ -428,7 +473,7 @@ def generate_yaml(iocs: Sequence[ScoredIOC], path: str | Path | None = None) -> 
 # ---------------------------------------------------------------------------
 
 SQLITE_SCHEMA = """
-CREATE TABLE IF NOT EXISTS ioCs (
+CREATE TABLE IF NOT EXISTS iocs (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     value TEXT NOT NULL,
     type TEXT NOT NULL,
@@ -444,11 +489,11 @@ CREATE TABLE IF NOT EXISTS ioCs (
     UNIQUE(value, type)
 );
 
-CREATE INDEX IF NOT EXISTS idx_iocs_type ON ioCs(type);
-CREATE INDEX IF NOT EXISTS idx_iocs_source ON ioCs(source);
-CREATE INDEX IF NOT EXISTS idx_iocs_desc ON ioCs(desc);
-CREATE INDEX IF NOT EXISTS idx_iocs_quality ON ioCs(quality_score);
-CREATE INDEX IF NOT EXISTS idx_iocs_criticality ON ioCs(criticality_level);
+CREATE INDEX IF NOT EXISTS idx_iocs_type ON iocs(type);
+CREATE INDEX IF NOT EXISTS idx_iocs_source ON iocs(source);
+CREATE INDEX IF NOT EXISTS idx_iocs_desc ON iocs(desc);
+CREATE INDEX IF NOT EXISTS idx_iocs_quality ON iocs(quality_score);
+CREATE INDEX IF NOT EXISTS idx_iocs_criticality ON iocs(criticality_level);
 
 CREATE TABLE IF NOT EXISTS pipeline_runs (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -493,7 +538,7 @@ def generate_sqlite(iocs: Sequence[ScoredIOC], path: str | Path | None = None) -
             for ioc in iocs
         ]
         conn.executemany(
-            """INSERT OR REPLACE INTO ioCs
+            """INSERT OR REPLACE INTO iocs
                (value, type, desc, source, date, criticality_level,
                 connectiontype, quality_score, false_positive_risk, flags)
                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",

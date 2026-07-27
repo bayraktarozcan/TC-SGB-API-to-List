@@ -38,22 +38,37 @@ def stable_iocs() -> list[ScoredIOC]:
     """Fixed IOC set for deterministic regression tests."""
     return [
         ScoredIOC(
-            value="evil-phish.com", ioc_type=IOCType.DOMAIN,
-            desc=DescriptionCategory.PHISHING, source=Source.USOM,
-            criticality_level=3, connectiontype=ConnectionType.PHISHING,
-            quality_score=93.0, false_positive_risk="low", flags=[],
+            value="evil-phish.com",
+            ioc_type=IOCType.DOMAIN,
+            desc=DescriptionCategory.PHISHING,
+            source=Source.USOM,
+            criticality_level=3,
+            connectiontype=ConnectionType.PHISHING,
+            quality_score=93.0,
+            false_positive_risk="low",
+            flags=[],
         ),
         ScoredIOC(
-            value="85.214.132.117", ioc_type=IOCType.IP,
-            desc=DescriptionCategory.CYBER_ATTACK, source=Source.RSA,
-            criticality_level=2, connectiontype=ConnectionType.APT_CNC,
-            quality_score=88.0, false_positive_risk="low", flags=["private_ip"],
+            value="85.214.132.117",
+            ioc_type=IOCType.IP,
+            desc=DescriptionCategory.CYBER_ATTACK,
+            source=Source.RSA,
+            criticality_level=2,
+            connectiontype=ConnectionType.APT_CNC,
+            quality_score=88.0,
+            false_positive_risk="low",
+            flags=["private_ip"],
         ),
         ScoredIOC(
-            value="spam.xyz", ioc_type=IOCType.DOMAIN,
-            desc=DescriptionCategory.MALWARE_DIST_DOMAIN, source=Source.IHBAR,
-            criticality_level=5, connectiontype=ConnectionType.MALWARE_DOWNLOAD,
-            quality_score=82.0, false_positive_risk="low", flags=[],
+            value="spam.xyz",
+            ioc_type=IOCType.DOMAIN,
+            desc=DescriptionCategory.MALWARE_DIST_DOMAIN,
+            source=Source.IHBAR,
+            criticality_level=5,
+            connectiontype=ConnectionType.MALWARE_DOWNLOAD,
+            quality_score=82.0,
+            false_positive_risk="low",
+            flags=[],
         ),
     ]
 
@@ -100,9 +115,16 @@ class TestJSONRegression:
         out = generate_json(stable_iocs)
         data = json.loads(out)
         assert list(data[0].keys()) == [
-            "value", "type", "desc", "source", "date",
-            "criticality_level", "connectiontype", "quality_score",
-            "false_positive_risk", "flags",
+            "value",
+            "type",
+            "desc",
+            "source",
+            "date",
+            "criticality_level",
+            "connectiontype",
+            "quality_score",
+            "false_positive_risk",
+            "flags",
         ]
 
 
@@ -115,6 +137,7 @@ class TestCSVRegression:
     def test_row_values(self, stable_iocs):
         import csv
         import io
+
         reader = csv.DictReader(io.StringIO(generate_csv(stable_iocs)))
         rows = list(reader)
         assert rows[0]["value"] == "evil-phish.com"
@@ -219,8 +242,8 @@ class TestSQLiteRegression:
 
         conn1 = sqlite3.connect(str(db1))
         conn2 = sqlite3.connect(str(db2))
-        rows1 = conn1.execute("SELECT value, quality_score FROM ioCs ORDER BY id").fetchall()
-        rows2 = conn2.execute("SELECT value, quality_score FROM ioCs ORDER BY id").fetchall()
+        rows1 = conn1.execute("SELECT value, quality_score FROM iocs ORDER BY id").fetchall()
+        rows2 = conn2.execute("SELECT value, quality_score FROM iocs ORDER BY id").fetchall()
         conn1.close()
         conn2.close()
         assert rows1 == rows2

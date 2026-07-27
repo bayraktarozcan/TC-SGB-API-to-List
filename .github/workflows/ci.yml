@@ -44,7 +44,7 @@ jobs:
         run: ruff format --check .
 
       - name: Mypy
-        run: mypy scripts/ main.py
+        run: mypy scripts/
 
   test:
     name: Test
@@ -102,7 +102,7 @@ jobs:
         run: pip-audit -r requirements.txt
 
       - name: Bandit security scan
-        run: bandit -r scripts/ main.py -f json -o bandit-report.json || true
+        run: bandit -r scripts/ main.py -f json -o bandit-report.json
 
       - name: Bandit summary
         if: always()
