@@ -232,7 +232,7 @@ Annual Review:
 License Checklist:
   - [ ] Review TC SGB terms of service
   - [ ] Check for license changes
-  - [ ] Update LEGAL_NOTICES.md
+  - [ ] Update Legal-Notices.md
   - [ ] Review dependency licenses
   - [ ] Update copyright notices
 ```
@@ -678,7 +678,7 @@ Yıllık İnceleme:
 Lisans Kontrol Listesi:
   - [ ] TC SGB hizmet şartlarını incele
   - [ ] Lisans değişikliklerini kontrol et
-  - [ ] LEGAL_NOTICES.md'yi güncelle
+  - [ ] Legal-Notices.md'yi güncelle
   - [ ] Bağımlılık lisanslarını incele
   - [ ] Telif hakkı uyarılarını güncelle
 ```

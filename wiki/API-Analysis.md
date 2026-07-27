@@ -303,7 +303,7 @@ The API is governed by the legal warnings published at:
 - **Modification**: Prohibited without source attribution
 - **Integration**: Explicitly permitted for security systems (firewall, SIEM, URL filtering, DNS)
 
-See [09-license-analysis.md](09-license-analysis.md) and [LEGAL_NOTICES.md](LEGAL_NOTICES.md) for full details.
+See [License-Analysis](License-Analysis) and [Legal-Notices](Legal-Notices) for full details.
 
 ### Deprecated Endpoints
 
@@ -632,7 +632,7 @@ API aşağıdaki adreste yayımlanan yasal uyarılar tarafından yönetilmektedi
 - **Değiştirme**: Kaynak ataması olmadan yasaktır
 - **Entegrasyon**: Güvenlik sistemleri için açıkça izin verilmiştir (güvenlik duvarı, SIEM, URL filtreleme, DNS)
 
-Tam ayrıntılar için [09-license-analysis.md](09-license-analysis.md) ve [LEGAL_NOTICES.md](LEGAL_NOTICES.md) dosyalarına bakın.
+Tam ayrıntılar için [License-Analysis](License-Analysis#-türkçe) ve [Legal-Notices](Legal-Notices#-türkçe) dosyalarına bakın.
 
 ### Kullanımdan Kaldırılan Uç Noktalar
 

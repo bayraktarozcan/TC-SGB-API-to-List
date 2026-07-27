@@ -175,14 +175,14 @@ This tool is provided as-is for legitimate cybersecurity research and defense pu
 
 ## Genel Bakış
 
-TC-SGB-API-to-List, TC SGB kamu API'sinden (`https://siberguvenlik.gov.tr/api/`) IoC (Tehdit Göstergesi) verilerini çeker, güçlü bir çok aşamalı hat üzerinden işler ve **16+ birlikte çalışabilir formatta** yapılandırılmış tehdit istihbaratı çıktısı üretir.
+TC-SGB-API-to-List, TC SGB kamu API'sinden (`https://siberguvenlik.gov.tr/api/`) IOC (İhlal Göstergesi) verilerini çeker, güçlü bir çok aşamalı hat üzerinden işler ve **16+ birlikte çalışabilir formatta** yapılandırılmış tehdit istihbaratı çıktısı üretir.
 
 ## Özellikler
 
-- **Otomatik IoC Çekme** — Yeniden deneme mantığı ve hız sınırlaması ile sayfalı veri çekme
-- **Doğrulama ve Normalleştirme** — Pydantic tabanlı veri modelleri ile IoC türü çıkarma ve format normalleştirme
+- **Otomatik IOC Çekme** — Yeniden deneme mantığı ve hız sınırlaması ile sayfalı veri çekme
+- **Doğrulama ve Normalleştirme** — Pydantic tabanlı veri modelleri ile IOC türü çıkarma ve format normalleştirme
 - **Tekilleştirme** — Çekimler arasında verimli küme tabanlı tekilleştirme
-- **Kalite Puanlama** — Her IoC için çok faktörlü kalite değerlendirmesi
+- **Kalite Puanlama** — Her IOC için çok faktörlü kalite değerlendirmesi
 - **16+ Çıktı Formatı**:
   - DNS: NextDNS, AdGuard, Pi-hole, dnsmasq, Unbound, RPZ, Technitium, MikroTik
   - Güvenlik Duvarı: nftables, ipset
@@ -228,8 +228,8 @@ TC-SGB-API-to-List/
 │   └── src/
 │       ├── models.py            # Pydantic veri modelleri
 │       ├── client.py             # Asenkron API istemcisi
-│       ├── validator.py         # IoC doğrulama
-│       ├── normalizer.py        # IoC normalleştirme
+│       ├── validator.py         # IOC doğrulama
+│       ├── normalizer.py        # IOC normalleştirme
 │       ├── deduplicator.py      # Tekilleştirme
 │       ├── quality.py           # Kalite puanlama
 │       ├── outputs.py           # 16+ çıktı formatı üreteçleri
@@ -304,7 +304,7 @@ mypy scripts/src/
 
 ## Katkıda Bulunma
 
-Katkılar hoşa gelir! Lütfen pull request göndermeden önce [katkı yönergelerimizi](CONTRIBUTING.md) okuyun.
+Katkılar memnuniyetle karşılanmaktadır! Lütfen pull request göndermeden önce [katkı yönergelerimizi](CONTRIBUTING.md) okuyun.
 
 ## Lisans
 

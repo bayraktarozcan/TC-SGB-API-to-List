@@ -1,7 +1,7 @@
 # Contributing / Katkıda Bulunma
 
 Thank you for considering contributing to TC-SGB-API-to-List!
-Katkıda bulunmayı düşünmeniz teşekkür ederiz.
+Projemize katkıda bulunmayı düşünmeniz bizleri memnun etmektedir.
 
 ## Development Setup / Geliştirme Ortamı
 

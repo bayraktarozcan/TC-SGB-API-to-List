@@ -7,7 +7,7 @@
 
 **Auditor:** Claude (Claude Code)
 **Date:** 2026-07-23
-**Scope:** All 17 docs (wiki/Architecture through wiki/Roadmap), plus Legal-Notices.md and README.md
+**Scope:** All 22 docs (wiki/Architecture through wiki/Roadmap), plus Legal-Notices.md and README.md
 **Source of truth:** `D:\Repos\TC-SGB-API-to-List\scripts\src\` (Python source code)
 **Audit criteria:** Accuracy, Completeness, Consistency, Timeliness, Security, Error Handling, Configuration, API/Interface fidelity
 
@@ -61,7 +61,7 @@ The CLI accepts `--debug` (line 38) which sets root logger to DEBUG level, but `
 
 ## Finding 3 — HIGH: `--country` flag documentation is stale
 
-**Source code:** `scripts/src/cli.py:55-56`
+**Source code:** `scripts/main.py`
 ```python
 if args.country and args.country != "TR":
     parser.error("--country is fixed to TR. Turkey is the only supported country.")
@@ -79,7 +79,7 @@ The `--country` flag exists in the parser (line 55: `choices=["TR"]`) and the co
 
 ## Finding 4 — MEDIUM: `--proxy` description does not mention HTTPS enforcement
 
-**Source code:** `scripts/src/network.py:69-72`
+**Source code:** `scripts/src/client.py:69-72`
 ```python
 if proxy_url:
     proxy_url = self._validate_proxy_url(proxy_url)
@@ -87,7 +87,7 @@ if proxy_url:
     self._ssl_context = self._create_ssl_context(proxy_url=proxy_url)
 ```
 
-And `network.py:122-125`:
+And `client.py:122-125`:
 ```python
 def _validate_proxy_url(self, proxy_url: str) -> str:
     if not proxy_url:
@@ -108,7 +108,7 @@ The docs (Security-Analysis.md line 26) describe `--proxy` as "Use HTTP/HTTPS pr
 
 ## Finding 5 — MEDIUM: `Module-Architecture.md` describes `rate_limiter` as using `time.sleep()` — confirmed, but stale pattern
 
-**Source code:** `scripts/src/rate_limiter.py:19-24`
+**Source code:** `scripts/src/client.py:19-24`
 ```python
 async def acquire(self) -> None:
     while True:
@@ -125,18 +125,15 @@ The docs correctly describe `asyncio.sleep()` behavior. **No discrepancy found.*
 
 ---
 
-## Finding 6 — MEDIUM: LEGAL_NOTICES.md does not mention the `scripts/src/constants.py` Turkish Government data attribution
+## Finding 6 — MEDIUM: Legal-Notices.md does not mention the `scripts/src/client.py` Turkish Government data attribution
 
-**Source code:** `scripts/src/constants.py:7-10`
+**Source code:** `scripts/src/client.py:23-24`
 ```python
-TCS_GB_DATA_URL: str = "https://nc0y014lkw.execute-api.eu-central-1.amazonaws.com/prod/list"
-"""Turkiye Cumhuriyeti Ticaret Sicili Gazetesi veri adresi."""
-
-TCS_GB_DATA_CDN_URL: str = "https://d13k0kxkym9y80.cloudfront.net/prod/tcs_gb_data.json"
-"""Hizli erisim icin CloudFront CDN adresi."""
+# Real API base URL (verified from OpenAPI spec and live calls)
+BASE_URL = "https://siberguvenlik.gov.tr"
 ```
 
-**Documentation:** `LEGAL_NOTICES.md` (lines 29-33) does mention "Ticaret Sicili Gazetesi (Trade Registry Gazette)" and `scripts/src/constants.py` as a data source. However, LEGAL_NOTICES.md line 33 says `scripts/src/constants.py` is the data source for "ListData/UltimateBeneficialOwner" without specifying that it contains the **live API endpoint URLs** (the actual data pipeline entry points).
+**Documentation:** `Legal-Notices.md` (lines 29-33) does mention "Ticaret Sicili Gazetesi (Trade Registry Gazette)" and `scripts/src/client.py` as a data source. However, Legal-Notices.md line 33 says `scripts/src/client.py` is the data source for "ListData/UltimateBeneficialOwner" without specifying that it contains the **live API endpoint URLs** (the actual data pipeline entry points).
 
 **Impact:** Low. The legal notice references the file but undersells its importance as the configuration root for all data access.
 
@@ -167,7 +164,7 @@ The docs (Data-Flow.md line 16) say: `pip install -e ".[dev]"` — this is **cor
 
 ## Finding 8 — MEDIUM: `API-Analysis.md` does not document the CDN fallback mechanism
 
-**Source code:** `scripts/src/network.py:269-282`
+**Source code:** `scripts/src/client.py:269-282`
 ```python
 urls_to_try = [url]
 if url == TCS_GB_DATA_URL and self._config.enable_cdn_fallback:
@@ -209,7 +206,7 @@ All three refer to the same source. This is cosmetic but inconsistent.
 
 ## Finding 10 — HIGH: `Security-Analysis.md` does not document the SSL certificate verification bypass when proxy is present
 
-**Source code:** `scripts/src/network.py:127-137`
+**Source code:** `scripts/src/client.py:127-137`
 ```python
 def _create_ssl_context(self, proxy_url: Optional[str] = None) -> ssl.SSLContext:
     ssl_context = ssl.create_default_context()
@@ -234,7 +231,7 @@ When a proxy is configured, **SSL certificate verification is completely disable
 
 ## Finding 11 — MEDIUM: `Roadmap.md` documents `_make_request` as public but it is a private method
 
-**Source code:** `scripts/src/network.py:158-224`
+**Source code:** `scripts/src/client.py:158-224`
 ```python
 async def _make_request(
     self,
@@ -253,7 +250,7 @@ The method is prefixed with `_` indicating it is private/internal. The Roadmap.m
 
 ## Finding 12 — LOW: `Maintenance-Plan.md` mentions "exit code 1" but code uses multiple exit codes
 
-**Source code:** `scripts/src/cli.py:211-214`
+**Source code:** `scripts/main.py:211-214`
 ```python
 except KeyboardInterrupt:
     print("\nİşlem iptal edildi.", file=sys.stderr)
@@ -301,7 +298,7 @@ The code uses exit code 130 for keyboard interrupt (line 213) and exit code 1 fo
 | Risk-Analysis.md | — | 1 (Finding 10) |
 | Roadmap.md | — | 1 (Finding 11) |
 | Legal-Notices.md | — | 0 |
-| AUDIT_REPORT.md | — | 0 |
+| Audit-Report.md | — | 0 |
 
 **Source code files audited:**
 - `scripts/src/__init__.py`
@@ -326,7 +323,7 @@ The code uses exit code 130 for keyboard interrupt (line 213) and exit code 1 fo
 
 **Denetçi:** Claude (Claude Code)
 **Tarih:** 2026-07-23
-**Kapsam:** 17 belgenin tamamı (wiki/Architecture wiki/Roadmap arası), ayrıca Legal-Notices.md ve README.md
+**Kapsam:** 22 belgenin tamamı (wiki/Architecture ile wiki/Roadmap arası), ayrıca Legal-Notices.md ve README.md
 **Gerçek kaynağı:** `D:\Repos\TC-SGB-API-to-List\scripts\src\` (Python kaynak kodu)
 **Denetim kriterleri:** Doğruluk, Eksiksizlik, Tutarlılık, Güncellik, Güvenlik, Hata Yönetimi, Yapılandırma/Arayüz bütünlüğü
 
@@ -380,7 +377,7 @@ CLI, kök günlüğü DEBUG seviyesine ayarlayan `--debug` (38. satır) seçene�
 
 ## Bulgu 3 — YÜKSEK: `--country` bayrağı dokümantasyonda eski ve yanıltıcı
 
-**Kaynak kodu:** `scripts/src/cli.py:55-56`
+**Kaynak kodu:** `scripts/main.py`
 ```python
 if args.country and args.country != "TR":
     parser.error("--country is fixed to TR. Turkey is the only supported country.")
@@ -398,7 +395,7 @@ if args.country and args.country != "TR":
 
 ## Bulgu 4 — ORTA: `--proxy` açıklaması HTTPS zorunluluğundan bahsetmiyor
 
-**Kaynak kodu:** `scripts/src/network.py:69-72`
+**Kaynak kodu:** `scripts/src/client.py:69-72`
 ```python
 if proxy_url:
     proxy_url = self._validate_proxy_url(proxy_url)
@@ -406,7 +403,7 @@ if proxy_url:
     self._ssl_context = self._create_ssl_context(proxy_url=proxy_url)
 ```
 
-Ve `network.py:122-125`:
+Ve `client.py:122-125`:
 ```python
 def _validate_proxy_url(self, proxy_url: str) -> str:
     if not proxy_url:
@@ -427,7 +424,7 @@ Dokümantasyon (Security-Analysis.md, 26. satır) `--proxy` seçeneğini "HTTP/H
 
 ## Bulgu 5 — ORTA: `Module-Architecture.md` dosyası `rate_limiter`'ın `time.sleep()` kullandığını tanımlıyor — doğrulandı ancak eski kalıp
 
-**Kaynak kodu:** `scripts/src/rate_limiter.py:19-24`
+**Kaynak kodu:** `scripts/src/client.py:19-24`
 ```python
 async def acquire(self) -> None:
     while True:
@@ -444,18 +441,15 @@ Dokümantasyon `asyncio.sleep()` davranışını doğru tanımlamaktadır. **Uyu
 
 ---
 
-## Bulgu 6 — ORTA: LEGAL_NOTICES.md dosyası `scripts/src/constants.py` içindeki Türkiye Hükümeti veri atıfını belgelemiyor
+## Bulgu 6 — ORTA: Legal-Notices.md dosyası `scripts/src/client.py` içindeki Türkiye Hükümeti veri atıfını belgelemiyor
 
-**Kaynak kodu:** `scripts/src/constants.py:7-10`
+**Kaynak kodu:** `scripts/src/client.py:23-24`
 ```python
-TCS_GB_DATA_URL: str = "https://nc0y014lkw.execute-api.eu-central-1.amazonaws.com/prod/list"
-"""Turkiye Cumhuriyeti Ticaret Sicili Gazetesi veri adresi."""
-
-TCS_GB_DATA_CDN_URL: str = "https://d13k0kxkym9y80.cloudfront.net/prod/tcs_gb_data.json"
-"""Hizli erisim icin CloudFront CDN adresi."""
+# Real API base URL (verified from OpenAPI spec and live calls)
+BASE_URL = "https://siberguvenlik.gov.tr"
 ```
 
-**Dokümantasyon:** `LEGAL_NOTICES.md` (29-33. satırlar) "Ticaret Sicili Gazetesi" ve veri kaynağı olarak `scripts/src/constants.py` dosyasından bahsetmektedir. Ancak LEGAL_NOTICES.md 33. satırı, `scripts/src/constants.py` dosyasının "ListData/UltimateBeneficialOwner" için veri kaynağı olduğunu belirtmekte; ancak bunun **canlı API uç noktası URL'lerini** (asıl veri hattı giriş noktalarını) içerdiğini belirtmemektedir.
+**Dokümantasyon:** `Legal-Notices.md` (29-33. satırlar) "Ticaret Sicili Gazetesi" ve veri kaynağı olarak `scripts/src/client.py` dosyasından bahsetmektedir. Ancak Legal-Notices.md 33. satırı, `scripts/src/client.py` dosyasının "ListData/UltimateBeneficialOwner" için veri kaynağı olduğunu belirtmekte; ancak bunun **canlı API uç noktası URL'lerini** (asıl veri hattı giriş noktalarını) içerdiğini belirtmemektedir.
 
 **Etki:** Düşük. Yasal bildirim dosyaya referans vermekte ancak tüm veri erişiminin yapılandırma kökü olarak önemini yeterince vurgulamamaktadır.
 
@@ -486,7 +480,7 @@ Dokümantasyon (`Data-Flow.md`, 16. satır): `pip install -e ".[dev]"` — bu **
 
 ## Bulgu 8 — ORTA: `API-Analysis.md` dosyası CDN fallback mekanizmasını belgelemiyor
 
-**Kaynak kodu:** `scripts/src/network.py:269-282`
+**Kaynak kodu:** `scripts/src/client.py:269-282`
 ```python
 urls_to_try = [url]
 if url == TCS_GB_DATA_URL and self._config.enable_cdn_fallback:
@@ -528,7 +522,7 @@ Kod bir **CDN fallback mekanizması** uygulamaktadır: Birincil TCS GB API URL's
 
 ## Bulgu 10 — YÜKSEK: `Security-Analysis.md` dosyası proxy varlığında SSL sertifika doğrulama bypass'ını belgelemiyor
 
-**Kaynak kodu:** `scripts/src/network.py:127-137`
+**Kaynak kodu:** `scripts/src/client.py:127-137`
 ```python
 def _create_ssl_context(self, proxy_url: Optional[str] = None) -> ssl.SSLContext:
     ssl_context = ssl.create_default_context()
@@ -553,7 +547,7 @@ Proxy yapılandırıldığında, **SSL sertifika doğrulaması tamamen devre dı
 
 ## Bulgu 11 — ORTA: `Roadmap.md` dosyası `_make_request`'i genel API olarak belgelemektedir ancak bu özel bir metottur
 
-**Kaynak kodu:** `scripts/src/network.py:158-224`
+**Kaynak kodu:** `scripts/src/client.py:158-224`
 ```python
 async def _make_request(
     self,
@@ -572,7 +566,7 @@ Metot `_` ile başlamaktadır, bu da özel/dahili olduğunu göstermektedir. `Te
 
 ## Bulgu 12 — DÜŞÜK: `Maintenance-Plan.md` dosyası "çıkış kodu 1"den bahsetmektedir ancak kod birden fazla çıkış kodu kullanmaktadır
 
-**Kaynak kodu:** `scripts/src/cli.py:211-214`
+**Kaynak kodu:** `scripts/main.py:211-214`
 ```python
 except KeyboardInterrupt:
     print("\nİşlem iptal edildi.", file=sys.stderr)

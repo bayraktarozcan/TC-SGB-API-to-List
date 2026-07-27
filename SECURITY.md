@@ -4,7 +4,7 @@
 
 | Version / Sürüm | Supported / Destekleniyor |
 |-----------------|---------------------------|
-| 1.1.x           | Yes / Evet                |
+| 1.0.x           | Yes / Evet                |
 | < 1.0           | No / Hayır                |
 
 ## Reporting a Vulnerability / Güvenlik Açığı Bildirme
