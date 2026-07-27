@@ -138,7 +138,7 @@ def malicious_only_records() -> list[AddressRecord]:
     return [
         AddressRecord(
             id=101,
-            url="phishing-bank.ru",
+            url="example-phishing.net",
             type="domain",
             desc="PH",
             source="US",
@@ -158,7 +158,7 @@ def malicious_only_records() -> list[AddressRecord]:
         ),
         AddressRecord(
             id=103,
-            url="85.214.132.117",
+            url="192.0.2.1",
             type="ip",
             desc="CA",
             source="RS",
@@ -414,7 +414,7 @@ def mock_api_page2() -> dict[str, Any]:
         "models": [
             {
                 "id": 3,
-                "url": "85.214.132.117",
+                "url": "192.0.2.1",
                 "type": "ip",
                 "desc": "CA",
                 "source": "RS",

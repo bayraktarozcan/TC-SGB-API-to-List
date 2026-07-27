@@ -204,14 +204,14 @@ class TestValidateIOC:
         assert validate_ioc(r) is None
 
     def test_valid_domain(self):
-        r = AddressRecord(id=1, url="phishing-bank.ru", desc="PH", source="US")
+        r = AddressRecord(id=1, url="example-phishing.net", desc="PH", source="US")
         result = validate_ioc(r)
         assert result is not None
         assert result.ioc_type == IOCType.DOMAIN
         assert result.validation_errors == []
 
     def test_valid_ip(self):
-        r = AddressRecord(id=1, url="85.214.132.117", desc="CA", source="RS")
+        r = AddressRecord(id=1, url="192.0.2.1", desc="CA", source="RS")
         result = validate_ioc(r)
         assert result is not None
         assert result.ioc_type == IOCType.IP
