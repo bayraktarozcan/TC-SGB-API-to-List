@@ -28,7 +28,7 @@ def _extract_domain_from_url(url: str) -> str | None:
         host = parsed.hostname
         if host:
             return host.lower().rstrip(".")
-    except Exception:
+    except Exception:  # nosec B110 — intentional fallback for optional DNS resolution
         pass
     return None
 

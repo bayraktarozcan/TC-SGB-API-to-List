@@ -295,9 +295,9 @@ def generate_suricata(iocs: Sequence[ScoredIOC], path: str | Path | None = None)
             "timestamp": (ioc.date or datetime.now(UTC)).strftime("%Y-%m-%dT%H:%M:%S+00:00"),
             "flow_id": ioc.original_id,
             "event_type": "alert",
-            "src_ip": "0.0.0.0",
+            "src_ip": "0.0.0.0",  # nosec B104 — placeholder IP for Suricata EVE JSON output
             "src_port": 0,
-            "dest_ip": ioc.value if ioc.ioc_type in (IOCType.IP, IOCType.IP6) else "0.0.0.0",
+            "dest_ip": ioc.value if ioc.ioc_type in (IOCType.IP, IOCType.IP6) else "0.0.0.0",  # nosec B104
             "dest_port": 0,
             "proto": "ip",
             "alert": {

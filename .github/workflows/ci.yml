@@ -102,11 +102,11 @@ jobs:
         run: pip-audit -r requirements.txt
 
       - name: Bandit security scan
-        run: bandit -r scripts/ main.py -f json -o bandit-report.json
+        run: bandit -r scripts/ -f json -o bandit-report.json
 
       - name: Bandit summary
         if: always()
-        run: bandit -r scripts/ main.py
+        run: bandit -r scripts/
 
       - name: Upload bandit report
         if: always()
