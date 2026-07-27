@@ -50,16 +50,13 @@ TC SGB API ──► Fetch ──► Validate ──► Normalize ──► Dedu
 ```bash
 git clone https://github.com/bayraktarozcan/TC-SGB-API-to-List.git
 cd TC-SGB-API-to-List
-python -m venv .venv
-.venv\Scripts\activate          # Windows
-# source .venv/bin/activate     # macOS/Linux
-pip install -r requirements.txt
+pip install -e .
 
 # Fetch all IOC data
-python -m scripts.main fetch
+tc-sgb fetch
 
 # Generate all output formats
-python -m scripts.main generate
+tc-sgb generate -i output/raw_records.json
 ```
 
 ---
@@ -137,16 +134,13 @@ TC SGB API ──► Çekme ──► Doğrulama ──► Normalleştirme ─�
 ```bash
 git clone https://github.com/bayraktarozcan/TC-SGB-API-to-List.git
 cd TC-SGB-API-to-List
-python -m venv .venv
-.venv\Scripts\activate          # Windows
-# source .venv/bin/activate     # macOS/Linux
-pip install -r requirements.txt
+pip install -e .
 
 # Tüm IOC verilerini çek
-python -m scripts.main fetch
+tc-sgb fetch
 
 # Tüm çıktı formatlarını üret
-python -m scripts.main generate
+tc-sgb generate -i output/raw_records.json
 ```
 
 ---

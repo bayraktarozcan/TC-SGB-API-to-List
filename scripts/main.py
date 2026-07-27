@@ -25,6 +25,7 @@ _SCRIPTS_DIR = Path(__file__).resolve().parent
 if str(_SCRIPTS_DIR.parent) not in sys.path:
     sys.path.insert(0, str(_SCRIPTS_DIR.parent))
 
+from scripts.src.changelog import generate_changelog
 from scripts.src.client import AsyncAPIClient
 from scripts.src.models import AddressRecord
 from scripts.src.outputs import generate_all
@@ -91,6 +92,11 @@ async def cmd_fetch(args: argparse.Namespace) -> None:
         ]
         raw_path.write_text(json.dumps(raw_data, indent=2, ensure_ascii=False), encoding="utf-8")
         print(f"\nSaved {len(raw_data)} records to {raw_path}")
+
+        # Generate changelog (new/removed IOCs vs previous snapshot)
+        log_path = generate_changelog(output_dir=output_dir, current_records=raw_data)
+        if log_path:
+            print(f"Changelog written to {log_path}")
 
         # Generate output files
         formats = args.formats.split(",") if hasattr(args, "formats") and args.formats else None

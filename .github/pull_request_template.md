@@ -37,5 +37,5 @@ _Steps to verify:_
 
 ```bash
 pytest tests/ -v
-python scripts/main.py fetch --limit 100 --output-dir ./output
+tc-sgb fetch --max-records 100
 ```

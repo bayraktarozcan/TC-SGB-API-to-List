@@ -45,20 +45,20 @@ TC-SGB-API-to-List fetches IOC (Indicator of Compromise) data from the TC SGB pu
 ```bash
 git clone https://github.com/bayraktarozcan/TC-SGB-API-to-List.git
 cd TC-SGB-API-to-List
-pip install -r requirements.txt
+pip install -e .
 ```
 
 ### Usage
 
 ```bash
 # Run the full pipeline
-python scripts/main.py fetch --limit 1000 --output-dir ./output
+tc-sgb fetch
+
+# Generate outputs from previously saved raw data
+tc-sgb generate -i output/raw_records.json
 
 # Fetch and display health status
-python scripts/main.py health
-
-# Run in headless mode (no display)
-python scripts/main.py fetch --headless --output-dir ./output
+tc-sgb health
 ```
 
 ## Project Structure
@@ -120,7 +120,8 @@ cp .env.example .env
 ## Development
 
 ```bash
-# Install dependencies
+# Install dev dependencies
+pip install -e ".[dev]"
 pip install -r requirements.txt
 
 # Run tests
@@ -203,20 +204,20 @@ TC-SGB-API-to-List, TC SGB kamu API'sinden (`https://siberguvenlik.gov.tr/api/`)
 ```bash
 git clone https://github.com/bayraktarozcan/TC-SGB-API-to-List.git
 cd TC-SGB-API-to-List
-pip install -r requirements.txt
+pip install -e .
 ```
 
 ### Kullanım
 
 ```bash
 # Tam hattı çalıştır
-python scripts/main.py fetch --limit 1000 --output-dir ./output
+tc-sgb fetch
+
+# Daha önce kaydedilmiş ham veriden çıktı üret
+tc-sgb generate -i output/raw_records.json
 
 # Sağlık durumunu görüntüle
-python scripts/main.py health
-
-# Başsız modda çalıştır (görüntü olmadan)
-python scripts/main.py fetch --headless --output-dir ./output
+tc-sgb health
 ```
 
 ## Proje Yapısı
@@ -278,7 +279,8 @@ cp .env.example .env
 ## Geliştirme
 
 ```bash
-# Bağımlılıkları kur
+# Geliştirici bağımlılıklarını kur
+pip install -e ".[dev]"
 pip install -r requirements.txt
 
 # Testleri çalıştır

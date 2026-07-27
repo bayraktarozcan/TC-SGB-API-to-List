@@ -59,7 +59,7 @@ body:
       label: "Reproduction Steps / Tekrarlama Adımları"
       description: "Exact command and parameters you used"
       placeholder: |
-        python scripts/main.py fetch --limit 100
+        tc-sgb fetch --max-records 100
     validations:
       required: true
 

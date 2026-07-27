@@ -64,10 +64,10 @@ The CLI accepts `--debug` (line 38) which sets root logger to DEBUG level, but `
 **Source code:** `scripts/main.py`
 ```python
 if args.country and args.country != "TR":
-    parser.error("--country is fixed to TR. Turkey is the only supported country.")
+    parser.error("--country is fixed to TR. Türkiye is the only supported country.")
 ```
 
-The `--country` flag exists in the parser (line 55: `choices=["TR"]`) and the code **rejects any value other than TR** with `parser.error()`. The docs in `Security-Analysis.md` describe `--country` as accepting a value (line 22: `--country COUNTRY`) and state: "Override target country (default: TR). Turkey is the only supported country."
+The `--country` flag exists in the parser (line 55: `choices=["TR"]`) and the code **rejects any value other than TR** with `parser.error()`. The docs in `Security-Analysis.md` describe `--country` as accepting a value (line 22: `--country COUNTRY`) and state: "Override target country (default: TR). Türkiye is the only supported country."
 
 **Discrepancy:** The docs imply `--country` is a configurable parameter with a default. In reality, it is **hard-locked to "TR"** and any other value causes an immediate `parser.error()` exit. The flag is effectively vestigial.
 
@@ -380,10 +380,10 @@ CLI, kök günlüğü DEBUG seviyesine ayarlayan `--debug` (38. satır) seçene�
 **Kaynak kodu:** `scripts/main.py`
 ```python
 if args.country and args.country != "TR":
-    parser.error("--country is fixed to TR. Turkey is the only supported country.")
+    parser.error("--country is fixed to TR. Türkiye is the only supported country.")
 ```
 
-`--country` bayrağı kodlayıcıda mevcuttur (55. satır: `choices=["TR"]`) ve kod TR dışındaki herhangi bir değeri `parser.error()` ile **reddetmektedir**. Security-Analysis.md belgesinde `--country` bir değer kabul eden bir parametre olarak tanımlanmaktadır (22. satır: `--country COUNTRY`) ve şöyle belirtmektedir: "Varsayılan hedef ülkeyi (varsayılan: TR) değiştirin. Turkey tek desteklenen ülkedir."
+`--country` bayrağı kodlayıcıda mevcuttur (55. satır: `choices=["TR"]`) ve kod TR dışındaki herhangi bir değeri `parser.error()` ile **reddetmektedir**. Security-Analysis.md belgesinde `--country` bir değer kabul eden bir parametre olarak tanımlanmaktadır (22. satır: `--country COUNTRY`) ve şöyle belirtmektedir: "Varsayılan hedef ülkeyi (varsayılan: TR) değiştirin. Türkiye tek desteklenen ülkedir."
 
 **Uyumsuzluk:** Dokümantasyon `--country`'nin yapılandırılabilir bir parametre olduğunu ima etmektedir. Oysa bu seçenek **TR'ye sabitlenmiştir** ve herhangi bir diğer değer derhal `parser.error()` ile çıkış sağlar. Bayrak fiilen işlevsizdir.
 

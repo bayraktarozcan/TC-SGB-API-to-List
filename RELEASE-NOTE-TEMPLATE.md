@@ -56,17 +56,15 @@
 ````bash
 git clone https://github.com/bayraktarozcan/TC-SGB-API-to-List.git
 cd TC-SGB-API-to-List
-python -m venv .venv
-.venv\Scripts\activate   # Windows
-pip install -r requirements.txt
+pip install -e .
 ````
 
 ### Quick Start
 
 ````bash
-python scripts/main.py fetch
-python scripts/main.py generate --input output/raw_records.json
-python scripts/main.py health
+tc-sgb fetch
+tc-sgb generate -i output/raw_records.json
+tc-sgb health
 ````
 
 ### Documentation
@@ -121,17 +119,15 @@ python scripts/main.py health
 ````bash
 git clone https://github.com/bayraktarozcan/TC-SGB-API-to-List.git
 cd TC-SGB-API-to-List
-python -m venv .venv
-.venv\Scripts\activate   # Windows
-pip install -r requirements.txt
+pip install -e .
 ````
 
 ### Hızlı Başlangıç
 
 ````bash
-python scripts/main.py fetch
-python scripts/main.py generate --input output/raw_records.json
-python scripts/main.py health
+tc-sgb fetch
+tc-sgb generate -i output/raw_records.json
+tc-sgb health
 ````
 
 ### Dokümantasyon
@@ -214,17 +210,15 @@ python scripts/main.py health
 ````bash
 git clone https://github.com/bayraktarozcan/TC-SGB-API-to-List.git
 cd TC-SGB-API-to-List
-python -m venv .venv
-.venv\Scripts\activate   # Windows
-pip install -r requirements.txt
+pip install -e .
 ````
 
 ### Quick Start
 
 ````bash
-python scripts/main.py fetch
-python scripts/main.py generate --input output/raw_records.json
-python scripts/main.py health
+tc-sgb fetch
+tc-sgb generate -i output/raw_records.json
+tc-sgb health
 ````
 
 ### Documentation
@@ -279,17 +273,15 @@ python scripts/main.py health
 ````bash
 git clone https://github.com/bayraktarozcan/TC-SGB-API-to-List.git
 cd TC-SGB-API-to-List
-python -m venv .venv
-.venv\Scripts\activate   # Windows
-pip install -r requirements.txt
+pip install -e .
 ````
 
 ### Hızlı Başlangıç
 
 ````bash
-python scripts/main.py fetch
-python scripts/main.py generate --input output/raw_records.json
-python scripts/main.py health
+tc-sgb fetch
+tc-sgb generate -i output/raw_records.json
+tc-sgb health
 ````
 
 ### Dokümantasyon

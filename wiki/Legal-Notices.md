@@ -19,7 +19,7 @@
 
 > **T.C. Ulaştırma ve Altyapı Bakanlığı Siber Güvenlik Dairesi Başkanlığı**
 >
-> All intellectual property rights, including but not limited to copyright, related to the content, design, and all materials published on the website https://siberguvenlik.gov.tr belong exclusively to the Directorate of Cyber Security (Siber Güvenlik Dairesi Başkanlığı) of the Republic of Turkey Ministry of Transport and Infrastructure.
+> All intellectual property rights, including but not limited to copyright, related to the content, design, and all materials published on the website https://siberguvenlik.gov.tr belong exclusively to the Directorate of Cyber Security (Siber Güvenlik Dairesi Başkanlığı) of the Republic of Türkiye Ministry of Transport and Infrastructure.
 
 ### Content Protection
 
