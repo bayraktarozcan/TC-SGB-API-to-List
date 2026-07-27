@@ -6,32 +6,38 @@
 
 > Copy the template below, replace placeholders with actual values, and use it when creating GitHub Releases.
 
+> **MANDATORY: Every release MUST be bilingual (English + Turkish), following the same format as README.md.**
+> All section headings, descriptions, tables, and code comments must appear in both languages.
+> Use the combined template below — English block first, then Turkish block separated by `---`.
+
 ---
 
 ```markdown
 ## TC-SGB-API-to-List v{VERSION}
 
 > **{ONE_LINE_HIGHLIGHT}**
+>
+> **{TEK_SATIR_VURGULAMA}**
 
 ---
 
-### What's New
+### What's New / Yenilikler
 
 {FEATURE_LIST}
 
-### Improvements
+### Improvements / İyileştirmeler
 
 {IMPROVEMENT_LIST}
 
-### Bug Fixes
+### Bug Fixes / Hata Düzeltmeleri
 
 {BUG_FIX_LIST}
 
-### Breaking Changes
+### Breaking Changes / Kırıcı Değişiklikler
 
 {BREAKING_CHANGES_OR_NONE}
 
-### Statistics
+### Statistics / İstatistikler
 
 | Metric | Value |
 |--------|-------|
@@ -43,7 +49,7 @@
 | Type Safety | mypy clean |
 | Lint | ruff clean |
 
-### Installation
+### Installation / Kurulum
 
 ````bash
 git clone https://github.com/bayraktarozcan/TC-SGB-API-to-List.git
@@ -53,7 +59,7 @@ python -m venv .venv
 pip install -r requirements.txt
 ````
 
-### Quick Start
+### Quick Start / Hızlı Başlangıç
 
 ````bash
 python scripts/main.py fetch
@@ -61,16 +67,16 @@ python scripts/main.py generate --input output/raw_records.json
 python scripts/main.py health
 ````
 
-### Documentation
+### Documentation / Dokümantasyon
 
 - [Wiki](https://github.com/bayraktarozcan/TC-SGB-API-to-List/wiki)
-- [Architecture](https://github.com/bayraktarozcan/TC-SGB-API-to-List/wiki/Architecture)
-- [API Analysis](https://github.com/bayraktarozcan/TC-SGB-API-to-List/wiki/API-Analysis)
-- [Data Flow](https://github.com/bayraktarozcan/TC-SGB-API-to-List/wiki/Data-Flow)
+- [Architecture / Mimari](https://github.com/bayraktarozcan/TC-SGB-API-to-List/wiki/Architecture)
+- [API Analysis / API Analizi](https://github.com/bayraktarozcan/TC-SGB-API-to-List/wiki/API-Analysis)
+- [Data Flow / Veri Akışı](https://github.com/bayraktarozcan/TC-SGB-API-to-List/wiki/Data-Flow)
 
 ---
 
-**Full Changelog**: https://github.com/bayraktarozcan/TC-SGB-API-to-List/compare/{PREV_TAG}...v{VERSION}
+**Full Changelog / Tam Değişiklik Günlüğü**: https://github.com/bayraktarozcan/TC-SGB-API-to-List/compare/{PREV_TAG}...v{VERSION}
 ```
 
 ---
@@ -118,6 +124,10 @@ python scripts/main.py health
 
 > Aşağıdaki şablonu kopyalayın, yer tutucuları gerçek değerlerle değiştirin ve GitHub Release'leri oluştururken kullanın.
 
+> **ZORUNLU: Her release bilingual (İngilizce + Türkçe) olmalıdır, README.md ile aynı format izlenmelidir.**
+> Tüm bölüm başlıkları, açıklamalar, tablolar ve kod yorumları her iki dilde de yer almalıdır.
+> Aşağıdaki birleşik şablonu kullanın — önce İngilizce blok, ardından `---` ile ayrılmış Türkçe blok.
+
 ---
 
 ```markdown
@@ -127,23 +137,23 @@ python scripts/main.py health
 
 ---
 
-### Yenilikler
+### Yenilikler / Eklenenler
 
 {ÖZELLİK_LISTESİ}
 
-### İyileştirmeler
+### İyileştirmeler / Değiştirilenler
 
 {İYİLEŞTİRME_LISTESİ}
 
-### Hata Düzeltmeleri
+### Hata Düzeltmeleri / Düzeltilenler
 
 {HATA_DÜZELTME_LISTESİ}
 
-### Kırıcı Değişiklikler
+### Kırıcı Değişiklikler / Değişenler
 
 {KIRICI_DEĞİŞİKLİKLER_Veya_YOK}
 
-### İstatistikler
+### İstatistikler / Sayılar
 
 | Metrik | Değer |
 |--------|-------|
@@ -155,7 +165,7 @@ python scripts/main.py health
 | Tip Güvenliği | mypy temiz |
 | Lint | ruff temiz |
 
-### Kurulum
+### Kurulum / Yükleme
 
 ````bash
 git clone https://github.com/bayraktarozcan/TC-SGB-API-to-List.git
@@ -165,7 +175,7 @@ python -m venv .venv
 pip install -r requirements.txt
 ````
 
-### Hızlı Başlangıç
+### Hızlı Başlangıç / Başlangıç
 
 ````bash
 python scripts/main.py fetch
@@ -173,7 +183,7 @@ python scripts/main.py generate --input output/raw_records.json
 python scripts/main.py health
 ````
 
-### Dokümantasyon
+### Dokümantasyon / Belgeler
 
 - [Wiki](https://github.com/bayraktarozcan/TC-SGB-API-to-List/wiki)
 - [Mimari](https://github.com/bayraktarozcan/TC-SGB-API-to-List/wiki/Architecture)
