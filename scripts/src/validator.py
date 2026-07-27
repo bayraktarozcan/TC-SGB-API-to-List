@@ -7,7 +7,14 @@ import ipaddress
 import re
 from urllib.parse import urlparse
 
-from .models import AddressRecord, IOCType, ValidatedIOC
+from .models import (
+    AddressRecord,
+    ConnectionType,
+    DescriptionCategory,
+    IOCType,
+    Source,
+    ValidatedIOC,
+)
 
 # ---------------------------------------------------------------------------
 # RFC 6761 reserved / special-use domains and TLDs
@@ -179,8 +186,6 @@ def validate_ioc(record: AddressRecord) -> ValidatedIOC | None:
         ioc_type = IOCType.DOMAIN
 
     # Map string fields to enums
-    from .models import ConnectionType, DescriptionCategory, Source
-
     desc_cat: DescriptionCategory | None = None
     if record.desc:
         try:

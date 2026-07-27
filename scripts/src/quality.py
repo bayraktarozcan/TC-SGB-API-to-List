@@ -65,14 +65,6 @@ BENIGN_IPS: set[str] = {
     "208.67.220.220",
 }
 
-PRIVATE_IP_NETWORKS = [
-    ipaddress.ip_network("10.0.0.0/8"),
-    ipaddress.ip_network("172.16.0.0/12"),
-    ipaddress.ip_network("192.168.0.0/16"),
-    ipaddress.ip_network("127.0.0.0/8"),
-    ipaddress.ip_network("169.254.0.0/16"),
-]
-
 
 def _extract_domain(value: str) -> str | None:
     if "://" in value:
@@ -179,14 +171,14 @@ def score_ioc(ioc: NormalizedIOC) -> ScoredIOC:
     # Clamp
     score = max(0.0, min(100.0, score))
 
-    # Determine risk from score
+    # Determine risk from score — only elevate risk, never downgrade
+    # pattern-based fp_risk (set by checks above) takes precedence
     if score < 20:
         fp_risk = "high"
     elif score < 50:
-        fp_risk = "medium"
-    else:
-        if fp_risk != "high":
-            fp_risk = "low"
+        if fp_risk == "low":
+            fp_risk = "medium"
+    # score >= 50: keep whatever fp_risk was set by pattern checks
 
     return ScoredIOC(
         value=ioc.value,

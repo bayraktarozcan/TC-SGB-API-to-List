@@ -7,7 +7,7 @@
 
 ## Overview
 
-TC-SGB-API-to-List is an automated threat intelligence pipeline that ingests Indicator of Compromise (IOC) data from the Turkish National Cyber Security Directorate (TC SGB) public API, processes it through validation, normalization, deduplication, and quality control stages, and outputs structured threat intelligence in 16+ interoperable formats.
+TC-SGB-API-to-List is an automated threat intelligence pipeline that ingests Indicator of Compromise (IOC) data from the Turkish National Cyber Security Directorate (TC SGB) public API, processes it through validation, normalization, deduplication, and quality control stages, and outputs structured threat intelligence in 17 interoperable formats.
 
 ---
 
@@ -28,7 +28,7 @@ TC-SGB-API-to-List is an automated threat intelligence pipeline that ingests Ind
 ## Architecture at a Glance
 
 ```
-TC SGB API ──► Fetch ──► Validate ──► Normalize ──► Dedup ──► Score ──► Output (16+ formats)
+TC SGB API ──► Fetch ──► Validate ──► Normalize ──► Dedup ──► Score ──► Output (17 formats)
 ```
 
 ---
@@ -39,7 +39,7 @@ TC SGB API ──► Fetch ──► Validate ──► Normalize ──► Dedu
 - **Pydantic data models** with strict validation
 - **Cross-type deduplication** with metadata merging
 - **Quality scoring** with false-positive risk detection
-- **16+ output formats** including nftables, MikroTik, Suricata, Sigma, YARA, STIX 2.1, MISP
+- **17 output formats** including NextDNS, AdGuard, Pi-hole, dnsmasq, Unbound, RPZ, Technitium, MikroTik, nftables, ipset, Suricata, CrowdSec, CSV, JSON, YAML, SQLite
 - **CI/CD** via GitHub Actions (lint, type check, test, security scan)
 - **Dual-language** documentation (English / Turkish)
 
@@ -94,7 +94,7 @@ python -m scripts.main generate
 
 ## Genel Bakış
 
-TC-SGB-API-to-List, T.C. Siber Güvenlik Başkanlığı (TC SGB) kamu API'sinden İhlal Göstergesi (IOC) verilerini otomatik olarak çekip doğrulama, normalleştirme, yineleme kaldırma ve kalite kontrol aşamalarından geçiren, 16'dan fazla uyumlu formatta yapılandırılmış tehdit istihbaratı üreten bir otomatik tehdit istihbaratı hattıdır.
+TC-SGB-API-to-List, T.C. Siber Güvenlik Başkanlığı (TC SGB) kamu API'sinden İhlal Göstergesi (IOC) verilerini otomatik olarak çekip doğrulama, normalleştirme, tekilleştirme ve kalite kontrol aşamalarından geçiren, 17 uyumlu formatta yapılandırılmış tehdit istihbaratı üreten bir otomatik tehdit istihbaratı hattıdır.
 
 ---
 
@@ -115,7 +115,7 @@ TC-SGB-API-to-List, T.C. Siber Güvenlik Başkanlığı (TC SGB) kamu API'sinden
 ## Mimari Özet
 
 ```
-TC SGB API ──► Çekme ──► Doğrulama ──► Normalleştirme ──► Yineleme Kaldırma ──► Puanlama ──► Çıktı (16+ format)
+TC SGB API ──► Çekme ──► Doğrulama ──► Normalleştirme ──► Tekilleştirme ──► Puanlama ──► Çıktı (17 format)
 ```
 
 ---
@@ -126,7 +126,7 @@ TC SGB API ──► Çekme ──► Doğrulama ──► Normalleştirme ─�
 - **Pydantic veri modelleri** sıkı doğrulama ile
 - **Çapraz tür yineleme kaldırma** meta veri birleştirme ile
 - **Kalite puanlama** sahte pozitif risk tespiti ile
-- **16+ çıktı formatı** nftables, MikroTik, Suricata, Sigma, YARA, STIX 2.1, MISP dahil
+- **17 çıktı formatı** NextDNS, AdGuard, Pi-hole, dnsmasq, Unbound, RPZ, Technitium, MikroTik, nftables, ipset, Suricata, CrowdSec, CSV, JSON, YAML, SQLite dahil
 - **CI/CD** GitHub Actions üzerinden (lint, tip kontrolü, test, güvenlik taraması)
 - **Çift dilli** dokümantasyon (İngilizce / Türkçe)
 

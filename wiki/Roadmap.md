@@ -47,7 +47,7 @@ This document outlines the phased development roadmap for the TC-SGB-API-to-List
 - [x] Core pipeline (fetch → validate → normalize → dedup → output)
 - [x] Async API client with retry logic
 - [x] Pydantic v2 data models
-- [x] 16+ output formats (JSON, STIX, CSV, MISP, OpenIOC, Sigma, YARA, CEF, LEEF, Syslog, HTML, Markdown, PDF, Splunk, QRadar, Elastic, Grafana)
+- [x] 17 output formats (NextDNS, AdGuard, Pi-hole, dnsmasq, Unbound, RPZ, Technitium, MikroTik, nftables, ipset, Suricata, CrowdSec, CSV, JSON, YAML, SQLite)
 - [x] Unit test suite (>90% coverage)
 - [x] CI/CD pipeline (GitHub Actions)
 - [x] PyPI packaging
@@ -452,7 +452,7 @@ class URLhausPlugin(SourcePlugin):
 | GitHub stars | 50 | 200 | 500 | 1,000 |
 | Contributors | 3 | 10 | 25 | 50 |
 | Data sources | 1 | 6 | 10+ | 20+ |
-| Output formats | 16 | 20 | 25+ | 30+ |
+| Output formats | 17 | 20 | 25+ | 30+ |
 | Test coverage | 90% | 92% | 95% | 98% |
 | Response time | <20min | <15min | <5min | <1min |
 
@@ -503,7 +503,7 @@ Bu belge, TC-SGB-API-to-List projesinin aşamalı geliştirme yol haritasını �
 - [x] Çekirdek hattı (çekme → doğrulama → normalleştirme → tekilleştirme → çıktı)
 - [x] Yeniden deneme mantığı ile asenkron API istemcisi
 - [x] Pydantic v2 veri modelleri
-- [x] 16+ çıktı biçimi (JSON, STIX, CSV, MISP, OpenIOC, Sigma, YARA, CEF, LEEF, Syslog, HTML, Markdown, PDF, Splunk, QRadar, Elastic, Grafana)
+- [x] 17 çıktı biçimi (NextDNS, AdGuard, Pi-hole, dnsmasq, Unbound, RPZ, Technitium, MikroTik, nftables, ipset, Suricata, CrowdSec, CSV, JSON, YAML, SQLite)
 - [x] Birim test paketi (%90'dan fazla kapsama)
 - [x] CI/CD hattı (GitHub Actions)
 - [x] PyPI paketleme

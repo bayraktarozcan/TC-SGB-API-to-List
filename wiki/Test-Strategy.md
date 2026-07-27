@@ -51,7 +51,7 @@ This document defines the comprehensive testing strategy for the TC-SGB-API-to-L
 | normalizer.py | test_normalizer.py | ~12 | Type-specific normalization |
 | deduplicator.py | test_deduplicator.py | ~10 | Exact, semantic, subdomain dedup |
 | quality.py | test_quality.py | ~8 | Statistics, FP detection, scoring |
-| outputs.py | test_outputs.py | ~20 | All 16+ output formats |
+| outputs.py | test_outputs.py | ~20 | All 17 output formats |
 | pipeline.py | test_pipeline.py | ~5 | Orchestration, error handling |
 
 **Example Unit Test**:

@@ -12,6 +12,7 @@ from scripts.src.models import (
     IOCType,
     NormalizedIOC,
     PipelineStats,
+    ScoredIOC,
     ValidatedIOC,
 )
 from scripts.src.pipeline import Pipeline, run_pipeline_sync
@@ -157,18 +158,31 @@ class TestPipelineNormalize:
 class TestPipelineDedup:
     def test_removes_duplicates(self, pipeline):
         iocs = [
-            NormalizedIOC(value="a.com", ioc_type=IOCType.DOMAIN, criticality_level=5),
-            NormalizedIOC(value="b.com", ioc_type=IOCType.DOMAIN, criticality_level=3),
-            NormalizedIOC(value="a.com", ioc_type=IOCType.DOMAIN, criticality_level=1),
+            ScoredIOC(
+                value="a.com", ioc_type=IOCType.DOMAIN, criticality_level=5, quality_score=80.0
+            ),
+            ScoredIOC(
+                value="b.com", ioc_type=IOCType.DOMAIN, criticality_level=3, quality_score=90.0
+            ),
+            ScoredIOC(
+                value="a.com", ioc_type=IOCType.DOMAIN, criticality_level=1, quality_score=70.0
+            ),
         ]
         deduped, dup_count = pipeline._stage_dedup(iocs)
         assert len(deduped) == 2
         assert dup_count == 1
+        # The higher-scored a.com should be kept
+        a_values = [d.quality_score for d in deduped if d.value == "a.com"]
+        assert a_values == [80.0]
 
     def test_no_duplicates(self, pipeline):
         iocs = [
-            NormalizedIOC(value="a.com", ioc_type=IOCType.DOMAIN, criticality_level=5),
-            NormalizedIOC(value="b.com", ioc_type=IOCType.DOMAIN, criticality_level=3),
+            ScoredIOC(
+                value="a.com", ioc_type=IOCType.DOMAIN, criticality_level=5, quality_score=80.0
+            ),
+            ScoredIOC(
+                value="b.com", ioc_type=IOCType.DOMAIN, criticality_level=3, quality_score=90.0
+            ),
         ]
         deduped, dup_count = pipeline._stage_dedup(iocs)
         assert len(deduped) == 2
