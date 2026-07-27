@@ -1,6 +1,5 @@
 # Enforce LF line endings for all text files
 * text=auto eol=lf
-
 # Explicit text types
 *.py text eol=lf
 *.md text eol=lf
@@ -16,7 +15,6 @@
 *.js text eol=lf
 *.sh text eol=lf
 *.bat text eol=crlf
-
 # Binary files — do not diff or normalize
 *.png binary
 *.jpg binary
@@ -32,3 +30,8 @@
 *.pem binary
 *.p12 binary
 *.pfx binary
+output/threat_intel_json.json filter=lfs diff=lfs merge=lfs -text
+output/threat_intel_yaml.yaml filter=lfs diff=lfs merge=lfs -text
+output/*.db filter=lfs diff=lfs merge=lfs -text
+output/raw_records.json filter=lfs diff=lfs merge=lfs -text
+output/threat_intel_suricata.json filter=lfs diff=lfs merge=lfs -text
