@@ -66,34 +66,3 @@ jobs:
             PR_NUMBER=$(gh pr list --head "$BRANCH" --json number --jq '.[0].number')
             gh pr merge "$PR_NUMBER" --squash --auto --delete-branch
           fi
-
-  release:
-    name: Tag & Release
-    runs-on: ubuntu-latest
-    needs: fetch
-    if: success()
-    steps:
-      - uses: actions/checkout@v7
-        with:
-          fetch-depth: 0
-
-      - name: Check for version tag
-        id: tag
-        run: |
-          LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
-          COMMIT_COUNT=$(git rev-list --count ${LATEST_TAG:+${LATEST_TAG}..}HEAD)
-          if [ "$COMMIT_COUNT" -gt 0 ]; then
-            echo "new_commits=true" >> "$GITHUB_OUTPUT"
-            echo "commit_count=${COMMIT_COUNT}" >> "$GITHUB_OUTPUT"
-          else
-            echo "new_commits=false" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Create release
-        if: steps.tag.outputs.new_commits == 'true'
-        uses: softprops/action-gh-release@v3
-        with:
-          tag_name: v0.1.${{ github.run_number }}
-          name: "IOC Data Update v0.1.${{ github.run_number }}"
-          generate_release_notes: true
-          make_latest: false
