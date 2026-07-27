@@ -6,38 +6,40 @@
 
 > Copy the template below, replace placeholders with actual values, and use it when creating GitHub Releases.
 
-> **MANDATORY: Every release MUST be bilingual (English + Turkish), following the same format as README.md.**
-> All section headings, descriptions, tables, and code comments must appear in both languages.
-> Use the combined template below — English block first, then Turkish block separated by `---`.
+> **MANDATORY: Every release MUST be bilingual (English + Turkish), following the exact same format as README.md.**
+> Use the combined template below — English block first, then `---` separator, then Turkish block.
+> Each block has its own anchor, headings, and descriptions — never mix languages within a section.
 
 ---
 
-```markdown
+````markdown
+[English](#-english) | [Türkçe](#-türkçe)
+
+<a id="-english"></a>
+
 ## TC-SGB-API-to-List v{VERSION}
 
 > **{ONE_LINE_HIGHLIGHT}**
->
-> **{TEK_SATIR_VURGULAMA}**
 
 ---
 
-### What's New / Yenilikler
+### What's New
 
 {FEATURE_LIST}
 
-### Improvements / İyileştirmeler
+### Improvements
 
 {IMPROVEMENT_LIST}
 
-### Bug Fixes / Hata Düzeltmeleri
+### Bug Fixes
 
 {BUG_FIX_LIST}
 
-### Breaking Changes / Kırıcı Değişiklikler
+### Breaking Changes
 
 {BREAKING_CHANGES_OR_NONE}
 
-### Statistics / İstatistikler
+### Statistics
 
 | Metric | Value |
 |--------|-------|
@@ -49,7 +51,7 @@
 | Type Safety | mypy clean |
 | Lint | ruff clean |
 
-### Installation / Kurulum
+### Installation
 
 ````bash
 git clone https://github.com/bayraktarozcan/TC-SGB-API-to-List.git
@@ -59,7 +61,7 @@ python -m venv .venv
 pip install -r requirements.txt
 ````
 
-### Quick Start / Hızlı Başlangıç
+### Quick Start
 
 ````bash
 python scripts/main.py fetch
@@ -67,23 +69,248 @@ python scripts/main.py generate --input output/raw_records.json
 python scripts/main.py health
 ````
 
-### Documentation / Dokümantasyon
+### Documentation
 
 - [Wiki](https://github.com/bayraktarozcan/TC-SGB-API-to-List/wiki)
-- [Architecture / Mimari](https://github.com/bayraktarozcan/TC-SGB-API-to-List/wiki/Architecture)
-- [API Analysis / API Analizi](https://github.com/bayraktarozcan/TC-SGB-API-to-List/wiki/API-Analysis)
-- [Data Flow / Veri Akışı](https://github.com/bayraktarozcan/TC-SGB-API-to-List/wiki/Data-Flow)
+- [Architecture](https://github.com/bayraktarozcan/TC-SGB-API-to-List/wiki/Architecture)
+- [API Analysis](https://github.com/bayraktarozcan/TC-SGB-API-to-List/wiki/API-Analysis)
+- [Data Flow](https://github.com/bayraktarozcan/TC-SGB-API-to-List/wiki/Data-Flow)
+
+**Full Changelog**: https://github.com/bayraktarozcan/TC-SGB-API-to-List/compare/{PREV_TAG}...v{VERSION}
 
 ---
 
-**Full Changelog / Tam Değişiklik Günlüğü**: https://github.com/bayraktarozcan/TC-SGB-API-to-List/compare/{PREV_TAG}...v{VERSION}
-```
+<a id="-türkçe"></a>
+
+## TC-SGB-API-to-List v{SÜRÜM}
+
+> **{TEK_SATIR_VURGULAMA}**
+
+---
+
+### Yenilikler
+
+{ÖZELLİK_LISTESİ}
+
+### İyileştirmeler
+
+{İYİLEŞTİRME_LISTESİ}
+
+### Hata Düzeltmeleri
+
+{HATA_DÜZELTME_LISTESİ}
+
+### Kırıcı Değişiklikler
+
+{KIRICI_DEĞİŞİKLİKLER_Veya_YOK}
+
+### İstatistikler
+
+| Metrik | Değer |
+|--------|-------|
+| IOC Çıktı Formatı | {N} |
+| Çekilen Toplam IOC | ~{N} |
+| Doğrulanmış IOC | ~{N} |
+| Nihai IOC (tekilleştirmeden sonra) | ~{N} |
+| Test Paketi | {N} test geçiyor |
+| Tip Güvenliği | mypy temiz |
+| Lint | ruff temiz |
+
+### Kurulum
+
+````bash
+git clone https://github.com/bayraktarozcan/TC-SGB-API-to-List.git
+cd TC-SGB-API-to-List
+python -m venv .venv
+.venv\Scripts\activate   # Windows
+pip install -r requirements.txt
+````
+
+### Hızlı Başlangıç
+
+````bash
+python scripts/main.py fetch
+python scripts/main.py generate --input output/raw_records.json
+python scripts/main.py health
+````
+
+### Dokümantasyon
+
+- [Wiki](https://github.com/bayraktarozcan/TC-SGB-API-to-List/wiki)
+- [Mimari](https://github.com/bayraktarozcan/TC-SGB-API-to-List/wiki/Architecture)
+- [API Analizi](https://github.com/bayraktarozcan/TC-SGB-API-to-List/wiki/API-Analysis)
+- [Veri Akışı](https://github.com/bayraktarozcan/TC-SGB-API-to-List/wiki/Data-Flow)
+
+**Tam Değişiklik Günlüğü**: https://github.com/bayraktarozcan/TC-SGB-API-to-List/compare/{ÖNCEKİ_ETİKET}...v{SÜRÜM}
+````
+
+---
+
+<a id="-türkçe"></a>
+
+# Sürüm Notu Şablonu
+
+> Aşağıdaki şablonu kopyalayın, yer tutucuları gerçek değerlerle değiştirin ve GitHub Release'leri oluştururken kullanın.
+
+> **ZORUNLU: Her release bilingual (İngilizce + Türkçe) olmalıdır, README.md ile aynı format birebir izlenmelidir.**
+> Birleşik şablonu kullanın — önce İngilizce blok, ardından `---` ayracı, sonra Türkçe blok.
+> Her bloğun kendi çapa noktası, başlıkları ve açıklamaları vardır — bir bölüm içinde diller asla karıştırılmaz.
+
+---
+
+<a id="-english"></a>
+
+# Release Note Template
+
+> Copy the template below, replace placeholders with actual values, and use it when creating GitHub Releases.
+
+> **MANDATORY: Every release MUST be bilingual (English + Turkish), following the exact same format as README.md.**
+> Use the combined template below — English block first, then `---` separator, then Turkish block.
+> Each block has its own anchor, headings, and descriptions — never mix languages within a section.
+
+---
+
+````markdown
+[English](#-english) | [Türkçe](#-türkçe)
+
+<a id="-english"></a>
+
+## TC-SGB-API-to-List v{VERSION}
+
+> **{ONE_LINE_HIGHLIGHT}**
+
+---
+
+### What's New
+
+{FEATURE_LIST}
+
+### Improvements
+
+{IMPROVEMENT_LIST}
+
+### Bug Fixes
+
+{BUG_FIX_LIST}
+
+### Breaking Changes
+
+{BREAKING_CHANGES_OR_NONE}
+
+### Statistics
+
+| Metric | Value |
+|--------|-------|
+| IOC Output Formats | {N} |
+| Total IOCs Fetched | ~{N} |
+| Validated IOCs | ~{N} |
+| Final IOCs (after dedup) | ~{N} |
+| Test Suite | {N} tests passing |
+| Type Safety | mypy clean |
+| Lint | ruff clean |
+
+### Installation
+
+````bash
+git clone https://github.com/bayraktarozcan/TC-SGB-API-to-List.git
+cd TC-SGB-API-to-List
+python -m venv .venv
+.venv\Scripts\activate   # Windows
+pip install -r requirements.txt
+````
+
+### Quick Start
+
+````bash
+python scripts/main.py fetch
+python scripts/main.py generate --input output/raw_records.json
+python scripts/main.py health
+````
+
+### Documentation
+
+- [Wiki](https://github.com/bayraktarozcan/TC-SGB-API-to-List/wiki)
+- [Architecture](https://github.com/bayraktarozcan/TC-SGB-API-to-List/wiki/Architecture)
+- [API Analysis](https://github.com/bayraktarozcan/TC-SGB-API-to-List/wiki/API-Analysis)
+- [Data Flow](https://github.com/bayraktarozcan/TC-SGB-API-to-List/wiki/Data-Flow)
+
+**Full Changelog**: https://github.com/bayraktarozcan/TC-SGB-API-to-List/compare/{PREV_TAG}...v{VERSION}
+
+---
+
+<a id="-türkçe"></a>
+
+## TC-SGB-API-to-List v{SÜRÜM}
+
+> **{TEK_SATIR_VURGULAMA}**
+
+---
+
+### Yenilikler
+
+{ÖZELLİK_LISTESİ}
+
+### İyileştirmeler
+
+{İYİLEŞTİRME_LISTESİ}
+
+### Hata Düzeltmeleri
+
+{HATA_DÜZELTME_LISTESİ}
+
+### Kırıcı Değişiklikler
+
+{KIRICI_DEĞİŞİKLİKLER_Veya_YOK}
+
+### İstatistikler
+
+| Metrik | Değer |
+|--------|-------|
+| IOC Çıktı Formatı | {N} |
+| Çekilen Toplam IOC | ~{N} |
+| Doğrulanmış IOC | ~{N} |
+| Nihai IOC (tekilleştirmeden sonra) | ~{N} |
+| Test Paketi | {N} test geçiyor |
+| Tip Güvenliği | mypy temiz |
+| Lint | ruff temiz |
+
+### Kurulum
+
+````bash
+git clone https://github.com/bayraktarozcan/TC-SGB-API-to-List.git
+cd TC-SGB-API-to-List
+python -m venv .venv
+.venv\Scripts\activate   # Windows
+pip install -r requirements.txt
+````
+
+### Hızlı Başlangıç
+
+````bash
+python scripts/main.py fetch
+python scripts/main.py generate --input output/raw_records.json
+python scripts/main.py health
+````
+
+### Dokümantasyon
+
+- [Wiki](https://github.com/bayraktarozcan/TC-SGB-API-to-List/wiki)
+- [Mimari](https://github.com/bayraktarozcan/TC-SGB-API-to-List/wiki/Architecture)
+- [API Analizi](https://github.com/bayraktarozcan/TC-SGB-API-to-List/wiki/API-Analysis)
+- [Veri Akışı](https://github.com/bayraktarozcan/TC-SGB-API-to-List/wiki/Data-Flow)
+
+**Tam Değişiklik Günlüğü**: https://github.com/bayraktarozcan/TC-SGB-API-to-List/compare/{ÖNCEKİ_ETİKET}...v{SÜRÜM}
+````
 
 ---
 
 ### Example: v0.1.0.0
 
-```markdown
+````markdown
+[English](#-english) | [Türkçe](#-türkçe)
+
+<a id="-english"></a>
+
 ## TC-SGB-API-to-List v0.1.0.0
 
 > **Initial public release — Full IOC pipeline with 17 output formats and 490,000+ threat indicators**
@@ -114,95 +341,14 @@ python scripts/main.py health
 | Test Suite | 330 tests passing |
 
 **Full Changelog**: https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/tag/v0.1.0.0
-```
 
 ---
 
 <a id="-türkçe"></a>
 
-# Sürüm Notu Şablonu
-
-> Aşağıdaki şablonu kopyalayın, yer tutucuları gerçek değerlerle değiştirin ve GitHub Release'leri oluştururken kullanın.
-
-> **ZORUNLU: Her release bilingual (İngilizce + Türkçe) olmalıdır, README.md ile aynı format izlenmelidir.**
-> Tüm bölüm başlıkları, açıklamalar, tablolar ve kod yorumları her iki dilde de yer almalıdır.
-> Aşağıdaki birleşik şablonu kullanın — önce İngilizce blok, ardından `---` ile ayrılmış Türkçe blok.
-
----
-
-```markdown
-## TC-SGB-API-to-List v{SÜRÜM}
-
-> **{TEK SATIR_VURGULAMA}**
-
----
-
-### Yenilikler / Eklenenler
-
-{ÖZELLİK_LISTESİ}
-
-### İyileştirmeler / Değiştirilenler
-
-{İYİLEŞTİRME_LISTESİ}
-
-### Hata Düzeltmeleri / Düzeltilenler
-
-{HATA_DÜZELTME_LISTESİ}
-
-### Kırıcı Değişiklikler / Değişenler
-
-{KIRICI_DEĞİŞİKLİKLER_Veya_YOK}
-
-### İstatistikler / Sayılar
-
-| Metrik | Değer |
-|--------|-------|
-| IOC Çıktı Formatı | {N} |
-| Çekilen Toplam IOC | ~{N} |
-| Doğrulanmış IOC | ~{N} |
-| Nihai IOC (tekilleştirmeden sonra) | ~{N} |
-| Test Paketi | {N} test geçiyor |
-| Tip Güvenliği | mypy temiz |
-| Lint | ruff temiz |
-
-### Kurulum / Yükleme
-
-````bash
-git clone https://github.com/bayraktarozcan/TC-SGB-API-to-List.git
-cd TC-SGB-API-to-List
-python -m venv .venv
-.venv\Scripts\activate   # Windows
-pip install -r requirements.txt
-````
-
-### Hızlı Başlangıç / Başlangıç
-
-````bash
-python scripts/main.py fetch
-python scripts/main.py generate --input output/raw_records.json
-python scripts/main.py health
-````
-
-### Dokümantasyon / Belgeler
-
-- [Wiki](https://github.com/bayraktarozcan/TC-SGB-API-to-List/wiki)
-- [Mimari](https://github.com/bayraktarozcan/TC-SGB-API-to-List/wiki/Architecture)
-- [API Analizi](https://github.com/bayraktarozcan/TC-SGB-API-to-List/wiki/API-Analysis)
-- [Veri Akışı](https://github.com/bayraktarozcan/TC-SGB-API-to-List/wiki/Data-Flow)
-
----
-
-**Tam Değişiklik Günlüğü**: https://github.com/bayraktarozcan/TC-SGB-API-to-List/compare/{ÖNCEKİ_ETİKET}...v{SÜRÜM}
-```
-
----
-
-### Örnek: v0.1.0.0
-
-```markdown
 ## TC-SGB-API-to-List v0.1.0.0
 
-> **İlk kamuya açık sürüm — 17 çıktı formatı ve 490.000'den fazla tehdit göstergesi ile tam IOC hattı**
+> **İlk kamuya açık sürüm — 17 çıktı formatı ve 490,000'den fazla tehdit göstergesi ile tam IOC hattı**
 
 ---
 
@@ -225,9 +371,9 @@ python scripts/main.py health
 | Metrik | Değer |
 |--------|-------|
 | IOC Çıktı Formatı | 17 |
-| Çekilen Toplam IOC | ~490.000 |
-| Nihai IOC (tekilleştirmeden sonra) | ~479.000 |
+| Çekilen Toplam IOC | ~490,000 |
+| Nihai IOC (tekilleştirmeden sonra) | ~479,000 |
 | Test Paketi | 330 test geçiyor |
 
 **Tam Değişiklik Günlüğü**: https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/tag/v0.1.0.0
-```
+````
