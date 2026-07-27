@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
   fetch:
@@ -43,6 +44,8 @@ jobs:
         run: pytest tests/ -v --tb=short
 
       - name: Commit outputs if changed
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -50,9 +53,18 @@ jobs:
           if git diff --cached --quiet; then
             echo "No changes to commit"
           else
-            TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-            git commit -m "chore: update IOC data [skip ci] ${TIMESTAMP}"
-            git push
+            TIMESTAMP=$(date -u +"%Y%m%d-%H%M%S")
+            BRANCH="ioc-update/${TIMESTAMP}"
+            git checkout -b "$BRANCH"
+            git commit -m "chore: update IOC data ${TIMESTAMP}"
+            git push -u origin "$BRANCH"
+            gh pr create \
+              --title "chore: IOC data update ${TIMESTAMP}" \
+              --body "Automated IOC data update from scheduled fetch. ${TIMESTAMP}" \
+              --head "$BRANCH" \
+              --base main
+            PR_NUMBER=$(gh pr list --head "$BRANCH" --json number --jq '.[0].number')
+            gh pr merge "$PR_NUMBER" --squash --auto --delete-branch
           fi
 
   release:
