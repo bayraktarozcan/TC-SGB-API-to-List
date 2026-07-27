@@ -12,7 +12,6 @@
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
-[![codecov](https://codecov.io/gh/bayraktarozcan/TC-SGB-API-to-List/branch/main/graph/badge.svg)](https://codecov.io/gh/bayraktarozcan/TC-SGB-API-to-List)
 
 ---
 
@@ -81,8 +80,7 @@ TC-SGB-API-to-List/
 ├── wiki/                        # Documentation (bilingual)
 ├── schema/                      # JSON Schema & OpenAPI spec
 ├── data/                        # Runtime data cache
-├── output/                      # Generated output files
-├── logs/                        # Application logs
+├── output/                      # Generated IOC output files (tracked)
 ├── examples/                    # Usage examples
 ├── benchmark/                   # Performance benchmarks
 └── .github/workflows/           # CI/CD pipelines
@@ -172,7 +170,6 @@ This tool is provided as-is for legitimate cybersecurity research and defense pu
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
-[![codecov](https://codecov.io/gh/bayraktarozcan/TC-SGB-API-to-List/branch/main/graph/badge.svg)](https://codecov.io/gh/bayraktarozcan/TC-SGB-API-to-List)
 
 ---
 
@@ -241,8 +238,7 @@ TC-SGB-API-to-List/
 ├── wiki/                        # Dokümantasyon (çift dilli)
 ├── schema/                      # JSON Schema ve OpenAPI belirtimi
 ├── data/                        # Çalışma zamanı veri önbelleği
-├── output/                      # Üretilen çıktı dosyaları
-├── logs/                        # Uygulama günlükleri
+├── output/                      # Üretilen IOC çıktı dosyaları (izleniyor)
 ├── examples/                    # Kullanım örnekleri
 ├── benchmark/                   # Performans karşılaştırmaları
 └── .github/workflows/           # CI/CD hatları
