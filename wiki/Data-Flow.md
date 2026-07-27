@@ -294,7 +294,7 @@ This document describes the complete data flow through the TC-SGB-API-to-List th
 +---------------------------------------------------+
 |                                                   |
 |  Input:  Verified records                         |
-|  Output: 16+ formatted output files               |
+|  Output: 17 formatted output files               |
 |                                                   |
 |  Output Formats:                                  |
 |  +------------------------------------------------+
@@ -758,7 +758,7 @@ Bu belge, TC-SGB-API-to-List tehdit istihbaratı hattındaki API alımından nih
 +---------------------------------------------------+
 |                                                   |
 |  Input:  Verified records                         |
-|  Output: 16+ formatted output files               |
+|  Output: 17 formatted output files               |
 |                                                   |
 |  Output Formats:                                  |
 |  +------------------------------------------------+

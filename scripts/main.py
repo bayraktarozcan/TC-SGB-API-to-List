@@ -63,43 +63,46 @@ async def cmd_fetch(args: argparse.Namespace) -> None:
         max_retries=args.retries,
     )
 
-    pipeline = Pipeline(
-        client=client,
-        per_page=args.per_page,
-        max_pages=math.ceil(args.max_records / args.per_page) if args.max_records else 0,
-    )
+    try:
+        pipeline = Pipeline(
+            client=client,
+            per_page=args.per_page,
+            max_pages=math.ceil(args.max_records / args.per_page) if args.max_records else 0,
+        )
 
-    scored, stats = await pipeline.run()
+        scored, stats = await pipeline.run()
 
-    # Save raw records for offline use
-    raw_path = output_dir / "raw_records.json"
-    raw_data = [
-        {
-            "id": s.original_id,
-            "value": s.value,
-            "type": s.ioc_type.value if hasattr(s.ioc_type, "value") else str(s.ioc_type),
-            "desc": s.desc.value if s.desc else None,
-            "source": s.source.value if s.source else None,
-            "date": s.date.isoformat() if s.date else None,
-            "criticality_level": s.criticality_level,
-            "connectiontype": s.connectiontype.value if s.connectiontype else None,
-            "quality_score": s.quality_score,
-            "false_positive_risk": s.false_positive_risk,
-        }
-        for s in scored
-    ]
-    raw_path.write_text(json.dumps(raw_data, indent=2, ensure_ascii=False), encoding="utf-8")
-    print(f"\nSaved {len(raw_data)} records to {raw_path}")
+        # Save raw records for offline use
+        raw_path = output_dir / "raw_records.json"
+        raw_data = [
+            {
+                "id": s.original_id,
+                "value": s.value,
+                "type": s.ioc_type.value if hasattr(s.ioc_type, "value") else str(s.ioc_type),
+                "desc": s.desc.value if s.desc else None,
+                "source": s.source.value if s.source else None,
+                "date": s.date.isoformat() if s.date else None,
+                "criticality_level": s.criticality_level,
+                "connectiontype": s.connectiontype.value if s.connectiontype else None,
+                "quality_score": s.quality_score,
+                "false_positive_risk": s.false_positive_risk,
+            }
+            for s in scored
+        ]
+        raw_path.write_text(json.dumps(raw_data, indent=2, ensure_ascii=False), encoding="utf-8")
+        print(f"\nSaved {len(raw_data)} records to {raw_path}")
 
-    # Generate output files
-    formats = args.formats.split(",") if hasattr(args, "formats") and args.formats else None
-    results = generate_all(scored, str(output_dir), formats=formats)
+        # Generate output files
+        formats = args.formats.split(",") if hasattr(args, "formats") and args.formats else None
+        results = generate_all(scored, str(output_dir), formats=formats)
 
-    print("\n" + stats.summary())
-    if results:
-        print("\nOutput files:")
-        for fmt, path in results.items():
-            print(f"  {fmt:15s} -> {path}")
+        print("\n" + stats.summary())
+        if results:
+            print("\nOutput files:")
+            for fmt, path in results.items():
+                print(f"  {fmt:15s} -> {path}")
+    finally:
+        await client.close()
 
 
 async def cmd_generate(args: argparse.Namespace) -> None:
@@ -163,28 +166,31 @@ async def cmd_stats(args: argparse.Namespace) -> None:
         max_retries=args.retries,
     )
 
-    # Fetch metadata
-    meta = await client.fetch_metadata()
+    try:
+        # Fetch metadata
+        meta = await client.fetch_metadata()
 
-    print("\n=== API Metadata ===")
-    print(f"\nDescription categories ({len(meta['descriptions'])}):")
-    for rid, rec in meta["descriptions"].items():
-        print(f"  {rid:3s}: {rec.en_title} ({rec.tr_title})")
+        print("\n=== API Metadata ===")
+        print(f"\nDescription categories ({len(meta['descriptions'])}):")
+        for rid, rec in meta["descriptions"].items():
+            print(f"  {rid:3s}: {rec.en_title} ({rec.tr_title})")
 
-    print(f"\nConnection types ({len(meta['connection_types'])}):")
-    for rid, rec in meta["connection_types"].items():
-        print(f"  {rid:2s}: {rec.en_title} ({rec.tr_title})")
+        print(f"\nConnection types ({len(meta['connection_types'])}):")
+        for rid, rec in meta["connection_types"].items():
+            print(f"  {rid:2s}: {rec.en_title} ({rec.tr_title})")
 
-    print(f"\nSources ({len(meta['sources'])}):")
-    for rid, rec in meta["sources"].items():
-        print(f"  {rid:2s}: {rec.en_title} ({rec.tr_title})")
+        print(f"\nSources ({len(meta['sources'])}):")
+        for rid, rec in meta["sources"].items():
+            print(f"  {rid:2s}: {rec.en_title} ({rec.tr_title})")
 
-    # Fetch address count
-    data = await client._request("/api/address/index", {"page": 0, "per-page": 1})
-    total = data.get("totalCount", 0)
-    page_count = data.get("pageCount", 0)
-    print(f"\nTotal IOCs: {total:,}")
-    print(f"API pages (9999/page): {page_count:,}")
+        # Fetch address count
+        data = await client._request("/api/address/index", {"page": 0, "per-page": 1})
+        total = data.get("totalCount", 0)
+        page_count = data.get("pageCount", 0)
+        print(f"\nTotal IOCs: {total:,}")
+        print(f"API pages (9999/page): {page_count:,}")
+    finally:
+        await client.close()
 
 
 async def cmd_validate(args: argparse.Namespace) -> None:
@@ -195,57 +201,60 @@ async def cmd_validate(args: argparse.Namespace) -> None:
         max_retries=args.retries,
     )
 
-    if args.input:
-        input_path = Path(args.input)
-        if not input_path.exists():
-            print(f"Error: Input file not found: {input_path}", file=sys.stderr)
-            sys.exit(1)
-        raw_data = json.loads(input_path.read_text(encoding="utf-8"))
-        records = [AddressRecord.model_validate(r) for r in raw_data]
-    else:
-        print("Fetching from API...")
-        max_pages = (
-            math.ceil(args.max_records / args.per_page)
-            if args.max_records and args.max_records > 0
-            else 0
-        )
-        records = await client.fetch_addresses(
-            per_page=args.per_page,
-            max_pages=max_pages,
-        )
-
-    print(f"Validating {len(records)} records...")
-
-    from scripts.src.validator import validate_ioc
-
-    valid_count = 0
-    rejected: list[tuple[AddressRecord, list[str]]] = []
-    type_counts: dict[str, int] = {}
-
-    for record in records:
-        result = validate_ioc(record)
-        if result is None:
-            rejected.append((record, ["empty or unparseable IOC value"]))
-        elif result.validation_errors:
-            rejected.append((record, result.validation_errors))
+    try:
+        if args.input:
+            input_path = Path(args.input)
+            if not input_path.exists():
+                print(f"Error: Input file not found: {input_path}", file=sys.stderr)
+                sys.exit(1)
+            raw_data = json.loads(input_path.read_text(encoding="utf-8"))
+            records = [AddressRecord.model_validate(r) for r in raw_data]
         else:
-            valid_count += 1
-            t = result.ioc_type.value
-            type_counts[t] = type_counts.get(t, 0) + 1
+            print("Fetching from API...")
+            max_pages = (
+                math.ceil(args.max_records / args.per_page)
+                if args.max_records and args.max_records > 0
+                else 0
+            )
+            records = await client.fetch_addresses(
+                per_page=args.per_page,
+                max_pages=max_pages,
+            )
 
-    print(f"\nResults: {valid_count} valid, {len(rejected)} rejected")
+        print(f"Validating {len(records)} records...")
 
-    if rejected:
-        print("\nRejected records (first 20):")
-        for rec, errors in rejected[:20]:
-            print(f"  ID={rec.id} URL={rec.url[:60]}")
-            for err in errors:
-                print(f"    -> {err}")
+        from scripts.src.validator import validate_ioc
 
-    # Show type distribution of valid records
-    print("\nType distribution (valid):")
-    for t, c in sorted(type_counts.items()):
-        print(f"  {t:10s}: {c}")
+        valid_count = 0
+        rejected: list[tuple[AddressRecord, list[str]]] = []
+        type_counts: dict[str, int] = {}
+
+        for record in records:
+            result = validate_ioc(record)
+            if result is None:
+                rejected.append((record, ["empty or unparseable IOC value"]))
+            elif result.validation_errors:
+                rejected.append((record, result.validation_errors))
+            else:
+                valid_count += 1
+                t = result.ioc_type.value
+                type_counts[t] = type_counts.get(t, 0) + 1
+
+        print(f"\nResults: {valid_count} valid, {len(rejected)} rejected")
+
+        if rejected:
+            print("\nRejected records (first 20):")
+            for rec, errors in rejected[:20]:
+                print(f"  ID={rec.id} URL={rec.url[:60]}")
+                for err in errors:
+                    print(f"    -> {err}")
+
+        # Show type distribution of valid records
+        print("\nType distribution (valid):")
+        for t, c in sorted(type_counts.items()):
+            print(f"  {t:10s}: {c}")
+    finally:
+        await client.close()
 
 
 async def cmd_health(args: argparse.Namespace) -> None:
@@ -256,16 +265,19 @@ async def cmd_health(args: argparse.Namespace) -> None:
         max_retries=args.retries,
     )
 
-    print("Checking API health...")
-    is_healthy = await client.health_check()
+    try:
+        print("Checking API health...")
+        is_healthy = await client.health_check()
 
-    if is_healthy:
-        print("[OK] API is healthy and reachable")
-        print(f"  Base URL: {client.base_url}")
-        print(f"  Stats: {client.stats}")
-    else:
-        print("[FAIL] API is not reachable")
-        sys.exit(1)
+        if is_healthy:
+            print("[OK] API is healthy and reachable")
+            print(f"  Base URL: {client.base_url}")
+            print(f"  Stats: {client.stats}")
+        else:
+            print("[FAIL] API is not reachable")
+            sys.exit(1)
+    finally:
+        await client.close()
 
 
 # ---------------------------------------------------------------------------

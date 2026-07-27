@@ -8,6 +8,7 @@ import time
 from typing import Any
 
 from .client import AsyncAPIClient
+from .deduplicator import deduplicate
 from .models import (
     AddressRecord,
     NormalizedIOC,
@@ -28,9 +29,9 @@ class Pipeline:
     Stages:
     1. Fetch   — paginated retrieval of all IOCs from SGB API
     2. Validate — syntax + semantic checks, reject invalid entries
-    3. Normalize — lowercase, trim, IDN, remove duplicates
-    4. Dedup   — exact + fuzzy deduplication
-    5. Quality — confidence scoring and false-positive risk estimation
+    3. Normalize — lowercase, trim, IDN normalization
+    4. Quality — confidence scoring and false-positive risk estimation
+    5. Dedup   — cross-type deduplication (keeps highest-scored duplicate)
     """
 
     def __init__(
@@ -70,22 +71,22 @@ class Pipeline:
         normalized = self._stage_normalize(validated)
         self.stats.after_normalization = len(normalized)
 
-        # Stage 4: Dedup
-        deduped, dup_count = self._stage_dedup(normalized)
-        self.stats.duplicates_removed = dup_count
-        self.stats.after_dedup = len(deduped)
-
-        # Stage 5: Quality score
-        scored, quality_rejected = self._stage_quality(deduped)
+        # Stage 4: Quality score
+        scored, quality_rejected = self._stage_quality(normalized)
         self.stats.quality_rejected = quality_rejected
         self.stats.after_quality = len(scored)
 
+        # Stage 5: Dedup (cross-type, uses quality_score)
+        deduped, dup_count = self._stage_dedup(scored)
+        self.stats.duplicates_removed = dup_count
+        self.stats.after_dedup = len(deduped)
+
         # Compute stats
-        self._compute_stats(scored)
+        self._compute_stats(deduped)
         self.stats.pipeline_duration_seconds = time.monotonic() - start_time
 
         logger.info(self.stats.summary())
-        return scored, self.stats
+        return deduped, self.stats
 
     async def __aenter__(self) -> Pipeline:
         return self
@@ -142,31 +143,27 @@ class Pipeline:
         logger.info(f"Normalized {len(normalized)} IOCs")
         return normalized
 
-    def _stage_dedup(self, normalized: list[NormalizedIOC]) -> tuple[list[NormalizedIOC], int]:
-        """Stage 4: Remove duplicates.
+    def _stage_dedup(self, scored: list[ScoredIOC]) -> tuple[list[ScoredIOC], int]:
+        """Stage 5: Cross-type deduplication using deduplicator module.
 
-        Note: deduplicate() expects ScoredIOC, but we're passing NormalizedIOC.
-        For now, we do simple exact-match dedup on NormalizedIOC before scoring.
+        Uses quality_score to keep the highest-scored duplicate when the same
+        IOC appears with different metadata or across types (domain vs URL).
         """
-        logger.info("Stage 4/5: Deduplicating...")
-        seen: set[str] = set()
-        unique: list[NormalizedIOC] = []
-        for n in normalized:
-            key = f"{n.ioc_type.value}|{n.value}"
-            if key not in seen:
-                seen.add(key)
-                unique.append(n)
-        removed = len(normalized) - len(unique)
-        logger.info(f"Dedup: {len(unique)} unique (removed {removed} duplicates)")
-        return unique, removed
+        if self.skip_dedup:
+            logger.info("Stage 5/5: Deduplication skipped (--skip-dedup)")
+            return scored, 0
 
-    def _stage_quality(self, deduped: list[NormalizedIOC]) -> tuple[list[ScoredIOC], int]:
-        """Stage 5: Score quality and filter."""
-        logger.info("Stage 5/5: Quality scoring...")
+        logger.info("Stage 5/5: Cross-type deduplicating...")
+        result = deduplicate(scored)
+        return result.kept, result.removed_count
+
+    def _stage_quality(self, normalized: list[NormalizedIOC]) -> tuple[list[ScoredIOC], int]:
+        """Stage 4: Score quality and filter."""
+        logger.info("Stage 4/5: Quality scoring...")
         scored: list[ScoredIOC] = []
         rejected = 0
 
-        for n in deduped:
+        for n in normalized:
             try:
                 s = score_ioc(n)
                 if s.quality_score >= self.min_quality_score:
