@@ -1,3 +1,7 @@
+[English](#-english) | [Türkçe](#-türkçe)
+
+<a id="-english"></a>
+
 # Contributor Covenant Code of Conduct
 
 ## Our Pledge
@@ -52,4 +56,51 @@ All complaints will be reviewed and investigated promptly and fairly.
 
 This Code of Conduct is adapted from the [Contributor Covenant](https://www.contributor-covenant.org),
 version 2.0, available at
+https://www.contributor-covenant.org/version/2/0/code_of_conduct.html.
+
+---
+
+<a id="-türkçe"></a>
+
+# Katılımcı Antlaşması Davranış Kuralları
+
+## Taahhüdümüz
+
+Bizler, üyeler, katkıda bulunanlar ve liderler olarak, topluluğumuzdaki katılımı herkes için tacız bir deneyim haline getirmeyi taahhüt ediyoruz. Yaş, beden boyutu, görünür veya görünmez engel, etnik köken, cinsiyet özellikleri, cinsiyet kimliği ve ifadesi, deneyim düzeyi, eğitim, sosyoekonomik durum, uyruk, kişisel görünüm, ırk, din veya cinsel kimlik ve yönelim ayrımı yapmaksızın.
+
+## Standartlarımız
+
+Pozitif bir ortama katkı sağlayan davranış örnekleri:
+
+- Hoşgeldin ve kapsayıcı dil kullanmak
+- Farklı bakış açılarına ve deneyimlere saygı göstermek
+- Yapıcı eleştiriyi zarifçe kabul etmek
+- Topluluk için en iyisine odaklanmak
+- Diğer topluluk üyelerine empati göstermek
+
+Kabul edilemez davranış örnekleri:
+
+- Cinselleştirilmiş dil veya imaj kullanımı ve her türlü cinsel ilgi veya ilerleme
+- Trolleme, küçümseyici veya hakaret içeren yorumlar ve kişisel veya siyasi saldırılar
+- Herkese açık veya özel taciz
+- Başkalarının izni olmadan özel bilgilerini yayınlamak
+- Profesyonel ortamda makul şekilde uygunsuz kabul edilebilecek diğer davranışlar
+
+## Uygulama Sorumlulukları
+
+Topluluk liderleri, kabul edilebilir davranış standartlarımızı netleştirmek ve uygulamakla yükümlüdür ve uygunsuz, tehdit edici, saldırgan veya zararlı olarak değerlendirdikleri her türlü davranışa uygun ve adil düzeltici tedbirler alacaktır.
+
+## Kapsam
+
+Bu Davranış Kuralları tüm topluluk alanlarında geçerlidir ve ayrıca bir bireyin toplulugu resmi olarak kamu alanlarında temsil ettiği durumlarda da geçerlidir.
+
+## Uygulama
+
+Taciz, zorbalık veya başka türlü kabul edilemez davranışlar **bayraktarozcan** tarafından GitHub üzerinden bildirilebilir.
+
+Tüm şikayetler zamanında ve adil bir şekilde incelenecektir.
+
+## Atıf
+
+Bu Davranış Kuralları, [Katılımcı Antlaşması](https://www.contributor-covenant.org)'ndan Adaptasyon yapılmıştır, sürüm 2.0, şu adreste mevcuttur:
 https://www.contributor-covenant.org/version/2/0/code_of_conduct.html.
