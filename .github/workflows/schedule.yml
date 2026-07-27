@@ -13,12 +13,12 @@ jobs:
     name: Fetch & Validate IOCs
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.11"
           cache: pip
@@ -61,7 +61,7 @@ jobs:
     needs: fetch
     if: success()
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -79,7 +79,7 @@ jobs:
 
       - name: Create release
         if: steps.tag.outputs.new_commits == 'true'
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: release-${{ github.run_number }}
           name: "IOC Data Update #${{ github.run_number }}"
