@@ -346,9 +346,8 @@ class TestScoreIOCs:
         ]
         result = score_iocs(iocs)
         result_values = [ioc.value for ioc in result]
-        _url_sanitized_values = result_values
-        assert "evil.com" in _url_sanitized_values
-        assert "google.com" not in _url_sanitized_values
+        assert "evil.com" in result_values  # lgtm [py/incomplete-url-substring-sanitization]
+        assert "google.com" not in result_values
 
     def test_empty_input(self):
         assert score_iocs([]) == []
