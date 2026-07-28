@@ -3,7 +3,10 @@ private TLDs, reserved domains, unicode, IP, URL validation."""
 
 from __future__ import annotations
 
-from scripts.src.models import AddressRecord, IOCType
+from scripts.src.models import (
+    AddressRecord,
+    IOCType,
+)
 from scripts.src.validator import (
     _has_private_suffix,
     _infer_ioc_type,
@@ -13,6 +16,7 @@ from scripts.src.validator import (
     _is_valid_ip,
     _is_valid_ip_network,
     validate_ioc,
+    validate_records_batch,
 )
 
 # ---------------------------------------------------------------------------
@@ -278,3 +282,134 @@ class TestValidateIOC:
         result = validate_ioc(r)
         assert result is not None
         assert any("invalid IP" in e for e in result.validation_errors)
+
+
+# ---------------------------------------------------------------------------
+# Invalid API types / sources / connection types
+# ---------------------------------------------------------------------------
+
+
+class TestInvalidAPITypes:
+    def test_invalid_type_falls_back(self):
+        record = AddressRecord(id=1, url="evil.com", type="invalid_type_xyz")
+        validated, rejected = validate_records_batch([record])
+        assert len(validated) == 1
+        assert validated[0].ioc_type == IOCType.DOMAIN
+
+    def test_missing_type_falls_back(self):
+        record = AddressRecord(id=1, url="evil.com", type="")
+        validated, rejected = validate_records_batch([record])
+        assert len(validated) == 1
+
+
+class TestInvalidSources:
+    def test_invalid_source_falls_back(self):
+        record = AddressRecord(id=1, url="evil.com", type="domain", source="NONEXISTENT_SRC")
+        validated, rejected = validate_records_batch([record])
+        assert len(validated) == 1
+        assert validated[0].source is None
+
+    def test_missing_source_falls_back(self):
+        record = AddressRecord(id=1, url="evil.com", type="domain", source="")
+        validated, rejected = validate_records_batch([record])
+        assert len(validated) == 1
+
+
+class TestInvalidConnectionType:
+    def test_invalid_conn_type_falls_back(self):
+        record = AddressRecord(id=1, url="evil.com", type="domain", connectiontype="INVALID_CT")
+        validated, rejected = validate_records_batch([record])
+        assert len(validated) == 1
+        assert validated[0].connectiontype is None
+
+    def test_missing_conn_type_falls_back(self):
+        record = AddressRecord(id=1, url="evil.com", type="domain", connectiontype="")
+        validated, rejected = validate_records_batch([record])
+        assert len(validated) == 1
+
+
+class TestRecordWithValidationErrors:
+    def test_valid_record_with_errors_rejected(self):
+        record = AddressRecord(id=1, url="999.999.999.999", type="ip")
+        valid, rejected = validate_records_batch([record])
+        assert len(valid) == 0
+        assert len(rejected) == 1
+        assert len(rejected[0][1]) > 0
+
+
+class TestDateParseError:
+    def test_invalid_date_gets_none(self):
+        record = AddressRecord(id=1, url="evil.com", type="domain", date="not-a-date")
+        validated, rejected = validate_records_batch([record])
+        assert len(validated) == 1
+        assert validated[0].date is None
+
+    def test_empty_date_gets_none(self):
+        record = AddressRecord(id=1, url="evil.com", type="domain", date="")
+        validated, rejected = validate_records_batch([record])
+        assert len(validated) == 1
+        assert validated[0].date is None
+
+
+class TestIPUrlForm:
+    def test_ip_in_url_form_validates(self):
+        record = AddressRecord(id=1, url="http://1.2.3.4/path", type="ip")
+        validated, rejected = validate_records_batch([record])
+        assert len(validated) == 1
+        assert validated[0].ioc_type == IOCType.IP
+        assert validated[0].raw_url == "http://1.2.3.4/path"
+
+
+class TestValidateRecordsBatch:
+    def test_mixed_valid_invalid(self):
+        records = [
+            AddressRecord(
+                id=1,
+                url="good.com",
+                type="domain",
+                desc="PH",
+                source="US",
+                date="2024-01-01",
+                criticality_level=3,
+                connectiontype="PH",
+            ),
+            AddressRecord(
+                id=2,
+                url="also-good.org",
+                type="domain",
+                desc="MC",
+                source="SO",
+                date="2024-06-15",
+                criticality_level=1,
+                connectiontype="BC",
+            ),
+            AddressRecord(id=3, url="", type="domain"),
+        ]
+        validated, rejected = validate_records_batch(records)
+        assert len(validated) >= 2
+        assert len(rejected) >= 1
+
+    def test_all_valid(self):
+        records = [
+            AddressRecord(
+                id=1,
+                url="a.com",
+                type="domain",
+                desc="PH",
+                source="US",
+                date="2024-01-01",
+                criticality_level=3,
+                connectiontype="PH",
+            ),
+        ]
+        validated, rejected = validate_records_batch(records)
+        assert len(validated) == 1
+        assert len(rejected) == 0
+
+    def test_all_invalid(self):
+        records = [
+            AddressRecord(id=1, url="", type="domain"),
+        ]
+        validated, rejected = validate_records_batch(records)
+        assert len(validated) == 0
+        assert len(rejected) == 1

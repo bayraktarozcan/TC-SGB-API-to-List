@@ -24,7 +24,7 @@ This document outlines the phased development roadmap for the TC-SGB-API-to-List
   | Core      |----->| Multi-    |----->| Multi-    |----->| Enterprise|
   | Pipeline  |      | Source    |      | Platform  |      | Features  |
   |           |      |           |      |           |      |           |
-  | 16 Output |      | CISA KEV  |      | REST API  |      | Dashboard |
+  | 17 Output |      | CISA KEV  |      | REST API  |      | Dashboard |
   | Formats   |      | Spamhaus  |      | Web UI    |      | Real-time |
   |           |      | URLhaus   |      | Plugin    |      | Alerting  |
   | CLI Tool  |      | OTX       |      | System    |      | HA/DR     |
@@ -48,7 +48,7 @@ This document outlines the phased development roadmap for the TC-SGB-API-to-List
 - [x] Async API client with retry logic
 - [x] Pydantic v2 data models
 - [x] 17 output formats (NextDNS, AdGuard, Pi-hole, dnsmasq, Unbound, RPZ, Technitium, MikroTik, nftables, ipset, Suricata, CrowdSec, CSV, JSON, YAML, SQLite)
-- [x] Unit test suite (>90% coverage)
+- [x] Unit test suite (100% coverage)
 - [x] CI/CD pipeline (GitHub Actions)
 - [x] PyPI packaging
 - [x] CLI interface
@@ -453,7 +453,7 @@ class URLhausPlugin(SourcePlugin):
 | Contributors | 3 | 10 | 25 | 50 |
 | Data sources | 1 | 6 | 10+ | 20+ |
 | Output formats | 17 | 20 | 25+ | 30+ |
-| Test coverage | 90% | 92% | 95% | 98% |
+| Test coverage | 100% | 100% | 100% | 100% |
 | Response time | <20min | <15min | <5min | <1min |
 
 <a id="-türkçe"></a>
@@ -479,7 +479,7 @@ Bu belge, TC-SGB-API-to-List projesinin aşamalı geliştirme yol haritasını �
   | Çekirdek |----->| Çoklu     |----->| Çoklu     |----->| Kurumsal  |
   | Hattı    |      | Kaynak    |      | Platform  |      | Özellikler|
   |           |      |           |      |           |      |           |
-  | 16 Çıktı |      | CISA KEV  |      | REST API  |      | Kontrol   |
+  | 17 Çıktı |      | CISA KEV  |      | REST API  |      | Kontrol   |
   | Biçimi   |      | Spamhaus  |      | Web UI    |      | Paneli    |
   |           |      | URLhaus   |      | Eklenti   |      | Gerçek    |
   | CLI       |      | OTX       |      | Sistemi   |      | Zamanlı   |
@@ -504,7 +504,7 @@ Bu belge, TC-SGB-API-to-List projesinin aşamalı geliştirme yol haritasını �
 - [x] Yeniden deneme mantığı ile asenkron API istemcisi
 - [x] Pydantic v2 veri modelleri
 - [x] 17 çıktı biçimi (NextDNS, AdGuard, Pi-hole, dnsmasq, Unbound, RPZ, Technitium, MikroTik, nftables, ipset, Suricata, CrowdSec, CSV, JSON, YAML, SQLite)
-- [x] Birim test paketi (%90'dan fazla kapsama)
+- [x] Birim test paketi (%100 kapsama)
 - [x] CI/CD hattı (GitHub Actions)
 - [x] PyPI paketleme
 - [x] CLI arayüzü
@@ -908,6 +908,6 @@ class URLhausPlugin(SourcePlugin):
 | GitHub yıldızları | 50 | 200 | 500 | 1.000 |
 | Katkıda bulunanlar | 3 | 10 | 25 | 50 |
 | Veri kaynakları | 1 | 6 | 10+ | 20+ |
-| Çıktı biçimleri | 16 | 20 | 25+ | 30+ |
-| Test kapsaması | %90 | %92 | %95 | %98 |
+| Çıktı biçimleri | 17 | 20 | 25+ | 30+ |
+| Test kapsaması | %100 | %100 | %100 | %100 |
 | Yanıt süresi | <20dk | <15dk | <5dk | <1dk |

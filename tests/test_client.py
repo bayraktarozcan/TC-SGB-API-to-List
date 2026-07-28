@@ -299,3 +299,344 @@ def test_stats():
     assert s["base_url"] == "https://siberguvenlik.gov.tr"
     assert s["total_requests"] == 0
     assert s["max_retries"] == 3
+
+
+# ---------------------------------------------------------------------------
+# Close / context manager
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.asyncio
+async def test_close():
+    client = AsyncAPIClient()
+    await client._get_client()
+    assert client._client is not None
+    await client.close()
+    assert client._client is None
+
+
+@pytest.mark.asyncio
+async def test_close_when_already_closed():
+    client = AsyncAPIClient()
+    await client.close()
+    assert client._client is None
+
+
+@pytest.mark.asyncio
+async def test_aenter_aexit():
+    async with AsyncAPIClient() as client:
+        assert client._client is not None
+    assert client._client is None or client._client.is_closed
+
+
+# ---------------------------------------------------------------------------
+# Rate limit disabled
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.asyncio
+async def test_rate_limit_disabled():
+    ok_resp = _make_json_response(200, {"totalCount": 0, "models": [], "page": 0, "pageCount": 0})
+    client = AsyncAPIClient(rate_limit=0)
+    with patch("httpx.AsyncClient.get", new_callable=AsyncMock, return_value=ok_resp):
+        result = await client._request("/test")
+        assert result["totalCount"] == 0
+
+
+# ---------------------------------------------------------------------------
+# NetworkError retry
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.asyncio
+async def test_network_error_retries_then_raises():
+    async def raise_network(*args, **kwargs):
+        raise httpx.ConnectError("connection refused")
+
+    client = AsyncAPIClient(max_retries=2)
+    with (
+        patch("httpx.AsyncClient.get", side_effect=raise_network),
+        patch("scripts.src.client.asyncio.sleep", new_callable=AsyncMock),
+        pytest.raises(APIError, match="API error 0"),
+    ):
+        await client._request("/test")
+
+
+@pytest.mark.asyncio
+async def test_network_error_retries_once_then_succeeds():
+    call_count = 0
+
+    async def network_then_ok(*args, **kwargs):
+        nonlocal call_count
+        call_count += 1
+        if call_count == 1:
+            raise httpx.ConnectError("connection refused")
+        return _make_json_response(200, {"totalCount": 0, "models": [], "page": 0, "pageCount": 0})
+
+    client = AsyncAPIClient(max_retries=3)
+    with (
+        patch("httpx.AsyncClient.get", side_effect=network_then_ok),
+        patch("scripts.src.client.asyncio.sleep", new_callable=AsyncMock),
+    ):
+        result = await client._request("/test")
+        assert result["totalCount"] == 0
+        assert call_count == 2
+
+
+# ---------------------------------------------------------------------------
+# Invalid JSON (ValueError) retry
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.asyncio
+async def test_invalid_json_retries_then_raises():
+    bad_resp = httpx.Response(
+        status_code=200,
+        content=b"not json",
+        request=httpx.Request("GET", "http://test.com"),
+    )
+
+    async def mock_get(*args, **kwargs):
+        return bad_resp
+
+    client = AsyncAPIClient(max_retries=2)
+    with (
+        patch("httpx.AsyncClient.get", side_effect=mock_get),
+        patch("scripts.src.client.asyncio.sleep", new_callable=AsyncMock),
+        pytest.raises(APIError, match="Invalid JSON"),
+    ):
+        await client._request("/test")
+
+
+@pytest.mark.asyncio
+async def test_invalid_json_retries_once_then_succeeds():
+    call_count = 0
+
+    async def bad_then_ok(*args, **kwargs):
+        nonlocal call_count
+        call_count += 1
+        if call_count == 1:
+            return httpx.Response(
+                status_code=200,
+                content=b"not json",
+                request=httpx.Request("GET", "http://test.com"),
+            )
+        return _make_json_response(200, {"totalCount": 0, "models": [], "page": 0, "pageCount": 0})
+
+    client = AsyncAPIClient(max_retries=3)
+    with (
+        patch("httpx.AsyncClient.get", side_effect=bad_then_ok),
+        patch("scripts.src.client.asyncio.sleep", new_callable=AsyncMock),
+    ):
+        result = await client._request("/test")
+        assert result["totalCount"] == 0
+
+
+# ---------------------------------------------------------------------------
+# Pagination: max_pages, failed record parse, empty models
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.asyncio
+async def test_fetch_max_pages_limit():
+    page_data = {
+        "totalCount": 100,
+        "count": 2,
+        "page": 0,
+        "pageCount": 10,
+        "models": [
+            {
+                "id": 1,
+                "url": "a.com",
+                "type": "domain",
+                "desc": "PH",
+                "source": "US",
+                "date": "2024-01-01",
+                "criticality_level": 3,
+                "connectiontype": "PH",
+            },
+            {
+                "id": 2,
+                "url": "b.com",
+                "type": "domain",
+                "desc": "MC",
+                "source": "SO",
+                "date": "2024-01-02",
+                "criticality_level": 1,
+                "connectiontype": "BC",
+            },
+        ],
+    }
+
+    async def mock_get(*args, **kwargs):
+        return _make_json_response(200, page_data)
+
+    client = AsyncAPIClient()
+    with patch("httpx.AsyncClient.get", side_effect=mock_get):
+        records = await client.fetch_addresses(per_page=2, max_pages=1)
+        assert len(records) == 2
+
+
+@pytest.mark.asyncio
+async def test_fetch_empty_page_breaks():
+    empty_page = {"totalCount": 0, "count": 0, "page": 0, "pageCount": 5, "models": []}
+
+    async def mock_get(*args, **kwargs):
+        return _make_json_response(200, empty_page)
+
+    client = AsyncAPIClient()
+    with patch("httpx.AsyncClient.get", side_effect=mock_get):
+        records = await client.fetch_addresses(per_page=100)
+        assert records == []
+
+
+@pytest.mark.asyncio
+async def test_fetch_bad_record_skipped():
+    data = {
+        "totalCount": 2,
+        "count": 2,
+        "page": 0,
+        "pageCount": 1,
+        "models": [
+            {"id": 999, "url": None, "type": None},
+            {
+                "id": 1,
+                "url": "good.com",
+                "type": "domain",
+                "desc": "PH",
+                "source": "US",
+                "date": "2024-01-01",
+                "criticality_level": 3,
+                "connectiontype": "PH",
+            },
+        ],
+    }
+
+    async def mock_get(*args, **kwargs):
+        return _make_json_response(200, data)
+
+    client = AsyncAPIClient()
+    with patch("httpx.AsyncClient.get", side_effect=mock_get):
+        records = await client.fetch_addresses()
+        assert len(records) == 1
+
+
+# ---------------------------------------------------------------------------
+# Fetch metadata endpoints
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.asyncio
+async def test_fetch_descriptions():
+    data = {
+        "models": [
+            {
+                "id": "1",
+                "tr_title": "PH",
+                "en_title": "Phishing",
+                "tr_desc": "Açıklama",
+                "en_desc": "Description",
+            },
+        ],
+    }
+
+    async def mock_get(*args, **kwargs):
+        return _make_json_response(200, data)
+
+    client = AsyncAPIClient()
+    with patch("httpx.AsyncClient.get", side_effect=mock_get):
+        records = await client.fetch_descriptions()
+        assert len(records) == 1
+
+
+@pytest.mark.asyncio
+async def test_fetch_connection_types():
+    data = {
+        "models": [
+            {"id": "1", "tr_title": "PH", "en_title": "Phishing"},
+        ],
+    }
+
+    async def mock_get(*args, **kwargs):
+        return _make_json_response(200, data)
+
+    client = AsyncAPIClient()
+    with patch("httpx.AsyncClient.get", side_effect=mock_get):
+        records = await client.fetch_connection_types()
+        assert len(records) == 1
+
+
+@pytest.mark.asyncio
+async def test_fetch_sources():
+    data = {
+        "models": [
+            {"id": "1", "tr_title": "USOM", "en_title": "USOM"},
+        ],
+    }
+
+    async def mock_get(*args, **kwargs):
+        return _make_json_response(200, data)
+
+    client = AsyncAPIClient()
+    with patch("httpx.AsyncClient.get", side_effect=mock_get):
+        records = await client.fetch_sources()
+        assert len(records) == 1
+
+
+@pytest.mark.asyncio
+async def test_fetch_incidents():
+    data = {
+        "models": [
+            {"id": 1, "title": "Test incident", "date": "2024-01-01"},
+        ],
+    }
+
+    async def mock_get(*args, **kwargs):
+        return _make_json_response(200, data)
+
+    client = AsyncAPIClient()
+    with patch("httpx.AsyncClient.get", side_effect=mock_get):
+        records = await client.fetch_incidents()
+        assert len(records) == 1
+
+
+@pytest.mark.asyncio
+async def test_fetch_announcements():
+    data = {
+        "models": [
+            {"id": 1, "title": "Test announcement", "date": "2024-01-01"},
+        ],
+    }
+
+    async def mock_get(*args, **kwargs):
+        return _make_json_response(200, data)
+
+    client = AsyncAPIClient()
+    with patch("httpx.AsyncClient.get", side_effect=mock_get):
+        records = await client.fetch_announcements()
+        assert len(records) == 1
+
+
+@pytest.mark.asyncio
+async def test_fetch_metadata():
+    desc_data = {"models": [{"id": "1", "tr_title": "PH", "en_title": "Phishing"}]}
+    ct_data = {"models": [{"id": "1", "tr_title": "PH", "en_title": "Phishing"}]}
+    src_data = {"models": [{"id": "1", "tr_title": "USOM", "en_title": "USOM"}]}
+
+    call_count = 0
+
+    async def mock_get(*args, **kwargs):
+        nonlocal call_count
+        call_count += 1
+        if call_count == 1:
+            return _make_json_response(200, desc_data)
+        if call_count == 2:
+            return _make_json_response(200, ct_data)
+        return _make_json_response(200, src_data)
+
+    client = AsyncAPIClient()
+    with patch("httpx.AsyncClient.get", side_effect=mock_get):
+        result = await client.fetch_metadata()
+        assert "descriptions" in result
+        assert "connection_types" in result
+        assert "sources" in result

@@ -83,12 +83,12 @@ This document defines performance benchmarks, measurement methodology, and optim
 
 ```python
 import pytest
-from tc_sgb.client import SGBAPIClient
-from tc_sgb.validator import IOCValidator
-from tc_sgb.normalizer import IOCNormalizer
-from tc_sgb.deduplicator import IOCDeduplicator
-from tc_sgb.outputs import OutputEngine
-from tc_sgb.pipeline import ThreatIntelPipeline
+from scripts.src.client import AsyncAPIClient
+from scripts.src.validator import validate_ioc
+from scripts.src.normalizer import normalize_ioc
+from scripts.src.deduplicator import deduplicate
+from scripts.src.outputs import generate_all
+from scripts.src.pipeline import Pipeline
 
 
 @pytest.mark.performance
@@ -113,43 +113,36 @@ class TestBenchmarks:
 
     def test_fetch_100_records(self, benchmark, small_dataset):
         """Benchmark: Fetch 100 records."""
-        client = SGBAPIClient(config)
+        client = AsyncAPIClient()
         benchmark(client.fetch_all_sync, small_dataset)
 
     def test_validate_100_records(self, benchmark, small_dataset):
         """Benchmark: Validate 100 records."""
-        validator = IOCValidator()
-        benchmark(validator.validate_batch, small_dataset)
+        benchmark(lambda: [validate_ioc(r) for r in small_dataset])
 
     def test_normalize_100_records(self, benchmark, small_dataset):
         """Benchmark: Normalize 100 records."""
-        normalizer = IOCNormalizer()
-        benchmark(normalizer.normalize_batch, small_dataset)
+        benchmark(lambda: [normalize_ioc(r) for r in small_dataset])
 
     def test_dedup_1000_records(self, benchmark, medium_dataset):
         """Benchmark: Dedup 1000 records."""
-        deduplicator = IOCDeduplicator(config)
-        benchmark(deduplicator.deduplicate, medium_dataset)
+        benchmark(lambda: deduplicate(medium_dataset))
 
     def test_output_100_records(self, benchmark, small_dataset, tmp_path):
         """Benchmark: Generate all outputs for 100 records."""
-        engine = OutputEngine(config)
-        benchmark(engine.generate_all, small_dataset, tmp_path)
+        benchmark(lambda: generate_all(small_dataset, tmp_path))
 
     def test_full_pipeline_100(self, benchmark, small_dataset):
         """Benchmark: Full pipeline with 100 records."""
-        pipeline = ThreatIntelPipeline(config)
-        benchmark(pipeline.run_sync, small_dataset)
+        benchmark(lambda: run_pipeline_sync(small_dataset))
 
     def test_full_pipeline_1000(self, benchmark, medium_dataset):
         """Benchmark: Full pipeline with 1000 records."""
-        pipeline = ThreatIntelPipeline(config)
-        benchmark(pipeline.run_sync, medium_dataset)
+        benchmark(lambda: run_pipeline_sync(medium_dataset))
 
     def test_full_pipeline_10000(self, benchmark, large_dataset):
         """Benchmark: Full pipeline with 10000 records."""
-        pipeline = ThreatIntelPipeline(config)
-        benchmark(pipeline.run_sync, large_dataset)
+        benchmark(lambda: run_pipeline_sync(large_dataset))
 ```
 
 ---
@@ -166,8 +159,8 @@ from memory_profiler import profile
 def benchmark_memory_usage():
     """Profile memory usage during pipeline execution."""
     records = generate_records(100_000)
-    pipeline = ThreatIntelPipeline(config)
-    result = pipeline.run_sync(records)
+    pipeline = Pipeline()
+    result = run_pipeline_sync(records)
     return result
 ```
 
@@ -184,8 +177,8 @@ def benchmark_cpu_usage():
     profiler.enable()
 
     records = generate_records(100_000)
-    pipeline = ThreatIntelPipeline(config)
-    result = pipeline.run_sync(records)
+    pipeline = Pipeline()
+    result = run_pipeline_sync(records)
 
     profiler.disable()
     stats = pstats.Stats(profiler)
@@ -198,12 +191,12 @@ def benchmark_cpu_usage():
 
 ```python
 import asyncio
-from tc_sgb.client import SGBAPIClient
+from scripts.src.client import AsyncAPIClient
 
 
 async def benchmark_concurrent_fetch():
     """Benchmark concurrent API fetch performance."""
-    client = SGBAPIClient(config)
+    client = AsyncAPIClient()
 
     # Sequential fetch
     start = time.time()
@@ -400,11 +393,10 @@ import asyncio
 
 async def generate_outputs_parallel(records, output_dir):
     """Generate all output formats in parallel."""
-    formats = [OutputFormat.JSON, OutputFormat.STIX, OutputFormat.CSV, ...]
+        formats = ["json", "csv", "yaml", ...]
 
     async def generate_one(fmt):
-        engine = OutputEngine(config)
-        return await engine.generate_async(fmt, records, output_dir)
+        return generate_all(records, output_dir)
 
     tasks = [generate_one(fmt) for fmt in formats]
     results = await asyncio.gather(*tasks)
@@ -445,7 +437,7 @@ jobs:
           python-version: "3.11"
 
       - name: Install dependencies
-        run: pip install -r requirements.lock
+        run: pip install -r requirements.txt
 
       - name: Run benchmarks
         run: pytest -m performance --benchmark-json=benchmark.json
@@ -539,12 +531,12 @@ Bu belge, TC-SGB-API-to-List sistemi için çeşitli veri hacimlerinde performan
 
 ```python
 import pytest
-from tc_sgb.client import SGBAPIClient
-from tc_sgb.validator import IOCValidator
-from tc_sgb.normalizer import IOCNormalizer
-from tc_sgb.deduplicator import IOCDeduplicator
-from tc_sgb.outputs import OutputEngine
-from tc_sgb.pipeline import ThreatIntelPipeline
+from scripts.src.client import AsyncAPIClient
+from scripts.src.validator import validate_ioc
+from scripts.src.normalizer import normalize_ioc
+from scripts.src.deduplicator import deduplicate
+from scripts.src.outputs import generate_all
+from scripts.src.pipeline import Pipeline
 
 
 @pytest.mark.performance
@@ -569,43 +561,36 @@ class TestBenchmarks:
 
     def test_fetch_100_records(self, benchmark, small_dataset):
         """Benchmark: Fetch 100 records."""
-        client = SGBAPIClient(config)
+        client = AsyncAPIClient()
         benchmark(client.fetch_all_sync, small_dataset)
 
     def test_validate_100_records(self, benchmark, small_dataset):
         """Benchmark: Validate 100 records."""
-        validator = IOCValidator()
-        benchmark(validator.validate_batch, small_dataset)
+        benchmark(lambda: [validate_ioc(r) for r in small_dataset])
 
     def test_normalize_100_records(self, benchmark, small_dataset):
         """Benchmark: Normalize 100 records."""
-        normalizer = IOCNormalizer()
-        benchmark(normalizer.normalize_batch, small_dataset)
+        benchmark(lambda: [normalize_ioc(r) for r in small_dataset])
 
     def test_dedup_1000_records(self, benchmark, medium_dataset):
         """Benchmark: Dedup 1000 records."""
-        deduplicator = IOCDeduplicator(config)
-        benchmark(deduplicator.deduplicate, medium_dataset)
+        benchmark(lambda: deduplicate(medium_dataset))
 
     def test_output_100_records(self, benchmark, small_dataset, tmp_path):
         """Benchmark: Generate all outputs for 100 records."""
-        engine = OutputEngine(config)
-        benchmark(engine.generate_all, small_dataset, tmp_path)
+        benchmark(lambda: generate_all(small_dataset, tmp_path))
 
     def test_full_pipeline_100(self, benchmark, small_dataset):
         """Benchmark: Full pipeline with 100 records."""
-        pipeline = ThreatIntelPipeline(config)
-        benchmark(pipeline.run_sync, small_dataset)
+        benchmark(lambda: run_pipeline_sync(small_dataset))
 
     def test_full_pipeline_1000(self, benchmark, medium_dataset):
         """Benchmark: Full pipeline with 1000 records."""
-        pipeline = ThreatIntelPipeline(config)
-        benchmark(pipeline.run_sync, medium_dataset)
+        benchmark(lambda: run_pipeline_sync(medium_dataset))
 
     def test_full_pipeline_10000(self, benchmark, large_dataset):
         """Benchmark: Full pipeline with 10000 records."""
-        pipeline = ThreatIntelPipeline(config)
-        benchmark(pipeline.run_sync, large_dataset)
+        benchmark(lambda: run_pipeline_sync(large_dataset))
 ```
 
 ---
@@ -622,8 +607,8 @@ from memory_profiler import profile
 def benchmark_memory_usage():
     """Profile memory usage during pipeline execution."""
     records = generate_records(100_000)
-    pipeline = ThreatIntelPipeline(config)
-    result = pipeline.run_sync(records)
+    pipeline = Pipeline()
+    result = run_pipeline_sync(records)
     return result
 ```
 
@@ -640,8 +625,8 @@ def benchmark_cpu_usage():
     profiler.enable()
 
     records = generate_records(100_000)
-    pipeline = ThreatIntelPipeline(config)
-    result = pipeline.run_sync(records)
+    pipeline = Pipeline()
+    result = run_pipeline_sync(records)
 
     profiler.disable()
     stats = pstats.Stats(profiler)
@@ -654,12 +639,12 @@ def benchmark_cpu_usage():
 
 ```python
 import asyncio
-from tc_sgb.client import SGBAPIClient
+from scripts.src.client import AsyncAPIClient
 
 
 async def benchmark_concurrent_fetch():
     """Benchmark concurrent API fetch performance."""
-    client = SGBAPIClient(config)
+    client = AsyncAPIClient()
 
     # Sequential fetch
     start = time.time()
@@ -856,11 +841,10 @@ import asyncio
 
 async def generate_outputs_parallel(records, output_dir):
     """Generate all output formats in parallel."""
-    formats = [OutputFormat.JSON, OutputFormat.STIX, OutputFormat.CSV, ...]
+        formats = ["json", "csv", "yaml", ...]
 
     async def generate_one(fmt):
-        engine = OutputEngine(config)
-        return await engine.generate_async(fmt, records, output_dir)
+        return generate_all(records, output_dir)
 
     tasks = [generate_one(fmt) for fmt in formats]
     results = await asyncio.gather(*tasks)
@@ -901,7 +885,7 @@ jobs:
           python-version: "3.11"
 
       - name: Install dependencies
-        run: pip install -r requirements.lock
+        run: pip install -r requirements.txt
 
       - name: Run benchmarks
         run: pytest -m performance --benchmark-json=benchmark.json

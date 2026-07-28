@@ -84,8 +84,8 @@ pip install --upgrade pydantic
 pytest
 
 # Commit updated requirements
-pip freeze > requirements.lock
-git add requirements.lock
+pip freeze > requirements.txt
+git add requirements.txt
 git commit -m "chore: update dependencies"
 ```
 
@@ -99,7 +99,7 @@ pytest -m performance --benchmark-compare=0.001
 pytest -m performance --benchmark-only --benchmark-max-time=10
 
 # Review memory usage
-python -m memory_profiler scripts/fetch_iocs.py
+python -m memory_profiler scripts/main.py
 ```
 
 ### Log Review
@@ -139,13 +139,13 @@ cat SECURITY.md
 
 ```bash
 # Full performance profile
-python -m cProfile -o profile.stats -m tc_sgb
+python -m cProfile -o profile.stats -m scripts.main
 
 # Analyze results
 python -m pstats profile.stats
 
 # Memory profile
-python -m memory_profiler scripts/full_pipeline.py
+python -m memory_profiler scripts/main.py
 
 # Generate performance report
 pytest -m performance --benchmark-json=monthly-benchmark.json
@@ -179,10 +179,10 @@ pip install --upgrade pytest mypy ruff
 pytest
 
 # Type check
-mypy src/
+mypy scripts/
 
 # Lint
-ruff check src/ tests/
+ruff check scripts/ tests/
 ```
 
 ### Security Hardening Review
@@ -396,17 +396,17 @@ def check_pipeline_health():
 git checkout output/  # Restore from last known good
 
 # Recover from broken release
-pip install tc-sgb-api-list==1.0.0  # Install previous version
+pip install tc-sgb==0.1.0.0  # Install previous version
 
 # Recover from failed pipeline
 gh run rerun <failed-run-id>  # Re-run failed pipeline
 
 # Full recovery from scratch
 git clone https://github.com/bayraktarozcan/TC-SGB-API-to-List.git
-cd tc-sgb-api-list
+cd TC-SGB-API-to-List
 pip install -e .
 pytest  # Verify everything works
-python -m tc_sgb  # Run pipeline
+tc-sgb fetch  # Run pipeline
 ```
 
 ---
@@ -440,7 +440,7 @@ python -m tc_sgb  # Run pipeline
 - Memory optimization
 
 **Upgrade**:
-pip install --upgrade tc-sgb-api-list
+pip install --upgrade tc-sgb
 
 **Full notes**: https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/tag/v0.1.0.0
 ```
@@ -530,8 +530,8 @@ pip install --upgrade pydantic
 pytest
 
 # Güncellenmiş gereksinimleri commit et
-pip freeze > requirements.lock
-git add requirements.lock
+pip freeze > requirements.txt
+git add requirements.txt
 git commit -m "chore: update dependencies"
 ```
 
@@ -545,7 +545,7 @@ pytest -m performance --benchmark-compare=0.001
 pytest -m performance --benchmark-only --benchmark-max-time=10
 
 # Bellek kullanımını incele
-python -m memory_profiler scripts/fetch_iocs.py
+python -m memory_profiler scripts/main.py
 ```
 
 ### Günlük İncelemesi
@@ -585,13 +585,13 @@ cat SECURITY.md
 
 ```bash
 # Tam performans profili
-python -m cProfile -o profile.stats -m tc_sgb
+python -m cProfile -o profile.stats -m scripts.main
 
 # Sonuçları analiz et
 python -m pstats profile.stats
 
 # Bellek profili
-python -m memory_profiler scripts/full_pipeline.py
+python -m memory_profiler scripts/main.py
 
 # Performans raporu oluştur
 pytest -m performance --benchmark-json=monthly-benchmark.json
@@ -625,10 +625,10 @@ pip install --upgrade pytest mypy ruff
 pytest
 
 # Tip kontrolü
-mypy src/
+mypy scripts/
 
 # Lint
-ruff check src/ tests/
+ruff check scripts/ tests/
 ```
 
 ### Güvenlik Sertleştirmesi İncelemesi
@@ -843,17 +843,17 @@ def check_pipeline_health():
 git checkout output/  # Bilinen son iyi durumdan geri yükle
 
 # Bozulmuş yayından kurtarma
-pip install tc-sgb-api-list==1.0.0  # Önceki sürümü yükle
+pip install tc-sgb==0.1.0.0  # Önceki sürümü yükle
 
 # Başarısız hattan kurtarma
 gh run rerun <failed-run-id>  # Başarısız hattı yeniden çalıştır
 
 # Sıfırdan tam kurtarma
 git clone https://github.com/bayraktarozcan/TC-SGB-API-to-List.git
-cd tc-sgb-api-list
+cd TC-SGB-API-to-List
 pip install -e .
 pytest  # Her şeyin çalıştığını doğrula
-python -m tc_sgb  # Hattı çalıştır
+tc-sgb fetch  # Hattı çalıştır
 ```
 
 ---
@@ -887,7 +887,7 @@ python -m tc_sgb  # Hattı çalıştır
 - Memory optimization
 
 **Upgrade**:
-pip install --upgrade tc-sgb-api-list
+pip install --upgrade tc-sgb
 
 **Full notes**: https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/tag/v0.1.0.0
 ```

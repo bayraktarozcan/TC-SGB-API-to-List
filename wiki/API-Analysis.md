@@ -22,7 +22,7 @@ The Turkish National Cyber Security Directorate (T.C. Siber Güvenlik Başkanlı
 | **Authentication** | None required |
 | **Rate Limit** | Not documented (conservative: max 10 req/sec) |
 | **API Version** | v1.1 (info field only, no versioning scheme) |
-| **Base URL** | `https://threatintel.sgbsg.gov.tr/api/v1` |
+| **Base URL** | `https://siberguvenlik.gov.tr` |
 
 ### Endpoints
 
@@ -198,7 +198,7 @@ total_pages = ceil(total_records / per_page)
 **Request Headers** (sent by client):
 
 ```
-User-Agent: tc-sgb-api-list/1.0.0
+User-Agent: tc-sgb/0.1.0.0
 Accept: application/json
 Connection: keep-alive
 ```
@@ -351,7 +351,7 @@ Türk Siber Güvenlik Başkanlığı (T.C. Siber Güvenlik Başkanlığı), tehd
 | **Kimlik Doğrulama** | Gerekmez |
 | **Hız Sınırı** | Belgelenmemiş (muhafazakar: maks. 10 istek/sn) |
 | **API Sürümü** | v1.1 (yalnızca bilgi alanı, sürümleme şeması yok) |
-| **Temel URL** | `https://threatintel.sgbsg.gov.tr/api/v1` |
+| **Temel URL** | `https://siberguvenlik.gov.tr` |
 
 ### Uç Noktalar
 
@@ -527,7 +527,7 @@ total_pages = ceil(toplam_kayit / sayfa_basi)
 **İstek Başlıkları** (istemci tarafından gönderilir):
 
 ```
-User-Agent: tc-sgb-api-list/1.0.0
+User-Agent: tc-sgb/0.1.0.0
 Accept: application/json
 Connection: keep-alive
 ```

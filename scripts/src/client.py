@@ -137,7 +137,7 @@ class AsyncAPIClient:
                     self.max_retries,
                 )
                 await asyncio.sleep(wait)
-            except httpx.NetworkError as e:
+            except httpx.TransportError as e:
                 logger.error(f"Network error: {e}")
                 if attempt < self.max_retries - 1:
                     await asyncio.sleep(2**attempt)

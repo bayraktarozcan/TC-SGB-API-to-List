@@ -303,6 +303,199 @@ class TestPipelineStats:
         assert stats.errors == []
 
 
+class TestPipelineExceptionBranches:
+    def test_validate_exception_per_record(self, pipeline):
+        """Lines 123-125: validate_ioc raises for one record."""
+        good = AddressRecord(
+            id=1,
+            url="evil.com",
+            type="domain",
+            desc="PH",
+            source="US",
+            date="2024-01-01",
+            criticality_level=3,
+            connectiontype="PH",
+        )
+        bad = AddressRecord(
+            id=2,
+            url="bad.net",
+            type="domain",
+            desc="MC",
+            source="SO",
+            date="2024-01-02",
+            criticality_level=1,
+            connectiontype="BC",
+        )
+
+        def side_effect(rec):
+            if rec.id == 2:
+                raise RuntimeError("validate boom")
+            return ValidatedIOC(raw_url=rec.url, ioc_type=IOCType.DOMAIN, original_id=rec.id)
+
+        with patch("scripts.src.pipeline.validate_ioc", side_effect=side_effect):
+            validated, rejected = pipeline._stage_validate([good, bad])
+        assert len(validated) == 1
+        assert rejected == 1
+
+    def test_normalize_exception_per_record(self, pipeline):
+        """Lines 140-141: normalize_ioc raises for one record."""
+        v1 = ValidatedIOC(raw_url="evil.com", ioc_type=IOCType.DOMAIN, original_id=1)
+        v2 = ValidatedIOC(raw_url="bad.net", ioc_type=IOCType.DOMAIN, original_id=2)
+
+        def side_effect(v):
+            if v.original_id == 2:
+                raise RuntimeError("normalize boom")
+            return NormalizedIOC(value=v.raw_url, ioc_type=v.ioc_type)
+
+        with patch("scripts.src.pipeline.normalize_ioc", side_effect=side_effect):
+            normalized = pipeline._stage_normalize([v1, v2])
+        assert len(normalized) == 1
+        assert normalized[0].value == "evil.com"
+
+    def test_quality_exception_per_record(self, pipeline):
+        """Lines 172-175: score_ioc raises for one record."""
+        from scripts.src.models import ScoredIOC
+
+        n1 = NormalizedIOC(value="evil.com", ioc_type=IOCType.DOMAIN)
+        n2 = NormalizedIOC(value="bad.net", ioc_type=IOCType.DOMAIN)
+
+        def side_effect(n):
+            if n.value == "bad.net":
+                raise RuntimeError("quality boom")
+            return ScoredIOC(value=n.value, ioc_type=n.ioc_type, quality_score=100.0)
+
+        with patch("scripts.src.pipeline.score_ioc", side_effect=side_effect):
+            scored, rejected = pipeline._stage_quality([n1, n2])
+        assert len(scored) == 1
+        assert scored[0].value == "evil.com"
+        assert rejected == 1
+
+    def test_quality_rejects_below_threshold(self):
+        """Line 172: score_ioc returns score below min_quality_score."""
+        from scripts.src.models import NormalizedIOC, ScoredIOC
+
+        p = Pipeline(min_quality_score=999.0)
+        n1 = NormalizedIOC(value="evil.com", ioc_type=IOCType.DOMAIN)
+
+        def fake_score(n):
+            return ScoredIOC(value=n.value, ioc_type=n.ioc_type, quality_score=50.0)
+
+        with patch("scripts.src.pipeline.score_ioc", side_effect=fake_score):
+            scored, rejected = p._stage_quality([n1])
+        assert len(scored) == 0
+        assert rejected == 1
+
+
+class TestPipelineContextManager:
+    @pytest.mark.asyncio
+    async def test_aenter_returns_self(self, pipeline):
+        async with pipeline as p:
+            assert p is pipeline
+
+    @pytest.mark.asyncio
+    async def test_aexit_closes_client(self, pipeline):
+        async with pipeline:
+            pass
+        assert pipeline.client._client is None or pipeline.client._client.is_closed
+
+
+class TestPipelineStageFetch:
+    @pytest.mark.asyncio
+    async def test_stage_fetch_logs_and_returns(self, pipeline):
+        records = [
+            AddressRecord(
+                id=1,
+                url="a.com",
+                type="domain",
+                desc="PH",
+                source="US",
+                date="2024-01-01",
+                criticality_level=3,
+                connectiontype="PH",
+            ),
+        ]
+        with patch.object(
+            pipeline.client, "fetch_addresses", new_callable=AsyncMock, return_value=records
+        ):
+            result, duration = await pipeline._stage_fetch()
+            assert len(result) == 1
+            assert pipeline.stats.total_fetched == 1
+            assert duration >= 0
+
+
+class TestPipelineStageValidate:
+    def test_validate_exception_record_rejected(self, pipeline):
+        bad_record = AddressRecord(id=99, url="valid-domain.xyz", type="domain")
+        ok_record = AddressRecord(
+            id=1,
+            url="evil-phish.com",
+            type="domain",
+            desc="PH",
+            source="US",
+            date="2024-01-01",
+            criticality_level=3,
+            connectiontype="PH",
+        )
+        validated, rejected = pipeline._stage_validate([ok_record, bad_record])
+        assert len(validated) >= 1
+
+
+class TestPipelineStageNormalize:
+    def test_normalize_exception_handled(self, pipeline):
+        from scripts.src.models import ValidatedIOC
+
+        good = ValidatedIOC(raw_url="evil.com", ioc_type=IOCType.DOMAIN)
+        normalized = pipeline._stage_normalize([good])
+        assert len(normalized) == 1
+
+
+class TestPipelineStageDedup:
+    def test_skip_dedup(self, pipeline):
+        pipeline.skip_dedup = True
+        iocs = [
+            ScoredIOC(
+                value="a.com", ioc_type=IOCType.DOMAIN, criticality_level=5, quality_score=80.0
+            ),
+            ScoredIOC(
+                value="a.com", ioc_type=IOCType.DOMAIN, criticality_level=5, quality_score=90.0
+            ),
+        ]
+        deduped, dup_count = pipeline._stage_dedup(iocs)
+        assert len(deduped) == 2
+        assert dup_count == 0
+
+
+class TestPipelineStageQuality:
+    def test_quality_exception_rejected(self, pipeline):
+        from scripts.src.models import NormalizedIOC
+
+        iocs = [NormalizedIOC(value="test.com", ioc_type=IOCType.DOMAIN, criticality_level=5)]
+        scored, rejected = pipeline._stage_quality(iocs)
+        assert len(scored) >= 1
+
+
 class TestPipelineSync:
     def test_run_pipeline_sync_is_callable(self):
         assert callable(run_pipeline_sync)
+
+    def test_run_pipeline_sync_with_mocked(self, client):
+        with patch.object(
+            client,
+            "fetch_addresses",
+            new_callable=AsyncMock,
+            return_value=[
+                AddressRecord(
+                    id=1,
+                    url="evil.com",
+                    type="domain",
+                    desc="PH",
+                    source="US",
+                    date="2024-01-01",
+                    criticality_level=3,
+                    connectiontype="PH",
+                ),
+            ],
+        ):
+            scored, stats = run_pipeline_sync(client=client)
+            assert len(scored) >= 1
+            assert stats.total_fetched == 1

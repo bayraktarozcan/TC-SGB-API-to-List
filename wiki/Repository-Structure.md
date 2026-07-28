@@ -74,10 +74,8 @@ TC-SGB-API-to-List/
 │   ├── threat_intel_technitium.zone
 │   ├── threat_intel_unbound.conf
 │   ├── threat_intel_yaml.yaml
-│   └── regen/
-│       ├── threat_intel_adguard.txt
-│       ├── threat_intel_csv.csv
-│       └── threat_intel_nextdns.txt
+│   └── logs/
+│       └── ioc_changelog.md
 │
 ├── schema/
 │   ├── address.schema.json
@@ -148,10 +146,11 @@ TC-SGB-API-to-List/
 | `quality.py` | Functions: `score_ioc()`, `score_iocs()`, `filter_false_positives()`, plus FP detection helpers |
 | `outputs.py` | 17 `generate_*()` functions + `FORMAT_REGISTRY` dict + `generate_all()` orchestrator |
 | `pipeline.py` | `Pipeline` class (orchestrator), `run_pipeline_sync()` entry point |
+| `changelog.py` | Functions: `generate_changelog()`, `format_changelog_markdown()`, IOC diff engine |
 
 ### Tests (`tests/`)
 
-Flat structure — no subdirectories. 13 files total, 330 tests, ~73% coverage.
+Flat structure — no subdirectories. 13 files total, 438 tests, 100% coverage.
 
 | File | Focus |
 |------|-------|
@@ -234,11 +233,11 @@ from .models import IOCType, ScoredIOC
 ```toml
 # pyproject.toml
 [build-system]
-requires = ["setuptools>=68.0", "setuptools-scm>=8.0"]
+requires = ["setuptools>=68.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "tc-sgb-api-list"
+name = "tc-sgb"
 version = "1.0.0"
 description = "Threat Intelligence Pipeline for TC SGB API"
 requires-python = ">=3.11"
@@ -337,10 +336,8 @@ TC-SGB-API-to-List/
 │   ├── threat_intel_technitium.zone
 │   ├── threat_intel_unbound.conf
 │   ├── threat_intel_yaml.yaml
-│   └── regen/
-│       ├── threat_intel_adguard.txt
-│       ├── threat_intel_csv.csv
-│       └── threat_intel_nextdns.txt
+│   └── logs/
+│       └── ioc_changelog.md
 │
 ├── schema/
 │   ├── address.schema.json
@@ -411,10 +408,11 @@ TC-SGB-API-to-List/
 | `quality.py` | Fonksiyonlar: `score_ioc()`, `score_iocs()`, `filter_false_positives()`, FP tespit yardımcıları |
 | `outputs.py` | 17 `generate_*()` fonksiyonu + `FORMAT_REGISTRY` sözlüğü + `generate_all()` orkestratörü |
 | `pipeline.py` | `Pipeline` sınıfı (orkestratör), `run_pipeline_sync()` giriş noktası |
+| `changelog.py` | Fonksiyonlar: `generate_changelog()`, `format_changelog_markdown()`, IOC fark motoru |
 
 ### Testler (`tests/`)
 
-Düz yapı — alt dizin yok. Toplam 13 dosya, 330 test, ~73% kapsama.
+Düz yapı — alt dizin yok. Toplam 13 dosya, 438 test, %100 kapsama.
 
 | Dosya | Odak |
 |-------|------|
@@ -497,11 +495,11 @@ from .models import IOCType, ScoredIOC
 ```toml
 # pyproject.toml
 [build-system]
-requires = ["setuptools>=68.0", "setuptools-scm>=8.0"]
+requires = ["setuptools>=68.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "tc-sgb-api-list"
+name = "tc-sgb"
 version = "1.0.0"
 description = "Threat Intelligence Pipeline for TC SGB API"
 requires-python = ">=3.11"

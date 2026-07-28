@@ -2,7 +2,15 @@
 
 from __future__ import annotations
 
-from scripts.src.deduplicator import DeduplicationResult, deduplicate
+from unittest.mock import patch
+
+from scripts.src.deduplicator import (
+    DeduplicationResult,
+    _extract_domain_from_url,
+    _make_dedup_key,
+    deduplicate,
+    get_dedup_stats,
+)
 from scripts.src.models import DescriptionCategory, IOCType, ScoredIOC, Source
 
 
@@ -160,3 +168,84 @@ class TestDeduplicate:
         r2 = deduplicate(iocs)
         assert [u.value for u in r1.kept] == [u.value for u in r2.kept]
         assert r1.removed_count == r2.removed_count
+
+
+# ---------------------------------------------------------------------------
+# _extract_domain_from_url edge cases
+# ---------------------------------------------------------------------------
+
+
+class TestExtractDomainFromUrl:
+    def test_valid_url(self):
+        assert _extract_domain_from_url("https://evil.com/path") == "evil.com"
+
+    def test_empty_string(self):
+        assert _extract_domain_from_url("") is None
+
+    def test_no_scheme(self):
+        result = _extract_domain_from_url("evil.com")
+        assert result is None
+
+    def test_trailing_dot_stripped(self):
+        assert _extract_domain_from_url("https://evil.com.") == "evil.com"
+
+    def test_lowercase(self):
+        assert _extract_domain_from_url("https://EVIL.COM/path") == "evil.com"
+
+    def test_garbage_url_returns_none(self):
+        assert _extract_domain_from_url("not a url at all") is None
+
+    def test_urlparse_raises_returns_none(self):
+        with patch("urllib.parse.urlparse", side_effect=Exception("boom")):
+            assert _extract_domain_from_url("https://evil.com/path") is None
+
+
+# ---------------------------------------------------------------------------
+# _make_dedup_key edge cases
+# ---------------------------------------------------------------------------
+
+
+class TestMakeDedupKey:
+    def test_domain_key(self):
+        key = _make_dedup_key("evil.com", IOCType.DOMAIN)
+        assert key == "domain|evil.com"
+
+    def test_ip_key(self):
+        key = _make_scored_ioc  # just to check syntax
+        assert _make_dedup_key("10.0.0.1", IOCType.IP) == "ip|10.0.0.1"
+
+    def test_url_key_with_domain(self):
+        key = _make_dedup_key("https://evil.com/path", IOCType.URL)
+        assert "url|" in key
+        assert "domain|evil.com" in key
+
+    def test_url_key_without_valid_domain(self):
+        key = _make_dedup_key("https://", IOCType.URL)
+        assert key == "url|https://"
+
+    def test_strips_whitespace_and_trailing_dot(self):
+        key = _make_dedup_key("  EVIL.COM.  ", IOCType.DOMAIN)
+        assert key == "domain|evil.com"
+
+
+# ---------------------------------------------------------------------------
+# get_dedup_stats
+# ---------------------------------------------------------------------------
+
+
+class TestGetDedupStats:
+    def test_basic(self):
+        stats = get_dedup_stats(100, 80)
+        assert stats == {"before": 100, "after": 80, "removed": 20}
+
+    def test_no_duplicates(self):
+        stats = get_dedup_stats(50, 50)
+        assert stats["removed"] == 0
+
+    def test_all_duplicates(self):
+        stats = get_dedup_stats(100, 0)
+        assert stats["removed"] == 100
+
+    def test_empty_input(self):
+        stats = get_dedup_stats(0, 0)
+        assert stats == {"before": 0, "after": 0, "removed": 0}
