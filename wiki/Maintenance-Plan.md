@@ -396,7 +396,7 @@ def check_pipeline_health():
 git checkout output/  # Restore from last known good
 
 # Recover from broken release
-pip install tc-sgb==0.1.0.0  # Install previous version
+pip install tc-sgb==0.2.0.0  # Install previous version
 
 # Recover from failed pipeline
 gh run rerun <failed-run-id>  # Re-run failed pipeline
@@ -843,7 +843,7 @@ def check_pipeline_health():
 git checkout output/  # Bilinen son iyi durumdan geri yükle
 
 # Bozulmuş yayından kurtarma
-pip install tc-sgb==0.1.0.0  # Önceki sürümü yükle
+pip install tc-sgb==0.2.0.0  # Önceki sürümü yükle
 
 # Başarısız hattan kurtarma
 gh run rerun <failed-run-id>  # Başarısız hattı yeniden çalıştır

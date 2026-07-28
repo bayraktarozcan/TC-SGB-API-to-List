@@ -130,7 +130,7 @@ class TestBehavioralRegression:
     def test_output_file_count_stable(self):
         """Should always generate 17 output files."""
         records = load_test_dataset("output_test_data.json")
-        files = output_engine.generate_all(records, tmp_path)
+        files = generate_all(records, tmp_path)
         assert len(files) >= 16
 
     def test_processing_order_deterministic(self):
@@ -462,7 +462,7 @@ class TestBehavioralRegression:
     def test_output_file_count_stable(self):
         """Should always generate 17 output files."""
         records = load_test_dataset("output_test_data.json")
-        files = output_engine.generate_all(records, tmp_path)
+        files = generate_all(records, tmp_path)
         assert len(files) >= 16
 
     def test_processing_order_deterministic(self):

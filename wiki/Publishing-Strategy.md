@@ -104,7 +104,7 @@ pip install -e .
 | File | Checksum (SHA-256) |
 |------|-------------------|
 | tc-sgb-1.1.0.tar.gz | abc123... |
-| tc_sgb_api_list-1.1.0-py3-none-any.whl | def456... |
+| tc_sgb-1.1.0-py3-none-any.whl | def456... |
 
 ## Migration Notes
 - Config files now require `version: 2` key
@@ -501,7 +501,7 @@ pip install -e .
 | File | Checksum (SHA-256) |
 |------|-------------------|
 | tc-sgb-1.1.0.tar.gz | abc123... |
-| tc_sgb_api_list-1.1.0-py3-none-any.whl | def456... |
+| tc_sgb-1.1.0-py3-none-any.whl | def456... |
 
 ## Migration Notes
 - Config files now require `version: 2` key
