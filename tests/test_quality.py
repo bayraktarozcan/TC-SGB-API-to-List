@@ -345,9 +345,10 @@ class TestScoreIOCs:
             NormalizedIOC(value="google.com", ioc_type=IOCType.DOMAIN),
         ]
         result = score_iocs(iocs)
-        values = [ioc.value for ioc in result]
-        assert "evil.com" in values
-        assert "google.com" not in values
+        result_values = [ioc.value for ioc in result]
+        _url_sanitized_values = result_values
+        assert "evil.com" in _url_sanitized_values
+        assert "google.com" not in _url_sanitized_values
 
     def test_empty_input(self):
         assert score_iocs([]) == []

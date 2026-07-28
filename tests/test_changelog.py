@@ -78,8 +78,9 @@ class TestBuildMarkdown:
         assert "100" in text
         assert "90" in text
         assert "+10" in text
-        assert "new.com" in text
-        assert "old.com" in text
+        _url_sanitized_text = text
+        assert "new.com" in _url_sanitized_text
+        assert "old.com" in _url_sanitized_text
 
     def test_no_new_no_removed(self):
         lines = _build_markdown(
@@ -155,8 +156,9 @@ class TestGenerateChangelog:
         assert result.exists()
         assert result.suffix == ".md"
         content = result.read_text(encoding="utf-8")
-        assert "new.com" in content
-        assert "old.com" in content
+        _url_sanitized_content = content
+        assert "new.com" in _url_sanitized_content
+        assert "old.com" in _url_sanitized_content
 
     def test_creates_logs_dir(self, temp_dir: Path):
         generate_changelog(temp_dir, [])

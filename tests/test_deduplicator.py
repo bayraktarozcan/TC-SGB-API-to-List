@@ -211,7 +211,7 @@ class TestMakeDedupKey:
         assert key == "domain|evil.com"
 
     def test_ip_key(self):
-        key = _make_scored_ioc  # just to check syntax
+        _unused = _make_scored_ioc  # just to check syntax
         assert _make_dedup_key("10.0.0.1", IOCType.IP) == "ip|10.0.0.1"
 
     def test_url_key_with_domain(self):
