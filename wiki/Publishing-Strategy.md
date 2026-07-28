@@ -75,7 +75,7 @@ Each GitHub release includes:
 
 3. Release is live
    ├── GitHub: github.com/bayraktarozcan/TC-SGB-API-to-List/releases/tag/v0.1.0.0
-   ├── PyPI: pypi.org/project/tc-sgb-api-list/1.1.0/
+   ├── PyPI: pypi.org/project/tc-sgb/1.1.0/
    └── Artifacts: Downloadable from release page
 ```
 
@@ -92,18 +92,18 @@ Each GitHub release includes:
 ## Installation
 
 ### From PyPI
-pip install tc-sgb-api-list==1.1.0
+pip install tc-sgb==1.1.0
 
 ### From Source
 git clone https://github.com/bayraktarozcan/TC-SGB-API-to-List.git
-cd tc-sgb-api-list
+cd tc-sgb
 git checkout v1.1.0
 pip install -e .
 
 ## Artifacts
 | File | Checksum (SHA-256) |
 |------|-------------------|
-| tc-sgb-api-list-1.1.0.tar.gz | abc123... |
+| tc-sgb-1.1.0.tar.gz | abc123... |
 | tc_sgb_api_list-1.1.0-py3-none-any.whl | def456... |
 
 ## Migration Notes
@@ -127,7 +127,7 @@ requires = ["setuptools>=68.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "tc-sgb-api-list"
+name = "tc-sgb"
 version = "1.1.0"
 description = "Turkish National Cyber Security Directorate IOC processor"
 readme = "README.md"
@@ -186,21 +186,21 @@ git push origin v1.1.0
 
 ```bash
 # Method 1: pip install from PyPI
-pip install tc-sgb-api-list
+pip install tc-sgb
 
 # Method 2: pip install specific version
-pip install tc-sgb-api-list==1.1.0
+pip install tc-sgb==1.1.0
 
 # Method 3: pip install from GitHub
 pip install git+https://github.com/bayraktarozcan/TC-SGB-API-to-List.git@v0.1.0.0
 
 # Method 4: pip install from source
 git clone https://github.com/bayraktarozcan/TC-SGB-API-to-List.git
-cd tc-sgb-api-list
+cd tc-sgb
 pip install -e .
 
 # Method 5: pipx (for CLI usage)
-pipx install tc-sgb-api-list
+pipx install tc-sgb
 ```
 
 ---
@@ -266,7 +266,7 @@ def generate_checksums(output_dir: Path) -> Path:
     "duration_seconds": 28.5
   },
   "source": {
-    "api_url": "https://threatintel.sgbsg.gov.tr/api/v1",
+    "api_url": "https://siberguvenlik.gov.tr",
     "fetch_time": "2025-01-20T11:58:00Z",
     "total_records": 483690
   },
@@ -321,7 +321,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Run pipeline
-        run: python -m tc_sgb --config config/production.yaml
+        run: tc-sgb fetch
       - name: Upload outputs
         uses: actions/upload-artifact@v3
         with:
@@ -351,11 +351,11 @@ jobs:
 # Yanking makes version unavailable for install but keeps it visible
 
 # Yank a release
-pip install tc-sgb-api-list==1.1.0  # Still works
-# But `pip install tc-sgb-api-list` won't pick it up
+pip install tc-sgb==1.1.0  # Still works
+# But `pip install tc-sgb` won't pick it up
 
 # Users can still install yanked version explicitly
-pip install tc-sgb-api-list==1.1.0  # Works even if yanked
+pip install tc-sgb==1.1.0  # Works even if yanked
 ```
 
 ### GitHub Release Rollback
@@ -472,7 +472,7 @@ Her GitHub sürümü şunları içerir:
 
 3. Yayın canlıya geçer
    ├── GitHub: github.com/bayraktarozcan/TC-SGB-API-to-List/releases/tag/v0.1.0.0
-   ├── PyPI: pypi.org/project/tc-sgb-api-list/1.1.0/
+   ├── PyPI: pypi.org/project/tc-sgb/1.1.0/
    └── Artifactlar: Yayın sayfasından indirilebilir
 ```
 
@@ -489,18 +489,18 @@ Her GitHub sürümü şunları içerir:
 ## Installation
 
 ### From PyPI
-pip install tc-sgb-api-list==1.1.0
+pip install tc-sgb==1.1.0
 
 ### From Source
 git clone https://github.com/bayraktarozcan/TC-SGB-API-to-List.git
-cd tc-sgb-api-list
+cd tc-sgb
 git checkout v1.1.0
 pip install -e .
 
 ## Artifacts
 | File | Checksum (SHA-256) |
 |------|-------------------|
-| tc-sgb-api-list-1.1.0.tar.gz | abc123... |
+| tc-sgb-1.1.0.tar.gz | abc123... |
 | tc_sgb_api_list-1.1.0-py3-none-any.whl | def456... |
 
 ## Migration Notes
@@ -524,7 +524,7 @@ requires = ["setuptools>=68.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "tc-sgb-api-list"
+name = "tc-sgb"
 version = "1.1.0"
 description = "Turkish National Cyber Security Directorate IOC processor"
 readme = "README.md"
@@ -583,21 +583,21 @@ git push origin v1.1.0
 
 ```bash
 # Yöntem 1: PyPI'dan pip install
-pip install tc-sgb-api-list
+pip install tc-sgb
 
 # Yöntem 2: Belirli sürüme pip install
-pip install tc-sgb-api-list==1.1.0
+pip install tc-sgb==1.1.0
 
 # Yöntem 3: GitHub'dan pip install
 pip install git+https://github.com/bayraktarozcan/TC-SGB-API-to-List.git@v0.1.0.0
 
 # Yöntem 4: Kaynaktan pip install
 git clone https://github.com/bayraktarozcan/TC-SGB-API-to-List.git
-cd tc-sgb-api-list
+cd tc-sgb
 pip install -e .
 
 # Yöntem 5: pipx (CLI kullanımı için)
-pipx install tc-sgb-api-list
+pipx install tc-sgb
 ```
 
 ---
@@ -663,7 +663,7 @@ def generate_checksums(output_dir: Path) -> Path:
     "duration_seconds": 28.5
   },
   "source": {
-    "api_url": "https://threatintel.sgbsg.gov.tr/api/v1",
+    "api_url": "https://siberguvenlik.gov.tr",
     "fetch_time": "2025-01-20T11:58:00Z",
     "total_records": 483690
   },
@@ -718,7 +718,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Run pipeline
-        run: python -m tc_sgb --config config/production.yaml
+        run: tc-sgb fetch
       - name: Upload outputs
         uses: actions/upload-artifact@v3
         with:
@@ -748,11 +748,11 @@ jobs:
 # Geri çekme, sürümün yüklenemez hale gelmesini sağlar ancak görünür kalır
 
 # Bir yayını geri çek
-pip install tc-sgb-api-list==1.1.0  # Hala çalışıyor
-# Ancak `pip install tc-sgb-api-list` onu seçmez
+pip install tc-sgb==1.1.0  # Hala çalışıyor
+# Ancak `pip install tc-sgb` onu seçmez
 
 # Kullanıcılar geri çekilmiş sürümü hala açıkça yükleyebilir
-pip install tc-sgb-api-list==1.1.0  # Geri çekilmiş olsa bile çalışır
+pip install tc-sgb==1.1.0  # Geri çekilmiş olsa bile çalışır
 ```
 
 ### GitHub Release Geri Alma

@@ -325,7 +325,7 @@ TC-SGB-API-to-List sistemi, Türkiye Ulusal Siber Güvenlik Direktörlüğü (TC
 |------------------|----------------|----------------------------------|
 | Test Çerçevesi   | pytest         | Birim ve entegrasyon testleri    |
 | Asenkron Test    | pytest-asyncio | Asenkron test desteği            |
-| Kapsam           | coverage.py    | Kod kapsama ölçümü              |
+| Kod Kapsaması    | coverage.py    | Testlerin kodun hangi satırlarını çalıştırdığını ölçer (testlerin kodu ne kadar kapsadığını gösterir) |
 | Tür Denetimi     | mypy           | Statik tür analizi               |
 | Kod Denetimi     | ruff           | Kod stili ve kalitesi            |
 | Biçimlendirme    | ruff format    | Kod biçimlendirme                |

@@ -374,6 +374,214 @@ class TestSQLite:
         assert count == 0
 
 
+class TestWriteToPath:
+    """All generators write to path when given."""
+
+    def test_nextdns_write(self, scored_iocs, temp_dir):
+        path = temp_dir / "nextdns.txt"
+        out = generate_nextdns(scored_iocs, path=path)
+        assert path.read_text(encoding="utf-8") == out
+
+    def test_adguard_write(self, scored_iocs, temp_dir):
+        path = temp_dir / "adguard.txt"
+        out = generate_adguard(scored_iocs, path=path)
+        assert path.read_text(encoding="utf-8") == out
+
+    def test_pihole_write(self, scored_iocs, temp_dir):
+        path = temp_dir / "pihole.txt"
+        out = generate_pihole(scored_iocs, path=path)
+        assert path.read_text(encoding="utf-8") == out
+
+    def test_dnsmasq_write(self, scored_iocs, temp_dir):
+        path = temp_dir / "dnsmasq.conf"
+        out = generate_dnsmasq(scored_iocs, path=path)
+        assert path.read_text(encoding="utf-8") == out
+
+    def test_unbound_write(self, scored_iocs, temp_dir):
+        path = temp_dir / "unbound.conf"
+        out = generate_unbound(scored_iocs, path=path)
+        assert path.read_text(encoding="utf-8") == out
+
+    def test_rpz_write(self, scored_iocs, temp_dir):
+        path = temp_dir / "rpz.zone"
+        out = generate_rpz(scored_iocs, path=path)
+        assert path.read_text(encoding="utf-8") == out
+
+    def test_technitium_write(self, scored_iocs, temp_dir):
+        path = temp_dir / "technitium.zone"
+        out = generate_technitium(scored_iocs, path=path)
+        assert path.read_text(encoding="utf-8") == out
+
+    def test_mikrotik_write(self, scored_iocs, temp_dir):
+        path = temp_dir / "mikrotik.rsc"
+        out = generate_mikrotik(scored_iocs, path=path)
+        assert path.read_text(encoding="utf-8") == out
+
+    def test_nftables_write(self, scored_iocs, temp_dir):
+        path = temp_dir / "nftables.nft"
+        out = generate_nftables(scored_iocs, path=path)
+        assert path.read_text(encoding="utf-8") == out
+
+    def test_ipset_write(self, scored_iocs, temp_dir):
+        path = temp_dir / "ipset.ipset"
+        out = generate_ipset(scored_iocs, path=path)
+        assert path.read_text(encoding="utf-8") == out
+
+    def test_suricata_write(self, scored_iocs, temp_dir):
+        path = temp_dir / "suricata.json"
+        out = generate_suricata(scored_iocs, path=path)
+        assert path.read_text(encoding="utf-8") == out
+
+    def test_crowdsec_write(self, scored_iocs, temp_dir):
+        path = temp_dir / "crowdsec.yaml"
+        out = generate_crowdsec(scored_iocs, path=path)
+        assert path.read_text(encoding="utf-8") == out
+
+    def test_csv_write(self, scored_iocs, temp_dir):
+        path = temp_dir / "out.csv"
+        out = generate_csv(scored_iocs, path=path)
+        disk_content = path.read_text(encoding="utf-8")
+        assert "evil-phish.com" in disk_content
+        assert len(disk_content) > 10
+
+    def test_json_write(self, scored_iocs, temp_dir):
+        path = temp_dir / "out.json"
+        out = generate_json(scored_iocs, path=path)
+        disk_content = path.read_text(encoding="utf-8").replace("\r\n", "\n")
+        assert disk_content == out.replace("\r\n", "\n")
+
+    def test_yaml_write(self, scored_iocs, temp_dir):
+        path = temp_dir / "out.yaml"
+        out = generate_yaml(scored_iocs, path=path)
+        disk_content = path.read_text(encoding="utf-8").replace("\r\n", "\n")
+        assert disk_content == out.replace("\r\n", "\n")
+
+
+class TestIPv6Formats:
+    """IPv6 IOCs appear in MikroTik, nftables, ipset, Suricata, CrowdSec."""
+
+    @pytest.fixture
+    def ipv6_iocs(self):
+        return [
+            ScoredIOC(
+                value="2001:db8::1",
+                ioc_type=IOCType.IP6,
+                desc=DescriptionCategory.CYBER_ATTACK,
+                source=Source.RSA,
+                criticality_level=2,
+                connectiontype=ConnectionType.APT_CNC,
+                quality_score=88.0,
+                false_positive_risk="low",
+            ),
+        ]
+
+    def test_mikrotik_ipv6(self, ipv6_iocs):
+        out = generate_mikrotik(ipv6_iocs)
+        assert "/ipv6 firewall address-list" in out
+        assert "2001:db8::1" in out
+
+    def test_nftables_ipv6(self, ipv6_iocs):
+        out = generate_nftables(ipv6_iocs)
+        assert "threat_intel6" in out
+        assert "ipv6_addr" in out
+        assert "2001:db8::1" in out
+
+    def test_ipset_ipv6(self, ipv6_iocs):
+        out = generate_ipset(ipv6_iocs)
+        assert "threat_intel6" in out
+        assert "add threat_intel6 2001:db8::1" in out
+
+    def test_suricata_ipv6(self, ipv6_iocs):
+        out = generate_suricata(ipv6_iocs)
+        assert "2001:db8::1" in out
+
+    def test_crowdsec_ipv6(self, ipv6_iocs):
+        out = generate_crowdsec(ipv6_iocs)
+        assert "2001:db8::1" in out
+
+
+class TestDomainsAndUrls:
+    def test_domains_and_urls_filter(self, scored_iocs):
+        from scripts.src.outputs import _domains_and_urls
+
+        result = _domains_and_urls(scored_iocs)
+        types = {ioc.ioc_type for ioc in result}
+        assert IOCType.DOMAIN in types
+        assert IOCType.URL in types
+        assert IOCType.IP not in types
+
+
+class TestGenerateAll:
+    def test_all_formats(self, scored_iocs, temp_dir):
+        from scripts.src.outputs import generate_all
+
+        output_dir = temp_dir / "all_output"
+        results = generate_all(scored_iocs, output_dir)
+        assert len(results) == 16
+        for _fmt, path_str in results.items():
+            assert not path_str.startswith("ERROR:")
+
+    def test_selective_formats(self, scored_iocs, temp_dir):
+        from scripts.src.outputs import generate_all
+
+        output_dir = temp_dir / "sel_output"
+        results = generate_all(scored_iocs, output_dir, formats=["csv", "json"])
+        assert len(results) == 2
+        assert "csv" in results
+        assert "json" in results
+
+    def test_unknown_format_skipped(self, scored_iocs, temp_dir):
+        from scripts.src.outputs import generate_all
+
+        output_dir = temp_dir / "unk_output"
+        results = generate_all(scored_iocs, output_dir, formats=["nonexistent"])
+        assert len(results) == 0
+
+    def test_generate_all_creates_dir(self, scored_iocs, temp_dir):
+        from scripts.src.outputs import generate_all
+
+        output_dir = temp_dir / "new_dir"
+        generate_all(scored_iocs, output_dir)
+        assert output_dir.is_dir()
+
+    def test_generate_all_skips_unknown_format(self, scored_iocs, temp_dir):
+        from scripts.src.outputs import FORMAT_REGISTRY, generate_all
+
+        output_dir = temp_dir / "skip_output"
+        original = FORMAT_REGISTRY["csv"]
+        try:
+            FORMAT_REGISTRY["csv"] = None
+            results = generate_all(scored_iocs, output_dir, formats=["csv"])
+            assert "csv" not in results
+        finally:
+            FORMAT_REGISTRY["csv"] = original
+
+    def test_generate_all_catches_exception(self, scored_iocs, temp_dir):
+        from scripts.src.outputs import FORMAT_REGISTRY, generate_all
+
+        output_dir = temp_dir / "err_output"
+
+        def _boom(iocs, path=None):
+            raise RuntimeError("boom")
+
+        original = FORMAT_REGISTRY["csv"]
+        try:
+            FORMAT_REGISTRY["csv"] = _boom
+            results = generate_all(scored_iocs, output_dir, formats=["csv"])
+            assert "csv" in results
+            assert "ERROR" in results["csv"]
+            assert "boom" in results["csv"]
+        finally:
+            FORMAT_REGISTRY["csv"] = original
+
+
+class TestSqliteDefaultPath:
+    def test_default_path(self, scored_iocs):
+        result = generate_sqlite(scored_iocs)
+        assert isinstance(result, str)
+        assert result.endswith("threat_intel.db")
+
+
 class TestEmptyInput:
     def test_all_formats_empty(self, temp_dir):
         iocs: list[ScoredIOC] = []

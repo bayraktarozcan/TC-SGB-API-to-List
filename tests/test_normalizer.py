@@ -94,6 +94,16 @@ class TestNormalizeUrl:
         val, _ = _normalize_url("https://evil.com/path#section")
         assert "#section" in val
 
+    def test_non_standard_port_preserved_on_normalize(self):
+        """Line 76: port_part added when host normalization changes hostname."""
+        val, notes = _normalize_url("https://MÜNCHEN.DE:8443/path")
+        assert "8443" in val
+        assert any("normalized hostname" in n for n in notes)
+
+    def test_standard_port_80_443_not_in_output(self):
+        val, notes = _normalize_url("https://MÜNCHEN.DE:443/path")
+        assert ":443" not in val
+
 
 # ---------------------------------------------------------------------------
 # _normalize_ip

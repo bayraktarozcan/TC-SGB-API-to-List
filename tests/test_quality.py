@@ -20,6 +20,7 @@ from scripts.src.quality import (
     _is_private_ip,
     filter_false_positives,
     score_ioc,
+    score_iocs,
 )
 
 
@@ -254,6 +255,29 @@ class TestScoreIOC:
         # Should be low or medium
         assert scored.false_positive_risk in ("low", "medium")
 
+    def test_medium_risk_when_score_between_20_and_50(self, monkeypatch):
+        # The "medium" branch (score < 50 and fp_risk == "low") requires
+        # enough penalties to push score below 50 without triggering benign
+        # or private checks. Max natural penalty is -40 (score 60), so we
+        # monkeypatch _has_suspicious_patterns to inject extra flags.
+        def _many_flags(domain: str) -> list[str]:
+            return ["flag1", "flag2", "flag3", "flag4", "flag5", "flag6", "flag7", "flag8"]
+
+        monkeypatch.setattr("scripts.src.quality._has_suspicious_patterns", _many_flags)
+        ioc = NormalizedIOC(
+            value="123456-abcdef-ghijklmnop.evil-com-domain.xyz",
+            ioc_type=IOCType.DOMAIN,
+            desc=None,
+            source=None,
+            date=None,
+            criticality_level=8,
+            connectiontype=None,
+        )
+        scored = score_ioc(ioc)
+        # 100 - 10(no_source) - 5(high_crit) - 40(8 flags*5) = 45
+        assert 20 <= scored.quality_score < 50
+        assert scored.false_positive_risk == "medium"
+
 
 # ---------------------------------------------------------------------------
 # filter_false_positives
@@ -304,3 +328,36 @@ class TestFilterFalsePositives:
         accepted, rejected = filter_false_positives(scored, min_score=20)
         assert len(accepted) == 0
         assert rejected == 1
+
+
+# ---------------------------------------------------------------------------
+# score_iocs (batch)
+# ---------------------------------------------------------------------------
+
+
+class TestScoreIOCs:
+    def test_filters_below_threshold(self):
+        iocs = [
+            _make_ioc("evil.com"),
+            # google.com is benign (−80), but _make_ioc adds bonuses
+            # (source+5, desc+5, date+3) → score 33 ≥ threshold.
+            # Use a bare IOC with no bonuses so score = 100−80−10 = 10 < 20.
+            NormalizedIOC(value="google.com", ioc_type=IOCType.DOMAIN),
+        ]
+        result = score_iocs(iocs)
+        values = [ioc.value for ioc in result]
+        assert "evil.com" in values
+        assert "google.com" not in values
+
+    def test_empty_input(self):
+        assert score_iocs([]) == []
+
+    def test_all_pass(self):
+        iocs = [_make_ioc("evil.com"), _make_ioc("malware.net")]
+        result = score_iocs(iocs)
+        assert len(result) == 2
+
+    def test_all_filtered(self):
+        iocs = [_make_ioc("google.com"), _make_ioc("github.com")]
+        result = score_iocs(iocs, threshold=50)
+        assert len(result) == 0

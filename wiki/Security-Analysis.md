@@ -85,10 +85,10 @@ dev = [
 
 ```bash
 # Generate lock file
-pip-compile pyproject.toml --output-file=requirements.lock
+pip-compile pyproject.toml --output-file=requirements.txt
 
 # Install from lock
-pip install -r requirements.lock
+pip install -r requirements.txt
 ```
 
 ### Mitigation: Dependency Scanning
@@ -214,7 +214,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.lock
+          pip install -r requirements.txt
 
       - name: Lint
         run: ruff check scripts/ tests/
@@ -281,7 +281,7 @@ chown -R tc-sgb:tc-sgb /opt/tc-sgb/
 |                                                   |
 |  Outbound:                                        |
 |  - HTTPS only (port 443)                          |
-|  - To threatintel.sgbsg.gov.tr only              |
+|  - To siberguvenlik.gov.tr only                  |
 |  - No other network access required               |
 |                                                   |
 |  Inbound:                                         |
@@ -494,10 +494,10 @@ dev = [
 
 ```bash
 # Kilitleme dosyası oluşturma
-pip-compile pyproject.toml --output-file=requirements.lock
+pip-compile pyproject.toml --output-file=requirements.txt
 
 # Kilitten yükleme
-pip install -r requirements.lock
+pip install -r requirements.txt
 ```
 
 ### Azaltma: Bağımlılık Taraması
@@ -624,7 +624,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.lock
+          pip install -r requirements.txt
 
       - name: Lint
         run: ruff check scripts/ tests/
@@ -691,7 +691,7 @@ chown -R tc-sgb:tc-sgb /opt/tc-sgb/
 |                                                   |
 |  Dışa Giden:                                      |
 |  - Yalnızca HTTPS (443. port)                     |
-|  - Yalnızca threatintel.sgbsg.gov.tr adresine     |
+|  - Yalnızca siberguvenlik.gov.tr adresine         |
 |  - Başka ağ erişimi gerekmez                      |
 |                                                   |
 |  İçeri Gelen:                                     |

@@ -1,16 +1,16 @@
 [build-system]
-requires = ["setuptools>=68.0", "setuptools-scm>=8.0"]
+requires = ["setuptools>=68.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "tc-sgb-api-list"
-version = "1.0.0"
+version = "0.2.0.0"
 description = "Threat Intelligence Pipeline for TC SGB API — IOC fetcher, validator, and multi-format exporter"
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.11"
 authors = [
-    { name = "bayra" },
+    { name = "Ozcan Bayraktar", email = "bayraktarozcan@gmail.com" },
 ]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -25,6 +25,7 @@ classifiers = [
 dependencies = [
     "httpx>=0.27,<1",
     "pydantic>=2.0,<3",
+    "PyYAML>=6.0,<7",
     "rich>=13.0,<16",
 ]
 
@@ -89,7 +90,7 @@ ignore = [
 ]
 
 [tool.ruff.lint.per-file-ignores]
-"tests/**" = ["S101", "ARG", "T20", "S311", "F841", "E741", "RUF059", "RUF001"]
+"tests/**" = ["S101", "ARG", "T20", "S311", "F841", "E501", "E741", "RUF059", "RUF001"]
 "scripts/main.py" = ["E402"]
 
 [tool.ruff.format]

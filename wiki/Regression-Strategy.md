@@ -70,7 +70,7 @@ tests/regression/snapshots/
 
 ```python
 import pytest
-from tc_sgb.pipeline import ThreatIntelPipeline
+from scripts.src.pipeline import Pipeline, run_pipeline_sync
 
 @pytest.mark.regression
 class TestOutputStability:
@@ -87,19 +87,19 @@ class TestOutputStability:
 
     def test_json_output_stable(self, stable_input, snapshot):
         """JSON output should match snapshot."""
-        pipeline = ThreatIntelPipeline(config)
+        pipeline = Pipeline()
         result = pipeline.run_sync(stable_input)
         snapshot.assert_match(result.json_output, "expected_output.json")
 
     def test_stix_output_stable(self, stable_input, snapshot):
         """STIX output should match snapshot."""
-        pipeline = ThreatIntelPipeline(config)
+        pipeline = Pipeline()
         result = pipeline.run_sync(stable_input)
         snapshot.assert_match(result.stix_output, "expected_stix.json")
 
     def test_csv_output_stable(self, stable_input, snapshot):
         """CSV output should match snapshot."""
-        pipeline = ThreatIntelPipeline(config)
+        pipeline = Pipeline()
         result = pipeline.run_sync(stable_input)
         snapshot.assert_match(result.csv_output, "expected_csv.csv")
 ```
@@ -402,7 +402,7 @@ tests/regression/snapshots/
 
 ```python
 import pytest
-from tc_sgb.pipeline import ThreatIntelPipeline
+from scripts.src.pipeline import Pipeline, run_pipeline_sync
 
 @pytest.mark.regression
 class TestOutputStability:
@@ -419,19 +419,19 @@ class TestOutputStability:
 
     def test_json_output_stable(self, stable_input, snapshot):
         """JSON output should match snapshot."""
-        pipeline = ThreatIntelPipeline(config)
+        pipeline = Pipeline()
         result = pipeline.run_sync(stable_input)
         snapshot.assert_match(result.json_output, "expected_output.json")
 
     def test_stix_output_stable(self, stable_input, snapshot):
         """STIX output should match snapshot."""
-        pipeline = ThreatIntelPipeline(config)
+        pipeline = Pipeline()
         result = pipeline.run_sync(stable_input)
         snapshot.assert_match(result.stix_output, "expected_stix.json")
 
     def test_csv_output_stable(self, stable_input, snapshot):
         """CSV output should match snapshot."""
-        pipeline = ThreatIntelPipeline(config)
+        pipeline = Pipeline()
         result = pipeline.run_sync(stable_input)
         snapshot.assert_match(result.csv_output, "expected_csv.csv")
 ```

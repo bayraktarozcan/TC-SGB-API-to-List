@@ -39,6 +39,8 @@ pip install -r requirements.txt
 pytest tests/ -v
 
 # Run with coverage
+# (kapsama: testlerin kodun hangi satırlarını çalıştırdığını ölçer — ne kadar çok satır
+# çalışıyorsa, o kadar iyi test edilmiş demektir)
 pytest tests/ --cov=scripts/src --cov-report=term-missing
 
 # Run specific test

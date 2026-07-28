@@ -173,7 +173,7 @@ For questions about the legal terms of the TC SGB API:
 
 - **Website**: https://siberguvenlik.gov.tr
 - **Legal Warnings**: https://siberguvenlik.gov.tr/yasal-uyarilar
-- **API Documentation**: https://threatintel.sgbsg.gov.tr
+- **API Documentation**: https://siberguvenlik.gov.tr
 
 For questions about the TC-SGB-API-to-List project:
 
@@ -352,7 +352,7 @@ TC SGB API'nin yasal şartlarıyla ilgili sorularınız için:
 
 - **Web Sitesi**: https://siberguvenlik.gov.tr
 - **Yasal Uyarılar**: https://siberguvenlik.gov.tr/yasal-uyarilar
-- **API Dokümantasyonu**: https://threatintel.sgbsg.gov.tr
+- **API Dokümantasyonu**: https://siberguvenlik.gov.tr
 
 TC-SGB-API-to-List projesiyle ilgili sorularınız için:
 
