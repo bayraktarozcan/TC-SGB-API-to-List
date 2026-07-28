@@ -9,737 +9,279 @@
 
 This document defines all data models, schemas, field definitions, and enumerations used in the TC-SGB-API-to-List system. All models use Pydantic v2 for validation and serialization.
 
-## Core Models
-
-### IOCRecord
-
-The primary data model representing a single Indicator of Compromise.
-
-```python
-class IOCRecord(BaseModel):
-    """A single IOC record from the TC SGB API."""
-
-    model_config = ConfigDict(
-        frozen=True,
-        str_strip_whitespace=True,
-        validate_assignment=True,
-    )
-
-    id: int = Field(
-        ...,
-        description="Unique identifier for the IOC record",
-        gt=0,
-    )
-    type: IOCType = Field(
-        ...,
-        description="Type of indicator (domain, ip, ip6, ip6net, url)",
-    )
-    value: str = Field(
-        ...,
-        description="The IOC value (domain, IP, URL, etc.)",
-        min_length=1,
-        max_length=2048,
-    )
-    first_seen: datetime = Field(
-        ...,
-        description="Timestamp when the IOC was first observed",
-    )
-    last_seen: datetime = Field(
-        ...,
-        description="Timestamp when the IOC was last observed",
-    )
-    status: IOCStatus = Field(
-        default=IOCStatus.ACTIVE,
-        description="Current status of the IOC",
-    )
-```
-
-**Field Constraints**:
-
-| Field | Type | Required | Constraints |
-|-------|------|----------|-------------|
-| `id` | int | Yes | gt=0 |
-| `type` | IOCType | Yes | Enum |
-| `value` | str | Yes | 1-2048 chars, non-empty |
-| `first_seen` | datetime | Yes | ISO 8601 |
-| `last_seen` | datetime | Yes | ISO 8601, >= first_seen |
-| `status` | IOCStatus | No | Default: ACTIVE |
-
----
-
-### NormalizedIOC
-
-Extended model after normalization and enrichment.
-
-```python
-class NormalizedIOC(BaseModel):
-    """IOC record after normalization and enrichment."""
-
-    model_config = ConfigDict(frozen=True)
-
-    # Core fields (from IOCRecord)
-    id: int
-    type: IOCType
-    value: str
-    first_seen: datetime
-    last_seen: datetime
-    status: IOCStatus
-
-    # Normalized fields
-    normalized_value: str = Field(
-        ...,
-        description="Canonical form of the IOC value",
-    )
-    normalized_type: str = Field(
-        ...,
-        description="Standardized type string",
-    )
-
-    # Quality fields
-    quality_score: float = Field(
-        default=1.0,
-        ge=0.0,
-        le=1.0,
-        description="Quality score 0.0-1.0",
-    )
-    quality_flags: list[str] = Field(
-        default_factory=list,
-        description="Quality issue flags",
-    )
-
-    # Provenance
-    source_page: int = Field(
-        ...,
-        description="API page where this record was found",
-    )
-    processing_timestamp: datetime = Field(
-        ...,
-        description="When this record was processed",
-    )
-
-    # Dedup
-    content_hash: str = Field(
-        ...,
-        description="SHA-256 hash of type+normalized_value",
-    )
-    is_unique: bool = Field(
-        default=True,
-        description="Whether this record is unique",
-    )
-```
-
----
-
-### ScoredIOC
-
-IOC record with computed risk score.
-
-```python
-class ScoredIOC(BaseModel):
-    """IOC record with computed risk assessment."""
-
-    record: NormalizedIOC
-    risk_score: float = Field(ge=0.0, le=10.0)
-    risk_factors: list[RiskFactor]
-    confidence: float = Field(ge=0.0, le=1.0)
-    recommended_action: str
-```
-
----
-
-## API Response Models
-
-### APIResponse
-
-```python
-class APIResponse(BaseModel):
-    """Response from the TC SGB API."""
-
-    data: list[IOCRecord]
-    meta: PaginationMeta
-```
-
-### PaginationMeta
-
-```python
-class PaginationMeta(BaseModel):
-    """Pagination metadata from API response."""
-
-    total: int = Field(
-        ...,
-        description="Total number of records",
-        ge=0,
-    )
-    page: int = Field(
-        ...,
-        description="Current page number",
-        ge=1,
-    )
-    per_page: int = Field(
-        ...,
-        description="Records per page",
-        ge=1,
-        le=9999,
-    )
-```
-
-### APIErrorResponse
-
-```python
-class APIErrorResponse(BaseModel):
-    """Error response from the API."""
-
-    error: str = Field(..., description="Error code")
-    message: str = Field(..., description="Human-readable error message")
-```
-
----
-
-## Enumerations
+## Enums
 
 ### IOCType
 
+Indicator of Compromise type classification.
+
 ```python
 class IOCType(str, Enum):
-    """Types of Indicators of Compromise."""
-
     DOMAIN = "domain"
-    """Malicious domain name"""
-
-    IP = "ip"
-    """IPv4 address"""
-
-    IP6 = "ip6"
-    """IPv6 address"""
-
-    IP6NET = "ip6net"
-    """IPv6 network (CIDR notation)"""
-
     URL = "url"
-    """Malicious URL"""
+    IP = "ip"
+    IP6 = "ip6"
+    IP6NET = "ip6net"
 ```
 
-### IOCStatus
+### DescriptionCategory
+
+Category of threat description from the SGB API.
 
 ```python
-class IOCStatus(str, Enum):
-    """Status of an IOC record."""
-
-    ACTIVE = "active"
-    """IOC is currently active/threatening"""
-
-    INACTIVE = "inactive"
-    """IOC is no longer active"""
-
-    UNKNOWN = "unknown"
-    """Status cannot be determined"""
+class DescriptionCategory(str, Enum):
+    PHISHING = "PH"
+    FINANCIAL_PHISHING = "BP"
+    MALWARE_DIST_DOMAIN = "MD"
+    MALWARE_DIST_IP = "MI"
+    MALWARE_DIST_URL = "MU"
+    MALWARE_CMD_CENTER = "MC"
+    CYBER_ATTACK = "CA"
 ```
 
-### RiskLevel
+### Source
+
+Originating source of the IOC report.
 
 ```python
-class RiskLevel(str, Enum):
-    """Risk classification levels."""
-
-    CRITICAL = "critical"
-    """Immediate threat, requires urgent action"""
-
-    HIGH = "high"
-    """Significant threat, prioritize remediation"""
-
-    MEDIUM = "medium"
-    """Moderate threat, schedule remediation"""
-
-    LOW = "low"
-    """Minor threat, monitor"""
-
-    INFO = "info"
-    """Informational, no immediate action needed"""
+class Source(str, Enum):
+    USOM = "US"   # Ulusal Siber Olay Müdahale
+    SOME = "SO"   # Siber Olayları Müdahale Ekipleri
+    RSA = "RS"    # Regional Security Assessment
+    IHBAR = "IH"  # İhbar
+    SGB = "SB"    # Siber Güvenlik Başkanlığı
 ```
 
-### OutputFormat
+### ConnectionType
+
+Network connection type classification.
 
 ```python
-class OutputFormat(str, Enum):
-    """Supported output formats."""
-
-    JSON = "json"
-    STIX = "stix"
-    CSV = "csv"
-    MISP = "misp"
-    OPENIOC = "openioc"
-    SIGMA = "sigma"
-    YARA = "yara"
-    CEF = "cef"
-    LEEF = "leef"
-    SYSLOG = "syslog"
-    HTML = "html"
-    MARKDOWN = "markdown"
-    PDF = "pdf"
-    SPLUNK = "splunk"
-    QRADAR = "qradar"
-    ELASTIC = "elastic"
-    GRAFANA = "grafana"
+class ConnectionType(str, Enum):
+    APT_CNC = "AC"
+    BOTNET_CNC = "BC"
+    EXPLOIT_KIT = "EK"
+    MOBILE_CNC = "MC"
+    MALWARE_DOWNLOAD = "MF"
+    MINING_MALWARE = "MM"
+    OTHER = "OT"
+    PHISHING = "PH"
 ```
 
-### ValidationSeverity
+## API Response Models
+
+### PaginatedResponse
+
+Generic paginated response wrapper matching the real SGB API field names.
 
 ```python
-class ValidationSeverity(str, Enum):
-    """Severity levels for validation errors."""
-
-    CRITICAL = "critical"
-    """Record must be rejected"""
-
-    HIGH = "high"
-    """Record should be rejected"""
-
-    MEDIUM = "medium"
-    """Record should be flagged"""
-
-    LOW = "low"
-    """Informational flag only"""
+class PaginatedResponse(BaseModel, Generic[T]):
+    models: list[T] = Field(default_factory=list)
+    totalCount: int = 0
+    count: int = 0
+    page: int = 0
+    pageCount: int = 0
 ```
 
----
+### AddressRecord
 
-## Result Models
+Single IOC record from `/api/address/index`.
 
-### ValidationResult
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `id` | `int` | — | Unique identifier |
+| `url` | `str` | `""` | IOC value (domain, IP, URL) |
+| `type` | `str` | `""` | IOC type code |
+| `desc` | `str` | `""` | Description category code |
+| `source` | `str` | `""` | Source code |
+| `date` | `str` | `""` | Observation date |
+| `criticality_level` | `int` | `10` | Criticality level (1=highest) |
+| `connectiontype` | `str` | `""` | Connection type code |
 
-```python
-class ValidationResult(BaseModel):
-    """Result of validating a single IOC record."""
+### DescriptionRecord
 
-    record_id: int
-    is_valid: bool
-    errors: list[ValidationError]
-    warnings: list[ValidationWarning]
-    processing_time_ms: float
-```
+Reference record from `/api/address-description/index`.
 
-### BatchValidationResult
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `id` | `str` | — | Description category code |
+| `tr_title` | `str` | `""` | Turkish title |
+| `en_title` | `str` | `""` | English title |
+| `tr_desc` | `str` | `""` | Turkish description |
+| `en_desc` | `str` | `""` | English description |
 
-```python
-class BatchValidationResult(BaseModel):
-    """Result of validating a batch of records."""
+### ConnectionTypeRecord
 
-    total_records: int
-    valid_records: int
-    invalid_records: int
-    warnings_count: int
-    validation_errors: list[ValidationReport]
-    processing_time_ms: float
-    pass_rate: float = Field(ge=0.0, le=1.0)
-```
+Reference record from `/api/address-connection-type/index`.
 
-### ValidationError
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `id` | `str` | — | Connection type code |
+| `tr_title` | `str` | `""` | Turkish title |
+| `en_title` | `str` | `""` | English title |
 
-```python
-class ValidationError(BaseModel):
-    """A single validation error."""
+### SourceRecord
 
-    rule_id: str = Field(
-        ...,
-        description="Unique rule identifier (e.g., V001)",
-    )
-    field: str = Field(
-        ...,
-        description="Field that failed validation",
-    )
-    severity: ValidationSeverity
-    message: str = Field(
-        ...,
-        description="Human-readable error description",
-    )
-    value: Any = Field(
-        ...,
-        description="The invalid value",
-    )
-```
+Reference record from `/api/address-source/index`.
 
-### ValidationWarning
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `id` | `str` | — | Source code |
+| `tr_title` | `str` | `""` | Turkish title |
+| `en_title` | `str` | `""` | English title |
 
-```python
-class ValidationWarning(BaseModel):
-    """A validation warning (non-fatal)."""
+### IncidentRecord
 
-    rule_id: str
-    field: str
-    message: str
-    value: Any
-```
+Record from `/api/incident/index`.
 
-### ValidationReport
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `id` | `int` | — | Incident ID |
+| `title` | `str` | `""` | Title |
+| `desc` | `str` | `""` | Description |
+| `date` | `str` | `""` | Date |
+| `active` | `bool` | `True` | Active status |
+| `slug` | `str` | `""` | URL slug |
+| `language` | `str` | `""` | Language code |
 
-```python
-class ValidationReport(BaseModel):
-    """Detailed validation report for a record."""
+### AnnouncementRecord
 
-    record_id: int
-    passed: bool
-    checks_run: int
-    checks_passed: int
-    checks_failed: int
-    checks_warned: int
-    errors: list[ValidationError]
-    warnings: list[ValidationWarning]
-```
+Record from `/api/announcement/index`.
 
----
-
-## Normalization Models
-
-### NormalizationTransform
-
-```python
-class NormalizationTransform(BaseModel):
-    """Record of a normalization transformation applied."""
-
-    field: str = Field(..., description="Field that was transformed")
-    original: str = Field(..., description="Original value")
-    normalized: str = Field(..., description="Normalized value")
-    transforms_applied: list[str] = Field(
-        ...,
-        description="List of transform names applied",
-    )
-```
-
-### NormalizationResult
-
-```python
-class NormalizationResult(BaseModel):
-    """Result of normalizing a batch of records."""
-
-    total_input: int
-    total_output: int
-    transforms_applied: int
-    unique_transforms: list[str]
-    processing_time_ms: float
-```
-
----
-
-## Deduplication Models
-
-### DedupConfig
-
-```python
-class DedupConfig(BaseModel):
-    """Configuration for deduplication engine."""
-
-    exact_match: bool = Field(
-        default=True,
-        description="Enable exact hash matching",
-    )
-    semantic_match: bool = Field(
-        default=True,
-        description="Enable semantic matching (URL path, etc.)",
-    )
-    subdomain_dedup: bool = Field(
-        default=False,
-        description="Enable subdomain deduplication",
-    )
-    subdomain_depth: int = Field(
-        default=2,
-        description="Number of domain levels for subdomain dedup",
-        ge=1,
-        le=5,
-    )
-    case_sensitive: bool = Field(
-        default=False,
-        description="Case-sensitive comparison",
-    )
-```
-
-### DedupResult
-
-```python
-class DedupResult(BaseModel):
-    """Result of deduplication."""
-
-    total_input: int
-    total_output: int
-    duplicates_removed: int
-    dedup_ratio: float = Field(ge=0.0, le=1.0)
-    by_type: dict[str, DedupStats]
-    processing_time_ms: float
-    merge_log: list[DedupMergeEvent]
-```
-
-### DedupStats
-
-```python
-class DedupStats(BaseModel):
-    """Deduplication statistics per IOC type."""
-
-    input_count: int
-    output_count: int
-    duplicates_removed: int
-    dedup_ratio: float
-```
-
-### DedupMergeEvent
-
-```python
-class DedupMergeEvent(BaseModel):
-    """Record of a deduplication merge event."""
-
-    primary_id: int
-    merged_ids: list[int]
-    merge_reason: str
-    original_values: list[str]
-```
-
----
-
-## Quality Models
-
-### QualityReport
-
-```python
-class QualityReport(BaseModel):
-    """Comprehensive quality analysis report."""
-
-    overall_score: float = Field(ge=0.0, le=1.0)
-    statistics: DatasetStatistics
-    false_positives: list[FPFlag]
-    anomalies: list[Anomaly]
-    per_type_scores: dict[str, float]
-    recommendations: list[str]
-    processing_time_ms: float
-```
-
-### DatasetStatistics
-
-```python
-class DatasetStatistics(BaseModel):
-    """Statistical summary of the IOC dataset."""
-
-    total_records: int
-    records_by_type: dict[str, int]
-    records_by_status: dict[str, int]
-    date_range: DateRange
-    avg_value_length: float
-    median_value_length: float
-    unique_values: int
-    duplicate_count: int
-```
-
-### FPFlag
-
-```python
-class FPFlag(BaseModel):
-    """A potential false positive flag."""
-
-    record_id: int
-    value: str
-    flag_type: str
-    confidence: float = Field(ge=0.0, le=1.0)
-    reason: str
-    recommendation: str
-```
-
-### Anomaly
-
-```python
-class Anomaly(BaseModel):
-    """A detected anomaly in the dataset."""
-
-    anomaly_type: str
-    description: str
-    affected_records: list[int]
-    severity: RiskLevel
-    recommendation: str
-```
-
----
-
-## Output Models
-
-### OutputFile
-
-```python
-class OutputFile(BaseModel):
-    """Metadata about a generated output file."""
-
-    format: OutputFormat
-    path: Path
-    size_bytes: int
-    record_count: int
-    checksum_sha256: str
-    encoding: str = "utf-8"
-    mime_type: str
-    generation_time_ms: float
-```
-
-### OutputConfig
-
-```python
-class OutputConfig(BaseModel):
-    """Configuration for output generation."""
-
-    enabled_formats: list[OutputFormat] = Field(
-        default_factory=lambda: list(OutputFormat),
-        description="Formats to generate",
-    )
-    output_dir: Path = Field(
-        default=Path("output"),
-        description="Output directory",
-    )
-    compress: bool = Field(
-        default=False,
-        description="Compress output files (gzip)",
-    )
-    include_metadata: bool = Field(
-        default=True,
-        description="Include metadata headers",
-    )
-    include_lineage: bool = Field(
-        default=False,
-        description="Include data lineage info",
-    )
-```
-
----
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `id` | `int` | — | Announcement ID |
+| `title` | `str` | `""` | Title |
+| `desc` | `str` | `""` | Description |
+| `date` | `str` | `""` | Date |
+| `active` | `bool` | `True` | Active status |
+| `slug` | `str` | `""` | URL slug |
+| `language` | `str` | `""` | Language code |
 
 ## Pipeline Models
 
-### PipelineConfig
+### ValidatedIOC
+
+An IOC that has passed validation.
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `raw_url` | `str` | — | Original IOC value |
+| `ioc_type` | `IOCType` | — | Classified IOC type |
+| `desc` | `DescriptionCategory \| None` | `None` | Description category |
+| `source` | `Source \| None` | `None` | Originating source |
+| `date` | `datetime \| None` | `None` | Observation date |
+| `criticality_level` | `int` | `10` | Criticality (1=highest) |
+| `connectiontype` | `ConnectionType \| None` | `None` | Connection type |
+| `original_id` | `int` | `0` | Original API record ID |
+| `validation_errors` | `list[str]` | `[]` | Non-fatal validation notes |
+
+### NormalizedIOC
+
+An IOC that has been normalised (lowercase, trimmed, IDN resolved, standard port extracted).
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `value` | `str` | — | Normalised IOC value |
+| `ioc_type` | `IOCType` | — | Classified IOC type |
+| `desc` | `DescriptionCategory \| None` | `None` | Description category |
+| `source` | `Source \| None` | `None` | Originating source |
+| `date` | `datetime \| None` | `None` | Observation date |
+| `criticality_level` | `int` | `10` | Criticality (1=highest) |
+| `connectiontype` | `ConnectionType \| None` | `None` | Connection type |
+| `original_id` | `int` | `0` | Original API record ID |
+| `normalization_notes` | `list[str]` | `[]` | Normalisation log |
+
+### ScoredIOC
+
+An IOC with a quality / confidence score.
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `value` | `str` | — | Normalised IOC value |
+| `ioc_type` | `IOCType` | — | Classified IOC type |
+| `desc` | `DescriptionCategory \| None` | `None` | Description category |
+| `source` | `Source \| None` | `None` | Originating source |
+| `date` | `datetime \| None` | `None` | Observation date |
+| `criticality_level` | `int` | `10` | Criticality (1=highest) |
+| `connectiontype` | `ConnectionType \| None` | `None` | Connection type |
+| `original_id` | `int` | `0` | Original API record ID |
+| `quality_score` | `float` | `0.0` | Confidence score (0–100) |
+| `false_positive_risk` | `str` | `"low"` | FP risk level: low / medium / high |
+| `flags` | `list[str]` | `[]` | Dedup metadata and quality flags |
+
+### PipelineStats
+
+Statistics collected during a pipeline run.
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `total_fetched` | `int` | `0` | Records fetched from API |
+| `after_validation` | `int` | `0` | Records passing validation |
+| `after_normalization` | `int` | `0` | Records after normalisation |
+| `after_dedup` | `int` | `0` | Records after deduplication |
+| `after_quality` | `int` | `0` | Records after quality filtering |
+| `by_type` | `dict[str, int]` | `{}` | Count by IOC type |
+| `by_source` | `dict[str, int]` | `{}` | Count by source |
+| `by_desc` | `dict[str, int]` | `{}` | Count by description category |
+| `by_criticality` | `dict[int, int]` | `{}` | Count by criticality level |
+| `validation_rejected` | `int` | `0` | Records rejected by validation |
+| `quality_rejected` | `int` | `0` | Records rejected by quality |
+| `duplicates_removed` | `int` | `0` | Duplicates removed |
+| `fetch_duration_seconds` | `float` | `0.0` | Time spent fetching |
+| `pipeline_duration_seconds` | `float` | `0.0` | Total pipeline time |
+| `errors` | `list[str]` | `[]` | Error messages |
+
+## Client Models
+
+### APIError
+
+Exception raised when the SGB API returns a non-2xx response.
 
 ```python
-class PipelineConfig(BaseModel):
-    """Complete pipeline configuration."""
-
-    api: ClientConfig = Field(default_factory=ClientConfig)
-    validation: ValidationConfig = Field(default_factory=ValidationConfig)
-    normalization: NormalizationConfig = Field(default_factory=NormalizationConfig)
-    dedup: DedupConfig = Field(default_factory=DedupConfig)
-    quality: QualityConfig = Field(default_factory=QualityConfig)
-    output: OutputConfig = Field(default_factory=OutputConfig)
-    publish: PublishConfig = Field(default_factory=PublishConfig)
-    logging: LoggingConfig = Field(default_factory=LoggingConfig)
+class APIError(Exception):
+    status_code: int   # HTTP status code
+    detail: str        # Error message
+    url: str           # Request URL
 ```
 
-### PipelineResult
+### AsyncAPIClient
 
-```python
-class PipelineResult(BaseModel):
-    """Final result of pipeline execution."""
+Async HTTP client for the SGB API. No authentication required.
 
-    success: bool
-    version: str
-    start_time: datetime
-    end_time: datetime
-    duration_seconds: float
-    stages: list[StageResult]
-    input_record_count: int
-    output_record_count: int
-    output_files: list[OutputFile]
-    quality_report: QualityReport
-    errors: list[PipelineError]
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `base_url` | `str` | `https://siberguvenlik.gov.tr` | API base URL |
+| `max_retries` | `int` | `3` | Max retry attempts |
+| `rate_limit` | `float` | `10.0` | Requests per second |
+| `timeout` | `float` | `60.0` | HTTP timeout (seconds) |
+
+## Deduplicator Models
+
+### DeduplicationResult
+
+Result of deduplicating a list of scored IOCs.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `kept` | `list[ScoredIOC]` | Deduplicated IOC list |
+| `removed_count` | `int` | Number of duplicates removed |
+| `merge_log` | `list[str]` | Log of merge decisions |
+
+## Data Flow
+
+The pipeline transforms data through these model stages:
+
 ```
-
-### StageResult
-
-```python
-class StageResult(BaseModel):
-    """Result of a single pipeline stage."""
-
-    stage_name: str
-    status: str  # "success", "partial", "failed"
-    input_count: int
-    output_count: int
-    duration_ms: float
-    details: dict[str, Any]
-```
-
-### PipelineError
-
-```python
-class PipelineError(BaseModel):
-    """An error that occurred during pipeline execution."""
-
-    stage: str
-    error_type: str
-    message: str
-    record_id: Optional[int]
-    timestamp: datetime
-    recoverable: bool
+API Response (PaginatedResponse[AddressRecord])
+    → ValidatedIOC[]
+    → NormalizedIOC[]
+    → ScoredIOC[]
+    → DeduplicationResult
+    → ScoredIOC[] (final, written to output files)
 ```
 
 ---
-
-## Configuration Models
-
-### ClientConfig
-
-```python
-class ClientConfig(BaseModel):
-    """HTTP client configuration."""
-
-    base_url: str = "https://siberguvenlik.gov.tr"
-    max_concurrent: int = Field(default=5, ge=1, le=20)
-    request_timeout: float = Field(default=30.0, gt=0)
-    retry_max: int = Field(default=3, ge=0)
-    retry_base_delay: float = Field(default=0.5, gt=0)
-    per_page: int = Field(default=500, ge=1, le=9999)
-    user_agent: str = "tc-sgb/{version}"
-```
-
-### ValidationConfig
-
-```python
-class ValidationConfig(BaseModel):
-    """Validation configuration."""
-
-    strict_mode: bool = Field(default=False)
-    max_value_length: int = Field(default=2048, gt=0)
-    allow_control_chars: bool = Field(default=False)
-    check_encoding: bool = Field(default=True)
-    check_self_reference: bool = Field(default=True)
-```
-
-### NormalizationConfig
-
-```python
-class NormalizationConfig(BaseModel):
-    """Normalization configuration."""
-
-    lowercase_values: bool = True
-    strip_whitespace: bool = True
-    normalize_urls: bool = True
-    remove_fragments: bool = True
-    remove_tracking_params: bool = True
-    normalize_dates: bool = True
-    target_date_format: str = "iso8601"
-```
-
-### QualityConfig
-
-```python
-class QualityConfig(BaseModel):
-    """Quality analysis configuration."""
-
-    enable_fp_detection: bool = True
-    enable_anomaly_detection: bool = True
-    min_quality_score: float = Field(default=0.5, ge=0.0, le=1.0)
-    whitelist_file: Optional[Path] = None
-    strict_whitelist: bool = False
-```
-
-### LoggingConfig
-
-```python
-class LoggingConfig(BaseModel):
-    """Logging configuration."""
-
-    level: str = "INFO"
-    format: str = "json"  # "json" or "text"
-    file: Optional[Path] = None
-    max_bytes: int = 10 * 1024 * 1024  # 10MB
-    backup_count: int = 5
-```
 
 <a id="-türkçe"></a>
 
@@ -747,736 +289,276 @@ class LoggingConfig(BaseModel):
 
 ## Genel Bakış
 
-Bu belge, TC-SGB-API-to-List sisteminde kullanılan tüm veri modellerini, şemaları, alan tanımlamalarını ve numaralandırmaları tanımlar. Tüm modeller doğrulama ve serializasyon için Pydantic v2 kullanır.
-
-## Temel Modeller
-
-### IOCRecord
-
-Tek bir Tehdit Göstergesini temsil eden birincil veri modeli.
-
-```python
-class IOCRecord(BaseModel):
-    """A single IOC record from the TC SGB API."""
-
-    model_config = ConfigDict(
-        frozen=True,
-        str_strip_whitespace=True,
-        validate_assignment=True,
-    )
-
-    id: int = Field(
-        ...,
-        description="Unique identifier for the IOC record",
-        gt=0,
-    )
-    type: IOCType = Field(
-        ...,
-        description="Type of indicator (domain, ip, ip6, ip6net, url)",
-    )
-    value: str = Field(
-        ...,
-        description="The IOC value (domain, IP, URL, etc.)",
-        min_length=1,
-        max_length=2048,
-    )
-    first_seen: datetime = Field(
-        ...,
-        description="Timestamp when the IOC was first observed",
-    )
-    last_seen: datetime = Field(
-        ...,
-        description="Timestamp when the IOC was last observed",
-    )
-    status: IOCStatus = Field(
-        default=IOCStatus.ACTIVE,
-        description="Current status of the IOC",
-    )
-```
-
-**Alan Kısıtlamaları**:
-
-| Alan | Tür | Gerekli | Kısıtlamalar |
-|------|------|---------|-------------|
-| `id` | int | Evet | gt=0 |
-| `type` | IOCType | Evet | Enum |
-| `value` | str | Evet | 1-2048 karakter, boş olmayan |
-| `first_seen` | datetime | Evet | ISO 8601 |
-| `last_seen` | datetime | Evet | ISO 8601, >= first_seen |
-| `status` | IOCStatus | Hayır | Varsayılan: ACTIVE |
-
----
-
-### NormalizedIOC
-
-Normalizasyon ve zenginleştirme sonrası genişletilmiş model.
-
-```python
-class NormalizedIOC(BaseModel):
-    """IOC record after normalization and enrichment."""
-
-    model_config = ConfigDict(frozen=True)
-
-    # Core fields (from IOCRecord)
-    id: int
-    type: IOCType
-    value: str
-    first_seen: datetime
-    last_seen: datetime
-    status: IOCStatus
-
-    # Normalized fields
-    normalized_value: str = Field(
-        ...,
-        description="Canonical form of the IOC value",
-    )
-    normalized_type: str = Field(
-        ...,
-        description="Standardized type string",
-    )
-
-    # Quality fields
-    quality_score: float = Field(
-        default=1.0,
-        ge=0.0,
-        le=1.0,
-        description="Quality score 0.0-1.0",
-    )
-    quality_flags: list[str] = Field(
-        default_factory=list,
-        description="Quality issue flags",
-    )
-
-    # Provenance
-    source_page: int = Field(
-        ...,
-        description="API page where this record was found",
-    )
-    processing_timestamp: datetime = Field(
-        ...,
-        description="When this record was processed",
-    )
-
-    # Dedup
-    content_hash: str = Field(
-        ...,
-        description="SHA-256 hash of type+normalized_value",
-    )
-    is_unique: bool = Field(
-        default=True,
-        description="Whether this record is unique",
-    )
-```
-
----
-
-### ScoredIOC
-
-Hesaplanmış risk puanına sahip IOC kaydı.
-
-```python
-class ScoredIOC(BaseModel):
-    """IOC record with computed risk assessment."""
-
-    record: NormalizedIOC
-    risk_score: float = Field(ge=0.0, le=10.0)
-    risk_factors: list[RiskFactor]
-    confidence: float = Field(ge=0.0, le=1.0)
-    recommended_action: str
-```
-
----
-
-## API Yanıt Modelleri
-
-### APIResponse
-
-```python
-class APIResponse(BaseModel):
-    """Response from the TC SGB API."""
-
-    data: list[IOCRecord]
-    meta: PaginationMeta
-```
-
-### PaginationMeta
-
-```python
-class PaginationMeta(BaseModel):
-    """Pagination metadata from API response."""
-
-    total: int = Field(
-        ...,
-        description="Total number of records",
-        ge=0,
-    )
-    page: int = Field(
-        ...,
-        description="Current page number",
-        ge=1,
-    )
-    per_page: int = Field(
-        ...,
-        description="Records per page",
-        ge=1,
-        le=9999,
-    )
-```
-
-### APIErrorResponse
-
-```python
-class APIErrorResponse(BaseModel):
-    """Error response from the API."""
-
-    error: str = Field(..., description="Error code")
-    message: str = Field(..., description="Human-readable error message")
-```
-
----
+Bu belge, TC-SGB-API-to-List sisteminde kullanılan tüm veri modellerini, şemaları, alan tanımlarını ve numaralandırmaları tanımlar. Tüm modeller doğrulama ve seri hale getirme için Pydantic v2 kullanır.
 
 ## Numaralandırmalar
 
 ### IOCType
 
+Tehdit göstergesi tipi sınıflandırması.
+
 ```python
 class IOCType(str, Enum):
-    """Types of Indicators of Compromise."""
-
     DOMAIN = "domain"
-    """Malicious domain name"""
-
-    IP = "ip"
-    """IPv4 address"""
-
-    IP6 = "ip6"
-    """IPv6 address"""
-
-    IP6NET = "ip6net"
-    """IPv6 network (CIDR notation)"""
-
     URL = "url"
-    """Malicious URL"""
+    IP = "ip"
+    IP6 = "ip6"
+    IP6NET = "ip6net"
 ```
 
-### IOCStatus
+### DescriptionCategory
+
+SGB API'sinden gelen tehdit açıklama kategorisi.
 
 ```python
-class IOCStatus(str, Enum):
-    """Status of an IOC record."""
-
-    ACTIVE = "active"
-    """IOC is currently active/threatening"""
-
-    INACTIVE = "inactive"
-    """IOC is no longer active"""
-
-    UNKNOWN = "unknown"
-    """Status cannot be determined"""
+class DescriptionCategory(str, Enum):
+    PHISHING = "PH"
+    FINANCIAL_PHISHING = "BP"
+    MALWARE_DIST_DOMAIN = "MD"
+    MALWARE_DIST_IP = "MI"
+    MALWARE_DIST_URL = "MU"
+    MALWARE_CMD_CENTER = "MC"
+    CYBER_ATTACK = "CA"
 ```
 
-### RiskLevel
+### Source
+
+IOC raporunun geldiği kaynak.
 
 ```python
-class RiskLevel(str, Enum):
-    """Risk classification levels."""
-
-    CRITICAL = "critical"
-    """Immediate threat, requires urgent action"""
-
-    HIGH = "high"
-    """Significant threat, prioritize remediation"""
-
-    MEDIUM = "medium"
-    """Moderate threat, schedule remediation"""
-
-    LOW = "low"
-    """Minor threat, monitor"""
-
-    INFO = "info"
-    """Informational, no immediate action needed"""
+class Source(str, Enum):
+    USOM = "US"   # Ulusal Siber Olay Müdahale
+    SOME = "SO"   # Siber Olayları Müdahale Ekipleri
+    RSA = "RS"    # Regional Security Assessment
+    IHBAR = "IH"  # İhbar
+    SGB = "SB"    # Siber Güvenlik Başkanlığı
 ```
 
-### OutputFormat
+### ConnectionType
+
+Ağ bağlantısı tipi sınıflandırması.
 
 ```python
-class OutputFormat(str, Enum):
-    """Supported output formats."""
-
-    JSON = "json"
-    STIX = "stix"
-    CSV = "csv"
-    MISP = "misp"
-    OPENIOC = "openioc"
-    SIGMA = "sigma"
-    YARA = "yara"
-    CEF = "cef"
-    LEEF = "leef"
-    SYSLOG = "syslog"
-    HTML = "html"
-    MARKDOWN = "markdown"
-    PDF = "pdf"
-    SPLUNK = "splunk"
-    QRADAR = "qradar"
-    ELASTIC = "elastic"
-    GRAFANA = "grafana"
+class ConnectionType(str, Enum):
+    APT_CNC = "AC"
+    BOTNET_CNC = "BC"
+    EXPLOIT_KIT = "EK"
+    MOBILE_CNC = "MC"
+    MALWARE_DOWNLOAD = "MF"
+    MINING_MALWARE = "MM"
+    OTHER = "OT"
+    PHISHING = "PH"
 ```
 
-### ValidationSeverity
+## API Yanıt Modelleri
+
+### PaginatedResponse
+
+Gerçek SGB API alan adlarıyla eşleşen genel sayfalı yanıt sarmalayıcısı.
 
 ```python
-class ValidationSeverity(str, Enum):
-    """Severity levels for validation errors."""
-
-    CRITICAL = "critical"
-    """Record must be rejected"""
-
-    HIGH = "high"
-    """Record should be rejected"""
-
-    MEDIUM = "medium"
-    """Record should be flagged"""
-
-    LOW = "low"
-    """Informational flag only"""
+class PaginatedResponse(BaseModel, Generic[T]):
+    models: list[T] = Field(default_factory=list)
+    totalCount: int = 0
+    count: int = 0
+    page: int = 0
+    pageCount: int = 0
 ```
 
----
+### AddressRecord
 
-## Sonuç Modelleri
+`/api/address/index` endpoint'inden gelen tek IOC kaydı.
 
-### ValidationResult
+| Alan | Tip | Varsayılan | Açıklama |
+|------|-----|-----------|----------|
+| `id` | `int` | — | Benzersiz tanımlayıcı |
+| `url` | `str` | `""` | IOC değeri (alan adı, IP, URL) |
+| `type` | `str` | `""` | IOC tipi kodu |
+| `desc` | `str` | `""` | Açıklama kategori kodu |
+| `source` | `str` | `""` | Kaynak kodu |
+| `date` | `str` | `""` | Gözlem tarihi |
+| `criticality_level` | `int` | `10` | Kritiklik düzeyi (1=en yüksek) |
+| `connectiontype` | `str` | `""` | Bağlantı tipi kodu |
+
+### DescriptionRecord
+
+`/api/address-description/index` referans kaydı.
+
+| Alan | Tip | Varsayılan | Açıklama |
+|------|-----|-----------|----------|
+| `id` | `str` | — | Açıklama kategori kodu |
+| `tr_title` | `str` | `""` | Türkçe başlık |
+| `en_title` | `str` | `""` | İngilizce başlık |
+| `tr_desc` | `str` | `""` | Türkçe açıklama |
+| `en_desc` | `str` | `""` | İngilizce açıklama |
+
+### ConnectionTypeRecord
+
+`/api/address-connection-type/index` referans kaydı.
+
+| Alan | Tip | Varsayılan | Açıklama |
+|------|-----|-----------|----------|
+| `id` | `str` | — | Bağlantı tipi kodu |
+| `tr_title` | `str` | `""` | Türkçe başlık |
+| `en_title` | `str` | `""` | İngilizce başlık |
+
+### SourceRecord
+
+`/api/address-source/index` referans kaydı.
+
+| Alan | Tip | Varsayılan | Açıklama |
+|------|-----|-----------|----------|
+| `id` | `str` | — | Kaynak kodu |
+| `tr_title` | `str` | `""` | Türkçe başlık |
+| `en_title` | `str` | `""` | İngilizce başlık |
+
+### IncidentRecord
+
+`/api/incident/index` kaydı.
+
+| Alan | Tip | Varsayılan | Açıklama |
+|------|-----|-----------|----------|
+| `id` | `int` | — | Olay ID'si |
+| `title` | `str` | `""` | Başlık |
+| `desc` | `str` | `""` | Açıklama |
+| `date` | `str` | `""` | Tarih |
+| `active` | `bool` | `True` | Aktif durum |
+| `slug` | `str` | `""` | URL slug |
+| `language` | `str` | `""` | Dil kodu |
+
+### AnnouncementRecord
+
+`/api/announcement/index` kaydı.
+
+| Alan | Tip | Varsayılan | Açıklama |
+|------|-----|-----------|----------|
+| `id` | `int` | — | Duyuru ID'si |
+| `title` | `str` | `""` | Başlık |
+| `desc` | `str` | `""` | Açıklama |
+| `date` | `str` | `""` | Tarih |
+| `active` | `bool` | `True` | Aktif durum |
+| `slug` | `str` | `""` | URL slug |
+| `language` | `str` | `""` | Dil kodu |
+
+## Hattın Veri Modelleri
+
+### ValidatedIOC
+
+Doğrulamayı geçmiş bir IOC.
+
+| Alan | Tip | Varsayılan | Açıklama |
+|------|-----|-----------|----------|
+| `raw_url` | `str` | — | Orijinal IOC değeri |
+| `ioc_type` | `IOCType` | — | Sınıflandırılmış IOC tipi |
+| `desc` | `DescriptionCategory \| None` | `None` | Açıklama kategorisi |
+| `source` | `Source \| None` | `None` | Geldiği kaynak |
+| `date` | `datetime \| None` | `None` | Gözlem tarihi |
+| `criticality_level` | `int` | `10` | Kritiklik (1=en yüksek) |
+| `connectiontype` | `ConnectionType \| None` | `None` | Bağlantı tipi |
+| `original_id` | `int` | `0` | Orijinal API kayıt ID'si |
+| `validation_errors` | `list[str]` | `[]` | Ölümcül olmayan doğrulama notları |
+
+### NormalizedIOC
+
+Küçük harfe dönüştürülmüş, kırpılmış, IDN çözümlenmiş, standart port çıkarılmış bir IOC.
+
+| Alan | Tip | Varsayılan | Açıklama |
+|------|-----|-----------|----------|
+| `value` | `str` | — | Normalize edilmiş IOC değeri |
+| `ioc_type` | `IOCType` | — | Sınıflandırılmış IOC tipi |
+| `desc` | `DescriptionCategory \| None` | `None` | Açıklama kategorisi |
+| `source` | `Source \| None` | `None` | Geldiği kaynak |
+| `date` | `datetime \| None` | `None` | Gözlem tarihi |
+| `criticality_level` | `int` | `10` | Kritiklik (1=en yüksek) |
+| `connectiontype` | `ConnectionType \| None` | `None` | Bağlantı tipi |
+| `original_id` | `int` | `0` | Orijinal API kayıt ID'si |
+| `normalization_notes` | `list[str]` | `[]` | Normalizasyon günlüğü |
+
+### ScoredIOC
+
+Kalite / güven puanı eklenmiş bir IOC.
+
+| Alan | Tip | Varsayılan | Açıklama |
+|------|-----|-----------|----------|
+| `value` | `str` | — | Normalize edilmiş IOC değeri |
+| `ioc_type` | `IOCType` | — | Sınıflandırılmış IOC tipi |
+| `desc` | `DescriptionCategory \| None` | `None` | Açıklama kategorisi |
+| `source` | `Source \| None` | `None` | Geldiği kaynak |
+| `date` | `datetime \| None` | `None` | Gözlem tarihi |
+| `criticality_level` | `int` | `10` | Kritiklik (1=en yüksek) |
+| `connectiontype` | `ConnectionType \| None` | `None` | Bağlantı tipi |
+| `original_id` | `int` | `0` | Orijinal API kayıt ID'si |
+| `quality_score` | `float` | `0.0` | Güven puanı (0–100) |
+| `false_positive_risk` | `str` | `"low"` | Yanlış pozitif risk düzeyi |
+| `flags` | `list[str]` | `[]` | Tekilleştirme meta verisi ve kalite imleri |
+
+### PipelineStats
+
+Bir hattı çalıştırma sırasında toplanan istatistikler.
+
+| Alan | Tip | Varsayılan | Açıklama |
+|------|-----|-----------|----------|
+| `total_fetched` | `int` | `0` | API'den çekilen kayıt sayısı |
+| `after_validation` | `int` | `0` | Doğrulamayı geçen kayıt sayısı |
+| `after_normalization` | `int` | `0` | Normalizasyon sonrası kayıt sayısı |
+| `after_dedup` | `int` | `0` | Tekilleştirme sonrası kayıt sayısı |
+| `after_quality` | `int` | `0` | Kalite filtresi sonrası kayıt sayısı |
+| `by_type` | `dict[str, int]` | `{}` | IOC tipine göre sayım |
+| `by_source` | `dict[str, int]` | `{}` | Kaynağa göre sayım |
+| `by_desc` | `dict[str, int]` | `{}` | Açıklama kategorisine göre sayım |
+| `by_criticality` | `dict[int, int]` | `{}` | Kritiklik düzeyine göre sayım |
+| `validation_rejected` | `int` | `0` | Doğrulama tarafından reddedilen |
+| `quality_rejected` | `int` | `0` | Kalite tarafından reddedilen |
+| `duplicates_removed` | `int` | `0` | Kaldırılan mükerrer kayıt |
+| `fetch_duration_seconds` | `float` | `0.0` | Çekme süresi |
+| `pipeline_duration_seconds` | `float` | `0.0` | Toplam hattı süresi |
+| `errors` | `list[str]` | `[]` | Hata mesajları |
+
+## İstemci Modelleri
+
+### APIError
+
+SGB API'si 2xx dışı bir yanıt döndürdüğünde oluşan istisna.
 
 ```python
-class ValidationResult(BaseModel):
-    """Result of validating a single IOC record."""
-
-    record_id: int
-    is_valid: bool
-    errors: list[ValidationError]
-    warnings: list[ValidationWarning]
-    processing_time_ms: float
+class APIError(Exception):
+    status_code: int   # HTTP durum kodu
+    detail: str        # Hata mesajı
+    url: str           # İstek URL'si
 ```
 
-### BatchValidationResult
+### AsyncAPIClient
 
-```python
-class BatchValidationResult(BaseModel):
-    """Result of validating a batch of records."""
+SGB API'si için asenkron HTTP istemcisi. Kimlik doğrulama gerekmez.
 
-    total_records: int
-    valid_records: int
-    invalid_records: int
-    warnings_count: int
-    validation_errors: list[ValidationReport]
-    processing_time_ms: float
-    pass_rate: float = Field(ge=0.0, le=1.0)
+| Parametre | Tip | Varsayılan | Açıklama |
+|-----------|-----|-----------|----------|
+| `base_url` | `str` | `https://siberguvenlik.gov.tr` | API temel URL'si |
+| `max_retries` | `int` | `3` | Maksimum yeniden deneme |
+| `rate_limit` | `float` | `10.0` | Saniye başına istek |
+| `timeout` | `float` | `60.0` | HTTP zaman aşımı (saniye) |
+
+## Tekilleştirici Modelleri
+
+### DeduplicationResult
+
+Skorlanmış IOC listesinin tekilleştirilmesinin sonucu.
+
+| Alan | Tip | Açıklama |
+|------|-----|----------|
+| `kept` | `list[ScoredIOC]` | Tekilleştirilmiş IOC listesi |
+| `removed_count` | `int` | Kaldırılan mükerrer kayıt sayısı |
+| `merge_log` | `list[str]` | Birleştirme karar günlüğü |
+
+## Veri Akışı
+
+Hatt veriyi şu model aşamalarından geçirerek dönüştürür:
+
 ```
-
-### ValidationError
-
-```python
-class ValidationError(BaseModel):
-    """A single validation error."""
-
-    rule_id: str = Field(
-        ...,
-        description="Unique rule identifier (e.g., V001)",
-    )
-    field: str = Field(
-        ...,
-        description="Field that failed validation",
-    )
-    severity: ValidationSeverity
-    message: str = Field(
-        ...,
-        description="Human-readable error description",
-    )
-    value: Any = Field(
-        ...,
-        description="The invalid value",
-    )
-```
-
-### ValidationWarning
-
-```python
-class ValidationWarning(BaseModel):
-    """A validation warning (non-fatal)."""
-
-    rule_id: str
-    field: str
-    message: str
-    value: Any
-```
-
-### ValidationReport
-
-```python
-class ValidationReport(BaseModel):
-    """Detailed validation report for a record."""
-
-    record_id: int
-    passed: bool
-    checks_run: int
-    checks_passed: int
-    checks_failed: int
-    checks_warned: int
-    errors: list[ValidationError]
-    warnings: list[ValidationWarning]
-```
-
----
-
-## Normalizasyon Modelleri
-
-### NormalizationTransform
-
-```python
-class NormalizationTransform(BaseModel):
-    """Record of a normalization transformation applied."""
-
-    field: str = Field(..., description="Field that was transformed")
-    original: str = Field(..., description="Original value")
-    normalized: str = Field(..., description="Normalized value")
-    transforms_applied: list[str] = Field(
-        ...,
-        description="List of transform names applied",
-    )
-```
-
-### NormalizationResult
-
-```python
-class NormalizationResult(BaseModel):
-    """Result of normalizing a batch of records."""
-
-    total_input: int
-    total_output: int
-    transforms_applied: int
-    unique_transforms: list[str]
-    processing_time_ms: float
-```
-
----
-
-## Tekilleştirme Modelleri
-
-### DedupConfig
-
-```python
-class DedupConfig(BaseModel):
-    """Configuration for deduplication engine."""
-
-    exact_match: bool = Field(
-        default=True,
-        description="Enable exact hash matching",
-    )
-    semantic_match: bool = Field(
-        default=True,
-        description="Enable semantic matching (URL path, etc.)",
-    )
-    subdomain_dedup: bool = Field(
-        default=False,
-        description="Enable subdomain deduplication",
-    )
-    subdomain_depth: int = Field(
-        default=2,
-        description="Number of domain levels for subdomain dedup",
-        ge=1,
-        le=5,
-    )
-    case_sensitive: bool = Field(
-        default=False,
-        description="Case-sensitive comparison",
-    )
-```
-
-### DedupResult
-
-```python
-class DedupResult(BaseModel):
-    """Result of deduplication."""
-
-    total_input: int
-    total_output: int
-    duplicates_removed: int
-    dedup_ratio: float = Field(ge=0.0, le=1.0)
-    by_type: dict[str, DedupStats]
-    processing_time_ms: float
-    merge_log: list[DedupMergeEvent]
-```
-
-### DedupStats
-
-```python
-class DedupStats(BaseModel):
-    """Deduplication statistics per IOC type."""
-
-    input_count: int
-    output_count: int
-    duplicates_removed: int
-    dedup_ratio: float
-```
-
-### DedupMergeEvent
-
-```python
-class DedupMergeEvent(BaseModel):
-    """Record of a deduplication merge event."""
-
-    primary_id: int
-    merged_ids: list[int]
-    merge_reason: str
-    original_values: list[str]
-```
-
----
-
-## Kalite Modelleri
-
-### QualityReport
-
-```python
-class QualityReport(BaseModel):
-    """Comprehensive quality analysis report."""
-
-    overall_score: float = Field(ge=0.0, le=1.0)
-    statistics: DatasetStatistics
-    false_positives: list[FPFlag]
-    anomalies: list[Anomaly]
-    per_type_scores: dict[str, float]
-    recommendations: list[str]
-    processing_time_ms: float
-```
-
-### DatasetStatistics
-
-```python
-class DatasetStatistics(BaseModel):
-    """Statistical summary of the IOC dataset."""
-
-    total_records: int
-    records_by_type: dict[str, int]
-    records_by_status: dict[str, int]
-    date_range: DateRange
-    avg_value_length: float
-    median_value_length: float
-    unique_values: int
-    duplicate_count: int
-```
-
-### FPFlag
-
-```python
-class FPFlag(BaseModel):
-    """A potential false positive flag."""
-
-    record_id: int
-    value: str
-    flag_type: str
-    confidence: float = Field(ge=0.0, le=1.0)
-    reason: str
-    recommendation: str
-```
-
-### Anomaly
-
-```python
-class Anomaly(BaseModel):
-    """A detected anomaly in the dataset."""
-
-    anomaly_type: str
-    description: str
-    affected_records: list[int]
-    severity: RiskLevel
-    recommendation: str
-```
-
----
-
-## Çıktı Modelleri
-
-### OutputFile
-
-```python
-class OutputFile(BaseModel):
-    """Metadata about a generated output file."""
-
-    format: OutputFormat
-    path: Path
-    size_bytes: int
-    record_count: int
-    checksum_sha256: str
-    encoding: str = "utf-8"
-    mime_type: str
-    generation_time_ms: float
-```
-
-### OutputConfig
-
-```python
-class OutputConfig(BaseModel):
-    """Configuration for output generation."""
-
-    enabled_formats: list[OutputFormat] = Field(
-        default_factory=lambda: list(OutputFormat),
-        description="Formats to generate",
-    )
-    output_dir: Path = Field(
-        default=Path("output"),
-        description="Output directory",
-    )
-    compress: bool = Field(
-        default=False,
-        description="Compress output files (gzip)",
-    )
-    include_metadata: bool = Field(
-        default=True,
-        description="Include metadata headers",
-    )
-    include_lineage: bool = Field(
-        default=False,
-        description="Include data lineage info",
-    )
-```
-
----
-
-## Boru Hattı Modelleri
-
-### PipelineConfig
-
-```python
-class PipelineConfig(BaseModel):
-    """Complete pipeline configuration."""
-
-    api: ClientConfig = Field(default_factory=ClientConfig)
-    validation: ValidationConfig = Field(default_factory=ValidationConfig)
-    normalization: NormalizationConfig = Field(default_factory=NormalizationConfig)
-    dedup: DedupConfig = Field(default_factory=DedupConfig)
-    quality: QualityConfig = Field(default_factory=QualityConfig)
-    output: OutputConfig = Field(default_factory=OutputConfig)
-    publish: PublishConfig = Field(default_factory=PublishConfig)
-    logging: LoggingConfig = Field(default_factory=LoggingConfig)
-```
-
-### PipelineResult
-
-```python
-class PipelineResult(BaseModel):
-    """Final result of pipeline execution."""
-
-    success: bool
-    version: str
-    start_time: datetime
-    end_time: datetime
-    duration_seconds: float
-    stages: list[StageResult]
-    input_record_count: int
-    output_record_count: int
-    output_files: list[OutputFile]
-    quality_report: QualityReport
-    errors: list[PipelineError]
-```
-
-### StageResult
-
-```python
-class StageResult(BaseModel):
-    """Result of a single pipeline stage."""
-
-    stage_name: str
-    status: str  # "success", "partial", "failed"
-    input_count: int
-    output_count: int
-    duration_ms: float
-    details: dict[str, Any]
-```
-
-### PipelineError
-
-```python
-class PipelineError(BaseModel):
-    """An error that occurred during pipeline execution."""
-
-    stage: str
-    error_type: str
-    message: str
-    record_id: Optional[int]
-    timestamp: datetime
-    recoverable: bool
-```
-
----
-
-## Yapılandırma Modelleri
-
-### ClientConfig
-
-```python
-class ClientConfig(BaseModel):
-    """HTTP client configuration."""
-
-    base_url: str = "https://siberguvenlik.gov.tr"
-    max_concurrent: int = Field(default=5, ge=1, le=20)
-    request_timeout: float = Field(default=30.0, gt=0)
-    retry_max: int = Field(default=3, ge=0)
-    retry_base_delay: float = Field(default=0.5, gt=0)
-    per_page: int = Field(default=500, ge=1, le=9999)
-    user_agent: str = "tc-sgb/{version}"
-```
-
-### ValidationConfig
-
-```python
-class ValidationConfig(BaseModel):
-    """Validation configuration."""
-
-    strict_mode: bool = Field(default=False)
-    max_value_length: int = Field(default=2048, gt=0)
-    allow_control_chars: bool = Field(default=False)
-    check_encoding: bool = Field(default=True)
-    check_self_reference: bool = Field(default=True)
-```
-
-### NormalizationConfig
-
-```python
-class NormalizationConfig(BaseModel):
-    """Normalization configuration."""
-
-    lowercase_values: bool = True
-    strip_whitespace: bool = True
-    normalize_urls: bool = True
-    remove_fragments: bool = True
-    remove_tracking_params: bool = True
-    normalize_dates: bool = True
-    target_date_format: str = "iso8601"
-```
-
-### QualityConfig
-
-```python
-class QualityConfig(BaseModel):
-    """Quality analysis configuration."""
-
-    enable_fp_detection: bool = True
-    enable_anomaly_detection: bool = True
-    min_quality_score: float = Field(default=0.5, ge=0.0, le=1.0)
-    whitelist_file: Optional[Path] = None
-    strict_whitelist: bool = False
-```
-
-### LoggingConfig
-
-```python
-class LoggingConfig(BaseModel):
-    """Logging configuration."""
-
-    level: str = "INFO"
-    format: str = "json"  # "json" or "text"
-    file: Optional[Path] = None
-    max_bytes: int = 10 * 1024 * 1024  # 10MB
-    backup_count: int = 5
+API Yanıtı (PaginatedResponse[AddressRecord])
+    → ValidatedIOC[]
+    → NormalizedIOC[]
+    → ScoredIOC[]
+    → DeduplicationResult
+    → ScoredIOC[] (nihai, çıktı dosyalarına yazılır)
 ```

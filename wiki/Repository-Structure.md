@@ -150,7 +150,7 @@ TC-SGB-API-to-List/
 
 ### Tests (`tests/`)
 
-Flat structure — no subdirectories. 13 files total, 438 tests, 100% coverage.
+Flat structure — no subdirectories. 14 files total, 438 tests, 100% coverage.
 
 | File | Focus |
 |------|-------|
@@ -238,7 +238,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "tc-sgb"
-version = "1.0.0"
+version = "0.2.0.0"
 description = "Threat Intelligence Pipeline for TC SGB API"
 requires-python = ">=3.11"
 license = "MIT"
@@ -500,7 +500,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "tc-sgb"
-version = "1.0.0"
+version = "0.2.0.0"
 description = "Threat Intelligence Pipeline for TC SGB API"
 requires-python = ">=3.11"
 license = "MIT"

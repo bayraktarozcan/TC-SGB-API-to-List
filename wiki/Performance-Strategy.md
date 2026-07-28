@@ -341,22 +341,19 @@ def process_in_chunks(records, chunk_size=1000):
 ### 3. Deduplication Optimization
 
 ```python
-# Use Bloom filter for probabilistic dedup
-from pybloom_live import BloomFilter
-
-
-class OptimizedDeduplicator:
-    def __init__(self, expected_items=500_000, error_rate=0.001):
-        self.bloom = BloomFilter(capacity=expected_items, error_rate=error_rate)
-        self.exact_set = set()  # For exact matching
-
-    def is_duplicate(self, record_hash: str) -> bool:
-        """Check if record is duplicate using Bloom filter first."""
-        if record_hash in self.bloom:
-            # Bloom filter says maybe - check exact set
-            return record_hash in self.exact_set
-        # Bloom filter says definitely not duplicate
-        self.bloom.add(record_hash)
+# Example: Use Bloom filter for probabilistic pre-filtering
+# (Not currently implemented — the actual deduplicator uses dict-based exact matching)
+# from pybloom_live import BloomFilter
+#
+# class OptimizedDeduplicator:
+#     def __init__(self, expected_items=500_000, error_rate=0.001):
+#         self.bloom = BloomFilter(capacity=expected_items, error_rate=error_rate)
+#         self.exact_set = set()
+#
+#     def is_duplicate(self, record_hash: str) -> bool:
+#         if record_hash in self.bloom:
+#             return record_hash in self.exact_set
+#         self.bloom.add(record_hash)
         self.exact_set.add(record_hash)
         return False
 ```
@@ -789,24 +786,21 @@ def process_in_chunks(records, chunk_size=1000):
 ### 3. Tekrar Kaldırma Optimizasyonu
 
 ```python
-# Use Bloom filter for probabilistic dedup
-from pybloom_live import BloomFilter
-
-
-class OptimizedDeduplicator:
-    def __init__(self, expected_items=500_000, error_rate=0.001):
-        self.bloom = BloomFilter(capacity=expected_items, error_rate=error_rate)
-        self.exact_set = set()  # For exact matching
-
-    def is_duplicate(self, record_hash: str) -> bool:
-        """Check if record is duplicate using Bloom filter first."""
-        if record_hash in self.bloom:
-            # Bloom filter says maybe - check exact set
-            return record_hash in self.exact_set
-        # Bloom filter says definitely not duplicate
-        self.bloom.add(record_hash)
-        self.exact_set.add(record_hash)
-        return False
+# Örnek: Olasılıksal ön filtreleme için Bloom filtresi kullanımı
+# (Henüz uygulanmadı — mevcut tekilleştirici dict tabanlı eşleşme kullanır)
+# from pybloom_live import BloomFilter
+#
+# class OptimizedDeduplicator:
+#     def __init__(self, expected_items=500_000, error_rate=0.001):
+#         self.bloom = BloomFilter(capacity=expected_items, error_rate=error_rate)
+#         self.exact_set = set()
+#
+#     def is_duplicate(self, record_hash: str) -> bool:
+#         if record_hash in self.bloom:
+#             return record_hash in self.exact_set
+#         self.bloom.add(record_hash)
+#         self.exact_set.add(record_hash)
+#         return False
 ```
 
 ### 4. Çıktı Optimizasyonu
