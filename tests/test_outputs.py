@@ -441,8 +441,7 @@ class TestWriteToPath:
         path = temp_dir / "out.csv"
         generate_csv(scored_iocs, path=path)
         disk_content = path.read_text(encoding="utf-8")
-        _url_sanitized_disk_content = disk_content
-        assert "evil-phish.com" in _url_sanitized_disk_content
+        assert "evil-phish.com" in disk_content  # lgtm [py/incomplete-url-substring-sanitization]
         assert len(disk_content) > 10
 
     def test_json_write(self, scored_iocs, temp_dir):
