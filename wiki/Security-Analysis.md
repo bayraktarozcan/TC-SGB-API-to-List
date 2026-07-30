@@ -310,8 +310,8 @@ chown -R tc-sgb:tc-sgb /opt/tc-sgb/
 # SAFE: Structured logging without sensitive data
 logger.info("fetched_page", page=page_num, records=len(records))
 
-# UNSAFE: Logging raw IOC data
-logger.debug(f"IOC data: {record}")  # NEVER DO THIS
+# UNSAFE: Logging raw IoC data
+logger.debug(f"IoC data: {record}")  # NEVER DO THIS
 
 # UNSAFE: Logging with f-string interpolation
 logger.info(f"Processing {len(records)} records from {url}")  # Prefer structured
@@ -720,8 +720,8 @@ chown -R tc-sgb:tc-sgb /opt/tc-sgb/
 # GÜVENLİ: Hassas veri olmayan yapılandırılmış kayıt
 logger.info("fetched_page", page=page_num, records=len(records))
 
-# GÜVENLİSİZ: Ham IOC verisini kaydetme
-logger.debug(f"IOC data: {record}")  # BUNU ASLA YAPMAYIN
+# GÜVENLİSİZ: Ham IoC verisini kaydetme
+logger.debug(f"IoC data: {record}")  # BUNU ASLA YAPMAYIN
 
 # GÜVENLİSİZ: f-string ile kayıt
 logger.info(f"Processing {len(records)} records from {url}")  # Yapılandırılmış tercih edin

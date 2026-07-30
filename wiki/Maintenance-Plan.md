@@ -50,7 +50,7 @@ This document defines the ongoing maintenance procedures for the TC-SGB-API-to-L
 
   Task                      Schedule         Action
   +------------------------+----------------+------------------------+
-  | Pipeline execution      | Daily 06:00 UTC| Fetch & process IOCs   |
+  | Pipeline execution      | Daily 06:00 UTC| Fetch & process IoCs   |
   | Dependency check        | Daily 00:00 UTC| Dependabot scan        |
   | Test suite              | On every push  | CI pipeline            |
   | Output validation       | After pipeline | Quality checks         |
@@ -496,7 +496,7 @@ Bu belge, TC-SGB-API-to-List projesi için devam eden bakım prosedürlerini, d�
 
   Görev                    Zamanlama          Eylem
   +------------------------+----------------+------------------------+
-  | Hat çalıştırması       | Günlük 06:00 UTC| IOC'leri çek ve işle  |
+  | Hat çalıştırması       | Günlük 06:00 UTC| IoC'leri çek ve işle  |
   | Bağımlılık kontrolü    | Günlük 00:00 UTC| Dependabot taraması   |
   | Test paketi            | Her push'ta     | CI hattı               |
   | Çıkış doğrulama        | Hat sonrasında   | Kalite kontrolleri     |

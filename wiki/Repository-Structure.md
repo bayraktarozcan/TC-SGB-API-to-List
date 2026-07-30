@@ -146,7 +146,7 @@ TC-SGB-API-to-List/
 | `quality.py` | Functions: `score_ioc()`, `score_iocs()`, `filter_false_positives()`, plus FP detection helpers |
 | `outputs.py` | 17 `generate_*()` functions + `FORMAT_REGISTRY` dict + `generate_all()` orchestrator |
 | `pipeline.py` | `Pipeline` class (orchestrator), `run_pipeline_sync()` entry point |
-| `changelog.py` | Functions: `generate_changelog()`, `format_changelog_markdown()`, IOC diff engine |
+| `changelog.py` | Functions: `generate_changelog()`, `format_changelog_markdown()`, IoC diff engine |
 
 ### Tests (`tests/`)
 
@@ -299,7 +299,7 @@ TC-SGB-API-to-List/
 │       ├── normalizer.py              # Veri normalizasyon fonksiyonları
 │       ├── deduplicator.py            # Tekilleştirme motoru
 │       ├── quality.py                 # Kalite puanlama ve FP tespiti
-│       ├── outputs.py                 # Çıktı üretimi (17 format)
+│       ├── outputs.py                 # Çıktı üretimi (17 biçim)
 │       └── pipeline.py                # Hat orkestratörü
 │
 ├── tests/                             # Düz test yapısı (alt dizin yok)
@@ -408,7 +408,7 @@ TC-SGB-API-to-List/
 | `quality.py` | Fonksiyonlar: `score_ioc()`, `score_iocs()`, `filter_false_positives()`, FP tespit yardımcıları |
 | `outputs.py` | 17 `generate_*()` fonksiyonu + `FORMAT_REGISTRY` sözlüğü + `generate_all()` orkestratörü |
 | `pipeline.py` | `Pipeline` sınıfı (orkestratör), `run_pipeline_sync()` giriş noktası |
-| `changelog.py` | Fonksiyonlar: `generate_changelog()`, `format_changelog_markdown()`, IOC fark motoru |
+| `changelog.py` | Fonksiyonlar: `generate_changelog()`, `format_changelog_markdown()`, IoC fark motoru |
 
 ### Testler (`tests/`)
 
@@ -424,7 +424,7 @@ Düz yapı — alt dizin yok. Toplam 13 dosya, 438 test, %100 kapsama.
 | `test_normalizer.py` | Veri normalizasyonu dönüşümleri |
 | `test_deduplicator.py` | Tekilleştirme mantığı |
 | `test_quality.py` | Kalite puanlama ve FP tespiti |
-| `test_outputs.py` | Çıktı formatı üretimi |
+| `test_outputs.py` | Çıktı biçimi üretimi |
 | `test_pipeline.py` | Uçtan uca hat orkestrasyonu |
 | `test_regression.py` | Anlık görüntü / çıktı kararlılığı |
 | `test_fuzz.py` | Özelliğe dayalı ve fuzz testleri |

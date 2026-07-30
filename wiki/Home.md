@@ -7,7 +7,7 @@
 
 ## Overview
 
-TC-SGB-API-to-List is an automated threat intelligence pipeline that ingests Indicator of Compromise (IOC) data from the Turkish National Cyber Security Directorate (TC SGB) public API, processes it through validation, normalization, deduplication, and quality control stages, and outputs structured threat intelligence in 17 interoperable formats.
+TC-SGB-API-to-List is an automated threat intelligence pipeline that ingests Indicator of Compromise (IoC) data from the Turkish National Cyber Security Directorate (TC SGB) public API, processes it through validation, normalization, deduplication, and quality control stages, and outputs structured threat intelligence in 17 interoperable formats.
 
 ---
 
@@ -52,7 +52,7 @@ git clone https://github.com/bayraktarozcan/TC-SGB-API-to-List.git
 cd TC-SGB-API-to-List
 pip install -e .
 
-# Fetch all IOC data
+# Fetch all IoC data
 tc-sgb fetch
 
 # Generate all output formats
@@ -91,7 +91,7 @@ tc-sgb generate -i output/raw_records.json
 
 ## Genel Bakış
 
-TC-SGB-API-to-List, T.C. Siber Güvenlik Başkanlığı (TC SGB) kamu API'sinden İhlal Göstergesi (IOC) verilerini otomatik olarak çekip doğrulama, normalleştirme, tekilleştirme ve kalite kontrol aşamalarından geçiren, 17 uyumlu formatta yapılandırılmış tehdit istihbaratı üreten bir otomatik tehdit istihbaratı hattıdır.
+TC-SGB-API-to-List, T.C. Siber Güvenlik Başkanlığı (TC SGB) kamu API'sinden İhlal Göstergesi (IoC) verilerini otomatik olarak çekip doğrulama, normalleştirme, tekilleştirme ve kalite kontrol aşamalarından geçiren, 17 uyumlu biçimde yapılandırılmış tehdit istihbaratı üreten bir otomatik tehdit istihbaratı hattıdır.
 
 ---
 
@@ -112,7 +112,7 @@ TC-SGB-API-to-List, T.C. Siber Güvenlik Başkanlığı (TC SGB) kamu API'sinden
 ## Mimari Özet
 
 ```
-TC SGB API ──► Çekme ──► Doğrulama ──► Normalleştirme ──► Tekilleştirme ──► Puanlama ──► Çıktı (17 format)
+TC SGB API ──► Çekme ──► Doğrulama ──► Normalleştirme ──► Tekilleştirme ──► Puanlama ──► Çıktı (17 biçim)
 ```
 
 ---
@@ -123,7 +123,7 @@ TC SGB API ──► Çekme ──► Doğrulama ──► Normalleştirme ─�
 - **Pydantic veri modelleri** sıkı doğrulama ile
 - **Çapraz tür yineleme kaldırma** meta veri birleştirme ile
 - **Kalite puanlama** sahte pozitif risk tespiti ile
-- **17 çıktı formatı** NextDNS, AdGuard, Pi-hole, dnsmasq, Unbound, RPZ, Technitium, MikroTik, nftables, ipset, Suricata, CrowdSec, CSV, JSON, YAML, SQLite dahil
+- **17 çıktı biçimi** NextDNS, AdGuard, Pi-hole, dnsmasq, Unbound, RPZ, Technitium, MikroTik, nftables, ipset, Suricata, CrowdSec, CSV, JSON, YAML, SQLite dahil
 - **CI/CD** GitHub Actions üzerinden (lint, tip kontrolü, test, güvenlik taraması)
 - **Çift dilli** dokümantasyon (İngilizce / Türkçe)
 
@@ -136,10 +136,10 @@ git clone https://github.com/bayraktarozcan/TC-SGB-API-to-List.git
 cd TC-SGB-API-to-List
 pip install -e .
 
-# Tüm IOC verilerini çek
+# Tüm IoC verilerini çek
 tc-sgb fetch
 
-# Tüm çıktı formatlarını üret
+# Tüm çıktı biçimlerini üret
 tc-sgb generate -i output/raw_records.json
 ```
 

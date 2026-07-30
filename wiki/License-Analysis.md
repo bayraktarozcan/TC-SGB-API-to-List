@@ -85,7 +85,7 @@ This implies:
 
 | Component | License | Redistribution |
 |-----------|---------|----------------|
-| IOC data from API | TC SGB Terms | **RESTRICTED** |
+| IoC data from API | TC SGB Terms | **RESTRICTED** |
 | Processed/derived data | TC SGB Terms | **RESTRICTED** |
 | Aggregated statistics | Gray area | **CAUTION** |
 | Raw API responses | TC SGB Terms | **RESTRICTED** |
@@ -101,11 +101,11 @@ This implies:
 
   1. Run the pipeline locally
      - Fetch data from TC SGB API
-     - Process and normalize IOCs
+     - Process and normalize IoCs
      - Use for your own security infrastructure
 
   2. Integrate with security systems
-     - Feed IOCs into firewalls
+     - Feed IoCs into firewalls
      - Import into SIEM platforms
      - Configure URL filtering
      - Update DNS sinkholes
@@ -130,16 +130,16 @@ This implies:
 
   1. Do NOT republish raw data on GitHub
      - No output/*.json commits
-     - No IOC value listings in README
+     - No IoC value listings in README
      - No bulk data dumps in issues/PRs
 
   2. Do NOT create a public data mirror
      - No alternative distribution sites
      - No public API re-serves
-     - No public databases of IOCs
+     - No public databases of IoCs
 
   3. Do NOT redistribute without permission
-     - No sharing IOC lists directly
+     - No sharing IoC lists directly
      - No selling access to processed data
      - No sublicensing the data
 
@@ -157,9 +157,9 @@ This implies:
 recommended:
   - Clone the repo
   - Run pipeline locally
-  - Feed IOCs to your firewall/SIEM
+  - Feed IoCs to your firewall/SIEM
   - Keep outputs private
-  - Do not share raw IOC data publicly
+  - Do not share raw IoC data publicly
 
 allowed:
   - Sharing the code (MIT license)
@@ -179,7 +179,7 @@ recommended:
   - Consult legal for redistribution questions
 
 allowed:
-  - Internal IOC databases
+  - Internal IoC databases
   - Integration with commercial security tools
   - Use in security operations center (SOC)
   - Automated threat response workflows
@@ -191,7 +191,7 @@ allowed:
 recommended:
   - Link to the TC SGB API (not re-serve data)
   - Provide configuration for users to fetch themselves
-  - Do not include IOC data in releases
+  - Do not include IoC data in releases
   - Document the API terms in your README
 
 allowed:
@@ -206,7 +206,7 @@ allowed:
 ### Low Risk Activities
 
 - Running the pipeline for personal/internal use
-- Feeding IOCs to your own security infrastructure
+- Feeding IoCs to your own security infrastructure
 - Contributing code improvements to the project
 - Sharing configuration and setup instructions
 
@@ -214,11 +214,11 @@ allowed:
 
 - Publishing aggregate statistics (with proper attribution)
 - Creating derivative tools that use the API
-- Sharing processed IOCs with partners (check ToS)
+- Sharing processed IoCs with partners (check ToS)
 
 ### High Risk Activities
 
-- Publicly redistributing IOC data
+- Publicly redistributing IoC data
 - Creating a public mirror of the data
 - Selling access to processed data
 - Removing attribution from data
@@ -226,7 +226,7 @@ allowed:
 ## Compliance Recommendations
 
 1. **Always attribute the source** — When sharing any derived work, credit TC SGB
-2. **Keep data processing local** — Don't upload IOC data to public services
+2. **Keep data processing local** — Don't upload IoC data to public services
 3. **Consult legal counsel** — For commercial or large-scale use cases
 4. **Document your usage** — Maintain records of how data is consumed
 5. **Respect rate limits** — Even though not documented, be a good citizen
@@ -234,12 +234,12 @@ allowed:
 
 ## Alternative Data Sources
 
-If the TC SGB license is too restrictive for your use case, consider these alternative IOC sources with more permissive licenses:
+If the TC SGB license is too restrictive for your use case, consider these alternative IoC sources with more permissive licenses:
 
 | Source | License | Data Types | Notes |
 |--------|---------|------------|-------|
-| AlienVault OTX | Apache 2.0 | IOCs, pulses | Open community |
-| Abuse.ch | CC0 | IOCs, malware | Public domain |
+| AlienVault OTX | Apache 2.0 | IoCs, pulses | Open community |
+| Abuse.ch | CC0 | IoCs, malware | Public domain |
 | PhishTank | Custom (free) | Phishing URLs | Registration required |
 | CISA KEV | Public domain | Known exploits | US government |
 | Spamhaus | Custom (free) | Blocklists | Non-commercial |
@@ -256,7 +256,7 @@ The TC SGB API is designed for integration with security systems. You can freely
 
 You must NOT:
 
-1. **Republish raw IOC data publicly** (GitHub, websites, databases)
+1. **Republish raw IoC data publicly** (GitHub, websites, databases)
 2. **Redistribute data commercially** without written permission
 3. **Remove attribution** from any derived works
 
@@ -348,7 +348,7 @@ Bu şunları ima etmektedir:
 
 | Bileşen | Lisans | Yeniden Dağıtım |
 |---------|--------|-----------------|
-| API'den gelen IOC verisi | TC SGB Koşulları | **KISITLI** |
+| API'den gelen IoC verisi | TC SGB Koşulları | **KISITLI** |
 | İşlenmiş/türetilmiş veri | TC SGB Koşulları | **KISITLI** |
 | Toplu istatistikler | Gri alan | **DİKKAT** |
 | Ham API yanıtları | TC SGB Koşulları | **KISITLI** |
@@ -364,11 +364,11 @@ Bu şunları ima etmektedir:
 
   1. Hattı yerel olarak çalıştırın
      - TC SGB API'sinden veri çekme
-     - IOC'leri işleme ve normalleştirme
+     - IoC'leri işleme ve normalleştirme
      - Kendi güvenlik altyapınız için kullanma
 
   2. Güvenlik sistemleriyle entegre etme
-     - IOC'leri güvenlik duvarlarına besleme
+     - IoC'leri güvenlik duvarlarına besleme
      - SIEM platformlarına aktarma
      - URL filtreleme yapılandırma
      - DNS sinkhole'larını güncelleme
@@ -393,16 +393,16 @@ Bu şunları ima etmektedir:
 
   1. Ham veriyi GitHub'da yeniden yayınlamayın
      - output/*.json提交 yok
-     - README'de IOC değer listeleri yok
+     - README'de IoC değer listeleri yok
      - Sorun taleplerinde/çekme isteklerinde toplu veri dökümleri yok
 
   2. Herkese açık veri aynası oluşturmayın
      - Alternatif dağıtım siteleri yok
      - Herkese açık API yeniden sunumları yok
-     - Herkese açık IOC veritabanları yok
+     - Herkese açık IoC veritabanları yok
 
   3. İzinsiz yeniden dağıtım yapmayın
-     - IOC listelerini doğrudan paylaşmayın
+     - IoC listelerini doğrudan paylaşmayın
      - İşlenmiş verilere erişimi satmayın
      - Verileri alt lisanslamayın
 
@@ -420,9 +420,9 @@ Bu şunları ima etmektedir:
 önerilen:
   - Depoyu çoğaltma
   - Hattı yerel olarak çalıştırma
-  - IOC'leri güvenlik duvarınıza/SIEM'inize besleme
+  - IoC'leri güvenlik duvarınıza/SIEM'inize besleme
   - Çıktıları gizli tutma
-  - Ham IOC verilerini herkese açık paylaşmama
+  - Ham IoC verilerini herkese açık paylaşmama
 
 izin_verilen:
   - Kodu paylaşma (MIT lisansı)
@@ -442,7 +442,7 @@ izin_verilen:
   - Yeniden dağıtım soruları için hukuki danışmanlık alma
 
 izin_verilen:
-  - İç IOC veritabanları
+  - İç IoC veritabanları
   - Ticari güvenlik araçlarıyla entegrasyon
   - Güvenlik operasyonları merkezinde (SOC) kullanım
   - Otomatik tehdit yanıt iş akışları
@@ -454,7 +454,7 @@ izin_verilen:
 önerilen:
   - TC SGB API'sine bağlantı verme (veriyi yeniden sunmama)
   - Kullanıcıların kendilerinin çekmesi için yapılandırma sağlama
-  - Sürümlere IOC verisi dahil etmeme
+  - Sürümlere IoC verisi dahil etmeme
   - README'de API koşullarını belgeleme
 
 izin_verilen:
@@ -469,7 +469,7 @@ izin_verilen:
 ### Düşük Riskli Faaliyetler
 
 - Kişisel/iç kullanım için hattı çalıştırma
-- IOC'leri kendi güvenlik altyapınıza besleme
+- IoC'leri kendi güvenlik altyapınıza besleme
 - Projeye kod iyileştirmelerine katkıda bulunma
 - Yapılandırma ve kurulum talimatlarını paylaşma
 
@@ -477,11 +477,11 @@ izin_verilen:
 
 - Toplu istatistikleri yayınlama (uygun atıfla)
 - API'yi kullanan türetilmiş araçlar oluşturma
-- İşlenmiş IOC'leri ortaklarla paylaşma (Kullanım Koşullarını kontrol edin)
+- İşlenmiş IoC'leri ortaklarla paylaşma (Kullanım Koşullarını kontrol edin)
 
 ### Yüksek Riskli Faaliyetler
 
-- IOC verilerini herkese açık olarak yeniden dağıtma
+- IoC verilerini herkese açık olarak yeniden dağıtma
 - Verilerin herkese açık bir aynasını oluşturma
 - İşlenmiş verilere erişimi satma
 - Verilerden atıfı kaldırma
@@ -489,7 +489,7 @@ izin_verilen:
 ## Uyumluluk Önerileri
 
 1. **Her zaman kaynağı atfedin** — Herhangi bir türetilmiş eseri paylaşırken TC SGB'ye kredi verin
-2. **Veri işlemenizi yerel tutun** — IOC verilerini herkese açık hizmetlere yüklemeyin
+2. **Veri işlemenizi yerel tutun** — IoC verilerini herkese açık hizmetlere yüklemeyin
 3. **Hukuki danışmanlık alın** — Ticari veya büyük ölçekli kullanım durumları için
 4. **Kullanımınızı belgeleyin** — Verilerin nasıl tüketildiğine ilişkin kayıtlar tutun
 5. **Hız sınırlarına saygı gösterin** — Belgelenmemiş olsa bile iyi bir vatandaş olun
@@ -497,12 +497,12 @@ izin_verilen:
 
 ## Alternatif Veri Kaynakları
 
-TC SGB lisansı kullanım durumunuz için çok kısıtlayıcıysa, daha izin verici lisanslara sahip bu alternatif IOC kaynaklarını değerlendirin:
+TC SGB lisansı kullanım durumunuz için çok kısıtlayıcıysa, daha izin verici lisanslara sahip bu alternatif IoC kaynaklarını değerlendirin:
 
 | Kaynak | Lisans | Veri Türleri | Notlar |
 |--------|--------|-------------|-------|
-| AlienVault OTX | Apache 2.0 | IOC'ler, nabızlar | Açık topluluk |
-| Abuse.ch | CC0 | IOC'ler, kötü amaçlı yazılım | Kamu malı |
+| AlienVault OTX | Apache 2.0 | IoC'ler, nabızlar | Açık topluluk |
+| Abuse.ch | CC0 | IoC'ler, kötü amaçlı yazılım | Kamu malı |
 | PhishTank | Özel (ücretsiz) | Oltalama URL'leri | Kayıt gerekli |
 | CISA KEV | Kamu malı | Bilinen açıklar | ABD hükümeti |
 | Spamhaus | Özel (ücretsiz) | Engelleme listeleri | Ticari olmayan |
@@ -519,7 +519,7 @@ TC SGB API'si güvenlik sistemleriyle entegrasyon için tasarlanmıştır. Şunl
 
 Şunları yapmamalısınız:
 
-1. **Ham IOC verilerini herkese açık olarak yeniden yayınlama** (GitHub, web siteleri, veritabanları)
+1. **Ham IoC verilerini herkese açık olarak yeniden yayınlama** (GitHub, web siteleri, veritabanları)
 2. **Yazılı izin olmadan verileri ticari olarak dağıtma**
 3. **Türetilmiş eserlerden atfı kaldırma**
 

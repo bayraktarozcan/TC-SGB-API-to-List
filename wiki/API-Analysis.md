@@ -9,7 +9,7 @@
 
 ### Overview
 
-The Turkish National Cyber Security Directorate (T.C. Siber Güvenlik Başkanlığı) provides a REST API for accessing threat intelligence IOC (Indicator of Compromise) data. This API replaced the deprecated XML feed (`url-list.xml`) as of February 2024.
+The Turkish National Cyber Security Directorate (T.C. Siber Güvenlik Başkanlığı) provides a REST API for accessing threat intelligence IoC (Indicator of Compromise) data. This API replaced the deprecated XML feed (`url-list.xml`) as of February 2024.
 
 ### API Specification
 
@@ -26,13 +26,13 @@ The Turkish National Cyber Security Directorate (T.C. Siber Güvenlik Başkanlı
 
 ### Endpoints
 
-#### 1. IOC List
+#### 1. IoC List
 
 ```
 GET /ioc
 ```
 
-Returns paginated list of IOC records.
+Returns paginated list of IoC records.
 
 **Parameters**:
 
@@ -63,13 +63,13 @@ Returns paginated list of IOC records.
 }
 ```
 
-#### 2. IOC Types
+#### 2. IoC Types
 
 ```
 GET /ioc/types
 ```
 
-Returns list of available IOC types.
+Returns list of available IoC types.
 
 **Response**:
 
@@ -85,19 +85,19 @@ Returns list of available IOC types.
 }
 ```
 
-#### 3. IOC by Type
+#### 3. IoC by Type
 
 ```
 GET /ioc/{type}
 ```
 
-Returns IOC records filtered by type.
+Returns IoC records filtered by type.
 
 **Parameters**:
 
 | Name | Type | Required | Description |
 |------|------|----------|-------------|
-| `type` | string | Yes | IOC type (domain, ip, ip6, ip6net, url) |
+| `type` | string | Yes | IoC type (domain, ip, ip6, ip6net, url) |
 | `page` | integer | No | Page number |
 | `per_page` | integer | No | Records per page |
 
@@ -107,7 +107,7 @@ Returns IOC records filtered by type.
 GET /stats
 ```
 
-Returns aggregate statistics about the IOC dataset.
+Returns aggregate statistics about the IoC dataset.
 
 **Response**:
 
@@ -171,17 +171,17 @@ total_pages = ceil(total_records / per_page)
 
 | Metric | Value |
 |--------|-------|
-| Total IOC records | ~483,690 |
+| Total IoC records | ~483,690 |
 | Average record size | ~200 bytes |
 | Total dataset size | ~97 MB (raw JSON) |
 | Pages at per_page=500 | ~968 |
 | API calls for full fetch | ~968 |
 
-### IOC Types Distribution (Estimated)
+### IoC Types Distribution (Estimated)
 
 ```
 +---------------------------------------------------+
-|  IOC Type Distribution                            |
+|  IoC Type Distribution                            |
 +---------------------------------------------------+
 |                                                   |
 |  url     ████████████████████████████  41.5%      |
@@ -317,7 +317,7 @@ See [License-Analysis](License-Analysis) and [Legal-Notices](Legal-Notices) for 
 The API is explicitly designed for integration with:
 
 - **Firewall systems** — Block malicious IPs and domains
-- **SIEM platforms** — Correlate IOCs with log data
+- **SIEM platforms** — Correlate IoCs with log data
 - **URL filtering** — Block malicious URLs
 - **DNS systems** — Sinkhole malicious domains
 
@@ -338,14 +338,14 @@ Target platforms include:
 
 ### Genel Bakış
 
-Türk Siber Güvenlik Başkanlığı (T.C. Siber Güvenlik Başkanlığı), tehdit istihbaratı IOC (Tehdit Göstergesi) verilerine erişim sağlayan bir REST API sunmaktadır. Bu API, Şubat 2024'ten itibaren kullanımdan kaldırılan XML beslemesinin (`url-list.xml`) yerini almıştır.
+Türk Siber Güvenlik Başkanlığı (T.C. Siber Güvenlik Başkanlığı), tehdit istihbaratı IoC (Tehdit Göstergesi) verilerine erişim sağlayan bir REST API sunmaktadır. Bu API, Şubat 2024'ten itibaren kullanımdan kaldırılan XML beslemesinin (`url-list.xml`) yerini almıştır.
 
 ### API Özellikleri
 
 | Özellik | Değer |
 |---------|-------|
 | **Protokol** | HTTPS |
-| **Format** | REST |
+| **Biçim** | REST |
 | **Özellikler** | OpenAPI 3.0 |
 | **Yanıt Formatı** | JSON |
 | **Kimlik Doğrulama** | Gerekmez |
@@ -355,13 +355,13 @@ Türk Siber Güvenlik Başkanlığı (T.C. Siber Güvenlik Başkanlığı), tehd
 
 ### Uç Noktalar
 
-#### 1. IOC Listesi
+#### 1. IoC Listesi
 
 ```
 GET /ioc
 ```
 
-Sayfalanmış IOC kayıtları listesini döndürür.
+Sayfalanmış IoC kayıtları listesini döndürür.
 
 **Parametreler**:
 
@@ -392,13 +392,13 @@ Sayfalanmış IOC kayıtları listesini döndürür.
 }
 ```
 
-#### 2. IOC Türleri
+#### 2. IoC Türleri
 
 ```
 GET /ioc/types
 ```
 
-Mevcut IOC türlerinin listesini döndürür.
+Mevcut IoC türlerinin listesini döndürür.
 
 **Yanıt**:
 
@@ -414,19 +414,19 @@ Mevcut IOC türlerinin listesini döndürür.
 }
 ```
 
-#### 3. Türe Göre IOC
+#### 3. Türe Göre IoC
 
 ```
 GET /ioc/{type}
 ```
 
-Türe göre filtrelenmiş IOC kayıtlarını döndürür.
+Türe göre filtrelenmiş IoC kayıtlarını döndürür.
 
 **Parametreler**:
 
 | Ad | Tür | Gerekli | Açıklama |
 |----|------|---------|----------|
-| `type` | dize | Evet | IOC türü (domain, ip, ip6, ip6net, url) |
+| `type` | dize | Evet | IoC türü (domain, ip, ip6, ip6net, url) |
 | `page` | tamsayı | Hayır | Sayfa numarası |
 | `per_page` | tamsayı | Hayır | Sayfa başına kayıt |
 
@@ -436,7 +436,7 @@ Türe göre filtrelenmiş IOC kayıtlarını döndürür.
 GET /stats
 ```
 
-IOC veri kümesi hakkında toplu istatistikleri döndürür.
+IoC veri kümesi hakkında toplu istatistikleri döndürür.
 
 **Yanıt**:
 
@@ -500,17 +500,17 @@ total_pages = ceil(toplam_kayit / sayfa_basi)
 
 | Metrik | Değer |
 |--------|-------|
-| Toplam IOC kaydı | ~483.690 |
+| Toplam IoC kaydı | ~483.690 |
 | Ortalama kayıt boyutu | ~200 bayt |
 | Toplam veri kümesi boyutu | ~97 MB (ham JSON) |
 | per_page=500 ile sayfa sayısı | ~968 |
 | Tam çekim için API çağrıları | ~968 |
 
-### IOC Tür Dağılımı (Tahmini)
+### IoC Tür Dağılımı (Tahmini)
 
 ```
 +---------------------------------------------------+
-|  IOC Tür Dağılımı                                 |
+|  IoC Tür Dağılımı                                 |
 +---------------------------------------------------+
 |                                                   |
 |  url     ████████████████████████████  41.5%      |
@@ -646,7 +646,7 @@ Tam ayrıntılar için [License-Analysis](License-Analysis#-türkçe) ve [Legal-
 API açıkça aşağıdaki entegrasyonlar için tasarlanmıştır:
 
 - **Güvenlik duvarı sistemleri** — Kötü amaçlı IP'leri ve alan adlarını engeller
-- **SIEM platformları** — IOC'leri günlük verileriyle korele eder
+- **SIEM platformları** — IoC'leri günlük verileriyle korele eder
 - **URL filtreleme** — Kötü amaçlı URL'leri engeller
 - **DNS sistemleri** — Kötü amaçlı alan adlarını sinkhole'a yönlendirir
 

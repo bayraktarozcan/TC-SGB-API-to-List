@@ -99,7 +99,7 @@ Data Available:
 
 Integration:
 - Fetch KEV catalog
-- Extract CVE-based IOCs
+- Extract CVE-based IoCs
 - Cross-reference with TC SGB data
 - Generate CVE-focused reports
 ```
@@ -156,15 +156,15 @@ License: Apache 2.0
 Update: Community-driven
 
 Data Available:
-- IOC pulses
-- Domain/IP/URL/Hash IOCs
+- IoC pulses
+- Domain/IP/URL/Hash IoCs
 - Threat actor profiles
 - Malware samples
 - Geolocation data
 
 Integration:
 - Fetch relevant pulses
-- Extract IOCs by type
+- Extract IoCs by type
 - Enrich with threat context
 - Cross-reference with TC SGB data
 ```
@@ -201,13 +201,13 @@ Update: Daily
 
 Data Available:
 - Network signatures
-- IOC-based rules
+- IoC-based rules
 - Protocol detection
 - Malware command channels
 
 Integration:
 - Parse ET Open rules
-- Extract IOC-based signatures
+- Extract IoC-based signatures
 - Generate Suricata rules
 - Cross-reference with TC SGB data
 ```
@@ -253,9 +253,9 @@ Integration:
   +-----------+       +-----------+       +-----------+
 
   Endpoints:
-  GET  /api/v1/iocs           - List IOCs
-  GET  /api/v1/iocs/{id}      - Get single IOC
-  GET  /api/v1/iocs/search    - Search IOCs
+  GET  /api/v1/iocs           - List IoCs
+  GET  /api/v1/iocs/{id}      - Get single IoC
+  GET  /api/v1/iocs/search    - Search IoCs
   GET  /api/v1/stats          - Dataset statistics
   POST /api/v1/refresh        - Trigger refresh
   GET  /api/v1/health         - Health check
@@ -273,12 +273,12 @@ Integration:
   +-----------------------------------------------+
   |  +----------+  +----------+  +----------+     |
   |  | Total    |  | Active   |  | Quality  |     |
-  |  | IOCs     |  | IOCs     |  | Score    |     |
+  |  | IoCs     |  | IoCs     |  | Score    |     |
   |  | 483,690  |  | 412,300  |  | 0.94     |     |
   |  +----------+  +----------+  +----------+     |
   |                                               |
   |  +------------------------------------------+ |
-  |  |  IOC Type Distribution (Chart)           | |
+  |  |  IoC Type Distribution (Chart)           | |
   |  |  ████ 35% | ████ 25% | ████ 20% | ...  | |
   |  +------------------------------------------+ |
   |                                               |
@@ -299,7 +299,7 @@ class SourcePlugin:
     """Base class for data source plugins."""
 
     def fetch(self) -> AsyncGenerator[IOCRecord, None]:
-        """Fetch IOCs from the source."""
+        """Fetch IoCs from the source."""
         ...
 
     def validate(self, record: IOCRecord) -> bool:
@@ -555,7 +555,7 @@ Mevcut Veriler:
 
 Entegrasyon:
 - KEEV kataloğunu çekme
-- CVE tabanlı IOC'leri çıkarma
+- CVE tabanlı IoC'leri çıkarma
 - TC SGB verisiyle çapraz referans
 - CVE odaklı raporlar oluşturma
 ```
@@ -612,15 +612,15 @@ Lisans: Apache 2.0
 Güncelleme: Topluluk tarafından
 
 Mevcut Veriler:
-- IOC nabızları
-- Domain/IP/URL/Hash IOC'leri
+- IoC nabızları
+- Domain/IP/URL/Hash IoC'leri
 - Tehdit aktörü profilleri
 - Kötü amaçlı yazılım örnekleri
 - Coğrafi konum verileri
 
 Entegrasyon:
 - İlgili nabızları çekme
-- Türe göre IOC'leri çıkarma
+- Türe göre IoC'leri çıkarma
 - Tehdit bağlamıyla zenginleştirme
 - TC SGB verisiyle çapraz referans
 ```
@@ -657,13 +657,13 @@ Güncelleme: Günlük
 
 Mevcut Veriler:
 - Ağ imzaları
-- IOC tabanlı kurallar
+- IoC tabanlı kurallar
 - Protokol tespiti
 - Kötü amaçlı yazılım komut kanalları
 
 Entegrasyon:
 - ET Open kurallarını ayrıştırma
-- IOC tabanlı imzaları çıkarma
+- IoC tabanlı imzaları çıkarma
 - Suricata kuralları oluşturma
 - TC SGB verisiyle çapraz referans
 ```
@@ -709,9 +709,9 @@ Entegrasyon:
   +-----------+       +-----------+       +-----------+
 
   Uç Noktaları:
-  GET  /api/v1/iocs           - IOC'leri listeleme
-  GET  /api/v1/iocs/{id}      - Tek IOC getirme
-  GET  /api/v1/iocs/search    - IOC arama
+  GET  /api/v1/iocs           - IoC'leri listeleme
+  GET  /api/v1/iocs/{id}      - Tek IoC getirme
+  GET  /api/v1/iocs/search    - IoC arama
   GET  /api/v1/stats          - Veri seti istatistikleri
   POST /api/v1/refresh        - Yenileme tetikleme
   GET  /api/v1/health         - Sağlık kontrolü
@@ -729,12 +729,12 @@ Entegrasyon:
   +-----------------------------------------------+
   |  +----------+  +----------+  +----------+     |
   |  | Toplam   |  | Aktif    |  | Kalite   |     |
-  |  | IOC      |  | IOC      |  | Puanı    |     |
+  |  | IoC      |  | IoC      |  | Puanı    |     |
   |  | 483.690  |  | 412.300  |  | 0,94     |     |
   |  +----------+  +----------+  +----------+     |
   |                                               |
   |  +------------------------------------------+ |
-  |  |  IOC Türü Dağılımı (Grafik)              | |
+  |  |  IoC Türü Dağılımı (Grafik)              | |
   |  |  ████ %35 | ████ %25 | ████ %20 | ...  | |
   |  +------------------------------------------+ |
   |                                               |
@@ -755,7 +755,7 @@ class SourcePlugin:
     """Base class for data source plugins."""
 
     def fetch(self) -> AsyncGenerator[IOCRecord, None]:
-        """Fetch IOCs from the source."""
+        """Fetch IoCs from the source."""
         ...
 
     def validate(self, record: IOCRecord) -> bool:

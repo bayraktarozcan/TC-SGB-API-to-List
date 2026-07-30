@@ -41,7 +41,7 @@ class DescriptionCategory(str, Enum):
 
 ### Source
 
-Originating source of the IOC report.
+Originating source of the IoC report.
 
 ```python
 class Source(str, Enum):
@@ -85,13 +85,13 @@ class PaginatedResponse(BaseModel, Generic[T]):
 
 ### AddressRecord
 
-Single IOC record from `/api/address/index`.
+Single IoC record from `/api/address/index`.
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `id` | `int` | — | Unique identifier |
-| `url` | `str` | `""` | IOC value (domain, IP, URL) |
-| `type` | `str` | `""` | IOC type code |
+| `url` | `str` | `""` | IoC value (domain, IP, URL) |
+| `type` | `str` | `""` | IoC type code |
 | `desc` | `str` | `""` | Description category code |
 | `source` | `str` | `""` | Source code |
 | `date` | `str` | `""` | Observation date |
@@ -162,12 +162,12 @@ Record from `/api/announcement/index`.
 
 ### ValidatedIOC
 
-An IOC that has passed validation.
+An IoC that has passed validation.
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `raw_url` | `str` | — | Original IOC value |
-| `ioc_type` | `IOCType` | — | Classified IOC type |
+| `raw_url` | `str` | — | Original IoC value |
+| `ioc_type` | `IOCType` | — | Classified IoC type |
 | `desc` | `DescriptionCategory \| None` | `None` | Description category |
 | `source` | `Source \| None` | `None` | Originating source |
 | `date` | `datetime \| None` | `None` | Observation date |
@@ -178,12 +178,12 @@ An IOC that has passed validation.
 
 ### NormalizedIOC
 
-An IOC that has been normalised (lowercase, trimmed, IDN resolved, standard port extracted).
+An IoC that has been normalised (lowercase, trimmed, IDN resolved, standard port extracted).
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `value` | `str` | — | Normalised IOC value |
-| `ioc_type` | `IOCType` | — | Classified IOC type |
+| `value` | `str` | — | Normalised IoC value |
+| `ioc_type` | `IOCType` | — | Classified IoC type |
 | `desc` | `DescriptionCategory \| None` | `None` | Description category |
 | `source` | `Source \| None` | `None` | Originating source |
 | `date` | `datetime \| None` | `None` | Observation date |
@@ -194,12 +194,12 @@ An IOC that has been normalised (lowercase, trimmed, IDN resolved, standard port
 
 ### ScoredIOC
 
-An IOC with a quality / confidence score.
+An IoC with a quality / confidence score.
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `value` | `str` | — | Normalised IOC value |
-| `ioc_type` | `IOCType` | — | Classified IOC type |
+| `value` | `str` | — | Normalised IoC value |
+| `ioc_type` | `IOCType` | — | Classified IoC type |
 | `desc` | `DescriptionCategory \| None` | `None` | Description category |
 | `source` | `Source \| None` | `None` | Originating source |
 | `date` | `datetime \| None` | `None` | Observation date |
@@ -221,7 +221,7 @@ Statistics collected during a pipeline run.
 | `after_normalization` | `int` | `0` | Records after normalisation |
 | `after_dedup` | `int` | `0` | Records after deduplication |
 | `after_quality` | `int` | `0` | Records after quality filtering |
-| `by_type` | `dict[str, int]` | `{}` | Count by IOC type |
+| `by_type` | `dict[str, int]` | `{}` | Count by IoC type |
 | `by_source` | `dict[str, int]` | `{}` | Count by source |
 | `by_desc` | `dict[str, int]` | `{}` | Count by description category |
 | `by_criticality` | `dict[int, int]` | `{}` | Count by criticality level |
@@ -260,11 +260,11 @@ Async HTTP client for the SGB API. No authentication required.
 
 ### DeduplicationResult
 
-Result of deduplicating a list of scored IOCs.
+Result of deduplicating a list of scored IoCs.
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `kept` | `list[ScoredIOC]` | Deduplicated IOC list |
+| `kept` | `list[ScoredIOC]` | Deduplicated IoC list |
 | `removed_count` | `int` | Number of duplicates removed |
 | `merge_log` | `list[str]` | Log of merge decisions |
 
@@ -323,7 +323,7 @@ class DescriptionCategory(str, Enum):
 
 ### Source
 
-IOC raporunun geldiği kaynak.
+IoC raporunun geldiği kaynak.
 
 ```python
 class Source(str, Enum):
@@ -367,13 +367,13 @@ class PaginatedResponse(BaseModel, Generic[T]):
 
 ### AddressRecord
 
-`/api/address/index` endpoint'inden gelen tek IOC kaydı.
+`/api/address/index` endpoint'inden gelen tek IoC kaydı.
 
 | Alan | Tip | Varsayılan | Açıklama |
 |------|-----|-----------|----------|
 | `id` | `int` | — | Benzersiz tanımlayıcı |
-| `url` | `str` | `""` | IOC değeri (alan adı, IP, URL) |
-| `type` | `str` | `""` | IOC tipi kodu |
+| `url` | `str` | `""` | IoC değeri (alan adı, IP, URL) |
+| `type` | `str` | `""` | IoC tipi kodu |
 | `desc` | `str` | `""` | Açıklama kategori kodu |
 | `source` | `str` | `""` | Kaynak kodu |
 | `date` | `str` | `""` | Gözlem tarihi |
@@ -444,12 +444,12 @@ class PaginatedResponse(BaseModel, Generic[T]):
 
 ### ValidatedIOC
 
-Doğrulamayı geçmiş bir IOC.
+Doğrulamayı geçmiş bir IoC.
 
 | Alan | Tip | Varsayılan | Açıklama |
 |------|-----|-----------|----------|
-| `raw_url` | `str` | — | Orijinal IOC değeri |
-| `ioc_type` | `IOCType` | — | Sınıflandırılmış IOC tipi |
+| `raw_url` | `str` | — | Orijinal IoC değeri |
+| `ioc_type` | `IOCType` | — | Sınıflandırılmış IoC tipi |
 | `desc` | `DescriptionCategory \| None` | `None` | Açıklama kategorisi |
 | `source` | `Source \| None` | `None` | Geldiği kaynak |
 | `date` | `datetime \| None` | `None` | Gözlem tarihi |
@@ -460,12 +460,12 @@ Doğrulamayı geçmiş bir IOC.
 
 ### NormalizedIOC
 
-Küçük harfe dönüştürülmüş, kırpılmış, IDN çözümlenmiş, standart port çıkarılmış bir IOC.
+Küçük harfe dönüştürülmüş, kırpılmış, IDN çözümlenmiş, standart port çıkarılmış bir IoC.
 
 | Alan | Tip | Varsayılan | Açıklama |
 |------|-----|-----------|----------|
-| `value` | `str` | — | Normalize edilmiş IOC değeri |
-| `ioc_type` | `IOCType` | — | Sınıflandırılmış IOC tipi |
+| `value` | `str` | — | Normalize edilmiş IoC değeri |
+| `ioc_type` | `IOCType` | — | Sınıflandırılmış IoC tipi |
 | `desc` | `DescriptionCategory \| None` | `None` | Açıklama kategorisi |
 | `source` | `Source \| None` | `None` | Geldiği kaynak |
 | `date` | `datetime \| None` | `None` | Gözlem tarihi |
@@ -476,12 +476,12 @@ Küçük harfe dönüştürülmüş, kırpılmış, IDN çözümlenmiş, standar
 
 ### ScoredIOC
 
-Kalite / güven puanı eklenmiş bir IOC.
+Kalite / güven puanı eklenmiş bir IoC.
 
 | Alan | Tip | Varsayılan | Açıklama |
 |------|-----|-----------|----------|
-| `value` | `str` | — | Normalize edilmiş IOC değeri |
-| `ioc_type` | `IOCType` | — | Sınıflandırılmış IOC tipi |
+| `value` | `str` | — | Normalize edilmiş IoC değeri |
+| `ioc_type` | `IOCType` | — | Sınıflandırılmış IoC tipi |
 | `desc` | `DescriptionCategory \| None` | `None` | Açıklama kategorisi |
 | `source` | `Source \| None` | `None` | Geldiği kaynak |
 | `date` | `datetime \| None` | `None` | Gözlem tarihi |
@@ -494,7 +494,7 @@ Kalite / güven puanı eklenmiş bir IOC.
 
 ### PipelineStats
 
-Bir hattı çalıştırma sırasında toplanan istatistikler.
+Bir hat çalıştırma sırasında toplanan istatistikler.
 
 | Alan | Tip | Varsayılan | Açıklama |
 |------|-----|-----------|----------|
@@ -503,7 +503,7 @@ Bir hattı çalıştırma sırasında toplanan istatistikler.
 | `after_normalization` | `int` | `0` | Normalizasyon sonrası kayıt sayısı |
 | `after_dedup` | `int` | `0` | Tekilleştirme sonrası kayıt sayısı |
 | `after_quality` | `int` | `0` | Kalite filtresi sonrası kayıt sayısı |
-| `by_type` | `dict[str, int]` | `{}` | IOC tipine göre sayım |
+| `by_type` | `dict[str, int]` | `{}` | IoC tipine göre sayım |
 | `by_source` | `dict[str, int]` | `{}` | Kaynağa göre sayım |
 | `by_desc` | `dict[str, int]` | `{}` | Açıklama kategorisine göre sayım |
 | `by_criticality` | `dict[int, int]` | `{}` | Kritiklik düzeyine göre sayım |
@@ -511,7 +511,7 @@ Bir hattı çalıştırma sırasında toplanan istatistikler.
 | `quality_rejected` | `int` | `0` | Kalite tarafından reddedilen |
 | `duplicates_removed` | `int` | `0` | Kaldırılan mükerrer kayıt |
 | `fetch_duration_seconds` | `float` | `0.0` | Çekme süresi |
-| `pipeline_duration_seconds` | `float` | `0.0` | Toplam hattı süresi |
+| `pipeline_duration_seconds` | `float` | `0.0` | Toplam hat süresi |
 | `errors` | `list[str]` | `[]` | Hata mesajları |
 
 ## İstemci Modelleri
@@ -542,11 +542,11 @@ SGB API'si için asenkron HTTP istemcisi. Kimlik doğrulama gerekmez.
 
 ### DeduplicationResult
 
-Skorlanmış IOC listesinin tekilleştirilmesinin sonucu.
+Skorlanmış IoC listesinin tekilleştirilmesinin sonucu.
 
 | Alan | Tip | Açıklama |
 |------|-----|----------|
-| `kept` | `list[ScoredIOC]` | Tekilleştirilmiş IOC listesi |
+| `kept` | `list[ScoredIOC]` | Tekilleştirilmiş IoC listesi |
 | `removed_count` | `int` | Kaldırılan mükerrer kayıt sayısı |
 | `merge_log` | `list[str]` | Birleştirme karar günlüğü |
 

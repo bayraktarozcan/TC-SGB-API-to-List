@@ -1,6 +1,6 @@
-"""Persistent changelog for IOC fetch runs.
+"""Persistent changelog for IoC fetch runs.
 
-Compares the current deduplicated IOC list against the previous
+Compares the current deduplicated IoC list against the previous
 ``raw_records.json`` snapshot and writes a human-readable markdown
 log to ``output/logs/fetch_<timestamp>.md``.
 
@@ -36,7 +36,7 @@ def generate_changelog(
     output_dir:
         The ``output/`` directory where ``raw_records.json`` lives.
     current_records:
-        The freshly-fetched list of IOC dicts (same structure as
+        The freshly-fetched list of IoC dicts (same structure as
         ``raw_records.json``).
 
     Returns
@@ -94,7 +94,7 @@ def generate_changelog(
 
 
 def _load_previous(raw_path: Path) -> list[dict[str, Any]] | None:
-    """Return the list of IOC dicts from the previous snapshot, or ``None``."""
+    """Return the list of IoC dicts from the previous snapshot, or ``None``."""
     if not raw_path.exists():
         return None
     try:
@@ -113,16 +113,16 @@ def _write_first_run_log(logs_dir: Path, count: int) -> None:
     file_label = now.strftime("%Y-%m-%d_%H%M%S")
     log_path = logs_dir / f"fetch_{file_label}.md"
     lines = [
-        f"# IOC Fetch Log — {ts_label}",
+        f"# IoC Fetch Log — {ts_label}",
         "",
         "## Özet",
         "",
-        f"- Toplam IOC: **{count:,}**",
-        "- Yeni IOC: — (ilk çalışma, önceki veri yok)",  # noqa: RUF001
-        "- Silinen IOC: —",
+        f"- Toplam IoC: **{count:,}**",
+        "- Yeni IoC: — (ilk çalışma, önceki veri yok)",  # noqa: RUF001
+        "- Silinen IoC: —",
         "",
         "> Bu ilk çalıştırma olduğundan karşılaştırma yapılamadı.",  # noqa: RUF001
-        "> Bir sonraki çalıştırmada yeni/silinen IOC'ler kaydedilecek.",  # noqa: RUF001
+        "> Bir sonraki çalıştırmada yeni/silinen IoC'ler kaydedilecek.",  # noqa: RUF001
         "",
     ]
     log_path.write_text("\n".join(lines), encoding="utf-8")
@@ -142,23 +142,23 @@ def _build_markdown(
     delta_str = f"+{delta}" if delta >= 0 else str(delta)
 
     lines: list[str] = [
-        f"# IOC Fetch Log — {ts_label}",
+        f"# IoC Fetch Log — {ts_label}",
         "",
         "## Özet",
         "",
-        f"- Toplam IOC (önceki): **{total_previous:,}**",
-        f"- Toplam IOC (mevcut): **{total_current:,}**",
+        f"- Toplam IoC (önceki): **{total_previous:,}**",
+        f"- Toplam IoC (mevcut): **{total_current:,}**",
         f"- Net değişim: **{delta_str}**",
-        f"- Yeni IOC: **{len(new_records):,}**",
-        f"- Silinen IOC: **{len(removed_records):,}**",
+        f"- Yeni IoC: **{len(new_records):,}**",
+        f"- Silinen IoC: **{len(removed_records):,}**",
         "",
     ]
 
-    # --- New IOCs table --------------------------------------------------------
-    lines.append("## Yeni IOC'ler")
+    # --- New IoCs table --------------------------------------------------------
+    lines.append("## Yeni IoC'ler")
     lines.append("")
     if new_records:
-        lines.append(f"({len(new_records):,} yeni IOC)")
+        lines.append(f"({len(new_records):,} yeni IoC)")
         lines.append("")
         lines.append("| # | Değer | Tip | Kaynak | Kritiklik | Güven Skoru | FP Riski |")
         lines.append("|---|-------|-----|--------|-----------|-------------|----------|")
@@ -171,14 +171,14 @@ def _build_markdown(
             fp = r.get("false_positive_risk", "—")
             lines.append(f"| {i} | `{value}` | {ioc_type} | {source} | {crit} | {score} | {fp} |")
     else:
-        lines.append("Yeni IOC yok.")
+        lines.append("Yeni IoC yok.")
     lines.append("")
 
-    # --- Removed IOCs table ----------------------------------------------------
-    lines.append("## Silinen IOC'ler")
+    # --- Removed IoCs table ----------------------------------------------------
+    lines.append("## Silinen IoC'ler")
     lines.append("")
     if removed_records:
-        lines.append(f"({len(removed_records):,} silinen IOC)")
+        lines.append(f"({len(removed_records):,} silinen IoC)")
         lines.append("")
         lines.append("| # | Değer | Tip | Kaynak | Kritiklik |")
         lines.append("|---|-------|-----|--------|-----------|")
@@ -189,7 +189,7 @@ def _build_markdown(
             crit = r.get("criticality_level") or "—"
             lines.append(f"| {i} | `{value}` | {ioc_type} | {source} | {crit} |")
     else:
-        lines.append("Silinen IOC yok.")
+        lines.append("Silinen IoC yok.")
     lines.append("")
 
     return lines

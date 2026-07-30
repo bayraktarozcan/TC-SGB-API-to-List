@@ -458,7 +458,7 @@ class TestWriteToPath:
 
 
 class TestIPv6Formats:
-    """IPv6 IOCs appear in MikroTik, nftables, ipset, Suricata, CrowdSec."""
+    """IPv6 IoCs appear in MikroTik, nftables, ipset, Suricata, CrowdSec."""
 
     @pytest.fixture
     def ipv6_iocs(self):

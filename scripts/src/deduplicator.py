@@ -1,7 +1,7 @@
-"""Cross-type IOC deduplication.
+"""Cross-type IoC deduplication.
 
 Handles deduplication across domain, URL, IP, IP6, and IP6Net types.
-When the same IOC appears multiple times (possibly with different metadata),
+When the same IoC appears multiple times (possibly with different metadata),
 the one with the highest quality score is kept, and metadata is merged.
 """
 
@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 
 
 def _extract_domain_from_url(url: str) -> str | None:
-    """Extract the hostname from a URL IOC for cross-type dedup."""
+    """Extract the hostname from a URL IoC for cross-type dedup."""
     try:
         from urllib.parse import urlparse
 
@@ -50,7 +50,7 @@ def _make_dedup_key(value: str, ioc_type: IOCType) -> str:
 
 
 class DeduplicationResult:
-    """Result of deduplicating a list of scored IOCs."""
+    """Result of deduplicating a list of scored IoCs."""
 
     __slots__ = ("kept", "merge_log", "removed_count")
 
@@ -70,18 +70,18 @@ def deduplicate(
     *,
     merge_metadata: bool = True,
 ) -> DeduplicationResult:
-    """Deduplicate a list of scored IOCs.
+    """Deduplicate a list of scored IoCs.
 
     Strategy:
     1. Primary dedup: (value, ioc_type) exact match.
-    2. Cross-type dedup: domain extracted from URL matches a domain IOC.
+    2. Cross-type dedup: domain extracted from URL matches a domain IoC.
     3. When duplicates are found, keep the one with the highest quality_score.
     4. Optionally merge source / desc metadata from all records.
 
     Parameters
     ----------
     scored_iocs:
-        IOCs to deduplicate, already scored.
+        IoCs to deduplicate, already scored.
     merge_metadata:
         If True, merge source, desc, and connectiontype from removed duplicates
         into the kept record's flags for provenance.
@@ -113,7 +113,7 @@ def deduplicate(
                 )
             continue
 
-        # Cross-type dedup for URLs: if a URL's domain matches an existing domain IOC.
+        # Cross-type dedup for URLs: if a URL's domain matches an existing domain IoC.
         if ioc.ioc_type == IOCType.URL:
             domain = _extract_domain_from_url(ioc.value)
             if domain and domain in domain_index:

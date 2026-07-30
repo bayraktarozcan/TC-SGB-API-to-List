@@ -54,7 +54,7 @@ def _setup_logging(verbose: bool = False) -> None:
 
 
 async def cmd_fetch(args: argparse.Namespace) -> None:
-    """Fetch all IOCs from the SGB API and save raw data."""
+    """Fetch all IoCs from the SGB API and save raw data."""
     output_dir = Path(args.output)
     output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -194,14 +194,14 @@ async def cmd_stats(args: argparse.Namespace) -> None:
         data = await client._request("/api/address/index", {"page": 0, "per-page": 1})
         total = data.get("totalCount", 0)
         page_count = data.get("pageCount", 0)
-        print(f"\nTotal IOCs: {total:,}")
+        print(f"\nTotal IoCs: {total:,}")
         print(f"API pages (9999/page): {page_count:,}")
     finally:
         await client.close()
 
 
 async def cmd_validate(args: argparse.Namespace) -> None:
-    """Validate IOCs from raw data or fetch and validate only."""
+    """Validate IoCs from raw data or fetch and validate only."""
     client = AsyncAPIClient(
         rate_limit=args.rps,
         timeout=args.timeout,
@@ -239,7 +239,7 @@ async def cmd_validate(args: argparse.Namespace) -> None:
         for record in records:
             result = validate_ioc(record)
             if result is None:
-                rejected.append((record, ["empty or unparseable IOC value"]))
+                rejected.append((record, ["empty or unparseable IoC value"]))
             elif result.validation_errors:
                 rejected.append((record, result.validation_errors))
             else:
@@ -297,7 +297,7 @@ def build_parser() -> argparse.ArgumentParser:
         prog="tc-sgb-intel",
         description=(
             "TC-SGB Threat Intelligence Pipeline — "
-            "Fetch, validate, and export IOCs from the "
+            "Fetch, validate, and export IoCs from the "
             "Turkish Cyber Security Directorate API."
         ),
     )
@@ -344,7 +344,7 @@ def build_parser() -> argparse.ArgumentParser:
         )
 
     # fetch
-    p_fetch = subparsers.add_parser("fetch", help="Fetch IOCs and generate all output formats.")
+    p_fetch = subparsers.add_parser("fetch", help="Fetch IoCs and generate all output formats.")
     add_common_args(p_fetch)
     p_fetch.add_argument(
         "--formats",
@@ -374,7 +374,7 @@ def build_parser() -> argparse.ArgumentParser:
     add_common_args(p_stats)
 
     # validate
-    p_val = subparsers.add_parser("validate", help="Validate IOCs from file or API.")
+    p_val = subparsers.add_parser("validate", help="Validate IoCs from file or API.")
     p_val.add_argument(
         "--input",
         "-i",

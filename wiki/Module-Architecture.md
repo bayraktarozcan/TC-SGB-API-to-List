@@ -254,7 +254,7 @@ class PipelineStats(BaseModel):
 
 ### 3. `validator.py` — Data Validator
 
-**Responsibility**: IOC validation, type checking, RFC6761 compliance, format verification.
+**Responsibility**: IoC validation, type checking, RFC6761 compliance, format verification.
 
 ```python
 def validate_ioc(record: AddressRecord) -> ValidatedIOC | None:
@@ -264,7 +264,7 @@ def validate_records_batch(records: list[AddressRecord]) -> tuple[list[Validated
     """Validate a batch. Returns (valid, rejected)."""
 
 def _infer_ioc_type(value: str) -> IOCType | None:
-    """Infer IOC type from value when API type field is unavailable."""
+    """Infer IoC type from value when API type field is unavailable."""
 
 def _is_valid_domain(domain: str) -> list[str]:
     """Validate domain format. Returns list of error strings."""
@@ -317,7 +317,7 @@ def _normalize_ip(value: str) -> tuple[str, list[str]]:
 
 **Normalization Rules**:
 
-| IOC Type | Transform | Example Input | Example Output |
+| IoC Type | Transform | Example Input | Example Output |
 |----------|-----------|---------------|----------------|
 | domain | Lowercase, trim, punycode | `Evil.COM ` | `evil.com` |
 | domain | Remove trailing dot | `evil.com.` | `evil.com` |
@@ -330,7 +330,7 @@ def _normalize_ip(value: str) -> tuple[str, list[str]]:
 
 ### 5. `deduplicator.py` — Deduplication Engine
 
-**Responsibility**: Cross-type IOC deduplication using quality scores.
+**Responsibility**: Cross-type IoC deduplication using quality scores.
 
 ```python
 class DeduplicationResult:
@@ -339,7 +339,7 @@ class DeduplicationResult:
     merge_log: list[str]
 
 def deduplicate(scored_iocs: list[ScoredIOC], *, merge_metadata: bool = True) -> DeduplicationResult:
-    """Deduplicate IOCs. Keeps the one with the highest quality_score."""
+    """Deduplicate IoCs. Keeps the one with the highest quality_score."""
 
 def get_dedup_stats(before: int, after: int) -> dict[str, int]:
     """Return simple dedup stats: {before, after, removed}."""
@@ -347,7 +347,7 @@ def get_dedup_stats(before: int, after: int) -> dict[str, int]:
 
 **Deduplication Strategy**:
 1. Primary dedup: `(value, ioc_type)` exact match
-2. Cross-type dedup: domain extracted from URL matches an existing domain IOC
+2. Cross-type dedup: domain extracted from URL matches an existing domain IoC
 3. When duplicates found, keep the one with the highest `quality_score`
 4. Metadata from removed duplicates logged to `merge_log`
 
@@ -365,10 +365,10 @@ def score_iocs(iocs: list[NormalizedIOC], threshold: float = 20.0) -> list[Score
     """Score a batch, filtering out those below threshold."""
 
 def filter_false_positives(scored: list[ScoredIOC], min_score: float = 20.0) -> tuple[list[ScoredIOC], int]:
-    """Filter IOCs below the quality threshold."""
+    """Filter IoCs below the quality threshold."""
 
 def _extract_domain(value: str) -> str | None:
-    """Extract domain from IOC value (handles URLs)."""
+    """Extract domain from IoC value (handles URLs)."""
 
 def _is_benign_domain(domain: str) -> bool:
     """Check against 50+ known-good domains (google, github, microsoft, etc.)."""
@@ -401,7 +401,7 @@ risk: score < 20 → "high", score < 50 → "medium" (unless pattern checks alre
 
 ### 7. `outputs.py` — Output Engine
 
-**Responsibility**: Multi-format IOC output generation (17 formats).
+**Responsibility**: Multi-format IoC output generation (17 formats).
 
 ```python
 FORMAT_REGISTRY: dict[str, Callable | None]
@@ -555,9 +555,9 @@ Stage              Exception              Handling
 
 <a id="-türkçe"></a>
 
-# Modul Mimarisi
+# Modül Mimarisi
 
-## Modul Bagimlilik Grafigi
+## Modül Bağımlılık Grafiği
 
 ```
 +=====================================================================+
@@ -590,15 +590,15 @@ Stage              Exception              Handling
                           +-----------+
 ```
 
-## Modul Ozellikleri
+## Modül Özellikleri
 
-### 1. `client.py` — API Istemcisi
+### 1. `client.py` — API İstemcisi
 
-**Sorumluluk**: T.C. Siber Guvenlik Baskanligi API'siyle HTTP iletisimi.
+**Sorumluluk**: T.C. Siber Güvenlik Başkanlığı API'siyle HTTP iletişimi.
 
 ```python
 class AsyncAPIClient:
-    """T.C. Siber Guvenlik Baskanligi API'si icin asenkron HTTP istemcisi."""
+    """T.C. Siber Güvenlik Başkanlığı API'si için asenkron HTTP istemcisi."""
 
     def __init__(
         self,
@@ -629,15 +629,15 @@ class AsyncAPIClient:
     def stats(self) -> dict[str, Any]: ...
 ```
 
-**Ana Davranislar**:
-- `follow_redirects=True` ile `httpx.AsyncClient` kullanir
-- Kalibrasyonlu `asyncio.sleep()` ile hiz sinirlama (varsayilan 10 istek/saniye)
-- 429 (hiz siniri) ve 5xx (sunucu hatalari) durumunda ustel geri cekilme
-- `httpx.TransportError` yakalama (DNS, baglanti reddi, vb.)
-- Kimlik dogrulama gerektirmez (kamu API'si)
-- Baglam yoneticisi destegi (`async with AsyncAPIClient() as client:`)
+**Ana Davranışlar**:
+- `follow_redirects=True` ile `httpx.AsyncClient` kullanır
+- Kalibrasyonlu `asyncio.sleep()` ile hız sınırlama (varsayılan 10 istek/saniye)
+- 429 (hız sınırı) ve 5xx (sunucu hataları) durumunda üstel geri çekilme
+- `httpx.TransportError` yakalama (DNS, bağlantı reddi, vb.)
+- Kimlik doğrulama gerektirmez (kamu API'si)
+- Bağlam yöneticisi desteği (`async with AsyncAPIClient() as client:`)
 
-**Varsayilan Yapilandirma**:
+**Varsayılan Yapılandırma**:
 ```python
 base_url = "https://siberguvenlik.gov.tr"
 max_retries = 3
@@ -651,9 +651,9 @@ max_pages = 0        # 0 = tum sayfalari cek
 
 ### 2. `models.py` — Veri Modelleri
 
-**Sorumluluk**: API yanitlari ve pipeline asamalari icin Pydantic modelleri, numaralandirmalari, tur tanimlari.
+**Sorumluluk**: API yanıtları ve pipeline aşamaları için Pydantic modelleri, numaralandırmaları, tür tanımları.
 
-#### Numaralandirmalar
+#### Numaralandırmalar
 
 ```python
 class IOCType(str, Enum):
@@ -804,72 +804,72 @@ class PipelineStats(BaseModel):
 
 ---
 
-### 3. `validator.py` — Veri Dogrulayici
+### 3. `validator.py` — Veri Doğrulayıcı
 
-**Sorumluluk**: IOC dogrulama, RFC6761 uyumlulugu, format dogrulama.
+**Sorumluluk**: IoC doğrulama, RFC6761 uyumluluğu, biçim doğrulama.
 
 ```python
 def validate_ioc(record: AddressRecord) -> ValidatedIOC | None:
-    """Tekil AddressRecord dogrulamasi. Gecersizse None dondurur."""
+    """Tekil AddressRecord doğrulaması. Geçersizse None döndürür."""
 
 def validate_records_batch(records: list[AddressRecord]) -> tuple[list[ValidatedIOC], list[tuple[AddressRecord, list[str]]]]:
-    """Toplu dogrulama. (gecerli, reddedilen) dondurur."""
+    """Toplu doğrulama. (geçerli, reddedilen) döndürür."""
 
 def _infer_ioc_type(value: str) -> IOCType | None:
-    """API tur alani bosken degerden IOC turu cikarir."""
+    """API tür alanı boşken değerden IoC türü çıkarır."""
 
 def _is_valid_domain(domain: str) -> list[str]:
-    """Domain formatini dogrular. Hata listesi dondurur."""
+    """Domain biçimini doğrular. Hata listesi döndürür."""
 
 def _is_rfc6761(domain: str) -> bool:
-    """Domain'in RFC6761 ayirt edici olup olmadigini kontrol eder."""
+    """Domain'in RFC6761 ayırt edici olup olmadığını kontrol eder."""
 
 def _has_private_suffix(domain: str) -> bool:
-    """Domain'in ozel/ic TLD kullanip kullanmadigini kontrol eder."""
+    """Domain'in özel/iç TLD kullanıp kullanmadığını kontrol eder."""
 
 def _is_reserved_domain(domain: str) -> bool:
-    """Domain'in rezerve/iyi bilinen domain listesinde olup olmadigini kontrol eder."""
+    """Domain'in rezerve/iyi bilinen domain listesinde olup olmadığını kontrol eder."""
 ```
 
-**Dogrulama Kurallari**:
+**Dogrulama Kuralları**:
 
 | Kural | Kontrol | Aksiyon |
 |-------|---------|---------|
 | Bos deger | URL alani dolu olmali | Reddet |
 | Gecersiz tur | API turu IOCType enum ile eslesmeli veya cikarilabilmeli | Reddet |
-| Domain formati | RFC952/1035 uyumlu, maks 253 karakter, etiket basina maks 63 | Reddet |
+| Domain biçimi | RFC952/1035 uyumlu, maks 253 karakter, etiket basina maks 63 | Reddet |
 | RFC6761 | localhost, example.com, test.com degil | Reddet |
 | Ozel TLD | .local, .lan, .home, .internal degil | Reddet |
 | Rezerve domain | schemas.microsoft.com, w3.org degil | Reddet |
 | IP gecerliligi | Gecerli IPv4/IPv6 adresi | Reddet |
-| Tarih ayristirma | ISO8601 formati | Basarisizsa None birak |
+| Tarih ayristirma | ISO8601 biçimi | Basarisizsa None birak |
 
 ---
 
-### 4. `normalizer.py` — Veri Normalizatoru
+### 4. `normalizer.py` — Veri Normalizatörü
 
-**Sorumluluk**: Format kanoniklestirme, ture donusum, meta veri standartlastirma.
+**Sorumluluk**: Biçim kanonikleştirme, türe dönüşüm, meta veri standartlaştırma.
 
 ```python
 def normalize_ioc(validated: ValidatedIOC) -> NormalizedIOC | None:
-    """ValidatedIOC normalizasyonu. Mumkun degilse None dondurur."""
+    """ValidatedIOC normalizasyonu. Mümkün değilse None döndürür."""
 
 def normalize_batch(validated_list: list[ValidatedIOC]) -> list[NormalizedIOC]:
-    """Toplu normalizasyon, gecersiz sonuclari filtreler."""
+    """Toplu normalizasyon, geçersiz sonuçları filtreler."""
 
 def _normalize_domain(value: str) -> tuple[str, list[str]]:
-    """Kucuk harf, kirpma, sondaki noktayi kaldirma, IDN→punycode."""
+    """Küçük harf, kırpma, sondaki noktayı kaldırma, IDN→punycode."""
 
 def _normalize_url(value: str) -> tuple[str, list[str]]:
-    """Sema/ana bilgisayari kucuk harfe cevirme, varsayilan portlari kaldirma."""
+    """Şema/ana bilgisayarı küçük harfe çevirme, varsayılan portları kaldırma."""
 
 def _normalize_ip(value: str) -> tuple[str, list[str]]:
-    """Bosluk temizleme, kucuk harf donusumu."""
+    """Boşluk temizleme, küçük harf dönüşümü."""
 ```
 
-**Normallestirme Kurallari**:
+**Normalleştirme Kuralları**:
 
-| IOC Turu | Donusum | Ornek Girdi | Ornek Cikti |
+| IoC Turu | Donusum | Ornek Girdi | Ornek Cikti |
 |----------|---------|-------------|-------------|
 | domain | Kucuk harf, kirpma, punycode | `Evil.COM ` | `evil.com` |
 | domain | Sondaki noktayi kaldir | `evil.com.` | `evil.com` |
@@ -880,9 +880,9 @@ def _normalize_ip(value: str) -> tuple[str, list[str]]:
 
 ---
 
-### 5. `deduplicator.py` — Tekillestirme Motoru
+### 5. `deduplicator.py` — Tekilleştirme Motoru
 
-**Sorumluluk**: Kalite puanlari kullanan cruz tur IOC tekrar kaldirma.
+**Sorumluluk**: Kalite puanlari kullanan cruz tur IoC tekrar kaldirma.
 
 ```python
 class DeduplicationResult:
@@ -891,15 +891,15 @@ class DeduplicationResult:
     merge_log: list[str]
 
 def deduplicate(scored_iocs: list[ScoredIOC], *, merge_metadata: bool = True) -> DeduplicationResult:
-    """IOC'leri tekrar kaldirir. En yuksek kalite puani olani korur."""
+    """IoC'leri tekrar kaldırır. En yüksek kalite puanı olanı korur."""
 
 def get_dedup_stats(before: int, after: int) -> dict[str, int]:
-    """Basit tekrar kaldirma istatistikleri dondurur: {before, after, removed}."""
+    """Basit tekrar kaldırma istatistikleri döndürür: {before, after, removed}."""
 ```
 
-**Tekillestirme Stratejisi**:
+**Tekilleştirme Stratejisi**:
 1. Birincil tekrar kaldirma: `(value, ioc_type)` tam eslesme
-2. Cruz tur tekrar kaldirma: URL'den cikarilan domain mevcut bir domain IOC ile eslesir
+2. Cruz tur tekrar kaldirma: URL'den cikarilan domain mevcut bir domain IoC ile eslesir
 3. Tekrarlananlar bulundugunda en yuksek `quality_score` olani korunur
 4. Kaldirilan tekrarlardan gelen meta veri `merge_log`'a kaydedilir
 
@@ -911,31 +911,31 @@ def get_dedup_stats(before: int, after: int) -> dict[str, int]:
 
 ```python
 def score_ioc(ioc: NormalizedIOC) -> ScoredIOC:
-    """Kalite puani (0-100) ve yanlis pozitif riski hesaplar."""
+    """Kalite puanı (0-100) ve yanlış pozitif riski hesaplar."""
 
 def score_iocs(iocs: list[NormalizedIOC], threshold: float = 20.0) -> list[ScoredIOC]:
-    """Toplu puanlama, esik altindakileri filtreler."""
+    """Toplu puanlama, eşik altındakileri filtreler."""
 
 def filter_false_positives(scored: list[ScoredIOC], min_score: float = 20.0) -> tuple[list[ScoredIOC], int]:
-    """Kalite esigi altindaki IOC'leri filtreler."""
+    """Kalite eşiği altındaki IoC'leri filtreler."""
 
 def _extract_domain(value: str) -> str | None:
-    """IOC degerinden domain cikarir (URL'leri isler)."""
+    """IoC değerinden domain çıkarır (URL'leri işler)."""
 
 def _is_benign_domain(domain: str) -> bool:
-    """50+ bilinen iyi domain'e karsi kontrol eder (google, github, microsoft, vb.)."""
+    """50+ bilinen iyi domain'e karşı kontrol eder (google, github, microsoft, vb.)."""
 
 def _is_benign_ip(ip_str: str) -> bool:
-    """Bilinen iyi IP'lere karsi kontrol eder (1.1.1.1, 8.8.8.8, vb.)."""
+    """Bilinen iyi IP'lere karşı kontrol eder (1.1.1.1, 8.8.8.8, vb.)."""
 
 def _is_private_ip(ip_str: str) -> bool:
-    """IP'nin ozel, dongu, rezerve veya baglanti yerel olup olmadigini kontrol eder."""
+    """IP'nin özel, döngü, rezerve veya bağlantı yerel olup olmadığını kontrol eder."""
 
 def _has_suspicious_patterns(domain: str) -> list[str]:
-    """Supheli kaliplari algilar: domain icinde IP, uzun domain, cok tire, vb."""
+    """Şüpheli kalıpları algılar: domain içinde IP, uzun domain, çok tire, vb."""
 ```
 
-**Puanlama Algoritmasi**:
+**Puanlama Algoritması**:
 ```
 base_puan = 100
 -80 ise masum domain/IP
@@ -951,9 +951,9 @@ risk: puan < 20 → "high", puan < 50 → "medium" (kalip kontrolleri "high" bel
 
 ---
 
-### 7. `outputs.py` — Cikti Motoru
+### 7. `outputs.py` — Çıktı Motoru
 
-**Sorumluluk**: Coklu formatli IOC cikti uretimi (17 format).
+**Sorumluluk**: Coklu biçimli IoC cikti uretimi (17 biçim).
 
 ```python
 FORMAT_REGISTRY: dict[str, Callable | None]
@@ -976,12 +976,12 @@ def generate_yaml(scored: list[ScoredIOC], path: Path) -> str: ...
 def generate_sqlite(scored: list[ScoredIOC], path: Path) -> str: ...
 
 def generate_all(scored: list[ScoredIOC], output_dir: Path, formats: list[str] | None = None) -> dict[str, str]:
-    """Tum (veya secili) cikti formatlarini uretir. {format: dosya_yolu} dondurur."""
+    """Tüm (veya seçili) çıktı formatlarını üretir. {format: dosya_yolu} döndürür."""
 ```
 
 **Cikti Formatlari**:
 
-| Format | Dosya | Aciklama |
+| Biçim | Dosya | Aciklama |
 |--------|-------|----------|
 | NextDNS | `nextdns.txt` | NextDNS engelleme listesi |
 | AdGuard | `adguard.txt` | AdGuard Home engelleme listesi |
@@ -991,20 +991,20 @@ def generate_all(scored: list[ScoredIOC], output_dir: Path, formats: list[str] |
 | RPZ | `rpz.zone` | Response Policy Zone |
 | Technitium | `technitium.txt` | Technitium DNS engelleme listesi |
 | MikroTik | `mikrotik.rsc` | MikroTik RouterOS betigi (IP + IPv6) |
-| nftables | `nftables.nft` | nftables kurallari (IPv4 + IPv6) |
+| nftables | `nftables.nft` | nftables kuralları (IPv4 + IPv6) |
 | ipset | `ipset.sh` | ipset/ip6set shell betigi |
-| Suricata | `suricata.rules` | Suricata IDS kurallari |
+| Suricata | `suricata.rules` | Suricata IDS kuralları |
 | CrowdSec | `crowdsec.yaml` | CrowdSec senaryo YAML'i |
 | CSV | `ioc_data.csv` |virgulle ayrılmış degerler |
 | JSON | `ioc_data.json` | Yapilandirilmis JSON |
-| YAML | `ioc_data.yaml` | YAML formati |
+| YAML | `ioc_data.yaml` | YAML biçimi |
 | SQLite | `ioc_database.sqlite` | SQLite veritabani |
 
 ---
 
-### 8. `pipeline.py` — Hat Orkestratoru
+### 8. `pipeline.py` — Hat Orkestratörü
 
-**Sorumluluk**: Cekme → dogrulama → normallestirme → kalite → tekrar kaldirma uclu orkestrasyon.
+**Sorumluluk**: Cekme → dogrulama → normalleştirme → kalite → tekrar kaldirma uclu orkestrasyon.
 
 ```python
 class Pipeline:
@@ -1022,7 +1022,7 @@ class Pipeline:
     ) -> None: ...
 
     async def run(self) -> tuple[list[ScoredIOC], PipelineStats]:
-        """Tam 5 asamali hatti calistirir."""
+        """Tam 5 aşamalı hattı çalıştırır."""
 
     async def __aenter__(self) -> Pipeline: ...
     async def __aexit__(self, *args) -> None: ...
@@ -1035,10 +1035,10 @@ class Pipeline:
     def _compute_stats(self, scored: list[ScoredIOC]) -> None: ...
 
 def run_pipeline_sync(client: AsyncAPIClient | None = None, **kwargs) -> tuple[list[ScoredIOC], PipelineStats]:
-    """asyncio.run() ile senkron sarmalayici."""
+    """asyncio.run() ile senkron sarmalayıcı."""
 ```
 
-## Hat Calisma Sirası
+## Hat Çalışma Sırası
 
 ```
 Pipeline.run()
@@ -1090,7 +1090,7 @@ Pipeline.run()
     +----> (tekrarsiz, PipelineStats) dondurur
 ```
 
-## Hata Yayilimi
+## Hata Yayılımı
 
 ```
 Asama              Istisna                  Islem

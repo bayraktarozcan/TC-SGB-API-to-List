@@ -50,7 +50,7 @@ When using this tool:
 - Never commit `.env` files or API keys
 - Use environment variables for sensitive configuration
 - Run the pipeline in isolated environments
-- Validate all IOC data before applying to production systems
+- Validate all IoC data before applying to production systems
 - Keep dependencies updated (`pip-audit`, `dependabot`)
 
 ## Dependency Security
@@ -79,7 +79,7 @@ When using this tool:
 
 # Güvenlik Politikası
 
-## Desteklenen Sürüm
+## Desteklenen Sürümler
 
 | Sürüm | Destekleniyor |
 |-------|---------------|
@@ -97,11 +97,11 @@ GitHub'un yerleşik **Özel güvenlik açığı bildirimi** özelliğini kullan�
 
 ### Alternatif
 
-Yukarıdaki seçenek kullanılamıyorsa, sorunu özel bir sorun olarak açıklayın.
+Yukarıdaki seçenek kullanılamıyorsa, sorunu özel bir sorun olarak açın.
 
 ### Neler Dahil Edilmeli
 
-- Sorunun türü (ör. enjeksiyon, yol gezintisi, vb.)
+- Sorunun türü (ör. enjeksiyon, yol aşımı, vb.)
 - Sorunla ilgili kaynak dosya(lar)ın tam yolları
 - Etkilenen kaynak kodunun konumu (etiket/dal/commit veya doğrudan URL)
 - Sorunu yeniden üretmek için gereken özel yapılandırma
@@ -125,7 +125,7 @@ Bu aracı kullanırken:
 - `.env` dosyalarını veya API anahtarlarını asla commit etmeyin
 - Hassas yapılandırma için ortam değişkenlerini kullanın
 - Hattı izole ortamlarda çalıştırın
-- Tüm IOC verilerini üretim sistemlerine uygulamadan önce doğrulayın
+- Tüm IoC verilerini üretim sistemlerine uygulamadan önce doğrulayın
 - Bağımlılıkları güncel tutun (`pip-audit`, `dependabot`)
 
 ## Bağımlılık Güvenliği

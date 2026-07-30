@@ -1,4 +1,4 @@
-"""Quality scoring and false-positive risk detection for IOCs."""
+"""Quality scoring and false-positive risk detection for IoCs."""
 
 from __future__ import annotations
 
@@ -116,7 +116,7 @@ def _has_suspicious_patterns(domain: str) -> list[str]:
 
 
 def score_ioc(ioc: NormalizedIOC) -> ScoredIOC:
-    """Compute quality score and false-positive risk for an IOC."""
+    """Compute quality score and false-positive risk for an IoC."""
     score = 100.0
     fp_risk = "low"
     flags: list[str] = []
@@ -201,7 +201,7 @@ DEFAULT_QUALITY_THRESHOLD: float = 20.0
 def filter_false_positives(
     scored: list[ScoredIOC], min_score: float = 20.0
 ) -> tuple[list[ScoredIOC], int]:
-    """Filter out IOCs with quality scores below the threshold."""
+    """Filter out IoCs with quality scores below the threshold."""
     accepted: list[ScoredIOC] = []
     rejected = 0
     for ioc in scored:
@@ -216,7 +216,7 @@ def score_iocs(
     iocs: list[NormalizedIOC],
     threshold: float = DEFAULT_QUALITY_THRESHOLD,
 ) -> list[ScoredIOC]:
-    """Score a batch of IOCs, filtering out those below the threshold."""
+    """Score a batch of IoCs, filtering out those below the threshold."""
     scored: list[ScoredIOC] = []
     for ioc in iocs:
         s = score_ioc(ioc)

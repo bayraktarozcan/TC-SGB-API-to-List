@@ -131,7 +131,7 @@ def normalize_ioc(validated: ValidatedIOC) -> NormalizedIOC | None:
 
 
 def normalize_batch(validated_list: list[ValidatedIOC]) -> list[NormalizedIOC]:
-    """Normalize a batch of validated IOCs, filtering out invalid ones."""
+    """Normalize a batch of validated IoCs, filtering out invalid ones."""
     results: list[NormalizedIOC] = []
     for v in validated_list:
         normalized = normalize_ioc(v)

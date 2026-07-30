@@ -155,7 +155,7 @@ from scripts.src.models import IOCRecord, IOCType, IOCStatus
 
 @pytest.fixture
 def sample_ioc_record():
-    """Create a valid IOC record for testing."""
+    """Create a valid IoC record for testing."""
     return IOCRecord(
         id=1,
         type=IOCType.DOMAIN,
@@ -168,7 +168,7 @@ def sample_ioc_record():
 
 @pytest.fixture
 def sample_ioc_batch():
-    """Create a batch of IOC records for testing."""
+    """Create a batch of IoC records for testing."""
     return [
         IOCRecord(
             id=i,
@@ -367,7 +367,7 @@ Bu belge, TC-SGB-API-to-List projesi için kapsamlı test stratejisini tanımlar
 | quality.py | test_quality.py | ~49 | İstatistikler, yanlış pozitif algılama, puanlama |
 | outputs.py | test_outputs.py | ~70 | Tüm 17 çıkış biçimi |
 | pipeline.py | test_pipeline.py | ~37 | Orkestrasyon, hata işleme |
-| changelog.py | test_changelog.py | ~15 | IOC farkı ve değişiklik günlüğü |
+| changelog.py | test_changelog.py | ~15 | IoC farkı ve değişiklik günlüğü |
 
 **Örnek Birim Testi**:
 
@@ -466,7 +466,7 @@ from scripts.src.models import IOCRecord, IOCType, IOCStatus
 
 @pytest.fixture
 def sample_ioc_record():
-    """Create a valid IOC record for testing."""
+    """Create a valid IoC record for testing."""
     return IOCRecord(
         id=1,
         type=IOCType.DOMAIN,
@@ -479,7 +479,7 @@ def sample_ioc_record():
 
 @pytest.fixture
 def sample_ioc_batch():
-    """Create a batch of IOC records for testing."""
+    """Create a batch of IoC records for testing."""
     return [
         IOCRecord(
             id=i,

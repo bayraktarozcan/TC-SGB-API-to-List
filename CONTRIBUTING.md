@@ -39,8 +39,8 @@ pip install -r requirements.txt
 pytest tests/ -v
 
 # Run with coverage
-# (kapsama: testlerin kodun hangi satırlarını çalıştırdığını ölçer — ne kadar çok satır
-# çalışıyorsa, o kadar iyi test edilmiş demektir)
+# (coverage: measures which lines of code the tests execute — the more lines
+# are executed, the better tested the code is)
 pytest tests/ --cov=scripts/src --cov-report=term-missing
 
 # Run specific test
@@ -194,7 +194,7 @@ pytest tests/test_validator.py -v
 ### Örnekler
 
 ```
-feat(outputs): Suricata kural formatı çıktısı ekle
+feat(outputs): Suricata kural biçimi çıktısı ekle
 fix(validator): IPv6'ya eşlenmiş IPv4 adreslerini işle
 docs(readme): Türkçe çeviriyi güncelle
 test(client): yeniden deneme mantığı birim testleri ekle
@@ -233,5 +233,5 @@ test(client): yeniden deneme mantığı birim testleri ekle
 
 ## Davranış Kuralları
 
-Bu proje [Contributor Covenant](CODE_OF_CONDUCT.md)standardını takip eder.
+Bu proje [Contributor Covenant](CODE_OF_CONDUCT.md) standardını takip eder.
 Katkıda bulunmadan önce lütfen okuyun.

@@ -1,4 +1,4 @@
-"""Tests for IOC validation: empty fields, invalid domains, RFC6761,
+"""Tests for IoC validation: empty fields, invalid domains, RFC6761,
 private TLDs, reserved domains, unicode, IP, URL validation."""
 
 from __future__ import annotations

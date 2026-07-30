@@ -346,7 +346,7 @@ This document describes the complete data flow through the TC-SGB-API-to-List th
 |  | Format conformance       | 100% pass          |
 |  | Round-trip consistency   | JSON=JSON          |
 |  | Record count match       | input == output    |
-|  | No duplicate IOCs        | 0 duplicates       |
+|  | No duplicate IoCs        | 0 duplicates       |
 |  | Field completeness       | >99% non-null      |
 |  | Date range validity      | All dates parse    |
 |  | Type distribution        | Matches expected   |
@@ -810,7 +810,7 @@ Bu belge, TC-SGB-API-to-List tehdit istihbaratı hattındaki API alımından nih
 |  | Format conformance       | 100% pass          |
 |  | Round-trip consistency   | JSON=JSON          |
 |  | Record count match       | input == output    |
-|  | No duplicate IOCs        | 0 duplicates       |
+|  | No duplicate IoCs        | 0 duplicates       |
 |  | Field completeness       | >99% non-null      |
 |  | Date range validity      | All dates parse    |
 |  | Type distribution        | Matches expected   |

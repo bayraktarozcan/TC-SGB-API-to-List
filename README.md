@@ -17,14 +17,14 @@
 
 ## Overview
 
-TC-SGB-API-to-List fetches IOC (Indicator of Compromise) data from the TC SGB public API (`https://siberguvenlik.gov.tr/api/`), processes it through a robust multi-stage pipeline, and outputs structured threat intelligence in **17 interoperable formats** compatible with leading DNS filtering and security tools.
+TC-SGB-API-to-List fetches IoC (Indicator of Compromise) data from the TC SGB public API (`https://siberguvenlik.gov.tr/api/`), processes it through a robust multi-stage pipeline, and outputs structured threat intelligence in **17 interoperable formats** compatible with leading DNS filtering and security tools.
 
 ## Features
 
-- **Automated IOC Fetching** — Paginated retrieval from the TC SGB API with retry logic and rate limiting
-- **Validation & Normalization** — Pydantic-based data models with IOC type inference and format normalization
+- **Automated IoC Fetching** — Paginated retrieval from the TC SGB API with retry logic and rate limiting
+- **Validation & Normalization** — Pydantic-based data models with IoC type inference and format normalization
 - **Deduplication** — Efficient set-based deduplication across fetches
-- **Quality Scoring** — Multi-factor quality assessment for each IOC
+- **Quality Scoring** — Multi-factor quality assessment for each IoC
 - **17 Output Formats**:
   - DNS: NextDNS, AdGuard, Pi-hole, dnsmasq, Unbound, RPZ, Technitium, MikroTik
   - Firewall: nftables, ipset
@@ -70,8 +70,8 @@ TC-SGB-API-to-List/
 │   └── src/
 │       ├── models.py            # Pydantic data models
 │       ├── client.py            # Async API client
-│       ├── validator.py         # IOC validation
-│       ├── normalizer.py        # IOC normalization
+│       ├── validator.py         # IoC validation
+│       ├── normalizer.py        # IoC normalization
 │       ├── deduplicator.py      # Deduplication
 │       ├── quality.py           # Quality scoring
 │       ├── outputs.py           # 17 output format generators
@@ -80,7 +80,7 @@ TC-SGB-API-to-List/
 ├── wiki/                        # Documentation (bilingual)
 ├── schema/                      # JSON Schema & OpenAPI spec
 ├── data/                        # Runtime data cache
-├── output/                      # Generated IOC output files (tracked)
+├── output/                      # Generated IoC output files (tracked)
 ├── examples/                    # Usage examples
 ├── benchmark/                   # Performance benchmarks
 └── .github/workflows/           # CI/CD pipelines
@@ -176,14 +176,14 @@ This tool is provided as-is for legitimate cybersecurity research and defense pu
 
 ## Genel Bakış
 
-TC-SGB-API-to-List, TC SGB kamu API'sinden (`https://siberguvenlik.gov.tr/api/`) IOC (İhlal Göstergesi) verilerini çeker, güçlü bir çok aşamalı hat üzerinden işler ve **17 birlikte çalışabilir formatta** yapılandırılmış tehdit istihbaratı çıktısı üretir.
+TC-SGB-API-to-List, TC SGB kamu API'sinden (`https://siberguvenlik.gov.tr/api/`) IoC (İhlal Göstergesi) verilerini çeker, güçlü bir çok aşamalı hat üzerinden işler ve **17 birlikte çalışabilir biçimde** yapılandırılmış tehdit istihbaratı çıktısı üretir.
 
 ## Özellikler
 
-- **Otomatik IOC Çekme** — Yeniden deneme mantığı ve hız sınırlaması ile sayfalı veri çekme
-- **Doğrulama ve Normalleştirme** — Pydantic tabanlı veri modelleri ile IOC türü çıkarma ve format normalleştirme
+- **Otomatik IoC Çekme** — Yeniden deneme mantığı ve hız sınırlaması ile sayfalı veri çekme
+- **Doğrulama ve Normalleştirme** — Pydantic tabanlı veri modelleri ile IoC türü çıkarma ve biçim normalleştirme
 - **Tekilleştirme** — Çekimler arasında verimli küme tabanlı tekilleştirme
-- **Kalite Puanlama** — Her IOC için çok faktörlü kalite değerlendirmesi
+- **Kalite Puanlama** — Her IoC için çok faktörlü kalite değerlendirmesi
 - **17 Çıktı Formatı**:
   - DNS: NextDNS, AdGuard, Pi-hole, dnsmasq, Unbound, RPZ, Technitium, MikroTik
   - Güvenlik Duvarı: nftables, ipset
@@ -229,17 +229,17 @@ TC-SGB-API-to-List/
 │   └── src/
 │       ├── models.py            # Pydantic veri modelleri
 │       ├── client.py             # Asenkron API istemcisi
-│       ├── validator.py         # IOC doğrulama
-│       ├── normalizer.py        # IOC normalleştirme
+│       ├── validator.py         # IoC doğrulama
+│       ├── normalizer.py        # IoC normalleştirme
 │       ├── deduplicator.py      # Tekilleştirme
 │       ├── quality.py           # Kalite puanlama
-│       ├── outputs.py           # 17 çıktı formatı üreteçleri
+│       ├── outputs.py           # 17 çıktı biçimi üreteçleri
 │       └── pipeline.py          # Hat koordinatörü
 ├── tests/                       # Test paketi
 ├── wiki/                        # Dokümantasyon (çift dilli)
 ├── schema/                      # JSON Schema ve OpenAPI belirtimi
 ├── data/                        # Çalışma zamanı veri önbelleği
-├── output/                      # Üretilen IOC çıktı dosyaları (izleniyor)
+├── output/                      # Üretilen IoC çıktı dosyaları (izleniyor)
 ├── examples/                    # Kullanım örnekleri
 ├── benchmark/                   # Performans karşılaştırmaları
 └── .github/workflows/           # CI/CD hatları
@@ -296,7 +296,7 @@ mypy scripts/src/
 ## Yol Haritası
 
 - [x] Çekirdek hat (çek → doğrula → normalleştir → tekilleştir → puanla → çıktı)
-- [x] 17 çıktı formatı
+- [x] 17 çıktı biçimi
 - [x] GitHub Actions ile CI/CD
 - [x] Kapsamlı test paketi
 - [ ] Docker konteynerleştirme

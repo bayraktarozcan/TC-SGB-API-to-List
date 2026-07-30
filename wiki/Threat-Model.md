@@ -7,7 +7,7 @@
 
 ## Overview
 
-This document presents a STRIDE-based threat model for the TC-SGB-API-to-List threat intelligence pipeline. The system ingests IOC data from an external API, processes it through multiple stages, and outputs to various formats.
+This document presents a STRIDE-based threat model for the TC-SGB-API-to-List threat intelligence pipeline. The system ingests IoC data from an external API, processes it through multiple stages, and outputs to various formats.
 
 ## System Boundary
 
@@ -45,10 +45,10 @@ This document presents a STRIDE-based threat model for the TC-SGB-API-to-List th
 
 | ID | Threat | Description | Likelihood | Impact | Mitigation |
 |----|--------|-------------|------------|--------|------------|
-| S-01 | API Impersonation | Attacker creates fake API endpoint serving malicious IOCs | LOW | CRITICAL | Certificate pinning, validate TLS, verify API URL in config |
+| S-01 | API Impersonation | Attacker creates fake API endpoint serving malicious IoCs | LOW | CRITICAL | Certificate pinning, validate TLS, verify API URL in config |
 | S-02 | DNS Spoofing | DNS poisoning redirects API calls to attacker server | LOW | CRITICAL | Use IP-based connection or DNS-over-HTTPS, validate certs |
 | S-03 | Man-in-the-Middle | Attacker intercepts API responses in transit | MEDIUM | HIGH | Enforce TLS 1.2+, verify certificates, HSTS |
-| S-04 | Data Source Spoofing | Compromised upstream feeds inject false IOCs | LOW | HIGH | Checksum validation, source attribution, anomaly detection |
+| S-04 | Data Source Spoofing | Compromised upstream feeds inject false IoCs | LOW | HIGH | Checksum validation, source attribution, anomaly detection |
 
 **Mitigations**:
 - Use `httpx` with TLS verification enabled by default
@@ -61,10 +61,10 @@ This document presents a STRIDE-based threat model for the TC-SGB-API-to-List th
 
 | ID | Threat | Description | Likelihood | Impact | Mitigation |
 |----|--------|-------------|------------|--------|------------|
-| T-01 | API Response Tampering | MITM modifies IOC data in transit | LOW | HIGH | TLS, response hashing, tamper detection |
+| T-01 | API Response Tampering | MITM modifies IoC data in transit | LOW | HIGH | TLS, response hashing, tamper detection |
 | T-02 | Local File Tampering | Attacker modifies output files on disk | LOW | MEDIUM | File permissions, integrity checks, checksums |
 | T-03 | Configuration Tampering | Attacker modifies pipeline config | LOW | HIGH | Config validation, version control, checksums |
-| T-04 | IOC Injection | Malicious IOC values cause processing issues | MEDIUM | MEDIUM | Input validation, sanitization, length limits |
+| T-04 | IoC Injection | Malicious IoC values cause processing issues | MEDIUM | MEDIUM | Input validation, sanitization, length limits |
 | T-05 | Output Tampering | Generated files modified before distribution | LOW | HIGH | File signing, checksums, secure distribution |
 
 **Mitigations**:
@@ -93,13 +93,13 @@ This document presents a STRIDE-based threat model for the TC-SGB-API-to-List th
 | ID | Threat | Description | Likelihood | Impact | Mitigation |
 |----|--------|-------------|------------|--------|------------|
 | I-01 | API Key Exposure | If auth is ever added, keys exposed in logs/config | LOW | HIGH | Never log secrets, use environment variables |
-| I-02 | IOC Data Leakage | Sensitive threat data exposed to unauthorized parties | MEDIUM | MEDIUM | Access controls on output files, secure distribution |
+| I-02 | IoC Data Leakage | Sensitive threat data exposed to unauthorized parties | MEDIUM | MEDIUM | Access controls on output files, secure distribution |
 | I-03 | Log Injection | Attacker injects data into logs to exfiltrate info | LOW | MEDIUM | Sanitize log inputs, structured logging |
 | I-04 | Metadata Disclosure | Processing metadata reveals infrastructure details | LOW | LOW | Minimize metadata in outputs |
 | I-05 | Network Exposure | API traffic intercepted on public networks | LOW | MEDIUM | TLS encryption, VPN for sensitive environments |
 
 **Mitigations**:
-- Never log raw IOC data at DEBUG level
+- Never log raw IoC data at DEBUG level
 - Use structured logging with sanitized fields
 - Restrict output file permissions (0644/0755)
 - Process data locally, don't expose intermediate results
@@ -127,10 +127,10 @@ This document presents a STRIDE-based threat model for the TC-SGB-API-to-List th
 | ID | Threat | Description | Likelihood | Impact | Mitigation |
 |----|--------|-------------|------------|--------|------------|
 | E-01 | Dependency Vulnerability | Malicious or vulnerable dependency installed | MEDIUM | HIGH | Dependabot, pin versions, audit dependencies |
-| E-02 | Code Injection via IOC | IOC value causes code execution during processing | LOW | CRITICAL | No eval/exec, safe string handling, input validation |
-| E-03 | Path Traversal | IOC value or config causes file access outside boundaries | LOW | HIGH | Validate paths, use Path objects, sandboxing |
+| E-02 | Code Injection via IoC | IoC value causes code execution during processing | LOW | CRITICAL | No eval/exec, safe string handling, input validation |
+| E-03 | Path Traversal | IoC value or config causes file access outside boundaries | LOW | HIGH | Validate paths, use Path objects, sandboxing |
 | E-04 | YAML Deserialization | Malicious YAML config causes code execution | LOW | HIGH | Use safe YAML loader only |
-| E-05 | Template Injection | IOC value injected into Jinja2 templates | LOW | HIGH | Auto-escaping, sandboxed templates |
+| E-05 | Template Injection | IoC value injected into Jinja2 templates | LOW | HIGH | Auto-escaping, sandboxed templates |
 
 **Mitigations**:
 - Never use `eval()`, `exec()`, or `subprocess` with user data
@@ -236,7 +236,7 @@ This document presents a STRIDE-based threat model for the TC-SGB-API-to-List th
 
 ## Genel Bakış
 
-Bu belge, TC-SGB-API-to-List tehdit istihbarat hattı için STRIDE tabanlı bir tehdit modeli sunmaktadır. Sistem, harici bir API'den IOC verilerini alır, birden fazla aşamadan geçirir ve çeşitli formatlara çıktı üretir.
+Bu belge, TC-SGB-API-to-List tehdit istihbaratı hattı için STRIDE tabanlı bir tehdit modeli sunmaktadır. Sistem, harici bir API'den IoC verilerini alır, birden fazla aşamadan geçirir ve çeşitli biçimlere çıktı üretir.
 
 ## Sistem Sınırı
 
@@ -274,10 +274,10 @@ Bu belge, TC-SGB-API-to-List tehdit istihbarat hattı için STRIDE tabanlı bir 
 
 | ID | Tehdit | Açıklama | Olasılık | Etki | Azaltma |
 |----|--------|----------|----------|------|---------|
-| S-01 | API Taklidi | Saldırgan kötü amaçlı IOC sunan sahte bir API uç noktası oluşturur | DÜŞÜK | KRİTİK | Sertifika sabitleme, TLS doğrulama, yapılandırmadaki API URL'sini doğrulama |
-| S-02 | DNS Taklidi | DNS zehirlenmesi API çağrılarını salırgan sunucusuna yönlendirir | DÜŞÜK | KRİTİK | IP tabanlı bağlantı veya DNS-over-HTTPS kullanımı, sertifikaları doğrulama |
-| S-03 | Araadamıcı Saldırı | Saldıran transitteki API yanıtlarını dinler | ORTA | YÜKSEK | TLS 1.2+ zorunlu kılma, sertifikaları doğrulama, HSTS |
-| S-04 | Veri Kaynağı Taklidi | Ele geçirilmiş üst beslemeler yanlış IOC'ler enjekte eder | DÜŞÜK | YÜKSEK | Kontrol toplamı doğrulama, kaynak atıfı, anormallik tespiti |
+| S-01 | API Taklidi | Saldırgan kötü amaçlı IoC sunan sahte bir API uç noktası oluşturur | DÜŞÜK | KRİTİK | Sertifika sabitleme, TLS doğrulama, yapılandırmadaki API URL'sini doğrulama |
+| S-02 | DNS Taklidi | DNS zehirlenmesi API çağrılarını saldırgan sunucusuna yönlendirir | DÜŞÜK | KRİTİK | IP tabanlı bağlantı veya DNS-over-HTTPS kullanımı, sertifikaları doğrulama |
+| S-03 | Ortadaki Adam Saldırısı | Saldıran transitteki API yanıtlarını dinler | ORTA | YÜKSEK | TLS 1.2+ zorunlu kılma, sertifikaları doğrulama, HSTS |
+| S-04 | Veri Kaynağı Taklidi | Ele geçirilmiş üst beslemeler yanlış IoC'ler enjekte eder | DÜŞÜK | YÜKSEK | Kontrol toplamı doğrulama, kaynak atıfı, anormallik tespiti |
 
 **Azaltma Önlemleri**:
 - Varsayılan olarak TLS doğrulaması etkin olan `httpx` kullanımı
@@ -290,15 +290,15 @@ Bu belge, TC-SGB-API-to-List tehdit istihbarat hattı için STRIDE tabanlı bir 
 
 | ID | Tehdit | Açıklama | Olasılık | Etki | Azaltma |
 |----|--------|----------|----------|------|---------|
-| T-01 | API Yanıtı Kurcalama | MITM transitteki IOC verilerini değiştirir | DÜŞÜK | YÜKSEK | TLS, yanıt hash'leme, kurcalama tespiti |
+| T-01 | API Yanıtı Kurcalama | MITM transitteki IoC verilerini değiştirir | DÜŞÜK | YÜKSEK | TLS, yanıt hash'leme, kurcalama tespiti |
 | T-02 | Yerel Dosya Kurcalama | Saldıran disk üzerindeki çıktı dosyalarını değiştirir | DÜŞÜK | ORTA | Dosya izinleri, bütünlük kontrolleri, kontrol toplamları |
 | T-03 | Yapılandırma Kurcalama | Saldıran hat yapılandırmasını değiştirir | DÜŞÜK | YÜKSEK | Yapılandırma doğrulama, sürüm kontrolü, kontrol toplamları |
-| T-04 | IOC Enjeksiyonu | Kötü amaçlı IOC değerleri işleme sorunlarına neden olur | ORTA | ORTA | Giriş doğrulama, arındırma, uzunluk sınırları |
+| T-04 | IoC Enjeksiyonu | Kötü amaçlı IoC değerleri işleme sorunlarına neden olur | ORTA | ORTA | Giriş doğrulama, arındırma, uzunluk sınırları |
 | T-05 | Çıktı Kurcalama | Üretilen dosyalar dağıtımdan önce değiştirilir | DÜŞÜK | YÜKSEK | Dosya imzalama, kontrol toplamları, güvenli dağıtım |
 
 **Azaltma Önlemleri**:
 - Tüm giriş verilerini Pydantic modelleriyle doğrulama
-- Beklenmeyen karakterlere veya formatlara sahip kayıtları reddetme
+- Beklenmeyen karakterlere veya biçimlere sahip kayıtları reddetme
 - Tüm çıktı dosyaları için SHA-256 kontrol toplamları üretme
 - Yapılandırmayı sürüm kontrolünde saklama
 - Çıktı dosyası bütünlüğü doğrulaması uygulama
@@ -322,13 +322,13 @@ Bu belge, TC-SGB-API-to-List tehdit istihbarat hattı için STRIDE tabanlı bir 
 | ID | Tehdit | Açıklama | Olasılık | Etki | Azaltma |
 |----|--------|----------|----------|------|---------|
 | I-01 | API Anahtarı Sızıntısı | Kimlik doğrulama eklenirse anahtarlar kayıtlar/yapılandırmada sızdırılabilir | DÜŞÜK | YÜKSEK | Gizli anahtarları asla kaydetmeme, ortam değişkenleri kullanma |
-| I-02 | IOC Veri Sızıntısı | Hassas tehdit verileri yetkisiz taraflara ifşa edilir | ORTA | ORTA | Çıktı dosyalarında erişim kontrolleri, güvenli dağıtım |
+| I-02 | IoC Veri Sızıntısı | Hassas tehdit verileri yetkisiz taraflara ifşa edilir | ORTA | ORTA | Çıktı dosyalarında erişim kontrolleri, güvenli dağıtım |
 | I-03 | Kayıt Enjeksiyonu | Saldıran bilgi sızdırmak için kayıtlara veri enjekte eder | DÜŞÜK | ORTA | Kayıt girdilerini arındırma, yapılandırılmış kaydetme |
 | I-04 | Meta Veri İfşası | İşleme meta verisi altyapı detaylarını ortaya çıkarır | DÜŞÜK | DÜŞÜK | Çıktılarda meta veriyi en aza indirme |
 | I-05 | Ağ İfşası | API trafiği halka açık ağlarda dinlenir | DÜŞÜK | ORTA | TLS şifreleme, hassas ortamlar için VPN |
 
 **Azaltma Önlemleri**:
-- Ham IOC verilerini asla DEBUG düzeyinde kaydetmeme
+- Ham IoC verilerini asla DEBUG düzeyinde kaydetmeme
 - Arındırılmış alanlara sahip yapılandırılmış kaydetme kullanma
 - Çıktı dosyası izinlerini kısıtlama (0644/0755)
 - Verileri yerel olarak işleme, ara sonuçları ifşa etmeme
@@ -338,7 +338,7 @@ Bu belge, TC-SGB-API-to-List tehdit istihbarat hattı için STRIDE tabanlı bir 
 
 | ID | Tehdit | Açıklama | Olasılık | Etki | Azaltma |
 |----|--------|----------|----------|------|---------|
-| D-01 | API Hız Sınırı | TC SGB API isteklerimizi engeller veya yavaşlatır | ORTA | ORTA | Saygılı hız sınırlama, üssel geri çekilme |
+| D-01 | API Hız Sınırı | TC SGB API isteklerimizi engeller veya yavaşlatır | ORTA | ORTA | Saygılı hız sınırlama, üstel geri çekilme |
 | D-02 | Kaynak Tüketimi | Aşırı büyük veri seti belleği/diski tüketir | DÜŞÜK | YÜKSEK | Bellek açısından verimli işleme, akış, sınırlar |
 | D-03 | Disk Alanı Tüketimi | Çıktı dosyaları mevcut diskin tamamını tüketir | DÜŞÜK | ORTA | Disk alanı kontrolleri, çıktı boyutu sınırları |
 | D-04 | İşlemci Tüketimi | Karmaşık işleme sistemi bloke eder | DÜŞÜK | DÜŞÜK | Eşzamanlı işleme, kaynak sınırları |
@@ -356,10 +356,10 @@ Bu belge, TC-SGB-API-to-List tehdit istihbarat hattı için STRIDE tabanlı bir 
 | ID | Tehdit | Açıklama | Olasılık | Etki | Azaltma |
 |----|--------|----------|----------|------|---------|
 | E-01 | Bağımlılık Zafiyeti | Kötü amaçlı veya zafiyet içeren bağımlılık yüklenir | ORTA | YÜKSEK | Dependabot, sürüm sabitleme, bağımlılık denetimi |
-| E-02 | IOC Üzerinden Kod Enjeksiyonu | IOC değeri işleme sırasında kod çalıştırılmasına neden olur | DÜŞÜK | KRİTİK | eval/exec yok, güvenli dize işleme, giriş doğrulama |
-| E-03 | Yol Geçişi | IOC değeri veya yapılandırma sınırlar dışında dosya erişimine neden olur | DÜŞÜK | YÜKSEK | Yolları doğrulama, Nesne sınıfları kullanma, sandık oluşturma |
+| E-02 | IoC Üzerinden Kod Enjeksiyonu | IoC değeri işleme sırasında kod çalıştırılmasına neden olur | DÜŞÜK | KRİTİK | eval/exec yok, güvenli dize işleme, giriş doğrulama |
+| E-03 | Yol Geçişi | IoC değeri veya yapılandırma sınırlar dışında dosya erişimine neden olur | DÜŞÜK | YÜKSEK | Yolları doğrulama, Nesne sınıfları kullanma, sandık oluşturma |
 | E-04 | YAML Serileştirme | Kötü amaçlı YAML yapılandırması kod çalıştırılmasına neden olur | DÜŞÜK | YÜKSEK | Yalnızca güvenli YAML yükleyici kullanma |
-| E-05 | Şablon Enjeksiyonu | IOC değeri Jinja2 şablonlarına enjekte edilir | DÜŞÜK | YÜKSEK | Otomatik kaçış, sandıklı şablonlar |
+| E-05 | Şablon Enjeksiyonu | IoC değeri Jinja2 şablonlarına enjekte edilir | DÜŞÜK | YÜKSEK | Otomatik kaçış, sandıklı şablonlar |
 
 **Azaltma Önlemleri**:
 - Kullanıcı verileriyle asla `eval()`, `exec()` veya `subprocess` kullanmama
@@ -434,7 +434,7 @@ Bu belge, TC-SGB-API-to-List tehdit istihbarat hattı için STRIDE tabanlı bir 
 
 ### Düzeltici Kontroller
 
-1. **Yeniden Deneme Mantığı**: Geçici hatalar için üssel geri çekilme
+1. **Yeniden Deneme Mantığı**: Geçici hatalar için üstel geri çekilme
 2. **Zarif Bozulma**: Hatalarda kısmi verilerle devam etme
 3. **Geri Alma**: Sürüm etiketli sürümler geri almayı sağlar
 4. **Olay Müdahalesi**: Güvenlik olayları için belgelenmiş prosedürler

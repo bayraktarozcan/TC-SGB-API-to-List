@@ -341,7 +341,7 @@ class TestScoreIOCs:
             _make_ioc("evil.com"),
             # google.com is benign (−80), but _make_ioc adds bonuses
             # (source+5, desc+5, date+3) → score 33 ≥ threshold.
-            # Use a bare IOC with no bonuses so score = 100−80−10 = 10 < 20.
+            # Use a bare IoC with no bonuses so score = 100−80−10 = 10 < 20.
             NormalizedIOC(value="google.com", ioc_type=IOCType.DOMAIN),
         ]
         result = score_iocs(iocs)
