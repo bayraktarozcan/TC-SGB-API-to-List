@@ -64,7 +64,7 @@ jobs:
             --title "chore: update IOC data ${TIMESTAMP}" \
             --body "Automated IoC data update from scheduled pipeline.
 
-$(gh run view ${{ github.run_id }} --json displayTitle,createdAt,htmlUrl --jq '.displayTitle + \" — \" + .createdAt + \"\n\" + .htmlUrl')" \
+            $(gh run view ${{ github.run_id }} --json displayTitle,createdAt,htmlUrl --jq '.displayTitle + \" — \" + .createdAt + \"\n\" + .htmlUrl')" \
             --label automated \
             2>&1 || echo "PR already exists — branch updated"
           gh pr merge --auto --squash --delete-branch 2>&1 || true
