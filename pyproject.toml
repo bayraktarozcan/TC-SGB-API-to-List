@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "tc-sgb-api-list"
-version = "0.2.0.0"
+version = "0.2.0.1"
 description = "Threat Intelligence Pipeline for TC SGB API — IoC fetcher, validator, and multi-format exporter"
 readme = "README.md"
 license = "MIT"
@@ -24,6 +24,7 @@ classifiers = [
 ]
 dependencies = [
     "aiohttp>=3.9,<4",
+    "httpx>=0.28,<1",
     "pydantic>=2.10,<3",
     "python-dotenv>=1.0,<2",
     "pyyaml>=6.0,<7",
