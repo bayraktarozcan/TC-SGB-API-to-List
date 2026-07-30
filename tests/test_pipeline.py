@@ -89,8 +89,8 @@ class TestPipelineInit:
         p = Pipeline()
         assert isinstance(p.client, AsyncAPIClient)
         assert p.client.base_url == "https://siberguvenlik.gov.tr"
-        assert p.min_quality_score == 0.0
-        assert p.max_criticality == 10
+        assert p.min_quality_score == 20.0
+        assert p.max_criticality is None
         assert p.per_page == 9999
 
     def test_custom_config(self):

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import os
 import time
 from typing import Any
 
@@ -21,7 +22,7 @@ from .models import (
 logger = logging.getLogger(__name__)
 
 # Real API base URL (verified from OpenAPI spec and live calls)
-BASE_URL = "https://siberguvenlik.gov.tr"
+BASE_URL = os.getenv("TC_SGB_API_BASE_URL", "https://siberguvenlik.gov.tr")
 
 
 class APIError(Exception):
@@ -43,15 +44,15 @@ class AsyncAPIClient:
 
     def __init__(
         self,
-        base_url: str = BASE_URL,
-        max_retries: int = 3,
-        rate_limit: float = 10.0,
-        timeout: float = 60.0,
+        base_url: str | None = None,
+        max_retries: int | None = None,
+        rate_limit: float | None = None,
+        timeout: float | None = None,
     ):
-        self.base_url = base_url.rstrip("/")
-        self.max_retries = max_retries
-        self.rate_limit = rate_limit
-        self.timeout = timeout
+        self.base_url = (base_url or os.getenv("TC_SGB_API_BASE_URL", BASE_URL)).rstrip("/")
+        self.max_retries = max_retries or int(os.getenv("TC_SGB_MAX_RETRIES", "3"))
+        self.rate_limit = rate_limit or float(os.getenv("TC_SGB_RATE_LIMIT_PER_SECOND", "5"))
+        self.timeout = timeout or float(os.getenv("TC_SGB_REQUEST_TIMEOUT", "60"))
         self._last_request_time: float = 0.0
         self._request_count: int = 0
         self._client: httpx.AsyncClient | None = None
@@ -311,6 +312,17 @@ class AsyncAPIClient:
         except Exception as e:
             logger.error(f"Health check failed: {e}")
             return False
+
+    async def fetch_address_count(self) -> dict[str, int]:
+        """Fetch total IoC count and page count from the API."""
+        data = await self._request(
+            "/api/address/index",
+            params={"page": 0, "per-page": 1},
+        )
+        return {
+            "total": data.get("totalCount", 0),
+            "pages": data.get("pageCount", 0),
+        }
 
     @property
     def stats(self) -> dict[str, Any]:

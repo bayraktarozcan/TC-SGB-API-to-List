@@ -17,7 +17,7 @@
 
 ## Overview
 
-TC-SGB-API-to-List fetches IoC (Indicator of Compromise) data from the TC SGB public API (`https://siberguvenlik.gov.tr/api/`), processes it through a robust multi-stage pipeline, and outputs structured threat intelligence in **17 interoperable formats** compatible with leading DNS filtering and security tools.
+TC-SGB-API-to-List fetches IoC (Indicator of Compromise) data from the TC SGB public API (`https://siberguvenlik.gov.tr/api/`), processes it through a robust multi-stage pipeline, and outputs structured threat intelligence in **16 interoperable formats** compatible with leading DNS filtering and security tools.
 
 ## Features
 
@@ -25,7 +25,7 @@ TC-SGB-API-to-List fetches IoC (Indicator of Compromise) data from the TC SGB pu
 - **Validation & Normalization** — Pydantic-based data models with IoC type inference and format normalization
 - **Deduplication** — Efficient set-based deduplication across fetches
 - **Quality Scoring** — Multi-factor quality assessment for each IoC
-- **17 Output Formats**:
+- **16 Output Formats**:
   - DNS: NextDNS, AdGuard, Pi-hole, dnsmasq, Unbound, RPZ, Technitium, MikroTik
   - Firewall: nftables, ipset
   - IDS/IPS: Suricata, CrowdSec
@@ -74,7 +74,7 @@ TC-SGB-API-to-List/
 │       ├── normalizer.py        # IoC normalization
 │       ├── deduplicator.py      # Deduplication
 │       ├── quality.py           # Quality scoring
-│       ├── outputs.py           # 17 output format generators
+│       ├── outputs.py           # 16 output format generators
 │       └── pipeline.py          # Pipeline orchestrator
 ├── tests/                       # Test suite
 ├── wiki/                        # Documentation (bilingual)
@@ -137,7 +137,7 @@ mypy scripts/src/
 ## Roadmap
 
 - [x] Core pipeline (fetch → validate → normalize → dedup → score → output)
-- [x] 17 output formats
+- [x] 16 output formats
 - [x] CI/CD with GitHub Actions
 - [x] Comprehensive test suite
 - [ ] Docker containerization
@@ -176,7 +176,7 @@ This tool is provided as-is for legitimate cybersecurity research and defense pu
 
 ## Genel Bakış
 
-TC-SGB-API-to-List, TC SGB kamu API'sinden (`https://siberguvenlik.gov.tr/api/`) IoC (İhlal Göstergesi) verilerini çeker, güçlü bir çok aşamalı hat üzerinden işler ve **17 birlikte çalışabilir biçimde** yapılandırılmış tehdit istihbaratı çıktısı üretir.
+TC-SGB-API-to-List, TC SGB kamu API'sinden (`https://siberguvenlik.gov.tr/api/`) IoC (İhlal Göstergesi) verilerini çeker, güçlü bir çok aşamalı hat üzerinden işler ve **16 birlikte çalışabilir biçimde** yapılandırılmış tehdit istihbaratı çıktısı üretir.
 
 ## Özellikler
 
@@ -184,7 +184,7 @@ TC-SGB-API-to-List, TC SGB kamu API'sinden (`https://siberguvenlik.gov.tr/api/`)
 - **Doğrulama ve Normalleştirme** — Pydantic tabanlı veri modelleri ile IoC türü çıkarma ve biçim normalleştirme
 - **Tekilleştirme** — Çekimler arasında verimli küme tabanlı tekilleştirme
 - **Kalite Puanlama** — Her IoC için çok faktörlü kalite değerlendirmesi
-- **17 Çıktı Formatı**:
+- **16 Çıktı Formatı**:
   - DNS: NextDNS, AdGuard, Pi-hole, dnsmasq, Unbound, RPZ, Technitium, MikroTik
   - Güvenlik Duvarı: nftables, ipset
   - IDS/IPS: Suricata, CrowdSec
@@ -233,7 +233,7 @@ TC-SGB-API-to-List/
 │       ├── normalizer.py        # IoC normalleştirme
 │       ├── deduplicator.py      # Tekilleştirme
 │       ├── quality.py           # Kalite puanlama
-│       ├── outputs.py           # 17 çıktı biçimi üreteçleri
+│       ├── outputs.py           # 16 çıktı biçimi üreteçleri
 │       └── pipeline.py          # Hat koordinatörü
 ├── tests/                       # Test paketi
 ├── wiki/                        # Dokümantasyon (çift dilli)
@@ -296,7 +296,7 @@ mypy scripts/src/
 ## Yol Haritası
 
 - [x] Çekirdek hat (çek → doğrula → normalleştir → tekilleştir → puanla → çıktı)
-- [x] 17 çıktı biçimi
+- [x] 16 çıktı biçimi
 - [x] GitHub Actions ile CI/CD
 - [x] Kapsamlı test paketi
 - [ ] Docker konteynerleştirme

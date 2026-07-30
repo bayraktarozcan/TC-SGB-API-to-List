@@ -37,7 +37,7 @@ This document defines the distribution and publishing strategy for the TC-SGB-AP
   |                   |     |                   |     |  .stix.json   |
   +-------------------+     +-------------------+     |  .html        |
                                                        |  .md          |
-                                                       |  ...17       |
+                                                       |  ...16       |
                                                        +---------------+
 ```
 
@@ -278,9 +278,9 @@ def generate_checksums(output_dir: Path) -> Path:
   },
   "quality": {
     "overall_score": 0.94,
-    "records_passed": 478200,
-    "records_failed": 5490,
-    "duplicates_removed": 23500
+    "records_passed": 478500,
+    "records_failed": 5190,
+    "duplicates_removed": 8400
   }
 }
 ```
@@ -434,7 +434,7 @@ Bu belge, TC-SGB-API-to-List projesi için dağıtım ve yayın stratejisini, Gi
   |                   |     |                   |     |  .stix.json   |
   +-------------------+     +-------------------+     |  .html        |
                                                        |  .md          |
-                                                       |  ...17       |
+                                                       |  ...16       |
                                                        +---------------+
 ```
 
@@ -675,9 +675,9 @@ def generate_checksums(output_dir: Path) -> Path:
   },
   "quality": {
     "overall_score": 0.94,
-    "records_passed": 478200,
-    "records_failed": 5490,
-    "duplicates_removed": 23500
+    "records_passed": 478500,
+    "records_failed": 5190,
+    "duplicates_removed": 8400
   }
 }
 ```

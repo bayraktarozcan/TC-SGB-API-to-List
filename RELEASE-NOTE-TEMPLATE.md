@@ -305,14 +305,14 @@ tc-sgb health
 
 ## TC-SGB-API-to-List v0.1.0.0
 
-> **Initial public release — Full IoC pipeline with 17 output formats and 490.000+ threat indicators**
+> **Initial public release — Full IoC pipeline with 16 output formats and 483.690+ threat indicators**
 
 ---
 
 ### What's New
 
 - Complete IoC pipeline: fetch → validate → normalize → score → dedup → output
-- 17 output formats (NextDNS, AdGuard, Suricata, nftables, MikroTik, STIX 2.1, MISP, etc.)
+- 16 output formats (NextDNS, AdGuard, Suricata, nftables, MikroTik, STIX 2.1, MISP, etc.)
 - Cross-type deduplication with quality-score-aware resolution
 - RFC6761 compliant reserved domain handling
 - 330 tests passing, ruff clean, mypy clean
@@ -327,8 +327,8 @@ tc-sgb health
 
 | Metric | Value |
 |--------|-------|
-| IoC Output Formats | 17 |
-| Total IoCs Fetched | ~490.000 |
+| IoC Output Formats | 16 |
+| Total IoCs Fetched | ~483.690 |
 | Final IoCs (after dedup) | ~479.000 |
 | Test Suite | 330 tests passing |
 
@@ -340,14 +340,14 @@ tc-sgb health
 
 ## TC-SGB-API-to-List v0.1.0.0
 
-> **İlk kamuya açık sürüm — 17 çıktı biçimi ve 490.000'den fazla tehdit göstergesi ile tam IoC hattı**
+> **İlk kamuya açık sürüm — 16 çıktı biçimi ve 483.690'dan fazla tehdit göstergesi ile tam IoC hattı**
 
 ---
 
 ### Yenilikler
 
 - Tam IoC hattı: çek → doğrula → normalleştir → puanla → tekilleştir → çıktı
-- 17 çıktı biçimi (NextDNS, AdGuard, Suricata, nftables, MikroTik, STIX 2.1, MISP, vb.)
+- 16 çıktı biçimi (NextDNS, AdGuard, Suricata, nftables, MikroTik, STIX 2.1, MISP, vb.)
 - Kalite puanını dikkate alan çözümleme ile çapraz tür tekilleştirme
 - RFC6761 uyumlu ayrılmış alan adı işleme
 - 330 test geçiyor, ruff temiz, mypy temiz
@@ -362,8 +362,8 @@ tc-sgb health
 
 | Metrik | Değer |
 |--------|-------|
-| IoC Çıktı Formatı Sayısı | 17 |
-| Çekilen Toplam IoC | ~490.000 |
+| IoC Çıktı Formatı Sayısı | 16 |
+| Çekilen Toplam IoC | ~483.690 |
 | Nihai IoC (tekilleştirmeden sonra) | ~479.000 |
 | Test Paketi | 330 test geçiyor |
 

@@ -40,7 +40,7 @@ def test_client_default_config():
     client = AsyncAPIClient()
     assert client.base_url == "https://siberguvenlik.gov.tr"
     assert client.max_retries == 3
-    assert client.rate_limit == 10.0
+    assert client.rate_limit == 5.0
     assert client.timeout == 60.0
 
 

@@ -1,0 +1,74 @@
+name: Auto-Merge
+
+on:
+  pull_request:
+    types:
+      - labeled
+      - synchronize
+      - opened
+      - reopened
+      - unlocked
+
+concurrency:
+  group: auto-merge-${{ github.head_ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  pull-requests: write
+  checks: read
+
+jobs:
+  auto-merge:
+    if: contains(github.event.pull_request.labels.*.name, 'auto-merge')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: |
+            requirements.txt
+            pyproject.toml
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+
+      - name: Ruff lint
+        run: ruff check scripts/ tests/
+
+      - name: Ruff format check
+        run: ruff format --check scripts/ tests/
+
+      - name: Run tests
+        run: pytest --tb=short
+
+      - name: Approve
+        if: success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+        run: |
+          gh pr review --approve "$PR_URL" || echo "Already approved or no permission"
+
+      - name: Merge & delete
+        if: success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          BRANCH: ${{ github.head_ref }}
+        run: |
+          echo "Merging $BRANCH ..."
+          if gh pr merge --merge --delete-branch "$PR_URL" 2>/dev/null; then
+            echo "✓ Merged and deleted branch $BRANCH"
+          else
+            echo "⚠ --delete-branch failed, merging then explicit delete ..."
+            gh pr merge --merge "$PR_URL" 2>/dev/null || true
+            git push origin --delete "$BRANCH" 2>/dev/null \
+              && echo "✓ Branch $BRANCH deleted explicitly" \
+              || echo "ℹ Branch already deleted or not found"
+          fi

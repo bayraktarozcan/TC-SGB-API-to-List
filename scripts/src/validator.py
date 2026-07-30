@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import ipaddress
 import re
+from datetime import datetime
 from urllib.parse import urlparse
 
 from .models import (
@@ -238,8 +239,6 @@ def validate_ioc(record: AddressRecord) -> ValidatedIOC | None:
     parsed_date = None
     if record.date:
         try:
-            from datetime import datetime
-
             # Handle ISO format dates like "2024-01-15T10:30:00"
             date_str = record.date.replace("Z", "+00:00")
             parsed_date = datetime.fromisoformat(date_str)

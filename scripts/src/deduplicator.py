@@ -45,6 +45,22 @@ def _make_dedup_key(value: str, ioc_type: IOCType) -> str:
 
 
 # ---------------------------------------------------------------------------
+# Merge helper
+# ---------------------------------------------------------------------------
+
+
+def _merge_metadata(primary: ScoredIOC, secondary: ScoredIOC) -> ScoredIOC:
+    """Merge missing metadata from secondary into primary."""
+    if primary.source is None:
+        primary.source = secondary.source
+    if primary.desc is None:
+        primary.desc = secondary.desc
+    if primary.connectiontype is None:
+        primary.connectiontype = secondary.connectiontype
+    return primary
+
+
+# ---------------------------------------------------------------------------
 # Deduplication
 # ---------------------------------------------------------------------------
 
@@ -96,7 +112,11 @@ def deduplicate(
     domain_index: dict[str, str] = {}
     merge_log: list[str] = []
 
-    for ioc in scored_iocs:
+    # Pre-sort so DOMAINs are processed first — ensures domain_index is
+    # populated before any URL cross-type check, regardless of input order.
+    sorted_iocs = sorted(scored_iocs, key=lambda x: 0 if x.ioc_type == IOCType.DOMAIN else 1)
+
+    for ioc in sorted_iocs:
         # Primary key.
         pkey = f"{ioc.ioc_type.value}|{ioc.value}"
         if pkey in primary:
@@ -106,11 +126,16 @@ def deduplicate(
                     f"Replaced {pkey} "
                     f"(score {existing.quality_score:.3f} → {ioc.quality_score:.3f})"
                 )
-                primary[pkey] = ioc
+                if merge_metadata:
+                    primary[pkey] = _merge_metadata(ioc, existing)
+                else:
+                    primary[pkey] = ioc
             else:
                 merge_log.append(
                     f"Skipped duplicate {pkey} (kept score {existing.quality_score:.3f})"
                 )
+                if merge_metadata:
+                    primary[pkey] = _merge_metadata(existing, ioc)
             continue
 
         # Cross-type dedup for URLs: if a URL's domain matches an existing domain IoC.
