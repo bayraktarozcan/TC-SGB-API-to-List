@@ -18,7 +18,10 @@ import logging
 import math
 import sys
 import time
+from datetime import datetime
 from pathlib import Path
+
+from dotenv import load_dotenv
 
 # Ensure the scripts package is importable.
 _SCRIPTS_DIR = Path(__file__).resolve().parent
@@ -37,6 +40,7 @@ from scripts.src.pipeline import Pipeline
 
 
 def _setup_logging(verbose: bool = False) -> None:
+    load_dotenv()
     level = logging.DEBUG if verbose else logging.INFO
     logging.basicConfig(
         level=level,
@@ -121,7 +125,6 @@ async def cmd_generate(args: argparse.Namespace) -> None:
 
     # Load raw records.
     raw_data = json.loads(input_path.read_text(encoding="utf-8"))
-    from datetime import datetime
 
     from scripts.src.models import ConnectionType, DescriptionCategory, IOCType, ScoredIOC, Source
 
@@ -191,11 +194,9 @@ async def cmd_stats(args: argparse.Namespace) -> None:
             print(f"  {rid:2s}: {rec.en_title} ({rec.tr_title})")
 
         # Fetch address count
-        data = await client._request("/api/address/index", {"page": 0, "per-page": 1})
-        total = data.get("totalCount", 0)
-        page_count = data.get("pageCount", 0)
-        print(f"\nTotal IoCs: {total:,}")
-        print(f"API pages (9999/page): {page_count:,}")
+        counts = await client.fetch_address_count()
+        print(f"\nTotal IoCs: {counts['total']:,}")
+        print(f"API pages (9999/page): {counts['pages']:,}")
     finally:
         await client.close()
 

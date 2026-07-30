@@ -12,7 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 ### Added
 
 - Complete IoC pipeline: fetch → validate → normalize → score → dedup → output
-- 17 output formats: NextDNS, AdGuard, Pi-hole, dnsmasq, Unbound, RPZ, Technitium, MikroTik, nftables, ipset, Suricata, CSV, JSON, YAML, SQLite, STIX 2.1, MISP
+- 16 output formats: NextDNS, AdGuard, Pi-hole, dnsmasq, Unbound, RPZ, Technitium, MikroTik, nftables, ipset, Suricata, CrowdSec, CSV, JSON, YAML, SQLite
 - Async API client with retry logic and rate limiting
 - Pydantic data models for IoC validation
 - Quality scoring system for false-positive risk assessment
@@ -60,7 +60,7 @@ Biçim, [Keep a Changelog](https://keepachangelog.com/)'a dayanmaktadır.
 ### Eklenen
 
 - Tam IoC hattı: çek → doğrula → normalleştir → puanla → tekilleştir → çıktı
-- 17 çıktı biçimi: NextDNS, AdGuard, Pi-hole, dnsmasq, Unbound, RPZ, Technitium, MikroTik, nftables, ipset, Suricata, CSV, JSON, YAML, SQLite, STIX 2.1, MISP
+- 16 çıktı biçimi: NextDNS, AdGuard, Pi-hole, dnsmasq, Unbound, RPZ, Technitium, MikroTik, nftables, ipset, Suricata, CrowdSec, CSV, JSON, YAML, SQLite
 - Yeniden deneme mantığı ve hız sınırlaması ile asenkron API istemcisi
 - IoC doğrulama için Pydantic veri modelleri
 - Yanlış pozitif risk değerlendirmesi için kalite puanlama sistemi

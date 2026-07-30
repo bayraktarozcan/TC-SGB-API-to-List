@@ -51,7 +51,7 @@ This document defines the comprehensive testing strategy for the TC-SGB-API-to-L
 | normalizer.py | test_normalizer.py | ~32 | Type-specific normalization |
 | deduplicator.py | test_deduplicator.py | ~32 | Exact, semantic, subdomain dedup |
 | quality.py | test_quality.py | ~49 | Statistics, FP detection, scoring |
-| outputs.py | test_outputs.py | ~70 | All 17 output formats |
+| outputs.py | test_outputs.py | ~70 | All 16 output formats |
 | pipeline.py | test_pipeline.py | ~37 | Orchestration, error handling |
 | regression.py | test_regression.py | ~31 | Output stability |
 | fuzz.py | test_fuzz.py | ~23 | Property-based & fuzz testing |
@@ -365,7 +365,7 @@ Bu belge, TC-SGB-API-to-List projesi için kapsamlı test stratejisini tanımlar
 | normalizer.py | test_normalizer.py | ~32 | Türe özgü normalizasyon |
 | deduplicator.py | test_deduplicator.py | ~32 | Kesin, anlamsal, alt alan adı tekrar kontrolü |
 | quality.py | test_quality.py | ~49 | İstatistikler, yanlış pozitif algılama, puanlama |
-| outputs.py | test_outputs.py | ~70 | Tüm 17 çıkış biçimi |
+| outputs.py | test_outputs.py | ~70 | Tüm 16 çıkış biçimi |
 | pipeline.py | test_pipeline.py | ~37 | Orkestrasyon, hata işleme |
 | changelog.py | test_changelog.py | ~15 | IoC farkı ve değişiklik günlüğü |
 

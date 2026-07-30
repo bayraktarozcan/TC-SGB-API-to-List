@@ -401,7 +401,7 @@ risk: score < 20 → "high", score < 50 → "medium" (unless pattern checks alre
 
 ### 7. `outputs.py` — Output Engine
 
-**Responsibility**: Multi-format IoC output generation (17 formats).
+**Responsibility**: Multi-format IoC output generation (16 formats).
 
 ```python
 FORMAT_REGISTRY: dict[str, Callable | None]
@@ -953,7 +953,7 @@ risk: puan < 20 → "high", puan < 50 → "medium" (kalip kontrolleri "high" bel
 
 ### 7. `outputs.py` — Çıktı Motoru
 
-**Sorumluluk**: Coklu biçimli IoC cikti uretimi (17 biçim).
+**Sorumluluk**: Coklu biçimli IoC cikti uretimi (16 biçim).
 
 ```python
 FORMAT_REGISTRY: dict[str, Callable | None]

@@ -41,7 +41,7 @@ This document describes the complete data flow through the TC-SGB-API-to-List th
 | Dedup    |-->| False    |-->| Output   |---->| Quality  |
 |          |   | Positive |   | Generate |     | Tests    |
 | Hash     |   | Control  |   |          |     |          |
-| Content  |   |          |   | 17 Fmt  |     | Valid    |
+| Content  |   |          |   | 16 Fmt  |     | Valid    |
 | Seen Map |   | Benign   |   |          |     | Schema   |
 |          |   | Whitelist|   |          |     | Stats    |
 +----------+   +----------+   +----------+     +----------+
@@ -294,7 +294,7 @@ This document describes the complete data flow through the TC-SGB-API-to-List th
 +---------------------------------------------------+
 |                                                   |
 |  Input:  Verified records                         |
-|  Output: 17 formatted output files               |
+|  Output: 16 formatted output files               |
 |                                                   |
 |  Output Formats:                                  |
 |  +------------------------------------------------+
@@ -505,7 +505,7 @@ Bu belge, TC-SGB-API-to-List tehdit istihbaratı hattındaki API alımından nih
 | Dedup    |-->| False    |-->| Output   |---->| Quality  |
 |          |   | Positive |   | Generate |     | Tests    |
 | Hash     |   | Control  |   |          |     |          |
-| Content  |   |          |   | 17 Fmt  |     | Valid    |
+| Content  |   |          |   | 16 Fmt  |     | Valid    |
 | Seen Map |   | Benign   |   |          |     | Schema   |
 |          |   | Whitelist|   |          |     | Stats    |
 +----------+   +----------+   +----------+     +----------+
@@ -758,7 +758,7 @@ Bu belge, TC-SGB-API-to-List tehdit istihbaratı hattındaki API alımından nih
 +---------------------------------------------------+
 |                                                   |
 |  Input:  Verified records                         |
-|  Output: 17 formatted output files               |
+|  Output: 16 formatted output files               |
 |                                                   |
 |  Output Formats:                                  |
 |  +------------------------------------------------+

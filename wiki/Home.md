@@ -7,7 +7,7 @@
 
 ## Overview
 
-TC-SGB-API-to-List is an automated threat intelligence pipeline that ingests Indicator of Compromise (IoC) data from the Turkish National Cyber Security Directorate (TC SGB) public API, processes it through validation, normalization, deduplication, and quality control stages, and outputs structured threat intelligence in 17 interoperable formats.
+TC-SGB-API-to-List is an automated threat intelligence pipeline that ingests Indicator of Compromise (IoC) data from the Turkish National Cyber Security Directorate (TC SGB) public API, processes it through validation, normalization, deduplication, and quality control stages, and outputs structured threat intelligence in 16 interoperable formats.
 
 ---
 
@@ -18,7 +18,7 @@ TC-SGB-API-to-List is an automated threat intelligence pipeline that ingests Ind
 | **API Source** | TC SGB Threat Intelligence API (`https://siberguvenlik.gov.tr`) |
 | **Auth Required** | None (public API) |
 | **Pipeline Stages** | Fetch → Validate → Normalize → Dedup → Score → Output |
-| **Output Formats** | 17 (JSON, CSV, STIX 2.1, MISP, Sigma, YARA, nftables, MikroTik, Suricata, etc.) |
+| **Output Formats** | 16 (JSON, CSV, STIX 2.1, MISP, Sigma, YARA, nftables, MikroTik, Suricata, etc.) |
 | **Python Version** | 3.11+ |
 | **License** | MIT |
 | **Test Suite** | 438 tests, 100% coverage |
@@ -28,7 +28,7 @@ TC-SGB-API-to-List is an automated threat intelligence pipeline that ingests Ind
 ## Architecture at a Glance
 
 ```
-TC SGB API ──► Fetch ──► Validate ──► Normalize ──► Dedup ──► Score ──► Output (17 formats)
+TC SGB API ──► Fetch ──► Validate ──► Normalize ──► Dedup ──► Score ──► Output (16 formats)
 ```
 
 ---
@@ -39,7 +39,7 @@ TC SGB API ──► Fetch ──► Validate ──► Normalize ──► Dedu
 - **Pydantic data models** with strict validation
 - **Cross-type deduplication** with metadata merging
 - **Quality scoring** with false-positive risk detection
-- **17 output formats** including NextDNS, AdGuard, Pi-hole, dnsmasq, Unbound, RPZ, Technitium, MikroTik, nftables, ipset, Suricata, CrowdSec, CSV, JSON, YAML, SQLite
+- **16 output formats** including NextDNS, AdGuard, Pi-hole, dnsmasq, Unbound, RPZ, Technitium, MikroTik, nftables, ipset, Suricata, CrowdSec, CSV, JSON, YAML, SQLite
 - **CI/CD** via GitHub Actions (lint, type check, test, security scan)
 - **Dual-language** documentation (English / Turkish)
 
@@ -91,7 +91,7 @@ tc-sgb generate -i output/raw_records.json
 
 ## Genel Bakış
 
-TC-SGB-API-to-List, T.C. Siber Güvenlik Başkanlığı (TC SGB) kamu API'sinden İhlal Göstergesi (IoC) verilerini otomatik olarak çekip doğrulama, normalleştirme, tekilleştirme ve kalite kontrol aşamalarından geçiren, 17 uyumlu biçimde yapılandırılmış tehdit istihbaratı üreten bir otomatik tehdit istihbaratı hattıdır.
+TC-SGB-API-to-List, T.C. Siber Güvenlik Başkanlığı (TC SGB) kamu API'sinden İhlal Göstergesi (IoC) verilerini otomatik olarak çekip doğrulama, normalleştirme, tekilleştirme ve kalite kontrol aşamalarından geçiren, 16 uyumlu biçimde yapılandırılmış tehdit istihbaratı üreten bir otomatik tehdit istihbaratı hattıdır.
 
 ---
 
@@ -102,7 +102,7 @@ TC-SGB-API-to-List, T.C. Siber Güvenlik Başkanlığı (TC SGB) kamu API'sinden
 | **API Kaynağı** | TC SGB Tehdit İstihbaratı API'si (`https://siberguvenlik.gov.tr`) |
 | **Kimlik Doğrulama** | Gerekli değil (kamu API'si) |
 | **Hat Aşamaları** | Çekme → Doğrulama → Normalleştirme → Yineleme Kaldırma → Puanlama → Çıktı |
-| **Çıktı Formatları** | 17 (JSON, CSV, STIX 2.1, MISP, Sigma, YARA, nftables, MikroTik, Suricata, vb.) |
+| **Çıktı Formatları** | 16 (JSON, CSV, STIX 2.1, MISP, Sigma, YARA, nftables, MikroTik, Suricata, vb.) |
 | **Python Sürümü** | 3.11+ |
 | **Lisans** | MIT |
 | **Test Takımı** | 438 test, %100 kapsama |
@@ -112,7 +112,7 @@ TC-SGB-API-to-List, T.C. Siber Güvenlik Başkanlığı (TC SGB) kamu API'sinden
 ## Mimari Özet
 
 ```
-TC SGB API ──► Çekme ──► Doğrulama ──► Normalleştirme ──► Tekilleştirme ──► Puanlama ──► Çıktı (17 biçim)
+TC SGB API ──► Çekme ──► Doğrulama ──► Normalleştirme ──► Tekilleştirme ──► Puanlama ──► Çıktı (16 biçim)
 ```
 
 ---
@@ -123,7 +123,7 @@ TC SGB API ──► Çekme ──► Doğrulama ──► Normalleştirme ─�
 - **Pydantic veri modelleri** sıkı doğrulama ile
 - **Çapraz tür yineleme kaldırma** meta veri birleştirme ile
 - **Kalite puanlama** sahte pozitif risk tespiti ile
-- **17 çıktı biçimi** NextDNS, AdGuard, Pi-hole, dnsmasq, Unbound, RPZ, Technitium, MikroTik, nftables, ipset, Suricata, CrowdSec, CSV, JSON, YAML, SQLite dahil
+- **16 çıktı biçimi** NextDNS, AdGuard, Pi-hole, dnsmasq, Unbound, RPZ, Technitium, MikroTik, nftables, ipset, Suricata, CrowdSec, CSV, JSON, YAML, SQLite dahil
 - **CI/CD** GitHub Actions üzerinden (lint, tip kontrolü, test, güvenlik taraması)
 - **Çift dilli** dokümantasyon (İngilizce / Türkçe)
 

@@ -11,13 +11,14 @@ from .client import AsyncAPIClient
 from .deduplicator import deduplicate
 from .models import (
     AddressRecord,
+    IOCType,
     NormalizedIOC,
     PipelineStats,
     ScoredIOC,
     ValidatedIOC,
 )
 from .normalizer import normalize_ioc
-from .quality import score_ioc
+from .quality import DEFAULT_QUALITY_THRESHOLD, score_ioc
 from .validator import validate_ioc
 
 logger = logging.getLogger(__name__)
@@ -37,15 +38,17 @@ class Pipeline:
     def __init__(
         self,
         client: AsyncAPIClient | None = None,
-        min_quality_score: float = 0.0,
-        max_criticality: int = 10,
+        min_quality_score: float | None = None,
+        max_criticality: int | None = None,
         per_page: int = 9999,
         max_pages: int = 0,
         skip_validation: bool = False,
         skip_dedup: bool = False,
     ):
         self.client = client or AsyncAPIClient()
-        self.min_quality_score = min_quality_score
+        self.min_quality_score = (
+            min_quality_score if min_quality_score is not None else DEFAULT_QUALITY_THRESHOLD
+        )
         self.max_criticality = max_criticality
         self.per_page = per_page
         self.max_pages = max_pages
@@ -109,6 +112,14 @@ class Pipeline:
 
     def _stage_validate(self, records: list[AddressRecord]) -> tuple[list[ValidatedIOC], int]:
         """Stage 2: Validate each IoC."""
+        if self.skip_validation:
+            logger.info("Stage 2/5: Validation skipped (--skip-validation)")
+            validated = [
+                ValidatedIOC(raw_url=r.url, ioc_type=IOCType.DOMAIN, original_id=r.id)
+                for r in records
+            ]
+            return validated, 0
+
         logger.info("Stage 2/5: Validating IoCs...")
         validated: list[ValidatedIOC] = []
         rejected = 0
@@ -166,10 +177,13 @@ class Pipeline:
         for n in normalized:
             try:
                 s = score_ioc(n)
-                if s.quality_score >= self.min_quality_score:
-                    scored.append(s)
-                else:
+                if s.quality_score < self.min_quality_score:
                     rejected += 1
+                    continue
+                if self.max_criticality is not None and s.criticality_level > self.max_criticality:
+                    rejected += 1
+                    continue
+                scored.append(s)
             except Exception as e:
                 logger.debug(f"Quality scoring error: {e}")
                 rejected += 1

@@ -101,7 +101,7 @@ logs/
 *.log
 
 # Data output
-output500/
+output/
 test-output/
 
 # Runtime data cache
