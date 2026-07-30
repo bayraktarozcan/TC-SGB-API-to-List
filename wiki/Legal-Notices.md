@@ -90,10 +90,10 @@ This implies:
 
 The TC-SGB-API-to-List project:
 
-1. **Fetches IOC data** from the TC SGB public API using automated means
+1. **Fetches IoC data** from the TC SGB public API using automated means
 2. **Processes and normalizes** the data locally (validation, normalization, deduplication)
 3. **Generates output files** in multiple formats for local use
-4. **Does NOT redistribute** raw IOC data publicly
+4. **Does NOT redistribute** raw IoC data publicly
 
 ### Compliance Assessment
 
@@ -104,8 +104,8 @@ The TC-SGB-API-to-List project:
 | Integration with security systems | ✅ PERMITTED | Explicitly stated purpose in API docs |
 | Generating local reports | ✅ PERMITTED | For internal use only |
 | Publishing code | ✅ PERMITTED | Code is MIT licensed, not TC SGB content |
-| Redistributing IOC data | ❌ PROHIBITED | Cannot republish without written permission |
-| Hosting IOC data publicly | ❌ PROHIBITED | GitHub repos, websites, databases |
+| Redistributing IoC data | ❌ PROHIBITED | Cannot republish without written permission |
+| Hosting IoC data publicly | ❌ PROHIBITED | GitHub repos, websites, databases |
 | Commercial redistribution | ❌ PROHIBITED | No commercial use without permission |
 
 ### Recommendations
@@ -114,22 +114,22 @@ The TC-SGB-API-to-List project:
 
 1. **Run locally**: Execute the pipeline on your own infrastructure
 2. **Feed to security systems**: Use outputs with your firewall, SIEM, URL filtering, DNS
-3. **Keep data private**: Do not share raw IOC data publicly
-4. **Do not host publicly**: Do not create public mirrors or databases of IOC data
+3. **Keep data private**: Do not share raw IoC data publicly
+4. **Do not host publicly**: Do not create public mirrors or databases of IoC data
 5. **Consult legal counsel**: For commercial or large-scale use cases
 
 #### For Contributors
 
 1. **Code contributions**: Welcome and encouraged (MIT license)
-2. **No IOC data in PRs**: Do not include IOC data in pull requests or issues
+2. **No IoC data in PRs**: Do not include IoC data in pull requests or issues
 3. **Documentation**: May reference the API but not reproduce its content
-4. **Examples**: Use fictional examples, not real IOC data
+4. **Examples**: Use fictional examples, not real IoC data
 
 #### For Organizations
 
 1. **Internal use**: Deploy and use freely within your organization
-2. **Security integration**: Feed IOCs into your security stack
-3. **No external sharing**: Do not share IOC data with external parties without permission
+2. **Security integration**: Feed IoCs into your security stack
+3. **No external sharing**: Do not share IoC data with external parties without permission
 4. **Audit trail**: Maintain records of data processing for compliance
 5. **Legal review**: Consult legal for specific use cases
 
@@ -137,7 +137,7 @@ The TC-SGB-API-to-List project:
 
 ## Alternative Data Sources (More Permissive)
 
-If the TC SGB license restrictions are too limiting for your use case, consider these alternative IOC sources:
+If the TC SGB license restrictions are too limiting for your use case, consider these alternative IoC sources:
 
 | Source | License | Redistribution | Notes |
 |--------|---------|----------------|-------|
@@ -269,10 +269,10 @@ Bu şunları ifade etmektedir:
 
 TC-SGB-API-to-List projesi:
 
-1. TC SGB kamu API'sinden otomatik yollarla **IOC verisi çeker**
+1. TC SGB kamu API'sinden otomatik yollarla **IoC verisi çeker**
 2. Verileri yerel olarak **işler ve normalleştirir** (doğrulama, normalleştirme, tekilleştirme)
 3. Yerel kullanım için çoklu biçimlerde **çıktı dosyaları üretir**
-4. Ham IOC verisini kamuya **yeniden dağıtmaz**
+4. Ham IoC verisini kamuya **yeniden dağıtmaz**
 
 ### Uyumluluk Değerlendirmesi
 
@@ -283,8 +283,8 @@ TC-SGB-API-to-List projesi:
 | Güvenlik sistemleriyle entegrasyon | ✅ İZİN VERİLMİŞ | API dokümantasyonunda açıkça belirtilmiştir |
 | Yerel rapor oluşturma | ✅ İZİN VERİLMİŞ | Yalnızca dahili kullanım içindir |
 | Kod yayımlama | ✅ İZİN VERİLMİŞ | Kod MIT lisanslıdır, TC SGB içeriği değildir |
-| IOC verisinin yeniden dağıtımı | ❌ YASAKTIR | Yazılı izin olmadan yeniden yayımlanamaz |
-| IOC verisinin kamuya barındırılması | ❌ YASAKTIR | GitHub depoları, web siteleri, veritabanları |
+| IoC verisinin yeniden dağıtımı | ❌ YASAKTIR | Yazılı izin olmadan yeniden yayımlanamaz |
+| IoC verisinin kamuya barındırılması | ❌ YASAKTIR | GitHub depoları, web siteleri, veritabanları |
 | Ticari yeniden dağıtım | ❌ YASAKTIR | İzinsiz ticari kullanım yasaktır |
 
 ### Öneriler
@@ -293,22 +293,22 @@ TC-SGB-API-to-List projesi:
 
 1. **Yerel olarak çalıştırın**: Hattı kendi altyapınızda çalıştırın
 2. **Güvenlik sistemlerine besleyin**: Çıktıları güvenlik duvarınız, SIEM, URL filtreleme, DNS ile kullanın
-3. **Verileri gizli tutun**: Ham IOC verisini kamuya paylaşmayın
-4. **Kamuya barındırmayın**: IOC verisinin kamuya açık aynalarını veya veritabanlarını oluşturmayın
+3. **Verileri gizli tutun**: Ham IoC verisini kamuya paylaşmayın
+4. **Kamuya barındırmayın**: IoC verisinin kamuya açık aynalarını veya veritabanlarını oluşturmayın
 5. **Hukuki danışmana başvurun**: Ticari veya büyük ölçekli kullanım durumları için
 
 #### Katkıda Bulunanlar İçin
 
 1. **Katkılar**: Hoş geldiniz ve teşvik edilmektedir (MIT lisansı)
-2. **PR'larda IOC verisi olmasın**: Pull request'lere veya sorunlara IOC verisi eklemeyin
+2. **PR'larda IoC verisi olmasın**: Pull request'lere veya sorunlara IoC verisi eklemeyin
 3. **Dokümantasyon**: API'ye referans verilebilir ancak içeriği çoğaltılamaz
-4. **Örnekler**: Gerçek IOC verisi değil, kurgusal örnekler kullanın
+4. **Örnekler**: Gerçek IoC verisi değil, kurgusal örnekler kullanın
 
 #### Kuruluşlar İçin
 
 1. **Dahili kullanım**: Kuruluşunuz içinde özgürce dağıtın ve kullanın
-2. **Güvenlik entegrasyonu**: IOC'leri güvenlik yığınınıza besleyin
-3. **Harici Paylaşım Yasak**: İzinsiz IOC verisini harici taraflarla paylaşmayın
+2. **Güvenlik entegrasyonu**: IoC'leri güvenlik yığınınıza besleyin
+3. **Harici Paylaşım Yasak**: İzinsiz IoC verisini harici taraflarla paylaşmayın
 4. **Denetim izi**: Uyumluluk için veri işleme kayıtlarını tutun
 5. **Hukuki inceleme**: Belirli kullanım durumları için hukuki danışmana başvurun
 
@@ -316,7 +316,7 @@ TC-SGB-API-to-List projesi:
 
 ## Alternatif Veri Kaynakları (Daha İzni Geniş)
 
-TC SGB lisans kısıtlamaları kullanım senaryonuz için çok kısıtlayıcıysa, şu alternatif IOC kaynaklarını değerlendirin:
+TC SGB lisans kısıtlamaları kullanım senaryonuz için çok kısıtlayıcıysa, şu alternatif IoC kaynaklarını değerlendirin:
 
 | Kaynak | Lisans | Yeniden Dağıtım | Notlar |
 |--------|--------|-----------------|--------|
@@ -333,7 +333,7 @@ TC SGB lisans kısıtlamaları kullanım senaryonuz için çok kısıtlayıcıys
 
 ## Sorumluluk Reddi
 
-> **SORUMLULUK REDDİ**: Bu belge, yalnızca referans amaçlı olarak Türkiye Ulusal Siber Güvenlik Müdürlüğü tarafından yayımlanan yasal uyarıların bir özetini sunmaktadır. Hukuki tavsiye niteliği taşımamaktadır. https://siberguvenlik.gov.tr/yasal-uyarilar adresindeki orijinal Türkçe metin yetkili kaynaktır. TC SGB verilerinin kullanımıyla ilgili hukuki sorularınız için Türk fikri mülkiyet hukumuna hakim nitelikli hukuki danışmana başvurunuz.
+> **SORUMLULUK REDDİ**: Bu belge, yalnızca referans amaçlı olarak Türkiye Ulusal Siber Güvenlik Müdürlüğü tarafından yayımlanan yasal uyarıların bir özetini sunmaktadır. Hukuki tavsiye niteliği taşımamaktadır. https://siberguvenlik.gov.tr/yasal-uyarilar adresindeki orijinal Türkçe metin yetkili kaynaktır. TC SGB verilerinin kullanımıyla ilgili hukuki sorularınız için Türk fikri mülkiyet hukukuna hakim nitelikli hukuki danışmana başvurunuz.
 
 ---
 

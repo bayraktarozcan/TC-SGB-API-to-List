@@ -90,8 +90,8 @@ class TestBuildMarkdown:
             removed_records=[],
         )
         text = "\n".join(lines)
-        assert "Yeni IOC yok" in text
-        assert "Silinen IOC yok" in text
+        assert "Yeni IoC yok" in text
+        assert "Silinen IoC yok" in text
         assert "Net değişim: **+0**" in text
 
     def test_negative_delta(self):
@@ -168,5 +168,5 @@ class TestGenerateChangelog:
         result = generate_changelog(temp_dir, records)
         assert result is not None
         content = result.read_text(encoding="utf-8")
-        assert "Yeni IOC yok" in content
-        assert "Silinen IOC yok" in content
+        assert "Yeni IoC yok" in content
+        assert "Silinen IoC yok" in content

@@ -11,10 +11,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ### Added
 
-- Complete IOC pipeline: fetch → validate → normalize → score → dedup → output
+- Complete IoC pipeline: fetch → validate → normalize → score → dedup → output
 - 17 output formats: NextDNS, AdGuard, Pi-hole, dnsmasq, Unbound, RPZ, Technitium, MikroTik, nftables, ipset, Suricata, CSV, JSON, YAML, SQLite, STIX 2.1, MISP
 - Async API client with retry logic and rate limiting
-- Pydantic data models for IOC validation
+- Pydantic data models for IoC validation
 - Quality scoring system for false-positive risk assessment
 - Cross-type deduplication (domain↔URL bidirectional)
 - IDN/Punycode normalization for internationalized domains
@@ -53,16 +53,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 # Değişiklik Günlüğü
 
 Bu projedeki tüm dikkat çekici değişiklikler bu dosyada belgelenecektir.
-Format, [Keep a Changelog](https://keepachangelog.com/)'a dayanmaktadır.
+Biçim, [Keep a Changelog](https://keepachangelog.com/)'a dayanmaktadır.
 
 ## [v0.1.0.0] — 2026-07-27
 
 ### Eklenen
 
-- Tam IOC hattı: çek → doğrula → normalleştir → puanla → tekilleştir → çıktı
-- 17 çıktı formatı: NextDNS, AdGuard, Pi-hole, dnsmasq, Unbound, RPZ, Technitium, MikroTik, nftables, ipset, Suricata, CSV, JSON, YAML, SQLite, STIX 2.1, MISP
+- Tam IoC hattı: çek → doğrula → normalleştir → puanla → tekilleştir → çıktı
+- 17 çıktı biçimi: NextDNS, AdGuard, Pi-hole, dnsmasq, Unbound, RPZ, Technitium, MikroTik, nftables, ipset, Suricata, CSV, JSON, YAML, SQLite, STIX 2.1, MISP
 - Yeniden deneme mantığı ve hız sınırlaması ile asenkron API istemcisi
-- IOC doğrulama için Pydantic veri modelleri
+- IoC doğrulama için Pydantic veri modelleri
 - Yanlış pozitif risk değerlendirmesi için kalite puanlama sistemi
 - Çapraz tür tekilleştirme (alan adı↔URL çift yönlü)
 - Uluslararası alan adları için IDN/Punycode normalleştirmesi

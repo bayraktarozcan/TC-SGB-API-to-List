@@ -1,4 +1,4 @@
-"""Shared fixtures: sample IOC data, mock API responses, temp directories."""
+"""Shared fixtures: sample IoC data, mock API responses, temp directories."""
 
 from __future__ import annotations
 
@@ -180,7 +180,7 @@ def malicious_only_records() -> list[AddressRecord]:
 
 
 # ---------------------------------------------------------------------------
-# Validated IOC fixtures
+# Validated IoC fixtures
 # ---------------------------------------------------------------------------
 
 
@@ -221,7 +221,7 @@ def sample_validated_iocs() -> list[ValidatedIOC]:
 
 
 # ---------------------------------------------------------------------------
-# Normalized IOC fixtures
+# Normalized IoC fixtures
 # ---------------------------------------------------------------------------
 
 
@@ -263,7 +263,7 @@ def sample_normalized_iocs() -> list[NormalizedIOC]:
 
 @pytest.fixture
 def scoreable_iocs() -> list[NormalizedIOC]:
-    """IOCs designed to exercise quality scoring: benign, private, normal, no-source."""
+    """IoCs designed to exercise quality scoring: benign, private, normal, no-source."""
     return [
         NormalizedIOC(
             value="google.com",
@@ -309,7 +309,7 @@ def scoreable_iocs() -> list[NormalizedIOC]:
 
 
 # ---------------------------------------------------------------------------
-# Scored IOC fixtures
+# Scored IoC fixtures
 # ---------------------------------------------------------------------------
 
 

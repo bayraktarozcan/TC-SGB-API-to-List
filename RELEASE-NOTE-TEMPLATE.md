@@ -43,10 +43,10 @@
 
 | Metric | Value |
 |--------|-------|
-| IOC Output Formats | {N} |
-| Total IOCs Fetched | ~{N} |
-| Validated IOCs | ~{N} |
-| Final IOCs (after dedup) | ~{N} |
+| IoC Output Formats | {N} |
+| Total IoCs Fetched | ~{N} |
+| Validated IoCs | ~{N} |
+| Final IoCs (after dedup) | ~{N} |
 | Test Suite | {N} tests passing |
 | Type Safety | mypy clean |
 | Lint | ruff clean |
@@ -100,16 +100,16 @@ tc-sgb health
 
 ### Kırıcı Değişiklikler
 
-{KIRICI_DEĞİŞİKLİKLER_Veya_YOK}
+{KIRICI_DEĞİŞİKLİKLER_VEYA_YOK}
 
 ### İstatistikler
 
 | Metrik | Değer |
 |--------|-------|
-| IOC Çıktı Formatı | {N} |
-| Çekilen Toplam IOC | ~{N} |
-| Doğrulanmış IOC | ~{N} |
-| Nihai IOC (tekilleştirmeden sonra) | ~{N} |
+| IoC Çıktı Formatı Sayısı | {N} |
+| Çekilen Toplam IoC | ~{N} |
+| Doğrulanmış IoC | ~{N} |
+| Nihai IoC (tekilleştirmeden sonra) | ~{N} |
 | Test Paketi | {N} test geçiyor |
 | Tip Güvenliği | mypy temiz |
 | Lint | ruff temiz |
@@ -148,7 +148,7 @@ tc-sgb health
 
 > Aşağıdaki şablonu kopyalayın, yer tutucuları gerçek değerlerle değiştirin ve GitHub Release'leri oluştururken kullanın.
 
-> **ZORUNLU: Her release bilingual (İngilizce + Türkçe) olmalıdır, README.md ile aynı format birebir izlenmelidir.**
+> **ZORUNLU: Her release çift dilli (İngilizce + Türkçe) olmalıdır, README.md ile aynı biçim bire bir izlenmelidir.**
 > Birleşik şablonu kullanın — önce İngilizce blok, ardından `---` ayracı, sonra Türkçe blok.
 > Her bloğun kendi çapa noktası, başlıkları ve açıklamaları vardır — bir bölüm içinde diller asla karıştırılmaz.
 
@@ -197,10 +197,10 @@ tc-sgb health
 
 | Metric | Value |
 |--------|-------|
-| IOC Output Formats | {N} |
-| Total IOCs Fetched | ~{N} |
-| Validated IOCs | ~{N} |
-| Final IOCs (after dedup) | ~{N} |
+| IoC Output Formats | {N} |
+| Total IoCs Fetched | ~{N} |
+| Validated IoCs | ~{N} |
+| Final IoCs (after dedup) | ~{N} |
 | Test Suite | {N} tests passing |
 | Type Safety | mypy clean |
 | Lint | ruff clean |
@@ -254,16 +254,16 @@ tc-sgb health
 
 ### Kırıcı Değişiklikler
 
-{KIRICI_DEĞİŞİKLİKLER_Veya_YOK}
+{KIRICI_DEĞİŞİKLİKLER_VEYA_YOK}
 
 ### İstatistikler
 
 | Metrik | Değer |
 |--------|-------|
-| IOC Çıktı Formatı | {N} |
-| Çekilen Toplam IOC | ~{N} |
-| Doğrulanmış IOC | ~{N} |
-| Nihai IOC (tekilleştirmeden sonra) | ~{N} |
+| IoC Çıktı Formatı Sayısı | {N} |
+| Çekilen Toplam IoC | ~{N} |
+| Doğrulanmış IoC | ~{N} |
+| Nihai IoC (tekilleştirmeden sonra) | ~{N} |
 | Test Paketi | {N} test geçiyor |
 | Tip Güvenliği | mypy temiz |
 | Lint | ruff temiz |
@@ -305,13 +305,13 @@ tc-sgb health
 
 ## TC-SGB-API-to-List v0.1.0.0
 
-> **Initial public release — Full IOC pipeline with 17 output formats and 490,000+ threat indicators**
+> **Initial public release — Full IoC pipeline with 17 output formats and 490.000+ threat indicators**
 
 ---
 
 ### What's New
 
-- Complete IOC pipeline: fetch → validate → normalize → score → dedup → output
+- Complete IoC pipeline: fetch → validate → normalize → score → dedup → output
 - 17 output formats (NextDNS, AdGuard, Suricata, nftables, MikroTik, STIX 2.1, MISP, etc.)
 - Cross-type deduplication with quality-score-aware resolution
 - RFC6761 compliant reserved domain handling
@@ -327,9 +327,9 @@ tc-sgb health
 
 | Metric | Value |
 |--------|-------|
-| IOC Output Formats | 17 |
-| Total IOCs Fetched | ~490,000 |
-| Final IOCs (after dedup) | ~479,000 |
+| IoC Output Formats | 17 |
+| Total IoCs Fetched | ~490.000 |
+| Final IoCs (after dedup) | ~479.000 |
 | Test Suite | 330 tests passing |
 
 **Full Changelog**: https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/tag/v0.1.0.0
@@ -340,15 +340,15 @@ tc-sgb health
 
 ## TC-SGB-API-to-List v0.1.0.0
 
-> **İlk kamuya açık sürüm — 17 çıktı formatı ve 490,000'den fazla tehdit göstergesi ile tam IOC hattı**
+> **İlk kamuya açık sürüm — 17 çıktı biçimi ve 490.000'den fazla tehdit göstergesi ile tam IoC hattı**
 
 ---
 
 ### Yenilikler
 
-- Tam IOC hattı: çek → doğrula → normalleştir → puanla → tekilleştir → çıktı
-- 17 çıktı formatı (NextDNS, AdGuard, Suricata, nftables, MikroTik, STIX 2.1, MISP, vb.)
-- Kalite puanı bilinçli çözümleme ile çapraz tür tekilleştirme
+- Tam IoC hattı: çek → doğrula → normalleştir → puanla → tekilleştir → çıktı
+- 17 çıktı biçimi (NextDNS, AdGuard, Suricata, nftables, MikroTik, STIX 2.1, MISP, vb.)
+- Kalite puanını dikkate alan çözümleme ile çapraz tür tekilleştirme
 - RFC6761 uyumlu ayrılmış alan adı işleme
 - 330 test geçiyor, ruff temiz, mypy temiz
 
@@ -362,9 +362,9 @@ tc-sgb health
 
 | Metrik | Değer |
 |--------|-------|
-| IOC Çıktı Formatı | 17 |
-| Çekilen Toplam IOC | ~490,000 |
-| Nihai IOC (tekilleştirmeden sonra) | ~479,000 |
+| IoC Çıktı Formatı Sayısı | 17 |
+| Çekilen Toplam IoC | ~490.000 |
+| Nihai IoC (tekilleştirmeden sonra) | ~479.000 |
 | Test Paketi | 330 test geçiyor |
 
 **Tam Değişiklik Günlüğü**: https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/tag/v0.1.0.0

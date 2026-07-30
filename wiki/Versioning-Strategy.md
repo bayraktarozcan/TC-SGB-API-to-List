@@ -410,7 +410,7 @@ Bu belge, TC-SGB-API-to-List projesi için Anlamsal Sürüm Numaralandırması (
 
 ## Anlamsal Sürüm Numaralandırması
 
-### Format
+### Biçim
 
 ```
 MAJOR.MINOR.PATCH
@@ -418,8 +418,8 @@ MAJOR.MINOR.PATCH
 
 | Bileşen | Artırma Durumu | Örnek |
 |---------|----------------|-------|
-| MAJOR | Genel API, yapılandırma formatı veya çıkış şemasında geriye dönük uyumsuz değişiklikler | 2.0.0 |
-| MINOR | Yeni özellikler, yeni çıkış formatları, geriye dönük uyumlu | 1.1.0 |
+| MAJOR | Genel API, yapılandırma biçimi veya çıkış şemasında geriye dönük uyumsuz değişiklikler | 2.0.0 |
+| MINOR | Yeni özellikler, yeni çıkış biçimleri, geriye dönük uyumlu | 1.1.0 |
 | PATCH | Hata düzeltmeleri, güvenlik yamaları, belgeleme güncellemeleri | 1.0.1 |
 
 ### Ön Yayın Sürümleri
@@ -436,9 +436,9 @@ MAJOR.MINOR.PATCH-rc.N       # Aday yayın
 |-------|----------|
 | 1.0.0 | İlk kararlı yayın |
 | 1.0.1 | Hata düzeltme yayını |
-| 1.1.0 | Sigma çıkış formatı eklendi |
-| 1.2.0 | MISP çıkış formatı eklendi |
-| 2.0.0 | Kırıcı: Yeni yapılandırma formatı, Python 3.10 desteği kaldırıldı |
+| 1.1.0 | Sigma çıkış biçimi eklendi |
+| 1.2.0 | MISP çıkış biçimi eklendi |
+| 2.0.0 | Kırıcı: Yeni yapılandırma biçimi, Python 3.10 desteği kaldırıldı |
 | 2.0.0-rc.1 | v2 için aday yayın |
 
 ---
@@ -572,7 +572,7 @@ jobs:
 
 ## Sürüm Notu Kuralları
 
-### Format
+### Biçim
 
 ```markdown
 # Release v1.1.0
@@ -648,13 +648,13 @@ jobs:
 |------------|------------|-----------------|
 | CLI seçeneği kaldırma | EVET | MAJOR |
 | CLI seçeneği yeniden adlandırma | EVET | MAJOR |
-| Yapılandırma dosyası formatını değiştirme | EVET | MAJOR |
+| Yapılandırma dosyası biçimini değiştirme | EVET | MAJOR |
 | Çıkış JSON şemasını değiştirme | EVET | MAJOR |
-| Çıkış formatını kaldırma | EVET | MAJOR |
+| Çıkış biçimini kaldırma | EVET | MAJOR |
 | Gerekli yapılandırma anahtarı ekleme | EVET | MAJOR |
 | Varsayılan değerleri değiştirme | BELKİ | MINOR veya MAJOR |
 | Opsiyonel yapılandırma anahtarı ekleme | HAYIR | MINOR |
-| Yeni çıkış formatı ekleme | HAYIR | MINOR |
+| Yeni çıkış biçimi ekleme | HAYIR | MINOR |
 | Dahili API'yi değiştirme | HAYIR | MINOR |
 | Çıkışta hata düzeltme | HAYIR | PATCH |
 | Bağımlılıkları güncelleme | HAYIR | PATCH |
@@ -669,14 +669,14 @@ jobs:
   N.x.y sürümü garantileri:
   +---------------------------------------------------+
   | ✓ Aynı CLI arayüzü                                 |
-  | ✓ Aynı yapılandırma dosyası formatı                |
+  | ✓ Aynı yapılandırma dosyası biçimi                |
   | ✓ Aynı çıkış JSON şeması                           |
   | ✓ Aynı çıkış kodları                                |
   | ✓ Aynı ortam değişkenleri                           |
   | ✓ Aynı Python sürüm desteği                         |
   |                                                    |
   | ✗ Dahili modül API'leri garanti edilmez             |
-  | ✗ Günlük formatı garanti edilmez                    |
+  | ✗ Günlük biçimi garanti edilmez                    |
   | ✗ Hata mesajı metni garanti edilmez                 |
   +---------------------------------------------------+
 ```
@@ -685,7 +685,7 @@ jobs:
 
 ## Değişiklik Günlüğü Yönetimi
 
-### Değişiklik Günlüğü Formatı
+### Değişiklik Günlüğü Biçimi
 
 ```markdown
 # Changelog

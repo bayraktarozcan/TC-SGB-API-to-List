@@ -1,4 +1,4 @@
-"""Tests for deduplication across IOC types."""
+"""Tests for deduplication across IoC types."""
 
 from __future__ import annotations
 

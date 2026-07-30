@@ -1,4 +1,4 @@
-"""IOC validation: checks for empty fields, invalid domains, RFC6761,
+"""IoC validation: checks for empty fields, invalid domains, RFC6761,
 private TLDs, reserved domains, unicode issues, IP/URL correctness."""
 
 from __future__ import annotations
@@ -142,7 +142,7 @@ def _is_valid_domain(domain: str) -> list[str]:
 
 
 def _infer_ioc_type(value: str) -> IOCType | None:
-    """Infer IOC type from the value when API type field is not available."""
+    """Infer IoC type from the value when API type field is not available."""
     value = value.strip()
     if not value:
         return None
@@ -284,7 +284,7 @@ def validate_records_batch(
     for rec in records:
         result = validate_ioc(rec)
         if result is None:
-            rejected.append((rec, ["empty or unparseable IOC value"]))
+            rejected.append((rec, ["empty or unparseable IoC value"]))
         elif result.validation_errors:
             rejected.append((rec, result.validation_errors))
         else:

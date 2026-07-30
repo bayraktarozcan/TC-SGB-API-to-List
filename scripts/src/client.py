@@ -236,7 +236,7 @@ class AsyncAPIClient:
         per_page: int = 9999,
         max_pages: int = 0,
     ) -> list[AddressRecord]:
-        """Fetch all IOC addresses (domains, IPs, URLs)."""
+        """Fetch all IoC addresses (domains, IPs, URLs)."""
         logger.info("Fetching all addresses from SGB API...")
         records = await self._fetch_paginated(
             endpoint="/api/address/index",

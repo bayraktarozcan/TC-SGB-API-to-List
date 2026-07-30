@@ -21,7 +21,6 @@
 - [Risk Analysis](Risk-Analysis#-english)
 - [Roadmap](Roadmap#-english)
 - [Legal Notices](Legal-Notices#-english)
-- [Audit Report](Audit-Report#-english)
 
 ## Türkçe
 
@@ -44,7 +43,6 @@
 - [Risk Analizi](Risk-Analysis#-türkçe)
 - [Yol Haritası](Roadmap#-türkçe)
 - [Yasal Bildirimler](Legal-Notices#-türkçe)
-- [Denetim Raporu](Audit-Report#-türkçe)
 
 ---
 

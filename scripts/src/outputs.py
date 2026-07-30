@@ -28,7 +28,7 @@ _yaml_dumper: type[yaml.SafeDumper] = yaml.SafeDumper
 
 
 def _domains_only(iocs: Sequence[ScoredIOC]) -> list[ScoredIOC]:
-    """Filter to domain-type IOCs only (used by most DNS filter formats)."""
+    """Filter to domain-type IoCs only (used by most DNS filter formats)."""
     return [ioc for ioc in iocs if ioc.ioc_type == IOCType.DOMAIN]
 
 
@@ -290,12 +290,12 @@ def generate_ipset(iocs: Sequence[ScoredIOC], path: str | Path | None = None) ->
 
 
 # ---------------------------------------------------------------------------
-# 11. Suricata — EVE JSON IOC format
+# 11. Suricata — EVE JSON IoC format
 # ---------------------------------------------------------------------------
 
 
 def generate_suricata(iocs: Sequence[ScoredIOC], path: str | Path | None = None) -> str:
-    """Generate Suricata EVE-format JSON lines for IOCs."""
+    """Generate Suricata EVE-format JSON lines for IoCs."""
     lines: list[str] = []
     for ioc in iocs:
         entry: dict[str, Any] = {
@@ -314,7 +314,7 @@ def generate_suricata(iocs: Sequence[ScoredIOC], path: str | Path | None = None)
                 "severity": ioc.criticality_level,
                 "category": ioc.desc.value if ioc.desc else "unknown",
                 "signature": (
-                    f"TC-SGB Intel — {ioc.desc.value if ioc.desc else 'IOC'} — {ioc.value[:128]}"
+                    f"TC-SGB Intel — {ioc.desc.value if ioc.desc else 'IoC'} — {ioc.value[:128]}"
                 ),
             },
             "metadata": {
@@ -376,7 +376,7 @@ def generate_crowdsec(iocs: Sequence[ScoredIOC], path: str | Path | None = None)
 
 
 def generate_csv(iocs: Sequence[ScoredIOC], path: str | Path | None = None) -> str:
-    """Generate CSV with all IOC fields."""
+    """Generate CSV with all IoC fields."""
     output = io.StringIO()
     writer = csv.writer(output)
     writer.writerow(
@@ -516,7 +516,7 @@ CREATE TABLE IF NOT EXISTS pipeline_runs (
 
 
 def generate_sqlite(iocs: Sequence[ScoredIOC], path: str | Path | None = None) -> str:
-    """Generate a SQLite database with the IOCs.
+    """Generate a SQLite database with the IoCs.
 
     Returns the path to the created database as a string.
     """
@@ -552,7 +552,7 @@ def generate_sqlite(iocs: Sequence[ScoredIOC], path: str | Path | None = None) -
             rows,
         )
         conn.commit()
-        logger.info("SQLite: wrote %d IOCs to %s", len(rows), path)
+        logger.info("SQLite: wrote %d IoCs to %s", len(rows), path)
     finally:
         conn.close()
 
@@ -594,7 +594,7 @@ def generate_all(
     Parameters
     ----------
     iocs:
-        Scored and deduplicated IOCs.
+        Scored and deduplicated IoCs.
     output_dir:
         Directory to write output files into.
     formats:

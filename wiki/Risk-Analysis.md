@@ -80,7 +80,7 @@ This document presents a comprehensive risk matrix for the TC-SGB-API-to-List pr
 | S-02 | Compromised GitHub Actions | 1 | 5 | 5 | MEDIUM | Pin action SHAs, minimal permissions |
 | S-03 | API impersonation/MITM | 1 | 5 | 5 | MEDIUM | TLS verification, certificate pinning |
 | S-04 | Data exfiltration via logs | 2 | 3 | 6 | MEDIUM | Sanitize logs, structured logging |
-| S-05 | Code injection via IOC values | 1 | 5 | 5 | MEDIUM | Input validation, no eval/exec |
+| S-05 | Code injection via IoC values | 1 | 5 | 5 | MEDIUM | Input validation, no eval/exec |
 | S-06 | Credential exposure | 1 | 4 | 4 | LOW | Environment variables, no secrets in code |
 | S-07 | Unauthorized access to outputs | 2 | 3 | 6 | MEDIUM | File permissions, access controls |
 | S-08 | Malicious pull request | 2 | 4 | 8 | MEDIUM | PR reviews, CI checks, branch protection |
@@ -94,7 +94,7 @@ This document presents a comprehensive risk matrix for the TC-SGB-API-to-List pr
 | L-01 | Violation of TC SGB terms of service | 2 | 5 | 10 | HIGH | Legal review, compliance monitoring |
 | L-02 | Copyright infringement claim | 1 | 5 | 5 | MEDIUM | Respect ToS, no redistribution |
 | L-03 | License violation in dependencies | 1 | 3 | 3 | LOW | License compatibility checks |
-| L-04 | Data privacy violation | 1 | 4 | 4 | LOW | No PII in IOC data, compliance review |
+| L-04 | Data privacy violation | 1 | 4 | 4 | LOW | No PII in IoC data, compliance review |
 | L-05 | Export control violation | 1 | 4 | 4 | LOW | Check export regulations |
 
 ---
@@ -109,7 +109,7 @@ This document presents a comprehensive risk matrix for the TC-SGB-API-to-List pr
 | D-04 | Duplicate data in output | 2 | 2 | 4 | LOW | Deduplication, output validation |
 | D-05 | Stale data in output | 3 | 2 | 6 | MEDIUM | Freshness checks, staleness alerts |
 | D-06 | False positives in output | 3 | 2 | 6 | MEDIUM | FP detection, whitelisting |
-| D-07 | Missing IOC types | 1 | 2 | 2 | LOW | Type coverage monitoring |
+| D-07 | Missing IoC types | 1 | 2 | 2 | LOW | Type coverage monitoring |
 
 ---
 
@@ -336,7 +336,7 @@ Bu belge, TC-SGB-API-to-List projesi için kapsamlı bir risk matrisi sunmakta; 
 | S-02 | Ele geçirilmiş GitHub Actions | 1 | 5 | 5 | ORTA | Action SHA'larını sabitleme, asgari izinler |
 | S-03 | API taklidi/MITM | 1 | 5 | 5 | ORTA | TLS doğrulama, sertifika sabitleme |
 | S-04 | Günlükler aracılığıyla veri sızıntısı | 2 | 3 | 6 | ORTA | Günlük temizleme, yapılandırılmış günlük kaydı |
-| S-05 | IOC değerleri üzerinden kod enjeksiyonu | 1 | 5 | 5 | ORTA | Girdi doğrulaması, eval/exec kullanmama |
+| S-05 | IoC değerleri üzerinden kod enjeksiyonu | 1 | 5 | 5 | ORTA | Girdi doğrulaması, eval/exec kullanmama |
 | S-06 | Kimlik bilgilerinin ifşası | 1 | 4 | 4 | DÜŞÜK | Ortam değişkenleri, kodda sır tutmama |
 | S-07 | Çıktılara yetkisiz erişim | 2 | 3 | 6 | ORTA | Dosya izinleri, erişim kontrolleri |
 | S-08 | Kötü niyetli pull request | 2 | 4 | 8 | ORTA | PR incelemeleri, CI kontrolleri, dal koruma |
@@ -350,7 +350,7 @@ Bu belge, TC-SGB-API-to-List projesi için kapsamlı bir risk matrisi sunmakta; 
 | L-01 | TC SGB hizmet şartlarının ihlali | 2 | 5 | 10 | YÜKSEK | Hukuki inceleme, uyumluluk izleme |
 | L-02 | Telif hakkı ihlali iddiası | 1 | 5 | 5 | ORTA | Hizmet şartlarına saygı, yeniden dağıtım yapmama |
 | L-03 | Bağımlılıklarda lisans ihlali | 1 | 3 | 3 | DÜŞÜK | Lisans uyumluluğu kontrolleri |
-| L-04 | Veri gizliliği ihlali | 1 | 4 | 4 | DÜŞÜK | IOC verisinde Kişisel Veri Bulunmaması, uyumluluk incelemesi |
+| L-04 | Veri gizliliği ihlali | 1 | 4 | 4 | DÜŞÜK | IoC verisinde Kişisel Veri Bulunmaması, uyumluluk incelemesi |
 | L-05 | İhracat kontrolü ihlali | 1 | 4 | 4 | DÜŞÜK | İhracat düzenlemelerini kontrol etme |
 
 ---
@@ -365,7 +365,7 @@ Bu belge, TC-SGB-API-to-List projesi için kapsamlı bir risk matrisi sunmakta; 
 | D-04 | Çıktıda tekrarlanan veri | 2 | 2 | 4 | DÜŞÜK | Tekilleştirme, çıktı doğrulama |
 | D-05 | Çıktıda eski veri | 3 | 2 | 6 | ORTA | Tazelik kontrolleri, eskime uyarıları |
 | D-06 | Çıktıda yanlış pozitifler | 3 | 2 | 6 | ORTA | Yanlış pozitif tespiti, beyaz liste |
-| D-07 | Eksik IOC türleri | 1 | 2 | 2 | DÜŞÜK | Tür kapsama izleme |
+| D-07 | Eksik IoC türleri | 1 | 2 | 2 | DÜŞÜK | Tür kapsama izleme |
 
 ---
 

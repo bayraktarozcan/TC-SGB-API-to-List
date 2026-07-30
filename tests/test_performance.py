@@ -1,4 +1,4 @@
-"""Performance benchmarks: measure time for processing 100, 1000, 10000 IOCs."""
+"""Performance benchmarks: measure time for processing 100, 1000, 10000 IoCs."""
 
 from __future__ import annotations
 

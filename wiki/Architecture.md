@@ -7,7 +7,7 @@
 
 ## Overview
 
-The TC-SGB-API-to-List system is an automated threat intelligence pipeline that ingests Indicator of Compromise (IOC) data from the Turkish National Cyber Security Directorate (TC SGB) public API, processes it through validation, normalization, deduplication, and quality control stages, and outputs structured threat intelligence in 17 interoperable formats.
+The TC-SGB-API-to-List system is an automated threat intelligence pipeline that ingests Indicator of Compromise (IoC) data from the Turkish National Cyber Security Directorate (TC SGB) public API, processes it through validation, normalization, deduplication, and quality control stages, and outputs structured threat intelligence in 17 interoperable formats.
 
 ## High-Level Architecture
 
@@ -179,7 +179,7 @@ The TC-SGB-API-to-List system is an automated threat intelligence pipeline that 
 
 ## Design Principles
 
-1. **Immutable Data**: IOC records are validated once and never mutated after normalization
+1. **Immutable Data**: IoC records are validated once and never mutated after normalization
 2. **Fail-Safe Defaults**: Invalid data is rejected with detailed error reporting
 3. **Defense in Depth**: Multiple validation layers prevent malformed data propagation
 4. **Auditability**: Every transformation is logged with before/after snapshots
@@ -222,7 +222,7 @@ The system uses asyncio with bounded concurrency to respect rate limits while ma
 
 ## Genel Bakış
 
-TC-SGB-API-to-List sistemi, Türkiye Ulusal Siber Güvenlik Direktörlüğü (TC SGB) kamu API'sinden Tehdit Göstergesi (IOC) verilerini alan, doğrulama, normalleştirme, tekilleştirme ve kalite kontrol aşamalarından geçirerek yapılandırılmış tehdit istihbaratını 17 birlikte çalışabilir formatta çıktı olarak üreten otomatik bir tehdit istihbaratı hattıdır.
+TC-SGB-API-to-List sistemi, Türkiye Ulusal Siber Güvenlik Direktörlüğü (TC SGB) kamu API'sinden Tehdit Göstergesi (IoC) verilerini alan, doğrulama, normalleştirme, tekilleştirme ve kalite kontrol aşamalarından geçirerek yapılandırılmış tehdit istihbaratını 17 birlikte çalışabilir biçimde çıktı olarak üreten otomatik bir tehdit istihbaratı hattıdır.
 
 ## Üst Düzey Mimari
 
@@ -336,7 +336,7 @@ TC-SGB-API-to-List sistemi, Türkiye Ulusal Siber Güvenlik Direktörlüğü (TC
 
 | Bileşen          | Teknoloji      | Amaç                            |
 |------------------|----------------|----------------------------------|
-| CI/CD            | GitHub Actions | Otomatik hattı                   |
+| CI/CD            | GitHub Actions | Otomatik Hat                   |
 | Sürümleme        | SemVer         | Yayın yönetimi                   |
 | Paketleme        | setuptools     | Paket oluşturma                  |
 | Kayıt Defteri    | PyPI           | Paket dağıtımı                   |
@@ -394,7 +394,7 @@ TC-SGB-API-to-List sistemi, Türkiye Ulusal Siber Güvenlik Direktörlüğü (TC
 
 ## Tasarım İlkeleri
 
-1. **Değişmez Veri**: IOC kayıtları bir kez doğrulanır ve normalleştirmeden sonra asla değiştirilmez
+1. **Değişmez Veri**: IoC kayıtları bir kez doğrulanır ve normalleştirmeden sonra asla değiştirilmez
 2. **Güvenli Varsayılanlar**: Geçersiz veriler ayrıntılı hata raporlamasıyla reddedilir
 3. **Derinlemesine Savunma**: Çoklu doğrulama katmanları hatalı verilerin yayılmasını engeller
 4. **Denetlenebilirlik**: Her dönüştürme, öncesi/sonrası anlık görüntüleriyle kaydedilir

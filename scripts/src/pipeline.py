@@ -1,4 +1,4 @@
-"""Pipeline orchestrator for IOC ingestion, validation, dedup, and quality scoring."""
+"""Pipeline orchestrator for IoC ingestion, validation, dedup, and quality scoring."""
 
 from __future__ import annotations
 
@@ -27,7 +27,7 @@ class Pipeline:
     """Main pipeline orchestrator.
 
     Stages:
-    1. Fetch   — paginated retrieval of all IOCs from SGB API
+    1. Fetch   — paginated retrieval of all IoCs from SGB API
     2. Validate — syntax + semantic checks, reject invalid entries
     3. Normalize — lowercase, trim, IDN normalization
     4. Quality — confidence scoring and false-positive risk estimation
@@ -95,8 +95,8 @@ class Pipeline:
         await self.client.close()
 
     async def _stage_fetch(self) -> tuple[list[AddressRecord], float]:
-        """Stage 1: Fetch all IOCs from the API."""
-        logger.info("Stage 1/5: Fetching IOCs...")
+        """Stage 1: Fetch all IoCs from the API."""
+        logger.info("Stage 1/5: Fetching IoCs...")
         start = time.monotonic()
         records = await self.client.fetch_addresses(
             per_page=self.per_page,
@@ -104,12 +104,12 @@ class Pipeline:
         )
         self.stats.total_fetched = len(records)
         duration = time.monotonic() - start
-        logger.info(f"Fetched {len(records)} IOCs in {duration:.1f}s")
+        logger.info(f"Fetched {len(records)} IoCs in {duration:.1f}s")
         return records, duration
 
     def _stage_validate(self, records: list[AddressRecord]) -> tuple[list[ValidatedIOC], int]:
-        """Stage 2: Validate each IOC."""
-        logger.info("Stage 2/5: Validating IOCs...")
+        """Stage 2: Validate each IoC."""
+        logger.info("Stage 2/5: Validating IoCs...")
         validated: list[ValidatedIOC] = []
         rejected = 0
 
@@ -128,8 +128,8 @@ class Pipeline:
         return validated, rejected
 
     def _stage_normalize(self, validated: list[ValidatedIOC]) -> list[NormalizedIOC]:
-        """Stage 3: Normalize each validated IOC."""
-        logger.info("Stage 3/5: Normalizing IOCs...")
+        """Stage 3: Normalize each validated IoC."""
+        logger.info("Stage 3/5: Normalizing IoCs...")
         normalized: list[NormalizedIOC] = []
 
         for v in validated:
@@ -140,14 +140,14 @@ class Pipeline:
             except Exception as e:
                 logger.debug(f"Normalization error: {e}")
 
-        logger.info(f"Normalized {len(normalized)} IOCs")
+        logger.info(f"Normalized {len(normalized)} IoCs")
         return normalized
 
     def _stage_dedup(self, scored: list[ScoredIOC]) -> tuple[list[ScoredIOC], int]:
         """Stage 5: Cross-type deduplication using deduplicator module.
 
         Uses quality_score to keep the highest-scored duplicate when the same
-        IOC appears with different metadata or across types (domain vs URL).
+        IoC appears with different metadata or across types (domain vs URL).
         """
         if self.skip_dedup:
             logger.info("Stage 5/5: Deduplication skipped (--skip-dedup)")
@@ -178,7 +178,7 @@ class Pipeline:
         return scored, rejected
 
     def _compute_stats(self, scored: list[ScoredIOC]) -> None:
-        """Compute aggregate statistics from scored IOCs."""
+        """Compute aggregate statistics from scored IoCs."""
         for s in scored:
             # By type
             type_key = s.ioc_type.value if hasattr(s.ioc_type, "value") else str(s.ioc_type)

@@ -35,7 +35,7 @@ from scripts.src.outputs import (
 
 @pytest.fixture
 def stable_iocs() -> list[ScoredIOC]:
-    """Fixed IOC set for deterministic regression tests."""
+    """Fixed IoC set for deterministic regression tests."""
     return [
         ScoredIOC(
             value="evil-phish.com",
@@ -223,7 +223,7 @@ class TestSuricataRegression:
     def test_json_lines_count(self, stable_iocs):
         out = generate_suricata(stable_iocs)
         lines = [line for line in out.split("\n") if line.strip()]
-        assert len(lines) == 3  # 3 IOCs
+        assert len(lines) == 3  # 3 IoCs
 
 
 class TestCrowdSecRegression:

@@ -1,9 +1,9 @@
 openapi: 3.1.0
 info:
-  title: Threat Connect SGB API — IOC List
+  title: Threat Connect SGB API — IoC List
   description: >
     REST API for retrieving, querying, and managing indicators of compromise
-    (IOCs) from the Threat Connect SGB intelligence platform.
+    (IoCs) from the Threat Connect SGB intelligence platform.
   version: "1.0.0"
   contact:
     name: TC-SGB Support
@@ -20,21 +20,21 @@ servers:
 
 tags:
   - name: addresses
-    description: IP address IOCs
+    description: IP address IoCs
   - name: hosts
-    description: Hostname IOCs
+    description: Hostname IoCs
   - name: indicators
     description: Generic indicator search
   - name: groups
     description: Threat intelligence groups
   - name: tags
-    description: IOC tagging
+    description: IoC tagging
 
 paths:
   /indicators/addresses:
     get:
       operationId: listAddresses
-      summary: List address IOCs
+      summary: List address IoCs
       description: Retrieve a paginated list of IP address indicators.
       tags: [addresses, indicators]
       parameters:
@@ -55,7 +55,7 @@ paths:
           example: "id,value,confidence,tags"
       responses:
         "200":
-          description: Paginated list of address IOCs.
+          description: Paginated list of address IoCs.
           content:
             application/json:
               schema:
@@ -70,7 +70,7 @@ paths:
           $ref: "#/components/responses/ServerError"
     post:
       operationId: createAddress
-      summary: Create an address IOC
+      summary: Create an address IoC
       description: Create a new IP address indicator of compromise.
       tags: [addresses, indicators]
       parameters:
@@ -83,7 +83,7 @@ paths:
               $ref: "#/components/schemas/AddressCreate"
       responses:
         "201":
-          description: IOC created successfully.
+          description: IoC created successfully.
           content:
             application/json:
               schema:
@@ -93,7 +93,7 @@ paths:
         "401":
           $ref: "#/components/responses/Unauthorized"
         "409":
-          description: IOC already exists.
+          description: IoC already exists.
           content:
             application/json:
               schema:
@@ -102,7 +102,7 @@ paths:
   /indicators/addresses/{id}:
     get:
       operationId: getAddress
-      summary: Get an address IOC by ID
+      summary: Get an address IoC by ID
       tags: [addresses, indicators]
       parameters:
         - $ref: "#/components/parameters/TokenHeader"
@@ -113,7 +113,7 @@ paths:
             type: string
       responses:
         "200":
-          description: Single address IOC.
+          description: Single address IoC.
           content:
             application/json:
               schema:
@@ -124,7 +124,7 @@ paths:
           $ref: "#/components/responses/NotFound"
     put:
       operationId: updateAddress
-      summary: Update an address IOC
+      summary: Update an address IoC
       tags: [addresses, indicators]
       parameters:
         - $ref: "#/components/parameters/TokenHeader"
@@ -137,7 +137,7 @@ paths:
               $ref: "#/components/schemas/AddressUpdate"
       responses:
         "200":
-          description: IOC updated.
+          description: IoC updated.
           content:
             application/json:
               schema:
@@ -150,14 +150,14 @@ paths:
           $ref: "#/components/responses/NotFound"
     delete:
       operationId: deleteAddress
-      summary: Delete an address IOC
+      summary: Delete an address IoC
       tags: [addresses, indicators]
       parameters:
         - $ref: "#/components/parameters/TokenHeader"
         - $ref: "#/components/parameters/IdPath"
       responses:
         "204":
-          description: IOC deleted.
+          description: IoC deleted.
         "401":
           $ref: "#/components/responses/Unauthorized"
         "404":
@@ -166,7 +166,7 @@ paths:
   /indicators/hosts:
     get:
       operationId: listHosts
-      summary: List host IOCs
+      summary: List host IoCs
       description: Retrieve a paginated list of hostname indicators.
       tags: [hosts, indicators]
       parameters:
@@ -183,7 +183,7 @@ paths:
             type: string
       responses:
         "200":
-          description: Paginated list of host IOCs.
+          description: Paginated list of host IoCs.
           content:
             application/json:
               schema:
@@ -200,14 +200,14 @@ paths:
   /indicators/hosts/{id}:
     get:
       operationId: getHost
-      summary: Get a host IOC by ID
+      summary: Get a host IoC by ID
       tags: [hosts, indicators]
       parameters:
         - $ref: "#/components/parameters/TokenHeader"
         - $ref: "#/components/parameters/IdPath"
       responses:
         "200":
-          description: Single host IOC.
+          description: Single host IoC.
           content:
             application/json:
               schema:
@@ -218,7 +218,7 @@ paths:
           $ref: "#/components/responses/NotFound"
     put:
       operationId: updateHost
-      summary: Update a host IOC
+      summary: Update a host IoC
       tags: [hosts, indicators]
       parameters:
         - $ref: "#/components/parameters/TokenHeader"
@@ -231,7 +231,7 @@ paths:
               $ref: "#/components/schemas/HostCreate"
       responses:
         "200":
-          description: IOC updated.
+          description: IoC updated.
           content:
             application/json:
               schema:
@@ -244,14 +244,14 @@ paths:
           $ref: "#/components/responses/NotFound"
     delete:
       operationId: deleteHost
-      summary: Delete a host IOC
+      summary: Delete a host IoC
       tags: [hosts, indicators]
       parameters:
         - $ref: "#/components/parameters/TokenHeader"
         - $ref: "#/components/parameters/IdPath"
       responses:
         "204":
-          description: IOC deleted.
+          description: IoC deleted.
         "401":
           $ref: "#/components/responses/Unauthorized"
         "404":
@@ -363,7 +363,7 @@ components:
       properties:
         id:
           type: integer
-          description: Numeric IOC ID.
+          description: Numeric IoC ID.
         ownerName:
           type: string
         type:

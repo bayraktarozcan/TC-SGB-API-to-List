@@ -127,7 +127,7 @@ class TestIPValidationFuzz:
 
 
 # ---------------------------------------------------------------------------
-# IOC type inference fuzz tests
+# IoC type inference fuzz tests
 # ---------------------------------------------------------------------------
 
 

@@ -71,7 +71,7 @@ class PaginatedResponse(BaseModel, Generic[T]):
 
 
 class AddressRecord(BaseModel):
-    """Single IOC record from /api/address/index.
+    """Single IoC record from /api/address/index.
 
     Real API fields: id, url, type, desc, source, date, criticality_level, connectiontype
     """
@@ -151,7 +151,7 @@ class AnnouncementRecord(BaseModel):
 
 
 class ValidatedIOC(BaseModel):
-    """An IOC that has passed validation."""
+    """An IoC that has passed validation."""
 
     raw_url: str
     ioc_type: IOCType
@@ -165,7 +165,7 @@ class ValidatedIOC(BaseModel):
 
 
 class NormalizedIOC(BaseModel):
-    """An IOC that has been normalised (lowercase, trimmed, IDN resolved, etc.)."""
+    """An IoC that has been normalised (lowercase, trimmed, IDN resolved, etc.)."""
 
     value: str
     ioc_type: IOCType
@@ -179,7 +179,7 @@ class NormalizedIOC(BaseModel):
 
 
 class ScoredIOC(BaseModel):
-    """An IOC with a quality / confidence score."""
+    """An IoC with a quality / confidence score."""
 
     value: str
     ioc_type: IOCType
