@@ -43,15 +43,27 @@ jobs:
       - name: Run tests
         run: pytest tests/ -v --tb=short
 
-      - name: Commit outputs if changed
+      - name: Commit and create PR if changed
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add -f output/
           if git diff --cached --quiet; then
             echo "No changes to commit"
-          else
-            TIMESTAMP=$(date -u +"%Y%m%d-%H%M%S")
-            git commit -m "chore: update IOC data ${TIMESTAMP}"
-            git push origin main
+            exit 0
           fi
+          TIMESTAMP=$(date -u +"%Y%m%d-%H%M%S")
+          git checkout -b scheduled-fetch
+          git commit -m "chore: update IOC data ${TIMESTAMP}"
+          git push --force origin scheduled-fetch
+          gh pr create \
+            --base main \
+            --head scheduled-fetch \
+            --title "chore: update IOC data ${TIMESTAMP}" \
+            --body "Automated IoC data update from scheduled pipeline.
+
+$(gh run view ${{ github.run_id }} --json displayTitle,createdAt,htmlUrl --jq '.displayTitle + \" — \" + .createdAt + \"\n\" + .htmlUrl')" \
+            --label automated \
+            2>&1 || echo "PR already exists — branch updated"
