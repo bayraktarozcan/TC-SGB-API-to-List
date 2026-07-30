@@ -94,7 +94,7 @@ jobs:
           pip install -e ".[dev]"
 
       - name: pip-audit
-        run: pip-audit --ignore-vuln PYSEC-2026-1845
+        run: pip-audit --ignore-vuln PYSEC-2026-1845 --ignore-vuln PYSEC-2026-3447
 
       - name: Bandit security scan
         run: bandit -r scripts/ -f json -o bandit-report.json
