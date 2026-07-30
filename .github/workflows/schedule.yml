@@ -43,7 +43,7 @@ jobs:
       - name: Run tests
         run: pytest tests/ -v --tb=short
 
-      - name: Commit and create PR if changed
+      - name: Commit, create PR, and auto-merge if changed
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -67,3 +67,4 @@ jobs:
 $(gh run view ${{ github.run_id }} --json displayTitle,createdAt,htmlUrl --jq '.displayTitle + \" — \" + .createdAt + \"\n\" + .htmlUrl')" \
             --label automated \
             2>&1 || echo "PR already exists — branch updated"
+          gh pr merge --auto --squash --delete-branch 2>&1 || true
