@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   fetch:
-    name: Fetch & Validate IOCs
+    name: Fetch & Validate IoCs
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -57,12 +57,12 @@ jobs:
           TIMESTAMP=$(date -u +"%Y%m%d-%H%M%S")
           RUN_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           git checkout -b scheduled-fetch
-          git commit -m "chore: update IOC data ${TIMESTAMP}"
+          git commit -m "chore: update IoC data ${TIMESTAMP}"
           git push --force origin scheduled-fetch
           gh pr create \
             --base main \
             --head scheduled-fetch \
-            --title "chore: update IOC data ${TIMESTAMP}" \
+            --title "chore: update IoC data ${TIMESTAMP}" \
             --body "Automated IoC data update from scheduled pipeline.
 
           ${RUN_URL}" \
