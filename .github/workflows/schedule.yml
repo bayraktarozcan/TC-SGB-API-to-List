@@ -65,6 +65,6 @@ jobs:
             --title "chore: update IOC data ${TIMESTAMP}" \
             --body "Automated IoC data update from scheduled pipeline.
 
-${RUN_URL}" \
+          ${RUN_URL}" \
             2>&1 || echo "PR already exists — branch updated"
           gh pr merge --auto --squash --delete-branch 2>&1 || true
