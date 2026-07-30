@@ -112,6 +112,7 @@ class Pipeline:
 
     def _stage_validate(self, records: list[AddressRecord]) -> tuple[list[ValidatedIOC], int]:
         """Stage 2: Validate each IoC."""
+        validated: list[ValidatedIOC]
         if self.skip_validation:
             logger.info("Stage 2/5: Validation skipped (--skip-validation)")
             validated = [
@@ -121,7 +122,7 @@ class Pipeline:
             return validated, 0
 
         logger.info("Stage 2/5: Validating IoCs...")
-        validated: list[ValidatedIOC] = []
+        validated = []
         rejected = 0
 
         for record in records:

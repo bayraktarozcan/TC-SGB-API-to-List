@@ -49,7 +49,7 @@ class AsyncAPIClient:
         rate_limit: float | None = None,
         timeout: float | None = None,
     ):
-        self.base_url = (base_url or os.getenv("TC_SGB_API_BASE_URL", BASE_URL)).rstrip("/")
+        self.base_url = (base_url or os.getenv("TC_SGB_API_BASE_URL") or BASE_URL).rstrip("/")
         self.max_retries = max_retries or int(os.getenv("TC_SGB_MAX_RETRIES", "3"))
         self.rate_limit = rate_limit or float(os.getenv("TC_SGB_RATE_LIMIT_PER_SECOND", "5"))
         self.timeout = timeout or float(os.getenv("TC_SGB_REQUEST_TIMEOUT", "60"))
