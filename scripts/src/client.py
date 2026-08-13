@@ -22,7 +22,7 @@ from .models import (
 logger = logging.getLogger(__name__)
 
 # Real API base URL (verified from OpenAPI spec and live calls)
-BASE_URL = os.getenv("TC_SGB_API_BASE_URL", "https://siberguvenlik.gov.tr")
+BASE_URL = os.getenv("TC_SGB_API_BASE_URL") or "https://siberguvenlik.gov.tr"
 
 
 class APIError(Exception):
