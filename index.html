@@ -402,7 +402,7 @@
                             <div class="terminal-line" id="term-9"><span class="text-green-400">[OUTPUT]</span> <span data-i18n="term_9">CSV, JSON, YAML, SQLite, nftables, ipset</span></div>
                             <div class="terminal-line" id="term-10"><span class="text-green-400">[OUTPUT]</span> <span data-i18n="term_10">NextDNS, AdGuard, Pi-hole, dnsmasq</span></div>
                             <div class="terminal-line" id="term-11"><span class="text-green-400">[OUTPUT]</span> <span data-i18n="term_11">nftables, ipset, Suricata, CrowdSec</span></div>
-                            <div class="terminal-line" id="term-12"><span class="text-green-400">[DONE]</span> <span data-i18n="term_12">478,598 IoCs exported to 16 formats in 4.2s</span></div>
+                            <div class="terminal-line" id="term-12"><span class="text-green-400">[DONE]</span> <span data-i18n="term_12">478,598 IoCs exported to 16 formats in ~2.1 min</span></div>
                             <div class="terminal-line" id="term-13"><span class="text-green-400">$</span> <span class="animate-pulse">_</span></div>
                         </div>
                     </div>
@@ -626,7 +626,7 @@
                 <div class="bg-dark-700 border border-zinc-800 rounded-xl p-6">
                     <div class="flex items-center gap-3 mb-3">
                         <i data-lucide="clock" class="w-5 h-5 text-secondary"></i>
-                        <span class="font-bold text-white" data-i18n="stat_speed_title">4.2s Average</span>
+                        <span class="font-bold text-white" data-i18n="stat_speed_title">~6.2 min Average</span>
                     </div>
                     <p class="text-zinc-400 text-sm" data-i18n="stat_speed_desc">Full pipeline execution from fetch to all 16 output formats generated.</p>
                 </div>
@@ -931,7 +931,7 @@
                 stats_badge: "Stats", stats_heading: "Pipeline Statistics",
                 stat_iocs: "Total IoCs", stat_formats: "Output Formats", stat_tests: "Unit Tests", stat_coverage: "Code Coverage",
                 stat_sources_title: "5 Sources", stat_sources_desc: "IoC data fetched from 5 threat intelligence sources.",
-                stat_speed_title: "4.2s Average", stat_speed_desc: "Full pipeline execution from fetch to all 16 output formats generated.",
+                stat_speed_title: "~6.2 min Average", stat_speed_desc: "Full pipeline execution from fetch to all 16 output formats generated.",
                 stat_valid_title: "100% Valid", stat_valid_desc: "All output formats validated against their respective schemas and specifications.",
                 formats_badge: "Formats", formats_heading: "16 Output Formats",
                 formats_desc: "Export IoCs in any format your security infrastructure needs. All formats are validated and production-ready.",
@@ -971,7 +971,7 @@
                 term_9: "CSV, JSON, YAML, SQLite, nftables, ipset",
                 term_10: "NextDNS, AdGuard, Pi-hole, dnsmasq",
                 term_11: "nftables, ipset, Suricata, CrowdSec",
-                term_12: "478,598 IoCs exported to 16 formats in 4.2s",
+                term_12: "478,598 IoCs exported to 16 formats in ~2.1 min",
             },
             tr: {
                 page_title: "TC-SGB-API-to-List — IoC Tehdit İstihbaratı Hattı",
@@ -1005,7 +1005,7 @@
                 stats_badge: "İstatistikler", stats_heading: "Hat İstatistikleri",
                 stat_iocs: "Toplam IoC", stat_formats: "Çıktı Biçimi", stat_tests: "Birim Testi", stat_coverage: "Kod Kapsama",
                 stat_sources_title: "5 Kaynak", stat_sources_desc: "IoC verileri 5 farklı tehdit istihbaratı kaynağından çekildi.",
-                stat_speed_title: "4.2s Ortalama", stat_speed_desc: "Çekimden 16 çıkış biçiminin tamamının oluşturulmasına kadar tam hat çalışması.",
+                stat_speed_title: "~6,2 dk Ortalama", stat_speed_desc: "Çekimden 16 çıkış biçiminin tamamının oluşturulmasına kadar tam hat çalışması.",
                 stat_valid_title: "%100 Geçerli", stat_valid_desc: "Tüm çıkış biçimleri ilgili şemalarına ve özelliklerine göre doğrulanır.",
                 formats_badge: "Biçimler", formats_heading: "16 Çıktı Biçimi",
                 formats_desc: "Güvenlik altyapınızın ihtiyaç duyduğu herhangi bir biçimde tehdit göstergelerini (IoC) dışa aktarın. Tüm biçimler doğrulanmış ve üretime hazır.",
@@ -1045,7 +1045,7 @@
                 term_9: "CSV, JSON, YAML, SQLite, nftables, ipset",
                 term_10: "NextDNS, AdGuard, Pi-hole, dnsmasq",
                 term_11: "nftables, ipset, Suricata, CrowdSec",
-                term_12: "478.598 tehdit göstergesi 16 biçimde 4,2 saniyede oluşturuldu",
+                term_12: "478.598 tehdit göstergesi 16 biçimde yaklaşık 2,1 dakikada oluşturuldu",
             }
         };
         let currentLang = localStorage.getItem("tcSgbLang") || "tr";
