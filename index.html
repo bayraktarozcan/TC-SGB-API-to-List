@@ -887,7 +887,7 @@
                 </div>
             </div>
             <div class="border-t border-zinc-800 pt-8 text-center text-zinc-500 text-sm">
-                <p data-i18n="footer_copy">Copyright &copy; 2026 T.C. Siber Güvenlik Başkanlığı. All rights reserved.</p>
+                <p data-i18n="footer_copy">Copyright &copy; 2026 bayraktarozcan. All rights reserved.</p>
             </div>
         </div>
     </footer>
@@ -960,7 +960,7 @@
                 footer_links: "Links", footer_issues: "Report Issues", footer_contrib: "Contributing",
                 footer_legal: "Legal", footer_license: "Released under the MIT License. See <a href='https://github.com/bayraktarozcan/TC-SGB-API-to-List/blob/main/LICENSE' target='_blank' rel='noopener noreferrer' class='text-zinc-400 hover:text-white transition-colors underline underline-offset-2 decoration-zinc-600'>LICENSE</a> for details.",
                 footer_disclaimer: "This tool is for authorized security research and threat intelligence purposes only.",
-                footer_copy: "Copyright &copy; 2026 T.C. Siber Güvenlik Başkanlığı. All rights reserved.",
+                footer_copy: "Copyright &copy; 2026 bayraktarozcan. All rights reserved.",
                 term_1: "python -m tc_sgb_api_to_list fetch --format all",
                 term_2: "Connecting to T.C. Siber Güvenlik Başkanlığı API...",
                 term_3: "Authenticated successfully",
@@ -1034,7 +1034,7 @@
                 footer_links: "Bağlantılar", footer_issues: "Sorun Bildir", footer_contrib: "Katkıda Bulun",
                 footer_legal: "Yasal", footer_license: "MIT Lisansı altında yayınlandı. Ayrıntılar için <a href='https://github.com/bayraktarozcan/TC-SGB-API-to-List/blob/main/LICENSE' target='_blank' rel='noopener noreferrer' class='text-zinc-400 hover:text-white transition-colors underline underline-offset-2 decoration-zinc-600'>LICENSE</a> dosyasına bakın.",
                 footer_disclaimer: "Bu araç yalnızca yetkili güvenlik araştırması ve tehdit istihbaratı amaçları içindir.",
-                footer_copy: "Copyright &copy; 2026 T.C. Siber Güvenlik Başkanlığı. Tüm hakları saklıdır.",
+                footer_copy: "Copyright &copy; 2026 bayraktarozcan. Tüm hakları saklıdır.",
                 term_1: "python -m tc_sgb_api_to_list fetch --format all",
                 term_2: "T.C. Siber Güvenlik Başkanlığı API'sine bağlanılıyor...",
                 term_3: "Başarıyla kimlik doğrulandı",
@@ -1082,7 +1082,12 @@
                         el.appendChild(svg);
                         el.appendChild(span);
                     } else {
-                        el.textContent = translations[lang][key];
+                        const value = translations[lang][key];
+                        if (value.includes("<") || value.includes("&")) {
+                            el.innerHTML = value;
+                        } else {
+                            el.textContent = value;
+                        }
                     }
                 }
             });
