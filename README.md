@@ -4,7 +4,7 @@
 
 # TC-SGB-API-to-List
 
-**Automated Threat Intelligence Pipeline for the Turkish National Cyber Security Directorate (TC SGB) API**
+**Automated Threat Intelligence Pipeline for the T.C. Siber Güvenlik Başkanlığı (Cyber Security Presidency) API**
 
 [![CI](https://github.com/bayraktarozcan/TC-SGB-API-to-List/actions/workflows/ci.yml/badge.svg)](https://github.com/bayraktarozcan/TC-SGB-API-to-List/actions/workflows/ci.yml)
 [![Scheduled Pipeline](https://github.com/bayraktarozcan/TC-SGB-API-to-List/actions/workflows/schedule.yml/badge.svg)](https://github.com/bayraktarozcan/TC-SGB-API-to-List/actions/workflows/schedule.yml)
@@ -163,7 +163,7 @@ This tool is provided as-is for legitimate cybersecurity research and defense pu
 
 # TC-SGB-API-to-List
 
-**Türkiye Ulusal Siber Güvenlik Direktörlüğü (TC SGB) API'si için Otomatik Tehdit İstihbaratı Hattı**
+**T.C. Siber Güvenlik Başkanlığı (Cyber Security Presidency) API'si için Otomatik Tehdit İstihbaratı Hattı**
 
 [![CI](https://github.com/bayraktarozcan/TC-SGB-API-to-List/actions/workflows/ci.yml/badge.svg)](https://github.com/bayraktarozcan/TC-SGB-API-to-List/actions/workflows/ci.yml)
 [![Scheduled Pipeline](https://github.com/bayraktarozcan/TC-SGB-API-to-List/actions/workflows/schedule.yml/badge.svg)](https://github.com/bayraktarozcan/TC-SGB-API-to-List/actions/workflows/schedule.yml)
