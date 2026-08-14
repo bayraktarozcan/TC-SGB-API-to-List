@@ -1,6 +1,27 @@
 - decisions:
   - duration: 168h
     origin: TC-SGB-Intel
+    scenario: 'Threat intelligence: MI'
+    scope: IP
+    type: ban
+    value: 85.11.167.109
+- decisions:
+  - duration: 168h
+    origin: TC-SGB-Intel
+    scenario: 'Threat intelligence: CA'
+    scope: IP
+    type: ban
+    value: 186.96.158.180
+- decisions:
+  - duration: 168h
+    origin: TC-SGB-Intel
+    scenario: 'Threat intelligence: CA'
+    scope: IP
+    type: ban
+    value: 14.49.163.100
+- decisions:
+  - duration: 168h
+    origin: TC-SGB-Intel
     scenario: 'Threat intelligence: CA'
     scope: IP
     type: ban
@@ -102436,66 +102457,3 @@
     scope: IP
     type: ban
     value: 195.54.163.91
-- decisions:
-  - duration: 168h
-    origin: TC-SGB-Intel
-    scenario: 'Threat intelligence: MI'
-    scope: IP
-    type: ban
-    value: 210.202.40.35
-- decisions:
-  - duration: 168h
-    origin: TC-SGB-Intel
-    scenario: 'Threat intelligence: MD'
-    scope: IP
-    type: ban
-    value: 174.127.126.186
-- decisions:
-  - duration: 168h
-    origin: TC-SGB-Intel
-    scenario: 'Threat intelligence: MI'
-    scope: IP
-    type: ban
-    value: 173.208.179.117
-- decisions:
-  - duration: 168h
-    origin: TC-SGB-Intel
-    scenario: 'Threat intelligence: MI'
-    scope: IP
-    type: ban
-    value: 69.197.169.94
-- decisions:
-  - duration: 168h
-    origin: TC-SGB-Intel
-    scenario: 'Threat intelligence: MI'
-    scope: IP
-    type: ban
-    value: 173.208.179.118
-- decisions:
-  - duration: 168h
-    origin: TC-SGB-Intel
-    scenario: 'Threat intelligence: MI'
-    scope: IP
-    type: ban
-    value: 45.79.85.149
-- decisions:
-  - duration: 168h
-    origin: TC-SGB-Intel
-    scenario: 'Threat intelligence: MI'
-    scope: IP
-    type: ban
-    value: 45.79.93.150
-- decisions:
-  - duration: 168h
-    origin: TC-SGB-Intel
-    scenario: 'Threat intelligence: MI'
-    scope: IP
-    type: ban
-    value: 45.79.82.189
-- decisions:
-  - duration: 168h
-    origin: TC-SGB-Intel
-    scenario: 'Threat intelligence: MI'
-    scope: IP
-    type: ban
-    value: 173.255.216.25
