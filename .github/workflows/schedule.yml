@@ -57,14 +57,50 @@ jobs:
           TIMESTAMP=$(date -u +"%Y%m%d-%H%M%S")
           BRANCH="scheduled-fetch-${TIMESTAMP}"
           RUN_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+          # Never more than one open scheduled-fetch PR at a time.
+          # Supersede a stuck one (behind main or with failing checks) so stale branches don't pile up.
+          for NUM in $(gh pr list --state open --json number,headRefName \
+              --jq '.[] | select(.headRefName | startswith("scheduled-fetch-")) | .number'); do
+            STUCK=$(gh pr view "$NUM" --json mergeStateStatus,statusCheckRollup \
+              --jq '(.mergeStateStatus == "BEHIND") or
+                    ([.statusCheckRollup[]? | select(.status == "COMPLETED" and
+                      (.conclusion == "FAILURE" or .conclusion == "CANCELLED"))] | length) > 0')
+            if [ "$STUCK" = "true" ]; then
+              HEAD=$(gh pr view "$NUM" --json headRefName --jq '.headRefName')
+              echo "Superseding stuck PR #${NUM} (branch ${HEAD})"
+              gh pr close "$NUM" --comment "Superseded by newer IoC data run." || true
+              git push origin --delete "$HEAD" 2>/dev/null || true
+            else
+              echo "Open scheduled PR #${NUM} is still on track; skipping PR creation this run."
+              exit 0
+            fi
+          done
+
           git checkout -b "${BRANCH}"
           git commit -m "chore: update IoC data ${TIMESTAMP}"
           git push origin "${BRANCH}"
-          gh pr create \
+          PR_URL=$(gh pr create \
             --base main \
             --head "${BRANCH}" \
             --title "chore: update IoC data ${TIMESTAMP}" \
             --body "Automated IoC data update from scheduled pipeline.
 
-          ${RUN_URL}"
-          gh pr merge --auto --squash --delete-branch 2>&1 || true
+          ${RUN_URL}")
+          echo "Created PR: ${PR_URL}"
+          gh pr merge --auto --squash --delete-branch "${PR_URL}" || true
+
+          # Keep the PR mergeable under strict branch protection: native auto-merge does
+          # NOT update the branch, so if main advances while checks run, update it here.
+          for i in $(seq 1 20); do
+            STATE=$(gh pr view "${PR_URL}" --json state,mergeStateStatus \
+              --jq '"\(.state)/\(.mergeStateStatus)"')
+            echo "[wait ${i}] ${STATE}"
+            case "$STATE" in
+              MERGED/*) echo "✓ Merged"; exit 0 ;;
+              */BEHIND) echo "  main advanced; updating branch"; gh pr update-branch "${PR_URL}" || true ;;
+              *) : ;; # checks pending or failing — keep waiting
+            esac
+            sleep 30
+          done
+          echo "Auto-merge still pending after wait window; PR left open."
