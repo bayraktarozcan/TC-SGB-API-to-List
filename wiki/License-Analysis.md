@@ -7,7 +7,7 @@
 
 ## Overview
 
-This document analyzes the legal and licensing constraints governing the TC-SGB-API-to-List project, specifically regarding the use and redistribution of data obtained from the Turkish National Cyber Security Directorate (T.C. Siber Güvenlik Başkanlığı) API.
+This document analyzes the legal and licensing constraints governing the TC-SGB-API-to-List project, specifically regarding the use and redistribution of data obtained from the T.C. Siber Güvenlik Başkanlığı (Cyber Security Presidency) API.
 
 ## Legal Framework
 

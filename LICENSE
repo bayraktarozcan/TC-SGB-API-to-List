@@ -25,10 +25,10 @@ SOFTWARE.
 ## Data Disclaimer
 
 The threat intelligence data (IoC feeds) processed by this tool originates
-from the Turkish National Cyber Security Directorate (TC SGB) public API.
+from the T.C. Siber Güvenlik Başkanlığı (Cyber Security Presidency) public API.
 Users are responsible for:
 
-- Complying with TC SGB's terms of service
+- Complying with T.C. Siber Güvenlik Başkanlığı's terms of service
 - Ensuring legal use of threat intelligence data in their jurisdiction
 - Not redistributing raw API data without authorization
 - Validating IoC data before applying to production systems

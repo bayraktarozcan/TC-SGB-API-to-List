@@ -7,7 +7,7 @@
 
 ## Overview
 
-TC-SGB-API-to-List is an automated threat intelligence pipeline that ingests Indicator of Compromise (IoC) data from the Turkish National Cyber Security Directorate (TC SGB) public API, processes it through validation, normalization, deduplication, and quality control stages, and outputs structured threat intelligence in 16 interoperable formats.
+TC-SGB-API-to-List is an automated threat intelligence pipeline that ingests Indicator of Compromise (IoC) data from the T.C. Siber Güvenlik Başkanlığı (Cyber Security Presidency) public API, processes it through validation, normalization, deduplication, and quality control stages, and outputs structured threat intelligence in 16 interoperable formats.
 
 ---
 

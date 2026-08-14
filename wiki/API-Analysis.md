@@ -9,7 +9,7 @@
 
 ### Overview
 
-The Turkish National Cyber Security Directorate (T.C. Siber Güvenlik Başkanlığı) provides a REST API for accessing threat intelligence IoC (Indicator of Compromise) data. This API replaced the deprecated XML feed (`url-list.xml`) as of February 2024.
+The T.C. Siber Güvenlik Başkanlığı (Cyber Security Presidency) provides a REST API for accessing threat intelligence IoC (Indicator of Compromise) data. This API replaced the deprecated XML feed (`url-list.xml`) as of February 2024.
 
 ### API Specification
 

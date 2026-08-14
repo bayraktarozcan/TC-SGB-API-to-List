@@ -299,7 +299,7 @@ def build_parser() -> argparse.ArgumentParser:
         description=(
             "TC-SGB Threat Intelligence Pipeline — "
             "Fetch, validate, and export IoCs from the "
-            "Turkish Cyber Security Directorate API."
+            "T.C. Siber Güvenlik Başkanlığı (Cyber Security Presidency) API."  # noqa: RUF001
         ),
     )
     parser.add_argument("-v", "--verbose", action="store_true", help="Enable debug logging.")
