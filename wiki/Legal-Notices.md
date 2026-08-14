@@ -5,7 +5,7 @@
 
 # Legal Notices
 
-## Turkish National Cyber Security Directorate — Legal Warnings
+## T.C. Siber Güvenlik Başkanlığı (Cyber Security Presidency) — Legal Warnings
 
 **Source**: https://siberguvenlik.gov.tr/yasal-uyarilar
 **Original Language**: Turkish
@@ -154,7 +154,7 @@ If the TC SGB license restrictions are too limiting for your use case, consider 
 
 ## Disclaimer
 
-> **DISCLAIMER**: This document provides a summary of the legal warnings published by the Turkish National Cyber Security Directorate for reference purposes only. It does not constitute legal advice. The original Turkish text at https://siberguvenlik.gov.tr/yasal-uyarilar is the authoritative source. For legal questions regarding the use of TC SGB data, consult qualified legal counsel familiar with Turkish intellectual property law.
+> **DISCLAIMER**: This document provides a summary of the legal warnings published by the T.C. Siber Güvenlik Başkanlığı for reference purposes only. It does not constitute legal advice. The original Turkish text at https://siberguvenlik.gov.tr/yasal-uyarilar is the authoritative source. For legal questions regarding the use of TC SGB data, consult qualified legal counsel familiar with Turkish intellectual property law.
 
 ---
 
@@ -184,7 +184,7 @@ For questions about the TC-SGB-API-to-List project:
 
 # Yasal Bildirimler
 
-## Türkiye Ulusal Siber Güvenlik Müdürlüğü — Yasal Uyarılar
+## T.C. Siber Güvenlik Başkanlığı — Yasal Uyarılar
 
 **Kaynak**: https://siberguvenlik.gov.tr/yasal-uyarilar
 **Orijinal Dil**: Türkçe
@@ -333,7 +333,7 @@ TC SGB lisans kısıtlamaları kullanım senaryonuz için çok kısıtlayıcıys
 
 ## Sorumluluk Reddi
 
-> **SORUMLULUK REDDİ**: Bu belge, yalnızca referans amaçlı olarak Türkiye Ulusal Siber Güvenlik Müdürlüğü tarafından yayımlanan yasal uyarıların bir özetini sunmaktadır. Hukuki tavsiye niteliği taşımamaktadır. https://siberguvenlik.gov.tr/yasal-uyarilar adresindeki orijinal Türkçe metin yetkili kaynaktır. TC SGB verilerinin kullanımıyla ilgili hukuki sorularınız için Türk fikri mülkiyet hukukuna hakim nitelikli hukuki danışmana başvurunuz.
+> **SORUMLULUK REDDİ**: Bu belge, yalnızca referans amaçlı olarak T.C. Siber Güvenlik Başkanlığı tarafından yayımlanan yasal uyarıların bir özetini sunmaktadır. Hukuki tavsiye niteliği taşımamaktadır. https://siberguvenlik.gov.tr/yasal-uyarilar adresindeki orijinal Türkçe metin yetkili kaynaktır. TC SGB verilerinin kullanımıyla ilgili hukuki sorularınız için Türk fikri mülkiyet hukukuna hakim nitelikli hukuki danışmana başvurunuz.
 
 ---
 
