@@ -118,7 +118,7 @@ def deduplicate(
 
     for ioc in sorted_iocs:
         # Primary key.
-        pkey = f"{ioc.ioc_type.value}|{ioc.value}"
+        pkey = _make_dedup_key(ioc.value, ioc.ioc_type)
         if pkey in primary:
             existing = primary[pkey]
             if ioc.quality_score > existing.quality_score:
@@ -171,8 +171,3 @@ def deduplicate(
         removed_count=removed_count,
         merge_log=merge_log,
     )
-
-
-def get_dedup_stats(before: int, after: int) -> dict[str, int]:
-    """Return a simple dedup stats dict."""
-    return {"before": before, "after": after, "removed": before - after}
