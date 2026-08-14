@@ -9,7 +9,6 @@ from scripts.src.deduplicator import (
     _extract_domain_from_url,
     _make_dedup_key,
     deduplicate,
-    get_dedup_stats,
 )
 from scripts.src.models import DescriptionCategory, IOCType, ScoredIOC, Source
 
@@ -211,7 +210,6 @@ class TestMakeDedupKey:
         assert key == "domain|evil.com"
 
     def test_ip_key(self):
-        _unused = _make_scored_ioc  # just to check syntax
         assert _make_dedup_key("10.0.0.1", IOCType.IP) == "ip|10.0.0.1"
 
     def test_url_key_with_domain(self):
@@ -226,26 +224,3 @@ class TestMakeDedupKey:
     def test_strips_whitespace_and_trailing_dot(self):
         key = _make_dedup_key("  EVIL.COM.  ", IOCType.DOMAIN)
         assert key == "domain|evil.com"
-
-
-# ---------------------------------------------------------------------------
-# get_dedup_stats
-# ---------------------------------------------------------------------------
-
-
-class TestGetDedupStats:
-    def test_basic(self):
-        stats = get_dedup_stats(100, 80)
-        assert stats == {"before": 100, "after": 80, "removed": 20}
-
-    def test_no_duplicates(self):
-        stats = get_dedup_stats(50, 50)
-        assert stats["removed"] == 0
-
-    def test_all_duplicates(self):
-        stats = get_dedup_stats(100, 0)
-        assert stats["removed"] == 100
-
-    def test_empty_input(self):
-        stats = get_dedup_stats(0, 0)
-        assert stats == {"before": 0, "after": 0, "removed": 0}

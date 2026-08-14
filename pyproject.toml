@@ -23,13 +23,10 @@ classifiers = [
     "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
 ]
 dependencies = [
-    "aiohttp>=3.9,<4",
     "httpx>=0.28,<1",
     "pydantic>=2.10,<3",
     "python-dotenv>=1.0,<2",
     "pyyaml>=6.0,<7",
-    "orjson>=3.10,<4",
-    "aiofiles>=24.1,<26",
 ]
 
 [project.optional-dependencies]

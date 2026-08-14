@@ -24,7 +24,7 @@ _Describe the change and what problem it solves._
 
 - [ ] Tests pass (`pytest tests/ -v`)
 - [ ] Ruff linter passes (`ruff check scripts/ tests/`)
-- [ ] mypy type checker passes (`mypy scripts/src/`)
+- [ ] mypy type checker passes (`mypy scripts/`)
 - [ ] No hardcoded secrets or credentials
 - [ ] CHANGELOG.md updated (if applicable)
 - [ ] README.md updated (if applicable)

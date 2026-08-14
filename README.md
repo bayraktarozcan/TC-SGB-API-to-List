@@ -30,7 +30,7 @@ TC-SGB-API-to-List fetches IoC (Indicator of Compromise) data from the TC SGB pu
   - Firewall: nftables, ipset
   - IDS/IPS: Suricata, CrowdSec
   - Data: CSV, JSON, YAML, SQLite
-- **Scheduled Pipeline** — GitHub Actions cron for automated daily updates
+- **Scheduled Pipeline** — GitHub Actions cron for automated updates every 6 hours
 - **Bilingual Documentation** — Full English and Turkish documentation
 
 ## Quick Start
@@ -131,7 +131,7 @@ pytest tests/ -v
 ruff check scripts/ tests/
 
 # Run type checker
-mypy scripts/src/
+mypy scripts/
 ```
 
 ## Roadmap
@@ -189,7 +189,7 @@ TC-SGB-API-to-List, TC SGB kamu API'sinden (`https://siberguvenlik.gov.tr/api/`)
   - Güvenlik Duvarı: nftables, ipset
   - IDS/IPS: Suricata, CrowdSec
   - Veri: CSV, JSON, YAML, SQLite
-- **Zamanlanmış Hat** — Otomatik günlük güncellemeler için GitHub Actions cron zamanlayıcısı
+- **Zamanlanmış Hat** — Her 6 saatte bir otomatik güncellemeler için GitHub Actions cron zamanlayıcısı
 - **Çift Dilli Dokümantasyon** — Tam İngilizce ve Türkçe dokümantasyon
 
 ## Hızlı Başlangıç
@@ -290,7 +290,7 @@ pytest tests/ -v
 ruff check scripts/ tests/
 
 # Tip kontrolcüyü çalıştır
-mypy scripts/src/
+mypy scripts/
 ```
 
 ## Yol Haritası

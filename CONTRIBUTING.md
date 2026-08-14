@@ -26,7 +26,7 @@ pip install -r requirements.txt
 ## Code Style
 
 - **Formatter/Linter**: Ruff (`ruff format`, `ruff check`)
-- **Type Checker**: mypy (`mypy scripts/src/`)
+- **Type Checker**: mypy (`mypy scripts/`)
 - **Line Length**: 100 characters max
 - **Quotes**: Double quotes
 - **Indentation**: 4 spaces (Python), 2 spaces (YAML/JSON)
@@ -41,7 +41,7 @@ pytest tests/ -v
 # Run with coverage
 # (coverage: measures which lines of code the tests execute — the more lines
 # are executed, the better tested the code is)
-pytest tests/ --cov=scripts/src --cov-report=term-missing
+pytest tests/ --cov=scripts --cov-report=term-missing
 
 # Run specific test
 pytest tests/test_validator.py -v
@@ -93,7 +93,7 @@ test(client): add retry logic unit tests
 4. **Run quality checks**
    ```bash
    ruff check scripts/ tests/
-   mypy scripts/src/
+   mypy scripts/
    pytest tests/ -v
    ```
 5. **Push** and open a PR
@@ -102,7 +102,7 @@ test(client): add retry logic unit tests
 
 - [ ] Tests pass (`pytest tests/ -v`)
 - [ ] Linter passes (`ruff check scripts/ tests/`)
-- [ ] Type checker passes (`mypy scripts/src/`)
+- [ ] Type checker passes (`mypy scripts/`)
 - [ ] No hardcoded secrets or credentials
 - [ ] Documentation updated (if applicable)
 - [ ] CHANGELOG.md updated (if applicable)
@@ -146,7 +146,7 @@ pip install -r requirements.txt
 ## Kod Stili
 
 - **Biçimlendirici/Linter**: Ruff (`ruff format`, `ruff check`)
-- **Tip Kontrolcü**: mypy (`mypy scripts/src/`)
+- **Tip Kontrolcü**: mypy (`mypy scripts/`)
 - **Satır Uzunluğu**: Maksimum 100 karakter
 - **Tırnak İşaretleri**: Çift tırnak
 - **Girinti**: 4 boşluk (Python), 2 boşluk (YAML/JSON)
@@ -159,7 +159,7 @@ pip install -r requirements.txt
 pytest tests/ -v
 
 # Kapsama ile çalıştır
-pytest tests/ --cov=scripts/src --cov-report=term-missing
+pytest tests/ --cov=scripts --cov-report=term-missing
 
 # Belirli testi çalıştır
 pytest tests/test_validator.py -v
@@ -211,7 +211,7 @@ test(client): yeniden deneme mantığı birim testleri ekle
 4. **Kalite kontrollerini çalıştırın**
    ```bash
    ruff check scripts/ tests/
-   mypy scripts/src/
+   mypy scripts/
    pytest tests/ -v
    ```
 5. **Push edin** ve PR açın
@@ -220,7 +220,7 @@ test(client): yeniden deneme mantığı birim testleri ekle
 
 - [ ] Testler çalışıyor mu (`pytest tests/ -v`)
 - [ ] Linter geçiyor mu (`ruff check scripts/ tests/`)
-- [ ] Tip kontrolcü geçiyor mu (`mypy scripts/src/`)
+- [ ] Tip kontrolcü geçiyor mu (`mypy scripts/`)
 - [ ] Sabit kodlanmış gizli anahtar veya kimlik bilgisi yok
 - [ ] Dokümantasyon güncellendi (gerekirse)
 - [ ] CHANGELOG.md güncellendi (gerekirse)
