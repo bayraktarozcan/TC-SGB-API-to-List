@@ -18,10 +18,10 @@ TC-SGB-API-to-List is an automated threat intelligence pipeline that ingests Ind
 | **API Source** | TC SGB Threat Intelligence API (`https://siberguvenlik.gov.tr`) |
 | **Auth Required** | None (public API) |
 | **Pipeline Stages** | Fetch → Validate → Normalize → Dedup → Score → Output |
-| **Output Formats** | 16 (JSON, CSV, STIX 2.1, MISP, Sigma, YARA, nftables, MikroTik, Suricata, etc.) |
+| **Output Formats** | 16 (JSON, CSV, NextDNS, AdGuard, Pi-hole, dnsmasq, Unbound, RPZ, Technitium, MikroTik, nftables, ipset, Suricata, CrowdSec, YAML, SQLite) |
 | **Python Version** | 3.11+ |
 | **License** | MIT |
-| **Test Suite** | 438 tests, 100% coverage |
+| **Test Suite** | 451 tests, 99% coverage |
 
 ---
 
@@ -102,10 +102,10 @@ TC-SGB-API-to-List, T.C. Siber Güvenlik Başkanlığı (TC SGB) kamu API'sinden
 | **API Kaynağı** | TC SGB Tehdit İstihbaratı API'si (`https://siberguvenlik.gov.tr`) |
 | **Kimlik Doğrulama** | Gerekli değil (kamu API'si) |
 | **Hat Aşamaları** | Çekme → Doğrulama → Normalleştirme → Yineleme Kaldırma → Puanlama → Çıktı |
-| **Çıktı Formatları** | 16 (JSON, CSV, STIX 2.1, MISP, Sigma, YARA, nftables, MikroTik, Suricata, vb.) |
+| **Çıktı Formatları** | 16 (JSON, CSV, NextDNS, AdGuard, Pi-hole, dnsmasq, Unbound, RPZ, Technitium, MikroTik, nftables, ipset, Suricata, CrowdSec, YAML, SQLite) |
 | **Python Sürümü** | 3.11+ |
 | **Lisans** | MIT |
-| **Test Takımı** | 438 test, %100 kapsama |
+| **Test Takımı** | 451 test, %99 kapsama |
 
 ---
 
