@@ -55,16 +55,16 @@ jobs:
             exit 0
           fi
           TIMESTAMP=$(date -u +"%Y%m%d-%H%M%S")
+          BRANCH="scheduled-fetch-${TIMESTAMP}"
           RUN_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-          git checkout -b scheduled-fetch
+          git checkout -b "${BRANCH}"
           git commit -m "chore: update IoC data ${TIMESTAMP}"
-          git push --force-with-lease origin scheduled-fetch
+          git push origin "${BRANCH}"
           gh pr create \
             --base main \
-            --head scheduled-fetch \
+            --head "${BRANCH}" \
             --title "chore: update IoC data ${TIMESTAMP}" \
             --body "Automated IoC data update from scheduled pipeline.
 
-          ${RUN_URL}" \
-            2>&1 || echo "PR already exists — branch updated"
+          ${RUN_URL}"
           gh pr merge --auto --squash --delete-branch 2>&1 || true
