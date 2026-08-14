@@ -6,11 +6,11 @@
     <meta name="color-scheme" content="dark">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="TC-SGB-API-to-List — T.C. Siber Güvenlik Başkanlığı IoC tehdit istihbaratı hattı. Açık kaynaklı, 16 biçimde tehdit unsurlarını çeken, zenginleştiren ve dağıtan Python aracı.">
-    <meta name="keywords" content="IoC, tehdit istihbaratı, Siber Güvenlik Başkanlığı, Türkiye, siber güvenlik, MISP, STIX, Sigma, YARA, CSV, JSON">
+    <meta name="keywords" content="IoC, tehdit istihbaratı, Siber Güvenlik Başkanlığı, Türkiye, siber güvenlik, NextDNS, AdGuard, Suricata, nftables, CSV, JSON">
     <meta name="author" content="bayraktarozcan">
     <meta name="robots" content="index, follow">
     <meta property="og:title" content="TC-SGB-API-to-List — IoC Tehdit İstihbaratı Hattı">
-    <meta property="og:description" content="Açık kaynaklı IoC tehdit istihbaratı hattı — 489K+ IoC, 16 çıktı biçimi, 438 test, %100 kapsama.">
+    <meta property="og:description" content="Açık kaynaklı IoC tehdit istihbaratı hattı — 478K+ IoC, 16 çıktı biçimi, 451 test, %99 kapsama.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://bayraktarozcan.github.io/TC-SGB-API-to-List/">
     <meta name="twitter:card" content="summary_large_image">
@@ -365,7 +365,7 @@
                     <div class="flex flex-wrap gap-6 mt-8 text-sm text-zinc-500">
                         <div class="flex items-center gap-2">
                             <i data-lucide="database" class="w-4 h-4 text-primary"></i>
-                            <span><strong class="text-zinc-300">489K+</strong> <span data-i18n="hero_stat_iocs">IoCs</span></span>
+                            <span><strong class="text-zinc-300">478K+</strong> <span data-i18n="hero_stat_iocs">IoCs</span></span>
                         </div>
                         <div class="flex items-center gap-2">
                             <i data-lucide="file-output" class="w-4 h-4 text-secondary"></i>
@@ -373,11 +373,11 @@
                         </div>
                         <div class="flex items-center gap-2">
                             <i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i>
-                            <span><strong class="text-zinc-300">438</strong> <span data-i18n="hero_stat_tests">Tests</span></span>
+                            <span><strong class="text-zinc-300">451</strong> <span data-i18n="hero_stat_tests">Tests</span></span>
                         </div>
                         <div class="flex items-center gap-2">
                             <i data-lucide="shield-check" class="w-4 h-4 text-yellow-500"></i>
-                            <span><strong class="text-zinc-300">100%</strong> <span data-i18n="hero_stat_coverage">Coverage</span></span>
+                            <span><strong class="text-zinc-300">99%</strong> <span data-i18n="hero_stat_coverage">Coverage</span></span>
                         </div>
                     </div>
                 </div>
@@ -394,12 +394,12 @@
                             <div class="terminal-line" id="term-1"><span class="text-green-400">$</span> <span data-i18n="term_1">python -m tc_sgb_api_to_list fetch --format all</span></div>
                             <div class="terminal-line" id="term-2"><span class="text-zinc-500">[INFO]</span> <span data-i18n="term_2">Connecting to T.C. Siber Güvenlik Başkanlığı API...</span></div>
                             <div class="terminal-line" id="term-3"><span class="text-green-400">[SUCCESS]</span> <span data-i18n="term_3">Authenticated successfully</span></div>
-                            <div class="terminal-line" id="term-4"><span class="text-zinc-500">[INFO]</span> <span data-i18n="term_4">Fetching IoCs from 48 sources...</span></div>
-                            <div class="terminal-line" id="term-5"><span class="text-blue-400">[FETCH]</span> <span data-i18n="term_5">489,216 IoCs retrieved</span></div>
+                            <div class="terminal-line" id="term-4"><span class="text-zinc-500">[INFO]</span> <span data-i18n="term_4">Fetching IoCs from 5 sources...</span></div>
+                            <div class="terminal-line" id="term-5"><span class="text-blue-400">[FETCH]</span> <span data-i18n="term_5">478,598 IoCs retrieved</span></div>
                             <div class="terminal-line" id="term-6"><span class="text-zinc-500">[INFO]</span> <span data-i18n="term_6">Enriching with threat context...</span></div>
                             <div class="terminal-line" id="term-7"><span class="text-yellow-400">[ENRICH]</span> <span data-i18n="term_7">12,847 duplicates removed</span></div>
                             <div class="terminal-line" id="term-8"><span class="text-zinc-500">[INFO]</span> <span data-i18n="term_8">Generating output formats...</span></div>
-                            <div class="terminal-line" id="term-9"><span class="text-green-400">[OUTPUT]</span> <span data-i18n="term_9">CSV, JSON, MISP, STIX, Sigma, YARA</span></div>
+                            <div class="terminal-line" id="term-9"><span class="text-green-400">[OUTPUT]</span> <span data-i18n="term_9">CSV, JSON, YAML, SQLite, nftables, ipset</span></div>
                             <div class="terminal-line" id="term-10"><span class="text-green-400">[OUTPUT]</span> <span data-i18n="term_10">NextDNS, AdGuard, Pi-hole, dnsmasq</span></div>
                             <div class="terminal-line" id="term-11"><span class="text-green-400">[OUTPUT]</span> <span data-i18n="term_11">nftables, ipset, Suricata, CrowdSec</span></div>
                             <div class="terminal-line" id="term-12"><span class="text-green-400">[DONE]</span> <span data-i18n="term_12">16 formats generated in 4.2s</span></div>
@@ -447,7 +447,7 @@
                     </div>
                     <h3 class="text-xl font-bold text-white mb-2" data-i18n="about_distribute_title">Distribute</h3>
                     <p class="text-zinc-400 text-sm" data-i18n="about_distribute_desc">
-                        Export to 16 formats including MISP, STIX, Sigma, YARA, Splunk, QRadar, Elastic, and more. Ready for any SIEM, SOAR, or TIP platform.
+                        Export to 16 formats including NextDNS, AdGuard, Pi-hole, dnsmasq, Unbound, RPZ, and more. Ready for any SIEM, SOAR, or TIP platform.
                     </p>
                 </div>
             </div>
@@ -478,14 +478,14 @@
                         <i data-lucide="layers" class="w-5 h-5 text-secondary"></i>
                     </div>
                     <h4 class="font-bold text-white mb-2" data-i18n="feat_formats_title">16 Output Formats</h4>
-                    <p class="text-zinc-400 text-sm" data-i18n="feat_formats_desc">MISP, STIX 2.1, Sigma, YARA, Splunk, QRadar, Elastic, CSV, JSON, and more.</p>
+                    <p class="text-zinc-400 text-sm" data-i18n="feat_formats_desc">NextDNS, AdGuard, Pi-hole, dnsmasq, Unbound, RPZ, Technitium, MikroTik, nftables, ipset, Suricata, CrowdSec, CSV, JSON, and more.</p>
                 </div>
                 <div class="bg-dark-700 border border-zinc-800 rounded-xl p-6 card-hover">
                     <div class="w-10 h-10 rounded-lg bg-green-500/20 flex items-center justify-center mb-3">
                         <i data-lucide="test-tubes" class="w-5 h-5 text-green-500"></i>
                     </div>
                     <h4 class="font-bold text-white mb-2" data-i18n="feat_test_title">Comprehensive Testing</h4>
-                    <p class="text-zinc-400 text-sm" data-i18n="feat_test_desc">438 unit tests with 100% coverage. Every format generator is thoroughly validated.</p>
+                    <p class="text-zinc-400 text-sm" data-i18n="feat_test_desc">451 unit tests with 99% coverage. Every format generator is thoroughly validated.</p>
                 </div>
                 <div class="bg-dark-700 border border-zinc-800 rounded-xl p-6 card-hover">
                     <div class="w-10 h-10 rounded-lg bg-yellow-500/20 flex items-center justify-center mb-3">
@@ -544,7 +544,7 @@
                             <span data-i18n="arch_step2_title">Fetch</span>
                         </h4>
                         <p class="text-zinc-400 text-sm" data-i18n="arch_step2_desc">
-                            Paginated IoC retrieval with retry logic. Handles 489K+ indicators across 48 sources.
+                            Paginated IoC retrieval with retry logic. Handles 478K+ indicators across 5 sources.
                         </p>
                     </div>
                 </div>
@@ -598,7 +598,7 @@
 
             <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
                 <div class="text-center p-6 bg-dark-700 border border-zinc-800 rounded-xl card-hover">
-                    <div class="text-3xl font-bold gradient-text mb-2">489K+</div>
+                    <div class="text-3xl font-bold gradient-text mb-2">478K+</div>
                     <div class="text-zinc-400 text-sm" data-i18n="stat_iocs">Total IoCs</div>
                 </div>
                 <div class="text-center p-6 bg-dark-700 border border-zinc-800 rounded-xl card-hover">
@@ -606,11 +606,11 @@
                     <div class="text-zinc-400 text-sm" data-i18n="stat_formats">Output Formats</div>
                 </div>
                 <div class="text-center p-6 bg-dark-700 border border-zinc-800 rounded-xl card-hover">
-                    <div class="text-3xl font-bold gradient-text mb-2">438</div>
+                    <div class="text-3xl font-bold gradient-text mb-2">451</div>
                     <div class="text-zinc-400 text-sm" data-i18n="stat_tests">Unit Tests</div>
                 </div>
                 <div class="text-center p-6 bg-dark-700 border border-zinc-800 rounded-xl card-hover">
-                    <div class="text-3xl font-bold gradient-text mb-2">100%</div>
+                    <div class="text-3xl font-bold gradient-text mb-2">99%</div>
                     <div class="text-zinc-400 text-sm" data-i18n="stat_coverage">Code Coverage</div>
                 </div>
             </div>
@@ -619,9 +619,9 @@
                 <div class="bg-dark-700 border border-zinc-800 rounded-xl p-6">
                     <div class="flex items-center gap-3 mb-3">
                         <i data-lucide="globe" class="w-5 h-5 text-primary"></i>
-                        <span class="font-bold text-white" data-i18n="stat_sources_title">48 Sources</span>
+                        <span class="font-bold text-white" data-i18n="stat_sources_title">5 Sources</span>
                     </div>
-                    <p class="text-zinc-400 text-sm" data-i18n="stat_sources_desc">IoC data fetched from 48 different threat intelligence feeds and sources.</p>
+                    <p class="text-zinc-400 text-sm" data-i18n="stat_sources_desc">IoC data fetched from 5 threat intelligence sources.</p>
                 </div>
                 <div class="bg-dark-700 border border-zinc-800 rounded-xl p-6">
                     <div class="flex items-center gap-3 mb-3">
@@ -655,10 +655,9 @@
             <div class="format-grid">
                 <div class="format-item"><i data-lucide="file-text" class="w-4 h-4 mx-auto mb-1 text-primary"></i>CSV</div>
                 <div class="format-item"><i data-lucide="file-json" class="w-4 h-4 mx-auto mb-1 text-yellow-500"></i>JSON</div>
-                <div class="format-item"><i data-lucide="shield" class="w-4 h-4 mx-auto mb-1 text-primary"></i>MISP</div>
-                <div class="format-item"><i data-lucide="lock" class="w-4 h-4 mx-auto mb-1 text-secondary"></i>STIX 2.1</div>
-                <div class="format-item"><i data-lucide="alert-triangle" class="w-4 h-4 mx-auto mb-1 text-yellow-400"></i>Sigma</div>
-                <div class="format-item"><i data-lucide="file-code" class="w-4 h-4 mx-auto mb-1 text-green-500"></i>YARA</div>
+                <div class="format-item"><i data-lucide="shield" class="w-4 h-4 mx-auto mb-1 text-primary"></i>CrowdSec</div>
+                <div class="format-item"><i data-lucide="lock" class="w-4 h-4 mx-auto mb-1 text-secondary"></i>YAML</div>
+                <div class="format-item"><i data-lucide="alert-triangle" class="w-4 h-4 mx-auto mb-1 text-yellow-400"></i>SQLite</div>
                 <div class="format-item"><i data-lucide="terminal" class="w-4 h-4 mx-auto mb-1 text-green-400"></i>NextDNS</div>
                 <div class="format-item"><i data-lucide="shield-check" class="w-4 h-4 mx-auto mb-1 text-blue-400"></i>AdGuard</div>
                 <div class="format-item"><i data-lucide="server" class="w-4 h-4 mx-auto mb-1 text-cyan-400"></i>Pi-hole</div>
@@ -822,9 +821,9 @@
                         <h4 class="font-bold text-white" data-i18n="rm_p2_title">Phase 2 — Format Expansion</h4>
                     </div>
                     <ul class="text-zinc-400 text-sm space-y-1">
-                        <li data-i18n="rm_p2_1">MISP, STIX 2.1, Sigma, YARA formats</li>
-                        <li data-i18n="rm_p2_2">Splunk, QRadar, Elastic, and SIEM integrations</li>
-                        <li data-i18n="rm_p2_3">438 unit tests with 100% coverage</li>
+                        <li data-i18n="rm_p2_1">NextDNS, AdGuard, Pi-hole, dnsmasq, Unbound, RPZ formats</li>
+                        <li data-i18n="rm_p2_2">Technitium, MikroTik, nftables, ipset, Suricata, CrowdSec formats</li>
+                        <li data-i18n="rm_p2_3">451 unit tests with 99% coverage</li>
                     </ul>
                 </div>
                 <div class="bg-dark-700 border border-zinc-800 rounded-xl p-6 card-hover">
@@ -913,25 +912,25 @@
                 about_desc: "An open-source Python pipeline that fetches Indicators of Compromise (IoCs) from T.C. Siber Güvenlik Başkanlığı's threat intelligence API, enriches them with contextual data, and distributes them in 16 industry-standard formats for SIEM, SOAR, and threat intelligence platforms.",
                 about_collect_title: "Collect", about_collect_desc: "Fetch IoCs from T.C. Siber Güvenlik Başkanlığı's API with automatic authentication, pagination, and rate limiting. Supports IPv4, IPv6, domain, URL, and hash indicators.",
                 about_enrich_title: "Enrich", about_enrich_desc: "Deduplicate, validate, and enrich IoCs with threat context. Apply confidence scoring, geo-location tagging, and threat actor attribution.",
-                about_distribute_title: "Distribute", about_distribute_desc: "Export to 16 formats including MISP, STIX, Sigma, YARA, Splunk, QRadar, Elastic, and more. Ready for any SIEM, SOAR, or TIP platform.",
+                about_distribute_title: "Distribute", about_distribute_desc: "Export to 16 formats including NextDNS, AdGuard, Pi-hole, dnsmasq, Unbound, RPZ, and more. Ready for any SIEM, SOAR, or TIP platform.",
                 features_badge: "Features", features_heading: "Key Features",
                 features_desc: "Enterprise-grade threat intelligence pipeline with comprehensive format support and robust testing.",
                 feat_api_title: "T.C. Siber Güvenlik Başkanlığı API Integration", feat_api_desc: "Direct integration with T.C. Siber Güvenlik Başkanlığı's threat intelligence API with automatic auth token management.",
-                feat_formats_title: "16 Output Formats", feat_formats_desc: "MISP, STIX 2.1, Sigma, YARA, Splunk, QRadar, Elastic, CSV, JSON, and more.",
-                feat_test_title: "Comprehensive Testing", feat_test_desc: "438 unit tests with 100% coverage. Every format generator is thoroughly validated.",
+                feat_formats_title: "16 Output Formats", feat_formats_desc: "NextDNS, AdGuard, Pi-hole, dnsmasq, Unbound, RPZ, Technitium, MikroTik, nftables, ipset, Suricata, CrowdSec, CSV, JSON, and more.",
+                feat_test_title: "Comprehensive Testing", feat_test_desc: "451 unit tests with 99% coverage. Every format generator is thoroughly validated.",
                 feat_dedup_title: "Smart Deduplication", feat_dedup_desc: "Intelligent IoC deduplication with hash normalization and context-aware merging.",
                 feat_cli_title: "Powerful CLI", feat_cli_desc: "Full-featured CLI with fetch, enrich, export, and schedule commands. Configurable via YAML.",
                 feat_sec_title: "Security First", feat_sec_desc: "Zero external network calls beyond T.C. Siber Güvenlik Başkanlığı API. All data processed locally. No telemetry.",
                 arch_badge: "Architecture", arch_heading: "Pipeline Architecture",
                 arch_desc: "A modular pipeline design with clear separation of concerns for reliability and extensibility.",
                 arch_step1_title: "Authentication", arch_step1_desc: "Secure OAuth2 authentication with T.C. Siber Güvenlik Başkanlığı API. Automatic token refresh and credential caching.",
-                arch_step2_title: "Fetch", arch_step2_desc: "Paginated IoC retrieval with retry logic. Handles 489K+ indicators across 48 sources.",
+                arch_step2_title: "Fetch", arch_step2_desc: "Paginated IoC retrieval with retry logic. Handles 478K+ indicators across 5 sources.",
                 arch_step3_title: "Normalize & Deduplicate", arch_step3_desc: "Standardize IoC formats, remove duplicates, and validate against threat intelligence schemas.",
                 arch_step4_title: "Enrich", arch_step4_desc: "Add threat context: confidence scores, geo-tags, threat actor attribution, and malware family mapping.",
                 arch_step5_title: "Export", arch_step5_desc: "Generate 16 output formats in parallel. Ready for SIEM, SOAR, TIP, and manual analysis.",
                 stats_badge: "Stats", stats_heading: "Pipeline Statistics",
                 stat_iocs: "Total IoCs", stat_formats: "Output Formats", stat_tests: "Unit Tests", stat_coverage: "Code Coverage",
-                stat_sources_title: "48 Sources", stat_sources_desc: "IoC data fetched from 48 different threat intelligence feeds and sources.",
+                stat_sources_title: "5 Sources", stat_sources_desc: "IoC data fetched from 5 threat intelligence sources.",
                 stat_speed_title: "4.2s Average", stat_speed_desc: "Full pipeline execution from fetch to all 16 output formats generated.",
                 stat_valid_title: "100% Valid", stat_valid_desc: "All output formats validated against their respective schemas and specifications.",
                 formats_badge: "Formats", formats_heading: "16 Output Formats",
@@ -953,7 +952,7 @@
                 rm_desc: "Planned features and enhancements for the TC-SGB-API-to-List pipeline.",
                 rm_status_done: "Done", rm_status_progress: "In Progress", rm_status_planned: "Planned",
                 rm_p1_title: "Phase 1 — Core Pipeline", rm_p1_1: "T.C. Siber Güvenlik Başkanlığı API authentication and IoC fetch", rm_p1_2: "Deduplication and normalization engine", rm_p1_3: "CSV, JSON, and basic format exporters",
-                rm_p2_title: "Phase 2 — Format Expansion", rm_p2_1: "MISP, STIX 2.1, Sigma, YARA formats", rm_p2_2: "Splunk, QRadar, Elastic, and SIEM integrations", rm_p2_3: "438 unit tests with 100% coverage",
+                rm_p2_title: "Phase 2 — Format Expansion", rm_p2_1: "NextDNS, AdGuard, Pi-hole, dnsmasq, Unbound, RPZ formats", rm_p2_2: "Technitium, MikroTik, nftables, ipset, Suricata, CrowdSec formats", rm_p2_3: "451 unit tests with 99% coverage",
                 rm_p3_title: "Phase 3 — Enrichment & Context", rm_p3_1: "Threat actor attribution and confidence scoring", rm_p3_2: "Geo-location tagging and ASN enrichment", rm_p3_3: "Malware family mapping and TTP correlation",
                 rm_p4_title: "Phase 4 — Enterprise Features", rm_p4_1: "Scheduled pipeline execution (cron/airflow)", rm_p4_2: "Web dashboard for IoC visualization", rm_p4_3: "API server for real-time IoC queries",
                 footer_built: "Built with purpose. Open-source threat intelligence for everyone.",
@@ -964,12 +963,12 @@
                 term_1: "python -m tc_sgb_api_to_list fetch --format all",
                 term_2: "Connecting to T.C. Siber Güvenlik Başkanlığı API...",
                 term_3: "Authenticated successfully",
-                term_4: "Fetching IoCs from 48 sources...",
-                term_5: "489,216 IoCs retrieved",
+                term_4: "Fetching IoCs from 5 sources...",
+                term_5: "478,598 IoCs retrieved",
                 term_6: "Enriching with threat context...",
                 term_7: "12,847 duplicates removed",
                 term_8: "Generating output formats...",
-                term_9: "CSV, JSON, MISP, STIX, Sigma, YARA",
+                term_9: "CSV, JSON, YAML, SQLite, nftables, ipset",
                 term_10: "NextDNS, AdGuard, Pi-hole, dnsmasq",
                 term_11: "nftables, ipset, Suricata, CrowdSec",
                 term_12: "16 formats generated in 4.2s",
@@ -987,25 +986,25 @@
                 about_desc: "T.C. Siber Güvenlik Başkanlığı tehdit istihbarat API'sinden İstih Bağlantılı Komplo Unsurlarını (IoC) çeken, bağlam verileriyle zenginleştiren ve SIEM, SOAR ile tehdit istihbaratı platformları için 16 endüstri standardı biçiminde dağıtan açık kaynaklı bir Python hattı.",
                 about_collect_title: "Topla", about_collect_desc: "Otomatik kimlik doğrulama, sayfalama ve hız sınırlamasıyla T.C. Siber Güvenlik Başkanlığı API'sinden tehdit göstergelerini (IoC) çekin. IPv4, IPv6, alan adı, URL ve hash göstergelerini destekler.",
                 about_enrich_title: "Zenginleştir", about_enrich_desc: "Tehdit göstergelerini tehdit bağlamıyla çoğaltmayı kaldırın, doğrulayın ve zenginleştirin. Güven puanlama, coğrafi konum etiketleme ve tehdit aktörü atama uygulayın.",
-                about_distribute_title: "Dağıt", about_distribute_desc: "MISP, STIX, Sigma, YARA, Splunk, QRadar, Elastic ve daha fazlası dahil 16 biçime dışa aktarın. Herhangi bir SIEM, SOAR veya TIP platformu için hazır.",
+                about_distribute_title: "Dağıt", about_distribute_desc: "NextDNS, AdGuard, Pi-hole, dnsmasq, Unbound, RPZ ve daha fazlası dahil 16 biçime dışa aktarın. Herhangi bir SIEM, SOAR veya TIP platformu için hazır.",
                 features_badge: "Özellikler", features_heading: "Temel Özellikler",
                 features_desc: "Kapsamlı biçim desteği ve sağlam test ile kurumsal düzeyde tehdit istihbaratı hattı.",
                 feat_api_title: "T.C. Siber Güvenlik Başkanlığı API Entegrasyonu", feat_api_desc: "Otomatik kimlik belirteci yönetimiyle T.C. Siber Güvenlik Başkanlığı tehdit istihbarat API'siyle doğrudan entegrasyon.",
-                feat_formats_title: "16 Çıktı Biçimi", feat_formats_desc: "MISP, STIX 2.1, Sigma, YARA, Splunk, QRadar, Elastic, CSV, JSON ve daha fazlası.",
-                feat_test_title: "Kapsamlı Testler", feat_test_desc: "%100 kapsama ile 438 birim testi. Her biçim üreteci titizlikle doğrulanır.",
+                feat_formats_title: "16 Çıktı Biçimi", feat_formats_desc: "NextDNS, AdGuard, Pi-hole, dnsmasq, Unbound, RPZ, Technitium, MikroTik, nftables, ipset, Suricata, CrowdSec, CSV, JSON ve daha fazlası.",
+                feat_test_title: "Kapsamlı Testler", feat_test_desc: "%99 kapsama ile 451 birim testi. Her biçim üreteci titizlikle doğrulanır.",
                 feat_dedup_title: "Akıllı Tekrar Kaldırma", feat_dedup_desc: "Hash normalizasyonu ve bağlam duyarlı birleştirme ile akıllı IoC tekrar kaldırma.",
                 feat_cli_title: "Güçlü CLI", feat_cli_desc: "Çekme, zenginleştirme, dışa aktarma ve zamanlama komutları ile eksiksiz CLI. YAML ile yapılandırılabilir.",
                 feat_sec_title: "Önce Güvenlik", feat_sec_desc: "T.C. Siber Güvenlik Başkanlığı API ötesinde sıfır harici ağ çağrısı. Tüm veriler yerel olarak işlenir. Telemetri yok.",
                 arch_badge: "Mimari", arch_heading: "Hat Mimarisi",
                 arch_desc: "Güvenilirlik ve genişletilebilirlik için net sorumluluk ayrımı ile modüler bir hat tasarımı.",
                 arch_step1_title: "Kimlik Doğrulama", arch_step1_desc: "T.C. Siber Güvenlik Başkanlığı API ile güvenli OAuth2 kimlik doğrulaması. Otomatik belirteç yenileme ve kimlik bilgisi önbelleğe alma.",
-                arch_step2_title: "Çek", arch_step2_desc: "Yeniden deneme mantığı ile sayfalı IoC alma. 48 kaynaktan 489K+ göstergeyi işler.",
+                arch_step2_title: "Çek", arch_step2_desc: "Yeniden deneme mantığı ile sayfalı IoC alma. 5 kaynaktan 478K+ göstergeyi işler.",
                 arch_step3_title: "Normalleştir ve Çoğaltmayı Kaldır", arch_step3_desc: "IoC biçimlerini standartlaştırın, çoğaltmaları kaldırın ve tehdit istihbaratı şemalarına göre doğrulayın.",
                 arch_step4_title: "Zenginleştir", arch_step4_desc: "Tehdit bağlamı ekleyin: güven puanları, coğrafi etiketler, tehdit aktörü atama ve kötü amaçlı yazılım ailesi eşleme.",
                 arch_step5_title: "Dışa Aktar", arch_step5_desc: "16 çıkış biçimini paralel olarak oluşturun. SIEM, SOAR, TIP ve manuel analiz için hazır.",
                 stats_badge: "İstatistikler", stats_heading: "Hat İstatistikleri",
                 stat_iocs: "Toplam IoC", stat_formats: "Çıktı Biçimi", stat_tests: "Birim Testi", stat_coverage: "Kod Kapsama",
-                stat_sources_title: "48 Kaynak", stat_sources_desc: "IoC verileri 48 farklı tehdit istihbaratı beslemesinden ve kaynağından çekildi.",
+                stat_sources_title: "5 Kaynak", stat_sources_desc: "IoC verileri 5 farklı tehdit istihbaratı kaynağından çekildi.",
                 stat_speed_title: "4.2s Ortalama", stat_speed_desc: "Çekimden 16 çıkış biçiminin tamamının oluşturulmasına kadar tam hat çalışması.",
                 stat_valid_title: "%100 Geçerli", stat_valid_desc: "Tüm çıkış biçimleri ilgili şemalarına ve özelliklerine göre doğrulanır.",
                 formats_badge: "Biçimler", formats_heading: "16 Çıktı Biçimi",
@@ -1027,7 +1026,7 @@
                 rm_desc: "TC-SGB-API-to-List hattı için planlanan özellikler ve geliştirmeler.",
                 rm_status_done: "Tamamlandı", rm_status_progress: "Devam Ediyor", rm_status_planned: "Planlandı",
                 rm_p1_title: "Faz 1 — Çekirdek Hattı", rm_p1_1: "T.C. Siber Güvenlik Başkanlığı API kimlik doğrulaması ve IoC çekme", rm_p1_2: "Çoğaltma kaldırma ve normalleştirme motoru", rm_p1_3: "CSV, JSON ve temel biçim dışa aktarıcılar",
-                rm_p2_title: "Faz 2 — Biçim Genişletme", rm_p2_1: "MISP, STIX 2.1, Sigma, YARA biçimleri", rm_p2_2: "Splunk, QRadar, Elastic ve SIEM entegrasyonları", rm_p2_3: "%100 kapsama ile 438 birim testi",
+                rm_p2_title: "Faz 2 — Biçim Genişletme", rm_p2_1: "NextDNS, AdGuard, Pi-hole, dnsmasq, Unbound, RPZ biçimleri", rm_p2_2: "Technitium, MikroTik, nftables, ipset, Suricata, CrowdSec biçimleri", rm_p2_3: "%99 kapsama ile 451 birim testi",
                 rm_p3_title: "Faz 3 — Zenginleştirme ve Bağlam", rm_p3_1: "Tehdit aktörü atama ve güven puanlama", rm_p3_2: "Coğrafi konum etiketleme ve ASN zenginleştirme", rm_p3_3: "Kötü amaçlı yazılım ailesi eşleme ve TTP korelasyonu",
                 rm_p4_title: "Faz 4 — Kurumsal Özellikler", rm_p4_1: "Zamanlanmış hattı çalıştırma (cron/airflow)", rm_p4_2: "IoC görselleştirme için web panosu", rm_p4_3: "Gerçek zamanlı IoC sorguları için API sunucusu",
                 footer_built: "Amaca yönelik inşa edildi. Herkes için açık kaynaklı tehdit istihbaratı.",
@@ -1038,12 +1037,12 @@
                 term_1: "python -m tc_sgb_api_to_list fetch --format all",
                 term_2: "T.C. Siber Güvenlik Başkanlığı API'sine bağlanılıyor...",
                 term_3: "Başarıyla kimlik doğrulandı",
-                term_4: "48 kaynaktan tehdit göstergeleri alınıyor...",
-                term_5: "489.216 tehdit göstergesi alındı",
+                term_4: "5 kaynaktan tehdit göstergeleri alınıyor...",
+                term_5: "478.598 tehdit göstergesi alındı",
                 term_6: "Tehdit bağlamıyla zenginleştiriliyor...",
                 term_7: "12.847 tekrar kaldırıldı",
                 term_8: "Çıktı biçimleri oluşturuluyor...",
-                term_9: "CSV, JSON, MISP, STIX, Sigma, YARA",
+                term_9: "CSV, JSON, YAML, SQLite, nftables, ipset",
                 term_10: "NextDNS, AdGuard, Pi-hole, dnsmasq",
                 term_11: "nftables, ipset, Suricata, CrowdSec",
                 term_12: "16 biçim 4,2 saniyede oluşturuldu",

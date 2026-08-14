@@ -150,7 +150,7 @@ TC-SGB-API-to-List/
 
 ### Tests (`tests/`)
 
-Flat structure — no subdirectories. 14 files total, 438 tests, 100% coverage.
+Flat structure — no subdirectories. 15 files total, 451 tests, 99% coverage.
 
 | File | Focus |
 |------|-------|
@@ -167,6 +167,8 @@ Flat structure — no subdirectories. 14 files total, 438 tests, 100% coverage.
 | `test_regression.py` | Snapshot / output stability |
 | `test_fuzz.py` | Property-based & fuzz testing |
 | `test_performance.py` | Throughput benchmarks |
+| `test_changelog.py` | Changelog generation & diff engine |
+| `test_main.py` | CLI entry point & pipeline wiring |
 
 ### Build & CI
 
@@ -412,7 +414,7 @@ TC-SGB-API-to-List/
 
 ### Testler (`tests/`)
 
-Düz yapı — alt dizin yok. Toplam 13 dosya, 438 test, %100 kapsama.
+Düz yapı — alt dizin yok. Toplam 15 dosya, 451 test, %99 kapsama.
 
 | Dosya | Odak |
 |-------|------|
@@ -429,6 +431,8 @@ Düz yapı — alt dizin yok. Toplam 13 dosya, 438 test, %100 kapsama.
 | `test_regression.py` | Anlık görüntü / çıktı kararlılığı |
 | `test_fuzz.py` | Özelliğe dayalı ve fuzz testleri |
 | `test_performance.py` | Verimlilik ölçümleri |
+| `test_changelog.py` | Changelog üretimi ve fark motoru |
+| `test_main.py` | CLI giriş noktası ve hat bağlantısı |
 
 ### Derleme ve CI
 

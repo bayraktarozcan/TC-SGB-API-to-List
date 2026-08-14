@@ -48,7 +48,7 @@ This document outlines the phased development roadmap for the TC-SGB-API-to-List
 - [x] Async API client with retry logic
 - [x] Pydantic v2 data models
 - [x] 16 output formats (NextDNS, AdGuard, Pi-hole, dnsmasq, Unbound, RPZ, Technitium, MikroTik, nftables, ipset, Suricata, CrowdSec, CSV, JSON, YAML, SQLite)
-- [x] Unit test suite (100% coverage)
+- [x] Unit test suite (99% coverage)
 - [x] CI/CD pipeline (GitHub Actions)
 - [x] PyPI packaging
 - [x] CLI interface
@@ -453,7 +453,7 @@ class URLhausPlugin(SourcePlugin):
 | Contributors | 3 | 10 | 25 | 50 |
 | Data sources | 1 | 6 | 10+ | 20+ |
 | Output formats | 16 | 20 | 25+ | 30+ |
-| Test coverage | 100% | 100% | 100% | 100% |
+| Test coverage | 99% | 99% | 99% | 99% |
 | Response time | <20min | <15min | <5min | <1min |
 
 <a id="-türkçe"></a>
@@ -504,7 +504,7 @@ Bu belge, TC-SGB-API-to-List projesinin aşamalı geliştirme yol haritasını �
 - [x] Yeniden deneme mantığı ile asenkron API istemcisi
 - [x] Pydantic v2 veri modelleri
 - [x] 16 çıktı biçimi (NextDNS, AdGuard, Pi-hole, dnsmasq, Unbound, RPZ, Technitium, MikroTik, nftables, ipset, Suricata, CrowdSec, CSV, JSON, YAML, SQLite)
-- [x] Birim test paketi (%100 kapsama)
+- [x] Birim test paketi (%99 kapsama)
 - [x] CI/CD hattı (GitHub Actions)
 - [x] PyPI paketleme
 - [x] CLI arayüzü
@@ -909,5 +909,5 @@ class URLhausPlugin(SourcePlugin):
 | Katkıda bulunanlar | 3 | 10 | 25 | 50 |
 | Veri kaynakları | 1 | 6 | 10+ | 20+ |
 | Çıktı biçimleri | 16 | 20 | 25+ | 30+ |
-| Test kapsaması | %100 | %100 | %100 | %100 |
+| Test kapsaması | %99 | %99 | %99 | %99 |
 | Yanıt süresi | <20dk | <15dk | <5dk | <1dk |
