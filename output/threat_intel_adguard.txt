@@ -1,6 +1,20 @@
 ! Title: TC-SGB Threat Intelligence Blocklist
-! Last updated: 2026-08-15T06:40:56.119909+00:00
+! Last updated: 2026-08-15T12:41:38.973177+00:00
 ! Homepage: https://siberguvenlik.gov.tr
+||elektronikdtm.com^
+||otokocturkeyfilo.net^
+||baz777.site^
+||cekilissonucuqnbfinans.com.ph^
+||garantibbva-vero.ph^
+||bell-garantibbva.com.ph^
+||garantibbva-bell.com.ph^
+||cekilissonucqnbfinans.com.ph^
+||halklimit.homes^
+||sndordnhmnrvdal.click^
+||www-teb-com-tr-emekli-promosyon.my-homeip.de^
+||garantibbva-acres.com.ph^
+||lazada-bankmandiri-garantibbva.com.ph^
+||cibeg-garantibbva.ph^
 ||020201337.sbs^
 ||pttavmkmsorgum.com^
 ||ustumuzeyokbualemdeeee.digital^
@@ -458427,16 +458441,3 @@
 ||halkbank-ceptemobil.com^
 ||ziraatbankasi-cekilisi.net^
 ||i-denizbankborclimitsorgulama.org^
-||plakadurumu.com^
-||plakedurumu.com^
-||subehizmeti.com^
-||bayilerimizdenhizmet.blogspot.com.tr^
-||e-halkbankyilbasikampanyasi.net^
-||garantihediyeleriniz.gq^
-||grantibank.com^
-||giris-halkbankmobilim.net^
-||sube-garaanti.com^
-||ziraatbank-onlinecep.com^
-||garantidenhediyeler.com^
-||digital-giris.xyz^
-||blutv-com.wixsite.com^

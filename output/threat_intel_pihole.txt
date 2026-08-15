@@ -1,4 +1,18 @@
 # TC-SGB Threat Intelligence — Pi-hole hosts format
+0.0.0.0 elektronikdtm.com
+0.0.0.0 otokocturkeyfilo.net
+0.0.0.0 baz777.site
+0.0.0.0 cekilissonucuqnbfinans.com.ph
+0.0.0.0 garantibbva-vero.ph
+0.0.0.0 bell-garantibbva.com.ph
+0.0.0.0 garantibbva-bell.com.ph
+0.0.0.0 cekilissonucqnbfinans.com.ph
+0.0.0.0 halklimit.homes
+0.0.0.0 sndordnhmnrvdal.click
+0.0.0.0 www-teb-com-tr-emekli-promosyon.my-homeip.de
+0.0.0.0 garantibbva-acres.com.ph
+0.0.0.0 lazada-bankmandiri-garantibbva.com.ph
+0.0.0.0 cibeg-garantibbva.ph
 0.0.0.0 020201337.sbs
 0.0.0.0 pttavmkmsorgum.com
 0.0.0.0 ustumuzeyokbualemdeeee.digital
@@ -458425,16 +458439,3 @@
 0.0.0.0 halkbank-ceptemobil.com
 0.0.0.0 ziraatbankasi-cekilisi.net
 0.0.0.0 i-denizbankborclimitsorgulama.org
-0.0.0.0 plakadurumu.com
-0.0.0.0 plakedurumu.com
-0.0.0.0 subehizmeti.com
-0.0.0.0 bayilerimizdenhizmet.blogspot.com.tr
-0.0.0.0 e-halkbankyilbasikampanyasi.net
-0.0.0.0 garantihediyeleriniz.gq
-0.0.0.0 grantibank.com
-0.0.0.0 giris-halkbankmobilim.net
-0.0.0.0 sube-garaanti.com
-0.0.0.0 ziraatbank-onlinecep.com
-0.0.0.0 garantidenhediyeler.com
-0.0.0.0 digital-giris.xyz
-0.0.0.0 blutv-com.wixsite.com
