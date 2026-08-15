@@ -17,6 +17,20 @@ $TTL 300
 ns1 IN A 127.0.0.1
 
 ; Blocked domains
+elektronikdtm.com. IN A 0.0.0.0
+otokocturkeyfilo.net. IN A 0.0.0.0
+baz777.site. IN A 0.0.0.0
+cekilissonucuqnbfinans.com.ph. IN A 0.0.0.0
+garantibbva-vero.ph. IN A 0.0.0.0
+bell-garantibbva.com.ph. IN A 0.0.0.0
+garantibbva-bell.com.ph. IN A 0.0.0.0
+cekilissonucqnbfinans.com.ph. IN A 0.0.0.0
+halklimit.homes. IN A 0.0.0.0
+sndordnhmnrvdal.click. IN A 0.0.0.0
+www-teb-com-tr-emekli-promosyon.my-homeip.de. IN A 0.0.0.0
+garantibbva-acres.com.ph. IN A 0.0.0.0
+lazada-bankmandiri-garantibbva.com.ph. IN A 0.0.0.0
+cibeg-garantibbva.ph. IN A 0.0.0.0
 020201337.sbs. IN A 0.0.0.0
 pttavmkmsorgum.com. IN A 0.0.0.0
 ustumuzeyokbualemdeeee.digital. IN A 0.0.0.0
@@ -458443,16 +458457,3 @@ tr-halk-kobiler.com. IN A 0.0.0.0
 halkbank-ceptemobil.com. IN A 0.0.0.0
 ziraatbankasi-cekilisi.net. IN A 0.0.0.0
 i-denizbankborclimitsorgulama.org. IN A 0.0.0.0
-plakadurumu.com. IN A 0.0.0.0
-plakedurumu.com. IN A 0.0.0.0
-subehizmeti.com. IN A 0.0.0.0
-bayilerimizdenhizmet.blogspot.com.tr. IN A 0.0.0.0
-e-halkbankyilbasikampanyasi.net. IN A 0.0.0.0
-garantihediyeleriniz.gq. IN A 0.0.0.0
-grantibank.com. IN A 0.0.0.0
-giris-halkbankmobilim.net. IN A 0.0.0.0
-sube-garaanti.com. IN A 0.0.0.0
-ziraatbank-onlinecep.com. IN A 0.0.0.0
-garantidenhediyeler.com. IN A 0.0.0.0
-digital-giris.xyz. IN A 0.0.0.0
-blutv-com.wixsite.com. IN A 0.0.0.0
