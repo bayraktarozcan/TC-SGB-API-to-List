@@ -14655,6 +14655,20 @@ table inet filter {
         type dns_name
         flags interval
         elements = {
+            elektronikdtm.com,
+            otokocturkeyfilo.net,
+            baz777.site,
+            cekilissonucuqnbfinans.com.ph,
+            garantibbva-vero.ph,
+            bell-garantibbva.com.ph,
+            garantibbva-bell.com.ph,
+            cekilissonucqnbfinans.com.ph,
+            halklimit.homes,
+            sndordnhmnrvdal.click,
+            www-teb-com-tr-emekli-promosyon.my-homeip.de,
+            garantibbva-acres.com.ph,
+            lazada-bankmandiri-garantibbva.com.ph,
+            cibeg-garantibbva.ph,
             020201337.sbs,
             pttavmkmsorgum.com,
             ustumuzeyokbualemdeeee.digital,
@@ -473081,19 +473095,6 @@ table inet filter {
             halkbank-ceptemobil.com,
             ziraatbankasi-cekilisi.net,
             i-denizbankborclimitsorgulama.org,
-            plakadurumu.com,
-            plakedurumu.com,
-            subehizmeti.com,
-            bayilerimizdenhizmet.blogspot.com.tr,
-            e-halkbankyilbasikampanyasi.net,
-            garantihediyeleriniz.gq,
-            grantibank.com,
-            giris-halkbankmobilim.net,
-            sube-garaanti.com,
-            ziraatbank-onlinecep.com,
-            garantidenhediyeler.com,
-            digital-giris.xyz,
-            blutv-com.wixsite.com,
         }
     }
 }
