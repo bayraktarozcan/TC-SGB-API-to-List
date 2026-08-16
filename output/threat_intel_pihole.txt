@@ -1,4 +1,8 @@
 # TC-SGB Threat Intelligence — Pi-hole hosts format
+0.0.0.0 haberler2373432.shop
+0.0.0.0 halklimit.lol
+0.0.0.0 iyte-utms.xyz
+0.0.0.0 mhkasdmk3474578f.com
 0.0.0.0 batuhancicekcilik.com.tr
 0.0.0.0 182-webs.biz
 0.0.0.0 kgmgovhelp.cc
@@ -458434,8 +458438,3 @@
 0.0.0.0 iziraatbonus.com
 0.0.0.0 yilbasicekilisimiz1.com
 0.0.0.0 ziraat--bank.com
-0.0.0.0 yilbasinda-garantiden.gq
-0.0.0.0 ziratim-cebimde.com
-0.0.0.0 bireysel-ziraattim.com
-0.0.0.0 halkbankmobilbireyselsube.com
-0.0.0.0 ziraatbankyeniyilda.com
