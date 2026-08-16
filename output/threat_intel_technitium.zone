@@ -5,7 +5,7 @@ $ORIGIN threatint.local.
 $TTL 300
 
 @ IN SOA ns1.threatint.local. admin.threatint.local. (
-    2026081501  ; serial
+    2026081601  ; serial
     3600       ; refresh (1 hour)
     600        ; retry (10 min)
     86400      ; expire (1 day)
@@ -17,6 +17,10 @@ $TTL 300
 ns1 IN A 127.0.0.1
 
 ; Blocked domains
+haberler2373432.shop. IN A 0.0.0.0
+halklimit.lol. IN A 0.0.0.0
+iyte-utms.xyz. IN A 0.0.0.0
+mhkasdmk3474578f.com. IN A 0.0.0.0
 batuhancicekcilik.com.tr. IN A 0.0.0.0
 182-webs.biz. IN A 0.0.0.0
 kgmgovhelp.cc. IN A 0.0.0.0
@@ -458452,8 +458456,3 @@ yeniyilinfirsati.com. IN A 0.0.0.0
 iziraatbonus.com. IN A 0.0.0.0
 yilbasicekilisimiz1.com. IN A 0.0.0.0
 ziraat--bank.com. IN A 0.0.0.0
-yilbasinda-garantiden.gq. IN A 0.0.0.0
-ziratim-cebimde.com. IN A 0.0.0.0
-bireysel-ziraattim.com. IN A 0.0.0.0
-halkbankmobilbireyselsube.com. IN A 0.0.0.0
-ziraatbankyeniyilda.com. IN A 0.0.0.0

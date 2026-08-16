@@ -1,7 +1,7 @@
 $ORIGIN threatintel.rpz.
 $TTL 300
 @ IN SOA localhost. admin.localhost. (
-    2026081501  ; serial
+    2026081601  ; serial
     3600       ; refresh
     600        ; retry
     86400      ; expire
@@ -9,6 +9,10 @@ $TTL 300
 )
 @ IN NS localhost.
 
+haberler2373432.shop CNAME .
+halklimit.lol CNAME .
+iyte-utms.xyz CNAME .
+mhkasdmk3474578f.com CNAME .
 batuhancicekcilik.com.tr CNAME .
 182-webs.biz CNAME .
 kgmgovhelp.cc CNAME .
@@ -458444,8 +458448,3 @@ yeniyilinfirsati.com CNAME .
 iziraatbonus.com CNAME .
 yilbasicekilisimiz1.com CNAME .
 ziraat--bank.com CNAME .
-yilbasinda-garantiden.gq CNAME .
-ziratim-cebimde.com CNAME .
-bireysel-ziraattim.com CNAME .
-halkbankmobilbireyselsube.com CNAME .
-ziraatbankyeniyilda.com CNAME .
