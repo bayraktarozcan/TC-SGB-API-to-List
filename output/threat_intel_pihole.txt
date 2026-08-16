@@ -1,4 +1,7 @@
 # TC-SGB Threat Intelligence — Pi-hole hosts format
+0.0.0.0 101-mobil-bugune-ozel-indirim-sadece-online-alisveris-tr.extramarket.online
+0.0.0.0 gugoahahsadwasdas923sad.click
+0.0.0.0 efsane-lndirim-havasi-kapinda.com
 0.0.0.0 haberler2373432.shop
 0.0.0.0 halklimit.lol
 0.0.0.0 iyte-utms.xyz
@@ -458436,5 +458439,3 @@
 0.0.0.0 onlinegiriis.com
 0.0.0.0 yeniyilinfirsati.com
 0.0.0.0 iziraatbonus.com
-0.0.0.0 yilbasicekilisimiz1.com
-0.0.0.0 ziraat--bank.com
