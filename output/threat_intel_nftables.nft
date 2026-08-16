@@ -14655,6 +14655,9 @@ table inet filter {
         type dns_name
         flags interval
         elements = {
+            101-mobil-bugune-ozel-indirim-sadece-online-alisveris-tr.extramarket.online,
+            gugoahahsadwasdas923sad.click,
+            efsane-lndirim-havasi-kapinda.com,
             haberler2373432.shop,
             halklimit.lol,
             iyte-utms.xyz,
@@ -473092,8 +473095,6 @@ table inet filter {
             onlinegiriis.com,
             yeniyilinfirsati.com,
             iziraatbonus.com,
-            yilbasicekilisimiz1.com,
-            ziraat--bank.com,
         }
     }
 }

@@ -1,6 +1,9 @@
 ! Title: TC-SGB Threat Intelligence Blocklist
-! Last updated: 2026-08-16T01:21:12.785770+00:00
+! Last updated: 2026-08-16T06:45:10.714765+00:00
 ! Homepage: https://siberguvenlik.gov.tr
+||101-mobil-bugune-ozel-indirim-sadece-online-alisveris-tr.extramarket.online^
+||gugoahahsadwasdas923sad.click^
+||efsane-lndirim-havasi-kapinda.com^
 ||haberler2373432.shop^
 ||halklimit.lol^
 ||iyte-utms.xyz^
@@ -458438,5 +458441,3 @@
 ||onlinegiriis.com^
 ||yeniyilinfirsati.com^
 ||iziraatbonus.com^
-||yilbasicekilisimiz1.com^
-||ziraat--bank.com^
