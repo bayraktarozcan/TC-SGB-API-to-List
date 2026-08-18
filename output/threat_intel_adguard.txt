@@ -1,6 +1,20 @@
 ! Title: TC-SGB Threat Intelligence Blocklist
-! Last updated: 2026-08-17T18:40:02.012812+00:00
+! Last updated: 2026-08-18T01:16:15.041570+00:00
 ! Homepage: https://siberguvenlik.gov.tr
+||paribu-sponsorlu-cekilisler.live^
+||paribu-pepecekilisin.com^
+||algor-form.site^
+||haberler1642432.shop^
+||bsvvvurrrsnfrstlrrrkmpyasii.xyz^
+||dijitalonline-hizlisiparis.sbs^
+||herkes-kullanabilsindiye.sbs^
+||einfazsorgu.org^
+||541221125565556559996.duckdns.org^
+||halklimitin.online^
+||glrdesnlweesw.duckdns.org^
+||hgshgsdeykle.cfd^
+||541221125565556559995.duckdns.org^
+||erkutdemirsigorta.com^
 ||mobilsepetlerimservis.online^
 ||541221125565556559994.duckdns.org^
 ||pttavm-kmsorgulamakkicn.web.app^
@@ -458440,17 +458454,3 @@
 ||yourserverupdate.ga^
 ||thecryptopeople.com^
 ||esubeyukle.com^
-||bodyclassics.org^
-||erpbizsolutions.com^
-||richardwillettphotography.com^
-||simpleaftercare.co.uk^
-||software24x7.us^
-||topcareerguide.info^
-||trafik-site.ru^
-||upperlensmagazine.com^
-||zhaksylyk.kz^
-||arnitorolgieetoneshutki.com^
-||armmasnmcznxqieqqty.com^
-||fuckasbichsoseksnaset.com^
-||aodkqiwjdqwezxcmasdqynu.com^
-||geltro.pt^

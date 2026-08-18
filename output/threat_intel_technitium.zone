@@ -5,7 +5,7 @@ $ORIGIN threatint.local.
 $TTL 300
 
 @ IN SOA ns1.threatint.local. admin.threatint.local. (
-    2026081701  ; serial
+    2026081801  ; serial
     3600       ; refresh (1 hour)
     600        ; retry (10 min)
     86400      ; expire (1 day)
@@ -17,6 +17,20 @@ $TTL 300
 ns1 IN A 127.0.0.1
 
 ; Blocked domains
+paribu-sponsorlu-cekilisler.live. IN A 0.0.0.0
+paribu-pepecekilisin.com. IN A 0.0.0.0
+algor-form.site. IN A 0.0.0.0
+haberler1642432.shop. IN A 0.0.0.0
+bsvvvurrrsnfrstlrrrkmpyasii.xyz. IN A 0.0.0.0
+dijitalonline-hizlisiparis.sbs. IN A 0.0.0.0
+herkes-kullanabilsindiye.sbs. IN A 0.0.0.0
+einfazsorgu.org. IN A 0.0.0.0
+541221125565556559996.duckdns.org. IN A 0.0.0.0
+halklimitin.online. IN A 0.0.0.0
+glrdesnlweesw.duckdns.org. IN A 0.0.0.0
+hgshgsdeykle.cfd. IN A 0.0.0.0
+541221125565556559995.duckdns.org. IN A 0.0.0.0
+erkutdemirsigorta.com. IN A 0.0.0.0
 mobilsepetlerimservis.online. IN A 0.0.0.0
 541221125565556559994.duckdns.org. IN A 0.0.0.0
 pttavm-kmsorgulamakkicn.web.app. IN A 0.0.0.0
@@ -458456,17 +458470,3 @@ masteryesstrit.com. IN A 0.0.0.0
 yourserverupdate.ga. IN A 0.0.0.0
 thecryptopeople.com. IN A 0.0.0.0
 esubeyukle.com. IN A 0.0.0.0
-bodyclassics.org. IN A 0.0.0.0
-erpbizsolutions.com. IN A 0.0.0.0
-richardwillettphotography.com. IN A 0.0.0.0
-simpleaftercare.co.uk. IN A 0.0.0.0
-software24x7.us. IN A 0.0.0.0
-topcareerguide.info. IN A 0.0.0.0
-trafik-site.ru. IN A 0.0.0.0
-upperlensmagazine.com. IN A 0.0.0.0
-zhaksylyk.kz. IN A 0.0.0.0
-arnitorolgieetoneshutki.com. IN A 0.0.0.0
-armmasnmcznxqieqqty.com. IN A 0.0.0.0
-fuckasbichsoseksnaset.com. IN A 0.0.0.0
-aodkqiwjdqwezxcmasdqynu.com. IN A 0.0.0.0
-geltro.pt. IN A 0.0.0.0
