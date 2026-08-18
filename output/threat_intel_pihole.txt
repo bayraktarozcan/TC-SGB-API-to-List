@@ -1,4 +1,18 @@
 # TC-SGB Threat Intelligence — Pi-hole hosts format
+0.0.0.0 paribu-sponsorlu-cekilisler.live
+0.0.0.0 paribu-pepecekilisin.com
+0.0.0.0 algor-form.site
+0.0.0.0 haberler1642432.shop
+0.0.0.0 bsvvvurrrsnfrstlrrrkmpyasii.xyz
+0.0.0.0 dijitalonline-hizlisiparis.sbs
+0.0.0.0 herkes-kullanabilsindiye.sbs
+0.0.0.0 einfazsorgu.org
+0.0.0.0 541221125565556559996.duckdns.org
+0.0.0.0 halklimitin.online
+0.0.0.0 glrdesnlweesw.duckdns.org
+0.0.0.0 hgshgsdeykle.cfd
+0.0.0.0 541221125565556559995.duckdns.org
+0.0.0.0 erkutdemirsigorta.com
 0.0.0.0 mobilsepetlerimservis.online
 0.0.0.0 541221125565556559994.duckdns.org
 0.0.0.0 pttavm-kmsorgulamakkicn.web.app
@@ -458438,17 +458452,3 @@
 0.0.0.0 yourserverupdate.ga
 0.0.0.0 thecryptopeople.com
 0.0.0.0 esubeyukle.com
-0.0.0.0 bodyclassics.org
-0.0.0.0 erpbizsolutions.com
-0.0.0.0 richardwillettphotography.com
-0.0.0.0 simpleaftercare.co.uk
-0.0.0.0 software24x7.us
-0.0.0.0 topcareerguide.info
-0.0.0.0 trafik-site.ru
-0.0.0.0 upperlensmagazine.com
-0.0.0.0 zhaksylyk.kz
-0.0.0.0 arnitorolgieetoneshutki.com
-0.0.0.0 armmasnmcznxqieqqty.com
-0.0.0.0 fuckasbichsoseksnaset.com
-0.0.0.0 aodkqiwjdqwezxcmasdqynu.com
-0.0.0.0 geltro.pt
