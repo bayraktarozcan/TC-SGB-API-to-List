@@ -1,7 +1,7 @@
 $ORIGIN threatintel.rpz.
 $TTL 300
 @ IN SOA localhost. admin.localhost. (
-    2026081701  ; serial
+    2026081801  ; serial
     3600       ; refresh
     600        ; retry
     86400      ; expire
@@ -9,6 +9,20 @@ $TTL 300
 )
 @ IN NS localhost.
 
+paribu-sponsorlu-cekilisler.live CNAME .
+paribu-pepecekilisin.com CNAME .
+algor-form.site CNAME .
+haberler1642432.shop CNAME .
+bsvvvurrrsnfrstlrrrkmpyasii.xyz CNAME .
+dijitalonline-hizlisiparis.sbs CNAME .
+herkes-kullanabilsindiye.sbs CNAME .
+einfazsorgu.org CNAME .
+541221125565556559996.duckdns.org CNAME .
+halklimitin.online CNAME .
+glrdesnlweesw.duckdns.org CNAME .
+hgshgsdeykle.cfd CNAME .
+541221125565556559995.duckdns.org CNAME .
+erkutdemirsigorta.com CNAME .
 mobilsepetlerimservis.online CNAME .
 541221125565556559994.duckdns.org CNAME .
 pttavm-kmsorgulamakkicn.web.app CNAME .
@@ -458448,17 +458462,3 @@ masteryesstrit.com CNAME .
 yourserverupdate.ga CNAME .
 thecryptopeople.com CNAME .
 esubeyukle.com CNAME .
-bodyclassics.org CNAME .
-erpbizsolutions.com CNAME .
-richardwillettphotography.com CNAME .
-simpleaftercare.co.uk CNAME .
-software24x7.us CNAME .
-topcareerguide.info CNAME .
-trafik-site.ru CNAME .
-upperlensmagazine.com CNAME .
-zhaksylyk.kz CNAME .
-arnitorolgieetoneshutki.com CNAME .
-armmasnmcznxqieqqty.com CNAME .
-fuckasbichsoseksnaset.com CNAME .
-aodkqiwjdqwezxcmasdqynu.com CNAME .
-geltro.pt CNAME .
