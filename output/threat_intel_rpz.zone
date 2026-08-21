@@ -1,7 +1,7 @@
 $ORIGIN threatintel.rpz.
 $TTL 300
 @ IN SOA localhost. admin.localhost. (
-    2026082001  ; serial
+    2026082101  ; serial
     3600       ; refresh
     600        ; retry
     86400      ; expire
@@ -9,6 +9,43 @@ $TTL 300
 )
 @ IN NS localhost.
 
+trendyo5.sbs CNAME .
+zairochkr.rf.gd CNAME .
+dasfgasdafasda.shop CNAME .
+sizlericin.lol CNAME .
+dijitalsiparis-kapinda.sbs CNAME .
+velirapolse-pudore.lol CNAME .
+mhrsrndsjlvsv.com CNAME .
+ceptetebliye-ozel.my-homeip.de CNAME .
+sarsarsarsarmakarayyyy.com CNAME .
+yapi.ve.kredi.dliso.com CNAME .
+juk2a.site CNAME .
+sokmarkethepsi.shop CNAME .
+matbet1001giris.site CNAME .
+sahibinden-param-guvende.ilanonayla.online CNAME .
+ilanonayla.online CNAME .
+letok82650.site CNAME .
+mhurbiraznle.sbs CNAME .
+cmhrdanbrayagldm.click CNAME .
+m1b10ir4zle.sbs CNAME .
+honejsatery.duckdns.org CNAME .
+uzaktankayit.abrdns.com CNAME .
+paramguvende-banaozel.my CNAME .
+avsfiloarackiralama.com CNAME .
+avsfilokiralamaa.com CNAME .
+obaresort.net CNAME .
+adenyabeachs.com CNAME .
+kizlarvixlex.cfd CNAME .
+trendy0l.lol CNAME .
+bilgihub.info CNAME .
+sokflrsatlarbrda.com CNAME .
+ac-count.my-homeip.de CNAME .
+sahibinden.hizlial-siparis.com CNAME .
+hf7x.com CNAME .
+sorguhukuk.org CNAME .
+baglanti-tamamlama.com CNAME .
+61322122214545578899897.duckdns.org CNAME .
+guncelhemen.abrdns.com CNAME .
 x7m6ha235fds3df2.click CNAME .
 7542875425852585385.xyz CNAME .
 karacas.top CNAME .
