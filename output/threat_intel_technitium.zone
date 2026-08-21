@@ -5,7 +5,7 @@ $ORIGIN threatint.local.
 $TTL 300
 
 @ IN SOA ns1.threatint.local. admin.threatint.local. (
-    2026082001  ; serial
+    2026082101  ; serial
     3600       ; refresh (1 hour)
     600        ; retry (10 min)
     86400      ; expire (1 day)
@@ -17,6 +17,43 @@ $TTL 300
 ns1 IN A 127.0.0.1
 
 ; Blocked domains
+trendyo5.sbs. IN A 0.0.0.0
+zairochkr.rf.gd. IN A 0.0.0.0
+dasfgasdafasda.shop. IN A 0.0.0.0
+sizlericin.lol. IN A 0.0.0.0
+dijitalsiparis-kapinda.sbs. IN A 0.0.0.0
+velirapolse-pudore.lol. IN A 0.0.0.0
+mhrsrndsjlvsv.com. IN A 0.0.0.0
+ceptetebliye-ozel.my-homeip.de. IN A 0.0.0.0
+sarsarsarsarmakarayyyy.com. IN A 0.0.0.0
+yapi.ve.kredi.dliso.com. IN A 0.0.0.0
+juk2a.site. IN A 0.0.0.0
+sokmarkethepsi.shop. IN A 0.0.0.0
+matbet1001giris.site. IN A 0.0.0.0
+sahibinden-param-guvende.ilanonayla.online. IN A 0.0.0.0
+ilanonayla.online. IN A 0.0.0.0
+letok82650.site. IN A 0.0.0.0
+mhurbiraznle.sbs. IN A 0.0.0.0
+cmhrdanbrayagldm.click. IN A 0.0.0.0
+m1b10ir4zle.sbs. IN A 0.0.0.0
+honejsatery.duckdns.org. IN A 0.0.0.0
+uzaktankayit.abrdns.com. IN A 0.0.0.0
+paramguvende-banaozel.my. IN A 0.0.0.0
+avsfiloarackiralama.com. IN A 0.0.0.0
+avsfilokiralamaa.com. IN A 0.0.0.0
+obaresort.net. IN A 0.0.0.0
+adenyabeachs.com. IN A 0.0.0.0
+kizlarvixlex.cfd. IN A 0.0.0.0
+trendy0l.lol. IN A 0.0.0.0
+bilgihub.info. IN A 0.0.0.0
+sokflrsatlarbrda.com. IN A 0.0.0.0
+ac-count.my-homeip.de. IN A 0.0.0.0
+sahibinden.hizlial-siparis.com. IN A 0.0.0.0
+hf7x.com. IN A 0.0.0.0
+sorguhukuk.org. IN A 0.0.0.0
+baglanti-tamamlama.com. IN A 0.0.0.0
+61322122214545578899897.duckdns.org. IN A 0.0.0.0
+guncelhemen.abrdns.com. IN A 0.0.0.0
 x7m6ha235fds3df2.click. IN A 0.0.0.0
 7542875425852585385.xyz. IN A 0.0.0.0
 karacas.top. IN A 0.0.0.0
