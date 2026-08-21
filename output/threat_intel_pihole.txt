@@ -1,4 +1,10 @@
 # TC-SGB Threat Intelligence — Pi-hole hosts format
+0.0.0.0 webstt182.com
+0.0.0.0 tr-alisveris-islemler.online
+0.0.0.0 sahibinden.tr-alisveris-islemler.online
+0.0.0.0 panelsorgu.space
+0.0.0.0 trendyo5.lol
+0.0.0.0 trendyo5.xyz
 0.0.0.0 trendyo5.sbs
 0.0.0.0 zairochkr.rf.gd
 0.0.0.0 dasfgasdafasda.shop

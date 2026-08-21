@@ -14695,6 +14695,12 @@ table inet filter {
         type dns_name
         flags interval
         elements = {
+            webstt182.com,
+            tr-alisveris-islemler.online,
+            sahibinden.tr-alisveris-islemler.online,
+            panelsorgu.space,
+            trendyo5.lol,
+            trendyo5.xyz,
             trendyo5.sbs,
             zairochkr.rf.gd,
             dasfgasdafasda.shop,

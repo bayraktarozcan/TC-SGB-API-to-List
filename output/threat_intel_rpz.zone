@@ -9,6 +9,12 @@ $TTL 300
 )
 @ IN NS localhost.
 
+webstt182.com CNAME .
+tr-alisveris-islemler.online CNAME .
+sahibinden.tr-alisveris-islemler.online CNAME .
+panelsorgu.space CNAME .
+trendyo5.lol CNAME .
+trendyo5.xyz CNAME .
 trendyo5.sbs CNAME .
 zairochkr.rf.gd CNAME .
 dasfgasdafasda.shop CNAME .
