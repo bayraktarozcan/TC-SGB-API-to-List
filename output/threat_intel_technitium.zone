@@ -17,6 +17,12 @@ $TTL 300
 ns1 IN A 127.0.0.1
 
 ; Blocked domains
+webstt182.com. IN A 0.0.0.0
+tr-alisveris-islemler.online. IN A 0.0.0.0
+sahibinden.tr-alisveris-islemler.online. IN A 0.0.0.0
+panelsorgu.space. IN A 0.0.0.0
+trendyo5.lol. IN A 0.0.0.0
+trendyo5.xyz. IN A 0.0.0.0
 trendyo5.sbs. IN A 0.0.0.0
 zairochkr.rf.gd. IN A 0.0.0.0
 dasfgasdafasda.shop. IN A 0.0.0.0
