@@ -515,6 +515,16 @@ CREATE TABLE IF NOT EXISTS pipeline_runs (
 """
 
 
+def _connect_sqlite_with_schema(path: Path) -> sqlite3.Connection:
+    conn = sqlite3.connect(str(path))
+    try:
+        conn.executescript(SQLITE_SCHEMA)
+    except sqlite3.DatabaseError:
+        conn.close()
+        raise
+    return conn
+
+
 def generate_sqlite(iocs: Sequence[ScoredIOC], path: str | Path | None = None) -> str:
     """Generate a SQLite database with the IoCs.
 
@@ -525,10 +535,16 @@ def generate_sqlite(iocs: Sequence[ScoredIOC], path: str | Path | None = None) -
     else:
         path = Path(path)
 
-    conn = sqlite3.connect(str(path))
     try:
-        conn.executescript(SQLITE_SCHEMA)
+        conn = _connect_sqlite_with_schema(path)
+    except sqlite3.DatabaseError:
+        # Existing file is not a valid SQLite database (e.g. a Git LFS pointer
+        # checked out without smudge): discard it and rebuild from scratch.
+        logger.warning("Existing %s is not a valid SQLite database — rebuilding.", path)
+        path.unlink(missing_ok=True)
+        conn = _connect_sqlite_with_schema(path)
 
+    try:
         rows = [
             (
                 ioc.value,
