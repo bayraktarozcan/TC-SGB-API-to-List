@@ -373,6 +373,21 @@ class TestSQLite:
         conn.close()
         assert count == 0
 
+    def test_rebuilds_over_non_database_file(self, scored_iocs, temp_dir):
+        """A garbage file at the target (e.g. a Git LFS pointer) is replaced by a valid DB."""
+        db_path = temp_dir / "pointer.db"
+        db_path.write_text(
+            "version https://git-lfs.github.com/spec/v1\n"
+            "oid sha256:0000000000000000000000000000000000000000000000000000000000000000\n",
+            encoding="utf-8",
+        )
+        result = generate_sqlite(scored_iocs, db_path)
+        assert isinstance(result, str)
+        conn = sqlite3.connect(str(db_path))
+        count = conn.execute("SELECT COUNT(*) FROM iocs").fetchone()[0]
+        conn.close()
+        assert count == 4
+
 
 class TestWriteToPath:
     """All generators write to path when given."""
