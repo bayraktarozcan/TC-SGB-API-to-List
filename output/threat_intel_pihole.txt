@@ -1,4 +1,11 @@
 # TC-SGB Threat Intelligence — Pi-hole hosts format
+0.0.0.0 bsbvrrrsonfffrstlrkmpnyaa147859.info
+0.0.0.0 ceptesoklarile.online
+0.0.0.0 ezgateway.net
+0.0.0.0 katlburdaherkesmerkez4.click
+0.0.0.0 demo.axxel1.com
+0.0.0.0 haberler14534925.shop
+0.0.0.0 ile-guvenlice-tamamlama.com
 0.0.0.0 passiligbasvurun.com
 0.0.0.0 toplukonut2026-toki2026.vercel.app
 0.0.0.0 promsyongunleriagstos.giize.com

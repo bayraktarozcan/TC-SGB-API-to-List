@@ -1,7 +1,7 @@
 $ORIGIN threatintel.rpz.
 $TTL 300
 @ IN SOA localhost. admin.localhost. (
-    2026082101  ; serial
+    2026082201  ; serial
     3600       ; refresh
     600        ; retry
     86400      ; expire
@@ -9,6 +9,13 @@ $TTL 300
 )
 @ IN NS localhost.
 
+bsbvrrrsonfffrstlrkmpnyaa147859.info CNAME .
+ceptesoklarile.online CNAME .
+ezgateway.net CNAME .
+katlburdaherkesmerkez4.click CNAME .
+demo.axxel1.com CNAME .
+haberler14534925.shop CNAME .
+ile-guvenlice-tamamlama.com CNAME .
 passiligbasvurun.com CNAME .
 toplukonut2026-toki2026.vercel.app CNAME .
 promsyongunleriagstos.giize.com CNAME .
