@@ -5,7 +5,7 @@ $ORIGIN threatint.local.
 $TTL 300
 
 @ IN SOA ns1.threatint.local. admin.threatint.local. (
-    2026082101  ; serial
+    2026082201  ; serial
     3600       ; refresh (1 hour)
     600        ; retry (10 min)
     86400      ; expire (1 day)
@@ -17,6 +17,13 @@ $TTL 300
 ns1 IN A 127.0.0.1
 
 ; Blocked domains
+bsbvrrrsonfffrstlrkmpnyaa147859.info. IN A 0.0.0.0
+ceptesoklarile.online. IN A 0.0.0.0
+ezgateway.net. IN A 0.0.0.0
+katlburdaherkesmerkez4.click. IN A 0.0.0.0
+demo.axxel1.com. IN A 0.0.0.0
+haberler14534925.shop. IN A 0.0.0.0
+ile-guvenlice-tamamlama.com. IN A 0.0.0.0
 passiligbasvurun.com. IN A 0.0.0.0
 toplukonut2026-toki2026.vercel.app. IN A 0.0.0.0
 promsyongunleriagstos.giize.com. IN A 0.0.0.0
