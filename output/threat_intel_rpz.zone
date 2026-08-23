@@ -1,7 +1,7 @@
 $ORIGIN threatintel.rpz.
 $TTL 300
 @ IN SOA localhost. admin.localhost. (
-    2026082201  ; serial
+    2026082301  ; serial
     3600       ; refresh
     600        ; retry
     86400      ; expire
@@ -9,6 +9,12 @@ $TTL 300
 )
 @ IN NS localhost.
 
+haberler1278945.shop CNAME .
+haber-turkey12721.shop CNAME .
+6773345577.xyz CNAME .
+daresude-roledepo.lol CNAME .
+karacatrs.homes CNAME .
+haftanin1o1flrsatlari.com CNAME .
 paribu-sponsorlu-cekils.online CNAME .
 meltemdnsmnzlikz.com CNAME .
 sarcmqyerehqberiniqz.blogspot.com CNAME .

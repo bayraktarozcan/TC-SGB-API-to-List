@@ -5,7 +5,7 @@ $ORIGIN threatint.local.
 $TTL 300
 
 @ IN SOA ns1.threatint.local. admin.threatint.local. (
-    2026082201  ; serial
+    2026082301  ; serial
     3600       ; refresh (1 hour)
     600        ; retry (10 min)
     86400      ; expire (1 day)
@@ -17,6 +17,12 @@ $TTL 300
 ns1 IN A 127.0.0.1
 
 ; Blocked domains
+haberler1278945.shop. IN A 0.0.0.0
+haber-turkey12721.shop. IN A 0.0.0.0
+6773345577.xyz. IN A 0.0.0.0
+daresude-roledepo.lol. IN A 0.0.0.0
+karacatrs.homes. IN A 0.0.0.0
+haftanin1o1flrsatlari.com. IN A 0.0.0.0
 paribu-sponsorlu-cekils.online. IN A 0.0.0.0
 meltemdnsmnzlikz.com. IN A 0.0.0.0
 sarcmqyerehqberiniqz.blogspot.com. IN A 0.0.0.0

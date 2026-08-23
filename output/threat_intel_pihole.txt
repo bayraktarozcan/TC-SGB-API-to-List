@@ -1,4 +1,10 @@
 # TC-SGB Threat Intelligence — Pi-hole hosts format
+0.0.0.0 haberler1278945.shop
+0.0.0.0 haber-turkey12721.shop
+0.0.0.0 6773345577.xyz
+0.0.0.0 daresude-roledepo.lol
+0.0.0.0 karacatrs.homes
+0.0.0.0 haftanin1o1flrsatlari.com
 0.0.0.0 paribu-sponsorlu-cekils.online
 0.0.0.0 meltemdnsmnzlikz.com
 0.0.0.0 sarcmqyerehqberiniqz.blogspot.com

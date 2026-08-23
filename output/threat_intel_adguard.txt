@@ -1,6 +1,12 @@
 ! Title: TC-SGB Threat Intelligence Blocklist
-! Last updated: 2026-08-22T18:32:23.147001+00:00
+! Last updated: 2026-08-23T01:23:25.569936+00:00
 ! Homepage: https://siberguvenlik.gov.tr
+||haberler1278945.shop^
+||haber-turkey12721.shop^
+||6773345577.xyz^
+||daresude-roledepo.lol^
+||karacatrs.homes^
+||haftanin1o1flrsatlari.com^
 ||paribu-sponsorlu-cekils.online^
 ||meltemdnsmnzlikz.com^
 ||sarcmqyerehqberiniqz.blogspot.com^
