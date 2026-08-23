@@ -102828,10 +102828,3 @@
     scope: IP
     type: ban
     value: 185.165.29.62
-- decisions:
-  - duration: 168h
-    origin: TC-SGB-Intel
-    scenario: 'Threat intelligence: MI'
-    scope: IP
-    type: ban
-    value: 149.91.83.138
