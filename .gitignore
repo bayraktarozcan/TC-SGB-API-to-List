@@ -113,7 +113,6 @@ data/*.csv
 *.db
 *.sqlite
 *.sqlite3
-!output/*.db
 
 # Hypothesis (property-based testing cache)
 .hypothesis/
