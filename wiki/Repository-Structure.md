@@ -57,23 +57,23 @@ TC-SGB-API-to-List/
 │
 ├── output/                            # Generated output files
 │   ├── .gitkeep
-│   ├── raw_records.json
+│   ├── raw_records.json               # ⚠ Large-format files are NOT tracked in git — published to the rolling release `ioc-data`
 │   ├── threat_intel_adguard.txt
 │   ├── threat_intel_csv.csv
 │   ├── threat_intel_crowdsec.yaml
 │   ├── threat_intel_dnsmasq.conf
 │   ├── threat_intel_ipset.ipset
-│   ├── threat_intel_json.json
+│   ├── threat_intel_json.json         # ⚠ See note above (published via `ioc-data` release)
 │   ├── threat_intel_mikrotik.rsc
 │   ├── threat_intel_nextdns.txt
 │   ├── threat_intel_nftables.nft
 │   ├── threat_intel_pihole.txt
 │   ├── threat_intel_rpz.zone
-│   ├── threat_intel_sqlite.db
-│   ├── threat_intel_suricata.json
+│   ├── threat_intel_sqlite.db         # ⚠ See note above (published via `ioc-data` release)
+│   ├── threat_intel_suricata.json     # ⚠ See note above (published via `ioc-data` release)
 │   ├── threat_intel_technitium.zone
 │   ├── threat_intel_unbound.conf
-│   ├── threat_intel_yaml.yaml
+│   ├── threat_intel_yaml.yaml         # ⚠ See note above (published via `ioc-data` release)
 │   └── logs/
 │       └── ioc_changelog.md
 │
@@ -150,7 +150,7 @@ TC-SGB-API-to-List/
 
 ### Tests (`tests/`)
 
-Flat structure — no subdirectories. 15 files total, 451 tests, 99% coverage.
+Flat structure — no subdirectories. 15 files total, 452 tests, 99% coverage.
 
 | File | Focus |
 |------|-------|
@@ -321,23 +321,23 @@ TC-SGB-API-to-List/
 │
 ├── output/                            # Üretilen çıktı dosyaları
 │   ├── .gitkeep
-│   ├── raw_records.json
+│   ├── raw_records.json               # ⚠ Büyük biçim dosyaları git'te İZLENMEZ — `ioc-data` yuvarlanan release'i ile yayınlanır
 │   ├── threat_intel_adguard.txt
 │   ├── threat_intel_csv.csv
 │   ├── threat_intel_crowdsec.yaml
 │   ├── threat_intel_dnsmasq.conf
 │   ├── threat_intel_ipset.ipset
-│   ├── threat_intel_json.json
+│   ├── threat_intel_json.json         # ⚠ Yukarıdaki nota bakın (`ioc-data` release'i ile yayınlanır)
 │   ├── threat_intel_mikrotik.rsc
 │   ├── threat_intel_nextdns.txt
 │   ├── threat_intel_nftables.nft
 │   ├── threat_intel_pihole.txt
 │   ├── threat_intel_rpz.zone
-│   ├── threat_intel_sqlite.db
-│   ├── threat_intel_suricata.json
+│   ├── threat_intel_sqlite.db         # ⚠ Yukarıdaki nota bakın (`ioc-data` release'i ile yayınlanır)
+│   ├── threat_intel_suricata.json     # ⚠ Yukarıdaki nota bakın (`ioc-data` release'i ile yayınlanır)
 │   ├── threat_intel_technitium.zone
 │   ├── threat_intel_unbound.conf
-│   ├── threat_intel_yaml.yaml
+│   ├── threat_intel_yaml.yaml         # ⚠ Yukarıdaki nota bakın (`ioc-data` release'i ile yayınlanır)
 │   └── logs/
 │       └── ioc_changelog.md
 │
@@ -414,7 +414,7 @@ TC-SGB-API-to-List/
 
 ### Testler (`tests/`)
 
-Düz yapı — alt dizin yok. Toplam 15 dosya, 451 test, %99 kapsama.
+Düz yapı — alt dizin yok. Toplam 15 dosya, 452 test, %99 kapsama.
 
 | Dosya | Odak |
 |-------|------|

@@ -20,23 +20,23 @@ The TC-SGB-API-to-List system is an automated threat intelligence pipeline that 
   EXTERNAL                  INTERNAL PIPELINE                    OUTPUT
 +-----------+        +---------------------------+        +---------------+
 |           |        |                           |        |               |
-|  TC SGB   |  HTTPS |  +-------+   +--------+  |  File  |  JSON         |
-|  API      |------->|  | Fetch |-->|Validate|  |  I/O   |  STIX 2.1     |
-|  Endpoint |        |  +-------+   +--------+  |------->|  CSV          |
-|           |        |                |          |        |  MISP         |
-|           |        |                v          |        |  OpenIOC      |
-|           |        |  +-----------+ +--------+ |        |  PDF Report   |
-|           |        |  |Normalize  |<-| Dedup  | |        |  Markdown     |
-|           |        |  +-----------+ +--------+ |        |  CEF          |
-|           |        |       |                   |        |  LEEF         |
-|           |        |       v                   |        |  Syslog       |
-|           |        |  +--------+  +---------+  |        |  Sigma Rules  |
-|           |        |  |Quality |->| Output  |  |        |  YARA Rules   |
-|           |        |  |Check   |  |Engine   |  |        |  HTML         |
-|           |        |  +--------+  +---------+  |        |  Splunk       |
-|           |        |                |          |        |  QRadar       |
-|           |        |                v          |        |  Elastic      |
-+-----------+        |          +---------+      |        |  Grafana      |
+|  TC SGB   |  HTTPS |  +-------+   +--------+  |  File  |  NextDNS      |
+|  API      |------->|  | Fetch |-->|Validate|  |  I/O   |  AdGuard      |
+|  Endpoint |        |  +-------+   +--------+  |------->|  Pi-hole      |
+|           |        |                |          |        |  dnsmasq      |
+|           |        |                v          |        |  Unbound      |
+|           |        |  +-----------+ +--------+ |        |  RPZ          |
+|           |        |  |Normalize  |<-| Dedup  | |        |  Technitium   |
+|           |        |  +-----------+ +--------+ |        |  MikroTik     |
+|           |        |       |                   |        |  nftables     |
+|           |        |       v                   |        |  ipset        |
+|           |        |  +--------+  +---------+  |        |  Suricata     |
+|           |        |  |Quality |->| Output  |  |        |  CrowdSec     |
+|           |        |  |Check   |  |Engine   |  |        |  CSV          |
+|           |        |  +--------+  +---------+  |        |  JSON         |
+|           |        |                |          |        |  YAML         |
+|           |        |                v          |        |  SQLite       |
++-----------+        |          +---------+      |        |               |
                      |          | Publish |      |        +---------------+
                      |          +---------+      |
                      +---------------------------+
@@ -84,11 +84,11 @@ The TC-SGB-API-to-List system is an automated threat intelligence pipeline that 
                           v                       v
  4. DEDUP              5. QUALITY            6. OUTPUT
 +----------+          +----------+          +-----------+
-| Hash     |          | FP Check |          | JSON      |
-| Content  | -------> | Benign   | -------> | STIX      |
+| Hash     |          | FP Check |          | NextDNS   |
+| Content  | -------> | Benign   | -------> | AdGuard   |
 | Seen Map |          | Whitelist|          | CSV       |
-+----------+          | Stats    |          | MISP      |
-                      +----------+          | ...16    |
++----------+          | Stats    |          | JSON      |
+                      +----------+          | ...16     |
                                             +-----------+
 ```
 
@@ -235,23 +235,23 @@ TC-SGB-API-to-List sistemi, T.C. Siber Güvenlik Başkanlığı kamu API'sinden 
   EXTERNAL                  INTERNAL PIPELINE                    OUTPUT
 +-----------+        +---------------------------+        +---------------+
 |           |        |                           |        |               |
-|  TC SGB   |  HTTPS |  +-------+   +--------+  |  File  |  JSON         |
-|  API      |------->|  | Fetch |-->|Validate|  |  I/O   |  STIX 2.1     |
-|  Endpoint |        |  +-------+   +--------+  |------->|  CSV          |
-|           |        |                |          |        |  MISP         |
-|           |        |                v          |        |  OpenIOC      |
-|           |        |  +-----------+ +--------+ |        |  PDF Report   |
-|           |        |  |Normalize  |<-| Dedup  | |        |  Markdown     |
-|           |        |  +-----------+ +--------+ |        |  CEF          |
-|           |        |       |                   |        |  LEEF         |
-|           |        |       v                   |        |  Syslog       |
-|           |        |  +--------+  +---------+  |        |  Sigma Rules  |
-|           |        |  |Quality |->| Output  |  |        |  YARA Rules   |
-|           |        |  |Check   |  |Engine   |  |        |  HTML         |
-|           |        |  +--------+  +---------+  |        |  Splunk       |
-|           |        |                |          |        |  QRadar       |
-|           |        |                v          |        |  Elastic      |
-+-----------+        |          +---------+      |        |  Grafana      |
+|  TC SGB   |  HTTPS |  +-------+   +--------+  |  File  |  NextDNS      |
+|  API      |------->|  | Fetch |-->|Validate|  |  I/O   |  AdGuard      |
+|  Endpoint |        |  +-------+   +--------+  |------->|  Pi-hole      |
+|           |        |                |          |        |  dnsmasq      |
+|           |        |                v          |        |  Unbound      |
+|           |        |  +-----------+ +--------+ |        |  RPZ          |
+|           |        |  |Normalize  |<-| Dedup  | |        |  Technitium   |
+|           |        |  +-----------+ +--------+ |        |  MikroTik     |
+|           |        |       |                   |        |  nftables     |
+|           |        |       v                   |        |  ipset        |
+|           |        |  +--------+  +---------+  |        |  Suricata     |
+|           |        |  |Quality |->| Output  |  |        |  CrowdSec     |
+|           |        |  |Check   |  |Engine   |  |        |  CSV          |
+|           |        |  +--------+  +---------+  |        |  JSON         |
+|           |        |                |          |        |  YAML         |
+|           |        |                v          |        |  SQLite       |
++-----------+        |          +---------+      |        |               |
                      |          | Publish |      |        +---------------+
                      |          +---------+      |
                      +---------------------------+
@@ -299,11 +299,11 @@ TC-SGB-API-to-List sistemi, T.C. Siber Güvenlik Başkanlığı kamu API'sinden 
                           v                       v
  4. DEDUP              5. QUALITY            6. OUTPUT
 +----------+          +----------+          +-----------+
-| Hash     |          | FP Check |          | JSON      |
-| Content  | -------> | Benign   | -------> | STIX      |
+| Hash     |          | FP Check |          | NextDNS   |
+| Content  | -------> | Benign   | -------> | AdGuard   |
 | Seen Map |          | Whitelist|          | CSV       |
-+----------+          | Stats    |          | MISP      |
-                      +----------+          | ...16    |
++----------+          | Stats    |          | JSON      |
+                      +----------+          | ...16     |
                                             +-----------+
 ```
 
