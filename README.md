@@ -61,6 +61,20 @@ tc-sgb generate -i output/raw_records.json
 tc-sgb health
 ```
 
+### Data Download
+
+Latest pre-generated IoC outputs are published automatically (every 6 hours) to the rolling GitHub Release `ioc-data`. The five large-format files are distributed through stable download URLs (small formats remain tracked in the `output/` directory):
+
+| Format | File | Size (approx.) |
+|--------|------|----------------|
+| Raw records | [raw_records.json](https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/download/ioc-data/raw_records.json) | 129 MB |
+| Structured JSON | [threat_intel_json.json](https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/download/ioc-data/threat_intel_json.json) | 130 MB |
+| SQLite database | [threat_intel_sqlite.db](https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/download/ioc-data/threat_intel_sqlite.db) | 96 MB |
+| Suricata JSON | [threat_intel_suricata.json](https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/download/ioc-data/threat_intel_suricata.json) | 203 MB |
+| Structured YAML | [threat_intel_yaml.yaml](https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/download/ioc-data/threat_intel_yaml.yaml) | 97 MB |
+
+> Download via `wget`/`curl`/`Invoke-WebRequest` or browse the [release page](https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/tag/ioc-data). All other formats are generated to `output/` when you run the pipeline locally.
+
 ## Project Structure
 
 ```
@@ -80,7 +94,7 @@ TC-SGB-API-to-List/
 ├── wiki/                        # Documentation (bilingual)
 ├── schema/                      # JSON Schema & OpenAPI spec
 ├── data/                        # Runtime data cache
-├── output/                      # Generated IoC output files (tracked)
+├── output/                      # Generated IoC output files (small formats tracked; large formats via `ioc-data` release)
 ├── examples/                    # Usage examples
 ├── benchmark/                   # Performance benchmarks
 └── .github/workflows/           # CI/CD pipelines
@@ -220,6 +234,20 @@ tc-sgb generate -i output/raw_records.json
 tc-sgb health
 ```
 
+### Veri İndirme
+
+En güncel önceden üretilmiş IoC çıktıları (her 6 saatte bir) yuvarlanan GitHub Release'i `ioc-data`'da otomatik olarak yayınlanır. Beş büyük biçim dosyası kararlı indirme bağlantıları üzerinden dağıtılır (küçük biçimler `output/` dizininde izlenmeye devam eder):
+
+| Biçim | Dosya | Yaklaşık Boyut |
+|-------|-------|----------------|
+| Ham kayıtlar | [raw_records.json](https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/download/ioc-data/raw_records.json) | 129 MB |
+| Yapılandırılmış JSON | [threat_intel_json.json](https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/download/ioc-data/threat_intel_json.json) | 130 MB |
+| SQLite veritabanı | [threat_intel_sqlite.db](https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/download/ioc-data/threat_intel_sqlite.db) | 96 MB |
+| Suricata JSON | [threat_intel_suricata.json](https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/download/ioc-data/threat_intel_suricata.json) | 203 MB |
+| Yapılandırılmış YAML | [threat_intel_yaml.yaml](https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/download/ioc-data/threat_intel_yaml.yaml) | 97 MB |
+
+> `wget`/`curl`/`Invoke-WebRequest` ile indirin veya [release sayfasını](https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/tag/ioc-data) inceleyin. Diğer tüm biçimler hattı yerel olarak çalıştırdığınızda `output/` dizinine üretilir.
+
 ## Proje Yapısı
 
 ```
@@ -239,7 +267,7 @@ TC-SGB-API-to-List/
 ├── wiki/                        # Dokümantasyon (çift dilli)
 ├── schema/                      # JSON Schema ve OpenAPI belirtimi
 ├── data/                        # Çalışma zamanı veri önbelleği
-├── output/                      # Üretilen IoC çıktı dosyaları (izleniyor)
+├── output/                      # Üretilen IoC çıktı dosyaları (küçük biçimler izlenir; büyük biçimler `ioc-data` release'i aracılığıyla)
 ├── examples/                    # Kullanım örnekleri
 ├── benchmark/                   # Performans karşılaştırmaları
 └── .github/workflows/           # CI/CD hatları

@@ -300,23 +300,22 @@ This document describes the complete data flow through the TC-SGB-API-to-List th
 |  +------------------------------------------------+
 |  | Format         | Extension  | Use Case        |
 |  +------------------------------------------------+
-|  | JSON           | .json      | General         |
-|  | STIX 2.1       | .stix.json | Interop         |
+|  | NextDNS        | .txt       | DNS blocking    |
+|  | AdGuard        | .txt       | DNS blocking    |
+|  | Pi-hole        | .txt       | DNS blocking    |
+|  | dnsmasq        | .conf      | DNS blocking    |
+|  | Unbound        | .conf      | DNS blocking    |
+|  | RPZ            | .zone      | DNS RPZ zone    |
+|  | Technitium     | .zone      | DNS blocking    |
+|  | MikroTik       | .rsc       | RouterOS import |
+|  | nftables       | .nft       | Firewall rules  |
+|  | ipset          | .ipset     | Kernel firewall |
+|  | Suricata       | .json      | IDS/IPS         |
+|  | CrowdSec       | .yaml      | CrowdSec        |
 |  | CSV            | .csv       | Spreadsheet     |
-|  | MISP           | .misp.json | MISP platform   |
-|  | OpenIOC        | .ioc       | FireEye/Trellix |
-|  | Sigma          | .yml       | SIEM rules      |
-|  | YARA           | .yar       | Malware detect  |
-|  | CEF            | .cef       | Syslog/CEF      |
-|  | LEEF           | .leef      | IBM QRadar      |
-|  | Syslog         | .log       | Generic SIEM    |
-|  | HTML           | .html      | Human report    |
-|  | Markdown       | .md        | Documentation   |
-|  | PDF            | .pdf       | Formal report   |
-|  | Splunk         | .spl       | Splunk import   |
-|  | QRadar         | .json      | QRadar import   |
-|  | Elastic NDJSON | .ndjson    | Elasticsearch   |
-|  | Grafana        | .json      | Dashboard       |
+|  | JSON           | .json      | General         |
+|  | YAML           | .yaml      | Config/CI       |
+|  | SQLite         | .db        | Database query  |
 |  +------------------------------------------------+
 |                                                   |
 |  Each format includes:                            |
@@ -764,23 +763,22 @@ Bu belge, TC-SGB-API-to-List tehdit istihbaratı hattındaki API alımından nih
 |  +------------------------------------------------+
 |  | Format         | Extension  | Use Case        |
 |  +------------------------------------------------+
-|  | JSON           | .json      | General         |
-|  | STIX 2.1       | .stix.json | Interop         |
+|  | NextDNS        | .txt       | DNS blocking    |
+|  | AdGuard        | .txt       | DNS blocking    |
+|  | Pi-hole        | .txt       | DNS blocking    |
+|  | dnsmasq        | .conf      | DNS blocking    |
+|  | Unbound        | .conf      | DNS blocking    |
+|  | RPZ            | .zone      | DNS RPZ zone    |
+|  | Technitium     | .zone      | DNS blocking    |
+|  | MikroTik       | .rsc       | RouterOS import |
+|  | nftables       | .nft       | Firewall rules  |
+|  | ipset          | .ipset     | Kernel firewall |
+|  | Suricata       | .json      | IDS/IPS         |
+|  | CrowdSec       | .yaml      | CrowdSec        |
 |  | CSV            | .csv       | Spreadsheet     |
-|  | MISP           | .misp.json | MISP platform   |
-|  | OpenIOC        | .ioc       | FireEye/Trellix |
-|  | Sigma          | .yml       | SIEM rules      |
-|  | YARA           | .yar       | Malware detect  |
-|  | CEF            | .cef       | Syslog/CEF      |
-|  | LEEF           | .leef      | IBM QRadar      |
-|  | Syslog         | .log       | Generic SIEM    |
-|  | HTML           | .html      | Human report    |
-|  | Markdown       | .md        | Documentation   |
-|  | PDF            | .pdf       | Formal report   |
-|  | Splunk         | .spl       | Splunk import   |
-|  | QRadar         | .json      | QRadar import   |
-|  | Elastic NDJSON | .ndjson    | Elasticsearch   |
-|  | Grafana        | .json      | Dashboard       |
+|  | JSON           | .json      | General         |
+|  | YAML           | .yaml      | Config/CI       |
+|  | SQLite         | .db        | Database query  |
 |  +------------------------------------------------+
 |                                                   |
 |  Each format includes:                            |

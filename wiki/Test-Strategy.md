@@ -557,7 +557,7 @@ pytest tests/test_validator.py::test_valid_record_passes
 |  Test Raporu Biçimi                                                  |
 +=====================================================================+
 |                                                                     |
-|  Toplam: 451 test, 0 başarısız                                     |
+|  Toplam: 452 test, 0 başarısız                                     |
 |                                                                     |
 |  Kapsam: %99 (testlerin kodun her satırını çalıştırıp               |
 |  çalıştırmadığını ölçer)                                           |

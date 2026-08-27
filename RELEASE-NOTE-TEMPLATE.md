@@ -312,7 +312,7 @@ tc-sgb health
 ### What's New
 
 - Complete IoC pipeline: fetch → validate → normalize → score → dedup → output
-- 16 output formats (NextDNS, AdGuard, Suricata, nftables, MikroTik, STIX 2.1, MISP, etc.)
+- 16 output formats (NextDNS, AdGuard, Pi-hole, dnsmasq, Unbound, RPZ, Technitium, MikroTik, nftables, ipset, Suricata, CrowdSec, CSV, JSON, YAML, SQLite)
 - Cross-type deduplication with quality-score-aware resolution
 - RFC6761 compliant reserved domain handling
 - 330 tests passing, ruff clean, mypy clean
@@ -347,7 +347,7 @@ tc-sgb health
 ### Yenilikler
 
 - Tam IoC hattı: çek → doğrula → normalleştir → puanla → tekilleştir → çıktı
-- 16 çıktı biçimi (NextDNS, AdGuard, Suricata, nftables, MikroTik, STIX 2.1, MISP, vb.)
+- 16 çıktı biçimi (NextDNS, AdGuard, Pi-hole, dnsmasq, Unbound, RPZ, Technitium, MikroTik, nftables, ipset, Suricata, CrowdSec, CSV, JSON, YAML, SQLite)
 - Kalite puanını dikkate alan çözümleme ile çapraz tür tekilleştirme
 - RFC6761 uyumlu ayrılmış alan adı işleme
 - 330 test geçiyor, ruff temiz, mypy temiz

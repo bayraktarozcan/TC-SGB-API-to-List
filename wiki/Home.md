@@ -21,7 +21,7 @@ TC-SGB-API-to-List is an automated threat intelligence pipeline that ingests Ind
 | **Output Formats** | 16 (JSON, CSV, NextDNS, AdGuard, Pi-hole, dnsmasq, Unbound, RPZ, Technitium, MikroTik, nftables, ipset, Suricata, CrowdSec, YAML, SQLite) |
 | **Python Version** | 3.11+ |
 | **License** | MIT |
-| **Test Suite** | 451 tests, 99% coverage |
+| **Test Suite** | 452 tests, 99% coverage |
 
 ---
 
@@ -105,7 +105,7 @@ TC-SGB-API-to-List, T.C. Siber Güvenlik Başkanlığı (TC SGB) kamu API'sinden
 | **Çıktı Formatları** | 16 (JSON, CSV, NextDNS, AdGuard, Pi-hole, dnsmasq, Unbound, RPZ, Technitium, MikroTik, nftables, ipset, Suricata, CrowdSec, YAML, SQLite) |
 | **Python Sürümü** | 3.11+ |
 | **Lisans** | MIT |
-| **Test Takımı** | 451 test, %99 kapsama |
+| **Test Takımı** | 452 test, %99 kapsama |
 
 ---
 

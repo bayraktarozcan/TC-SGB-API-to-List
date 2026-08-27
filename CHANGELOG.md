@@ -7,6 +7,13 @@
 All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [Unreleased]
+
+### Changed
+
+- **Large-format outputs** — `raw_records.json`, `threat_intel_json.json`, `threat_intel_sqlite.db`, `threat_intel_suricata.json`, `threat_intel_yaml.yaml` moved out of git (Git LFS removed). These five files are now distributed via the rolling GitHub Release `ioc-data` with stable URLs. Small formats stay tracked in `output/`.
+- **Release note**: LFS line replaced with `ioc-data` rolling release guidance
+
 ## [v0.2.0.1] — 2026-07-30
 
 ### Fixed
@@ -109,6 +116,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 Bu projedeki tüm dikkat çekici değişiklikler bu dosyada belgelenecektir.
 Biçim, [Keep a Changelog](https://keepachangelog.com/)'a dayanmaktadır.
+
+## [Yayınlanmamış]
+
+### Değiştirilen
+
+- **Büyük biçim çıktıları** — `raw_records.json`, `threat_intel_json.json`, `threat_intel_sqlite.db`, `threat_intel_suricata.json`, `threat_intel_yaml.yaml` git'ten çıkarıldı (Git LFS kaldırıldı). Bu beş dosya artık stabil URL'lerle `ioc-data` yuvarlanan GitHub Release'i üzerinden dağıtılıyor. Küçük biçimler `output/` içinde izlenmeye devam ediyor.
+- **Sürüm notu**: LFS satırı `ioc-data` yuvarlanan release yönergesiyle değiştirildi
 
 ## [v0.2.0.1] — 2026-07-30
 
