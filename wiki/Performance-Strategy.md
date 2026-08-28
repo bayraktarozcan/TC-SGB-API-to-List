@@ -19,7 +19,7 @@ This document defines performance benchmarks, measurement methodology, and optim
 | Medium | 1,000 | < 5s | 200 rec/s |
 | Large | 10,000 | < 30s | 333 rec/s |
 | XL | 100,000 | < 5min | 333 rec/s |
-| Full | 478,598 | < 20min | 400 rec/s |
+| Full | 478,709 | < 20min | 400 rec/s |
 | Stress | 1,000,000 | < 45min | 370 rec/s |
 
 ### API Fetch Performance
@@ -40,7 +40,7 @@ This document defines performance benchmarks, measurement methodology, and optim
 | Medium | 1,000 | 100 MB | Comfortable |
 | Large | 10,000 | 200 MB | Streaming recommended |
 | XL | 100,000 | 500 MB | Chunked processing |
-| Full | 478,598 | 1 GB | Full pipeline |
+| Full | 478,709 | 1 GB | Full pipeline |
 | Stress | 1,000,000 | 2 GB | Maximum expected |
 
 ### Disk Usage
@@ -51,7 +51,7 @@ This document defines performance benchmarks, measurement methodology, and optim
 | Medium | 1,000 | 500 KB | All formats |
 | Large | 10,000 | 5 MB | All formats |
 | XL | 100,000 | 50 MB | All formats |
-| Full | 478,598 | 250 MB | All formats |
+| Full | 478,709 | 250 MB | All formats |
 | Stress | 1,000,000 | 500 MB | All formats |
 
 ---
@@ -464,7 +464,7 @@ Bu belge, TC-SGB-API-to-List sistemi için çeşitli veri hacimlerinde performan
 | Orta | 1.000 | < 5s | 200 kayıt/sn |
 | Büyük | 10.000 | < 30s | 333 kayıt/sn |
 | XL | 100.000 | < 5dk | 333 kayıt/sn |
-| Tam | 478.598 | < 20dk | 400 kayıt/sn |
+| Tam | 478.709 | < 20dk | 400 kayıt/sn |
 | Stres | 1.000.000 | < 45dk | 370 kayıt/sn |
 
 ### API Çekme Performansı
@@ -485,7 +485,7 @@ Bu belge, TC-SGB-API-to-List sistemi için çeşitli veri hacimlerinde performan
 | Orta | 1.000 | 100 MB | Konforlu |
 | Büyük | 10.000 | 200 MB | Akış önerilir |
 | XL | 100.000 | 500 MB | Parçalı işleme |
-| Tam | 478.598 | 1 GB | Tam pipeline |
+| Tam | 478.709 | 1 GB | Tam pipeline |
 | Stres | 1.000.000 | 2 GB | Beklenen maksimum |
 
 ### Disk Kullanımı
@@ -496,7 +496,7 @@ Bu belge, TC-SGB-API-to-List sistemi için çeşitli veri hacimlerinde performan
 | Orta | 1.000 | 500 KB | Tüm biçimler |
 | Büyük | 10.000 | 5 MB | Tüm biçimler |
 | XL | 100.000 | 50 MB | Tüm biçimler |
-| Tam | 478.598 | 250 MB | Tüm biçimler |
+| Tam | 478.709 | 250 MB | Tüm biçimler |
 | Stres | 1.000.000 | 500 MB | Tüm biçimler |
 
 ---
