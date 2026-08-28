@@ -7,12 +7,25 @@
 All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
-## [Unreleased]
+## [v0.3.0.0] — 2026-08-28
+
+### Added
+
+- **GitHub Pages via GitHub Actions** — new `deploy.yml` workflow deploys the site from `docs/` in ~22 seconds, bypassing the slow/hanging legacy Jekyll builder (previously 40+ minutes stuck)
+- **New test files**: `tests/test_main.py` and `tests/test_outputs.py` added — 452 tests now passing
 
 ### Changed
 
+- **GitHub Pages source** moved from repo root to `docs/`, fully isolating the 233 MB `output/` directory from the published site (IoCs served via the `ioc-data` rolling release, small formats still tracked in `output/`)
 - **Large-format outputs** — `raw_records.json`, `threat_intel_json.json`, `threat_intel_sqlite.db`, `threat_intel_suricata.json`, `threat_intel_yaml.yaml` moved out of git (Git LFS removed). These five files are now distributed via the rolling GitHub Release `ioc-data` with stable URLs. Small formats stay tracked in `output/`.
+- **GitHub Actions upgraded to Node 24** — `configure-pages@v6`, `upload-pages-artifact@v5`, `deploy-pages@v5` (removes Node 20 deprecation warnings)
+- **Docs truth-anchor fixes** — IoC count aligned to 478,709, pipeline duration to ~6.2 min, architecture diagrams updated to the 16 real formats
 - **Release note**: LFS line replaced with `ioc-data` rolling release guidance
+
+### Fixed
+
+- **Schedule workflow stability** — unique branch names for auto-merge PRs, supersede stuck PRs, keep branch up to date, AUTO_MERGE_TOKEN PAT for CI-on-PR, LFS-pointer-safe sqlite output
+- **Pipeline duration/facts** — replaced fabricated 4.2s timings with measured pipeline times (fetch+process ~240s, 16-format export ~131s)
 
 ## [v0.2.0.1] — 2026-07-30
 
@@ -117,12 +130,25 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 Bu projedeki tüm dikkat çekici değişiklikler bu dosyada belgelenecektir.
 Biçim, [Keep a Changelog](https://keepachangelog.com/)'a dayanmaktadır.
 
-## [Yayınlanmamış]
+## [v0.3.0.0] — 2026-08-28
+
+### Eklenen
+
+- **GitHub Actions ile GitHub Pages** — yeni `deploy.yml` workflow'u siteyi `docs/`'tan ~22 saniyede dağıtır; yavaş/takılan eski Jekyll derleyicisini atlar (önceden 40+ dakika takılı kalıyordu)
+- **Yeni test dosyaları**: `tests/test_main.py` ve `tests/test_outputs.py` eklendi — 452 test geçiyor
 
 ### Değiştirilen
 
+- **GitHub Pages kaynağı** repo kökünden `docs/`'a taşındı; 233 MB'lık `output/` dizini yayınlanan siteden tamamen izole edildi (IoC'ler `ioc-data` yuvarlanan release aracılığıyla sunuluyor, küçük formatlar `output/` içinde izlenmeye devam ediyor)
 - **Büyük biçim çıktıları** — `raw_records.json`, `threat_intel_json.json`, `threat_intel_sqlite.db`, `threat_intel_suricata.json`, `threat_intel_yaml.yaml` git'ten çıkarıldı (Git LFS kaldırıldı). Bu beş dosya artık stabil URL'lerle `ioc-data` yuvarlanan GitHub Release'i üzerinden dağıtılıyor. Küçük biçimler `output/` içinde izlenmeye devam ediyor.
+- **GitHub Actions Node 24'e yükseltildi** — `configure-pages@v6`, `upload-pages-artifact@v5`, `deploy-pages@v5` (Node 20 deprecation uyarılarını kaldırır)
+- **Dokümantasyon truth-anchor düzeltmeleri** — IoC sayısı 478,709'a, hat süresi ~6.2 dk'ya hizalandı, mimari diyagramlar gerçek 16 formata güncellendi
 - **Sürüm notu**: LFS satırı `ioc-data` yuvarlanan release yönergesiyle değiştirildi
+
+### Düzeltilen
+
+- **Schedule workflow kararlılığı** — auto-merge PR'ları için benzersiz dal adları, takılan PR'ları aşma, dalı güncel tutma, PR'da çalışan CI için AUTO_MERGE_TOKEN PAT, LFS-pointer-güvenli sqlite çıktısı
+- **Hat süresi/gerçekler** — uydurma 4.2s süreleri ölçülen hat süreleriyle değiştirildi (çek+işleme ~240s, 16-format dışa aktarma ~131s)
 
 ## [v0.2.0.1] — 2026-07-30
 
