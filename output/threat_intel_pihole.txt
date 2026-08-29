@@ -1,4 +1,12 @@
 # TC-SGB Threat Intelligence — Pi-hole hosts format
+0.0.0.0 birimsorgu.org
+0.0.0.0 mobile-digital.shop
+0.0.0.0 web.evsahibibasvuru.com
+0.0.0.0 s0kmlarket.shop
+0.0.0.0 sizlericinbsu.duckdns.org
+0.0.0.0 mobilsepet-tr.online
+0.0.0.0 sewap426322plus.shop
+0.0.0.0 otokocrentecar.com
 0.0.0.0 beklemeynhalledins.duckdns.org
 0.0.0.0 promsyngunlerndyzbiz.sbs
 0.0.0.0 dijitalweb-basvurlarim.sbs
@@ -467508,11 +467516,3 @@
 0.0.0.0 turktelekomonline.info
 0.0.0.0 turktelekom24.org
 0.0.0.0 turktelekom24.net
-0.0.0.0 supergoodstart.ru
-0.0.0.0 turktelekomonline.net
-0.0.0.0 turktelekomfatura.info
-0.0.0.0 screenshot-pro.com
-0.0.0.0 dota2.bz
-0.0.0.0 botsworkingnets.net
-0.0.0.0 wjetphp.com
-0.0.0.0 qrz.uni.me
