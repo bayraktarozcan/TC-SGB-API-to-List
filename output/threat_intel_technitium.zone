@@ -5,7 +5,7 @@ $ORIGIN threatint.local.
 $TTL 300
 
 @ IN SOA ns1.threatint.local. admin.threatint.local. (
-    2026082801  ; serial
+    2026082901  ; serial
     3600       ; refresh (1 hour)
     600        ; retry (10 min)
     86400      ; expire (1 day)
@@ -17,6 +17,14 @@ $TTL 300
 ns1 IN A 127.0.0.1
 
 ; Blocked domains
+birimsorgu.org. IN A 0.0.0.0
+mobile-digital.shop. IN A 0.0.0.0
+web.evsahibibasvuru.com. IN A 0.0.0.0
+s0kmlarket.shop. IN A 0.0.0.0
+sizlericinbsu.duckdns.org. IN A 0.0.0.0
+mobilsepet-tr.online. IN A 0.0.0.0
+sewap426322plus.shop. IN A 0.0.0.0
+otokocrentecar.com. IN A 0.0.0.0
 beklemeynhalledins.duckdns.org. IN A 0.0.0.0
 promsyngunlerndyzbiz.sbs. IN A 0.0.0.0
 dijitalweb-basvurlarim.sbs. IN A 0.0.0.0
@@ -467526,11 +467534,3 @@ turktelekomonline.org. IN A 0.0.0.0
 turktelekomonline.info. IN A 0.0.0.0
 turktelekom24.org. IN A 0.0.0.0
 turktelekom24.net. IN A 0.0.0.0
-supergoodstart.ru. IN A 0.0.0.0
-turktelekomonline.net. IN A 0.0.0.0
-turktelekomfatura.info. IN A 0.0.0.0
-screenshot-pro.com. IN A 0.0.0.0
-dota2.bz. IN A 0.0.0.0
-botsworkingnets.net. IN A 0.0.0.0
-wjetphp.com. IN A 0.0.0.0
-qrz.uni.me. IN A 0.0.0.0

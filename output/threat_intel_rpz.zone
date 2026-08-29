@@ -1,7 +1,7 @@
 $ORIGIN threatintel.rpz.
 $TTL 300
 @ IN SOA localhost. admin.localhost. (
-    2026082801  ; serial
+    2026082901  ; serial
     3600       ; refresh
     600        ; retry
     86400      ; expire
@@ -9,6 +9,14 @@ $TTL 300
 )
 @ IN NS localhost.
 
+birimsorgu.org CNAME .
+mobile-digital.shop CNAME .
+web.evsahibibasvuru.com CNAME .
+s0kmlarket.shop CNAME .
+sizlericinbsu.duckdns.org CNAME .
+mobilsepet-tr.online CNAME .
+sewap426322plus.shop CNAME .
+otokocrentecar.com CNAME .
 beklemeynhalledins.duckdns.org CNAME .
 promsyngunlerndyzbiz.sbs CNAME .
 dijitalweb-basvurlarim.sbs CNAME .
@@ -467518,11 +467526,3 @@ turktelekomonline.org CNAME .
 turktelekomonline.info CNAME .
 turktelekom24.org CNAME .
 turktelekom24.net CNAME .
-supergoodstart.ru CNAME .
-turktelekomonline.net CNAME .
-turktelekomfatura.info CNAME .
-screenshot-pro.com CNAME .
-dota2.bz CNAME .
-botsworkingnets.net CNAME .
-wjetphp.com CNAME .
-qrz.uni.me CNAME .

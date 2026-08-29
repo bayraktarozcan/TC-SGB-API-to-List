@@ -1,6 +1,14 @@
 ! Title: TC-SGB Threat Intelligence Blocklist
-! Last updated: 2026-08-28T21:51:00.200081+00:00
+! Last updated: 2026-08-29T05:53:03.642050+00:00
 ! Homepage: https://siberguvenlik.gov.tr
+||birimsorgu.org^
+||mobile-digital.shop^
+||web.evsahibibasvuru.com^
+||s0kmlarket.shop^
+||sizlericinbsu.duckdns.org^
+||mobilsepet-tr.online^
+||sewap426322plus.shop^
+||otokocrentecar.com^
 ||beklemeynhalledins.duckdns.org^
 ||promsyngunlerndyzbiz.sbs^
 ||dijitalweb-basvurlarim.sbs^
@@ -467510,11 +467518,3 @@
 ||turktelekomonline.info^
 ||turktelekom24.org^
 ||turktelekom24.net^
-||supergoodstart.ru^
-||turktelekomonline.net^
-||turktelekomfatura.info^
-||screenshot-pro.com^
-||dota2.bz^
-||botsworkingnets.net^
-||wjetphp.com^
-||qrz.uni.me^
