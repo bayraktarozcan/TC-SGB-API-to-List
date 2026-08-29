@@ -15364,6 +15364,14 @@ table inet filter {
         type dns_name
         flags interval
         elements = {
+            birimsorgu.org,
+            mobile-digital.shop,
+            web.evsahibibasvuru.com,
+            s0kmlarket.shop,
+            sizlericinbsu.duckdns.org,
+            mobilsepet-tr.online,
+            sewap426322plus.shop,
+            otokocrentecar.com,
             beklemeynhalledins.duckdns.org,
             promsyngunlerndyzbiz.sbs,
             dijitalweb-basvurlarim.sbs,
@@ -482873,14 +482881,6 @@ table inet filter {
             turktelekomonline.info,
             turktelekom24.org,
             turktelekom24.net,
-            supergoodstart.ru,
-            turktelekomonline.net,
-            turktelekomfatura.info,
-            screenshot-pro.com,
-            dota2.bz,
-            botsworkingnets.net,
-            wjetphp.com,
-            qrz.uni.me,
         }
     }
 }
