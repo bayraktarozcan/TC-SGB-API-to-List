@@ -1,7 +1,7 @@
 $ORIGIN threatintel.rpz.
 $TTL 300
 @ IN SOA localhost. admin.localhost. (
-    2026082901  ; serial
+    2026083001  ; serial
     3600       ; refresh
     600        ; retry
     86400      ; expire
@@ -9,6 +9,17 @@ $TTL 300
 )
 @ IN NS localhost.
 
+smdodmezmnihgsykle.cfd CNAME .
+vuguhudere-redesede.lol CNAME .
+pinyeniyil.online CNAME .
+alisverisptt-avm.ph CNAME .
+kuhugug-redesede.lol CNAME .
+kamuceza.org CNAME .
+sahibinden-get.mobiliservis.com CNAME .
+sahibinden-get-paramguvende-ode.gt.tc CNAME .
+sahibinden-get.mobilservisleriniz-3.sbs CNAME .
+sahibinden-get.mobilservisleriniz-11.sbs CNAME .
+sahibinden-get.mobilsepetalim-15.online CNAME .
 millielektrikli.com CNAME .
 frstlrrsonnbsvrrkmpnyaa965849.online CNAME .
 bsvrrkmpnsnnfrstlarr150432.pro CNAME .
@@ -467523,14 +467534,3 @@ is-banka.com CNAME .
 trcellonline.org CNAME .
 garantiibank.org CNAME .
 efatura-indir.com CNAME .
-efatura-trcell.com CNAME .
-trcellabone.com CNAME .
-bilgi-garanti.com CNAME .
-vakifbnk.com CNAME .
-trcellfatura.com CNAME .
-vakif-bank.in CNAME .
-sms-vakifbank.com CNAME .
-vakifbank-bilgi.com CNAME .
-vakif-bank.com CNAME .
-f3ip4.turcell.org CNAME .
-wqoi9mqu.turcell.org CNAME .
