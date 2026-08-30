@@ -5,7 +5,7 @@ $ORIGIN threatint.local.
 $TTL 300
 
 @ IN SOA ns1.threatint.local. admin.threatint.local. (
-    2026082901  ; serial
+    2026083001  ; serial
     3600       ; refresh (1 hour)
     600        ; retry (10 min)
     86400      ; expire (1 day)
@@ -17,6 +17,17 @@ $TTL 300
 ns1 IN A 127.0.0.1
 
 ; Blocked domains
+smdodmezmnihgsykle.cfd. IN A 0.0.0.0
+vuguhudere-redesede.lol. IN A 0.0.0.0
+pinyeniyil.online. IN A 0.0.0.0
+alisverisptt-avm.ph. IN A 0.0.0.0
+kuhugug-redesede.lol. IN A 0.0.0.0
+kamuceza.org. IN A 0.0.0.0
+sahibinden-get.mobiliservis.com. IN A 0.0.0.0
+sahibinden-get-paramguvende-ode.gt.tc. IN A 0.0.0.0
+sahibinden-get.mobilservisleriniz-3.sbs. IN A 0.0.0.0
+sahibinden-get.mobilservisleriniz-11.sbs. IN A 0.0.0.0
+sahibinden-get.mobilsepetalim-15.online. IN A 0.0.0.0
 millielektrikli.com. IN A 0.0.0.0
 frstlrrsonnbsvrrkmpnyaa965849.online. IN A 0.0.0.0
 bsvrrkmpnsnnfrstlarr150432.pro. IN A 0.0.0.0
@@ -467531,14 +467542,3 @@ is-banka.com. IN A 0.0.0.0
 trcellonline.org. IN A 0.0.0.0
 garantiibank.org. IN A 0.0.0.0
 efatura-indir.com. IN A 0.0.0.0
-efatura-trcell.com. IN A 0.0.0.0
-trcellabone.com. IN A 0.0.0.0
-bilgi-garanti.com. IN A 0.0.0.0
-vakifbnk.com. IN A 0.0.0.0
-trcellfatura.com. IN A 0.0.0.0
-vakif-bank.in. IN A 0.0.0.0
-sms-vakifbank.com. IN A 0.0.0.0
-vakifbank-bilgi.com. IN A 0.0.0.0
-vakif-bank.com. IN A 0.0.0.0
-f3ip4.turcell.org. IN A 0.0.0.0
-wqoi9mqu.turcell.org. IN A 0.0.0.0
