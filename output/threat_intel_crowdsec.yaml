@@ -107371,10 +107371,3 @@
     scope: IP
     type: ban
     value: 37.46.228.76
-- decisions:
-  - duration: 168h
-    origin: TC-SGB-Intel
-    scenario: 'Threat intelligence: MI'
-    scope: IP
-    type: ban
-    value: 89.108.71.23
