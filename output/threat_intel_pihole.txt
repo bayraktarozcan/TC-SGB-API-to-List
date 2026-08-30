@@ -1,4 +1,15 @@
 # TC-SGB Threat Intelligence — Pi-hole hosts format
+0.0.0.0 smdodmezmnihgsykle.cfd
+0.0.0.0 vuguhudere-redesede.lol
+0.0.0.0 pinyeniyil.online
+0.0.0.0 alisverisptt-avm.ph
+0.0.0.0 kuhugug-redesede.lol
+0.0.0.0 kamuceza.org
+0.0.0.0 sahibinden-get.mobiliservis.com
+0.0.0.0 sahibinden-get-paramguvende-ode.gt.tc
+0.0.0.0 sahibinden-get.mobilservisleriniz-3.sbs
+0.0.0.0 sahibinden-get.mobilservisleriniz-11.sbs
+0.0.0.0 sahibinden-get.mobilsepetalim-15.online
 0.0.0.0 millielektrikli.com
 0.0.0.0 frstlrrsonnbsvrrkmpnyaa965849.online
 0.0.0.0 bsvrrkmpnsnnfrstlarr150432.pro
@@ -467513,14 +467524,3 @@
 0.0.0.0 trcellonline.org
 0.0.0.0 garantiibank.org
 0.0.0.0 efatura-indir.com
-0.0.0.0 efatura-trcell.com
-0.0.0.0 trcellabone.com
-0.0.0.0 bilgi-garanti.com
-0.0.0.0 vakifbnk.com
-0.0.0.0 trcellfatura.com
-0.0.0.0 vakif-bank.in
-0.0.0.0 sms-vakifbank.com
-0.0.0.0 vakifbank-bilgi.com
-0.0.0.0 vakif-bank.com
-0.0.0.0 f3ip4.turcell.org
-0.0.0.0 wqoi9mqu.turcell.org
