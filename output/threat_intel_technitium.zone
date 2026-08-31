@@ -5,7 +5,7 @@ $ORIGIN threatint.local.
 $TTL 300
 
 @ IN SOA ns1.threatint.local. admin.threatint.local. (
-    2026083001  ; serial
+    2026083101  ; serial
     3600       ; refresh (1 hour)
     600        ; retry (10 min)
     86400      ; expire (1 day)
@@ -17,6 +17,18 @@ $TTL 300
 ns1 IN A 127.0.0.1
 
 ; Blocked domains
+ziratkampanya.sbs. IN A 0.0.0.0
+hgsbakiyukleme.org. IN A 0.0.0.0
+hizligecisbayisi.org. IN A 0.0.0.0
+mobilsepetalim-20.online. IN A 0.0.0.0
+tkno-sa.info. IN A 0.0.0.0
+haberler8676.shop. IN A 0.0.0.0
+bnbrdanrvdaldm.click. IN A 0.0.0.0
+dsafasdadag4.xyz. IN A 0.0.0.0
+piloko-hulukuerede.lol. IN A 0.0.0.0
+teb-com-tr-emekliyeozel.my-homeip.de. IN A 0.0.0.0
+hizlibaslangic.abrdns.com. IN A 0.0.0.0
+bnafd246.duckdns.org. IN A 0.0.0.0
 bgnbrdansnkzlerden.lol. IN A 0.0.0.0
 agstskmpny.duckdns.org. IN A 0.0.0.0
 njreanbva.duckdns.org. IN A 0.0.0.0
@@ -467561,15 +467573,3 @@ onlineislem.org. IN A 0.0.0.0
 isbankasikredikartiborcusorgulama.com. IN A 0.0.0.0
 finasnbank.com. IN A 0.0.0.0
 finansbankasikredikartiborcsorgulama.com. IN A 0.0.0.0
-bkm-ekpress.com. IN A 0.0.0.0
-tlyuklemeci.com. IN A 0.0.0.0
-tlmerkez.com. IN A 0.0.0.0
-kredikartiborcogrenme.com. IN A 0.0.0.0
-yapikrediborcsorgulama.org. IN A 0.0.0.0
-yapikredl.com. IN A 0.0.0.0
-turkcell89.biz. IN A 0.0.0.0
-turkcell56.com. IN A 0.0.0.0
-turkcell98.com. IN A 0.0.0.0
-datamatikpanel.org. IN A 0.0.0.0
-bkmkredikartiborcsorgulama.com. IN A 0.0.0.0
-tahsilatmerkeziniz.com. IN A 0.0.0.0
