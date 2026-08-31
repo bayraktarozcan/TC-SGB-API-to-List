@@ -1,4 +1,16 @@
 # TC-SGB Threat Intelligence — Pi-hole hosts format
+0.0.0.0 ziratkampanya.sbs
+0.0.0.0 hgsbakiyukleme.org
+0.0.0.0 hizligecisbayisi.org
+0.0.0.0 mobilsepetalim-20.online
+0.0.0.0 tkno-sa.info
+0.0.0.0 haberler8676.shop
+0.0.0.0 bnbrdanrvdaldm.click
+0.0.0.0 dsafasdadag4.xyz
+0.0.0.0 piloko-hulukuerede.lol
+0.0.0.0 teb-com-tr-emekliyeozel.my-homeip.de
+0.0.0.0 hizlibaslangic.abrdns.com
+0.0.0.0 bnafd246.duckdns.org
 0.0.0.0 bgnbrdansnkzlerden.lol
 0.0.0.0 agstskmpny.duckdns.org
 0.0.0.0 njreanbva.duckdns.org
@@ -467543,15 +467555,3 @@
 0.0.0.0 isbankasikredikartiborcusorgulama.com
 0.0.0.0 finasnbank.com
 0.0.0.0 finansbankasikredikartiborcsorgulama.com
-0.0.0.0 bkm-ekpress.com
-0.0.0.0 tlyuklemeci.com
-0.0.0.0 tlmerkez.com
-0.0.0.0 kredikartiborcogrenme.com
-0.0.0.0 yapikrediborcsorgulama.org
-0.0.0.0 yapikredl.com
-0.0.0.0 turkcell89.biz
-0.0.0.0 turkcell56.com
-0.0.0.0 turkcell98.com
-0.0.0.0 datamatikpanel.org
-0.0.0.0 bkmkredikartiborcsorgulama.com
-0.0.0.0 tahsilatmerkeziniz.com
