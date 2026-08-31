@@ -1,7 +1,7 @@
 $ORIGIN threatintel.rpz.
 $TTL 300
 @ IN SOA localhost. admin.localhost. (
-    2026083001  ; serial
+    2026083101  ; serial
     3600       ; refresh
     600        ; retry
     86400      ; expire
@@ -9,6 +9,18 @@ $TTL 300
 )
 @ IN NS localhost.
 
+ziratkampanya.sbs CNAME .
+hgsbakiyukleme.org CNAME .
+hizligecisbayisi.org CNAME .
+mobilsepetalim-20.online CNAME .
+tkno-sa.info CNAME .
+haberler8676.shop CNAME .
+bnbrdanrvdaldm.click CNAME .
+dsafasdadag4.xyz CNAME .
+piloko-hulukuerede.lol CNAME .
+teb-com-tr-emekliyeozel.my-homeip.de CNAME .
+hizlibaslangic.abrdns.com CNAME .
+bnafd246.duckdns.org CNAME .
 bgnbrdansnkzlerden.lol CNAME .
 agstskmpny.duckdns.org CNAME .
 njreanbva.duckdns.org CNAME .
@@ -467553,15 +467565,3 @@ onlineislem.org CNAME .
 isbankasikredikartiborcusorgulama.com CNAME .
 finasnbank.com CNAME .
 finansbankasikredikartiborcsorgulama.com CNAME .
-bkm-ekpress.com CNAME .
-tlyuklemeci.com CNAME .
-tlmerkez.com CNAME .
-kredikartiborcogrenme.com CNAME .
-yapikrediborcsorgulama.org CNAME .
-yapikredl.com CNAME .
-turkcell89.biz CNAME .
-turkcell56.com CNAME .
-turkcell98.com CNAME .
-datamatikpanel.org CNAME .
-bkmkredikartiborcsorgulama.com CNAME .
-tahsilatmerkeziniz.com CNAME .

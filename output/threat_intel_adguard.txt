@@ -1,6 +1,18 @@
 ! Title: TC-SGB Threat Intelligence Blocklist
-! Last updated: 2026-08-30T20:44:38.659795+00:00
+! Last updated: 2026-08-31T03:58:19.203580+00:00
 ! Homepage: https://siberguvenlik.gov.tr
+||ziratkampanya.sbs^
+||hgsbakiyukleme.org^
+||hizligecisbayisi.org^
+||mobilsepetalim-20.online^
+||tkno-sa.info^
+||haberler8676.shop^
+||bnbrdanrvdaldm.click^
+||dsafasdadag4.xyz^
+||piloko-hulukuerede.lol^
+||teb-com-tr-emekliyeozel.my-homeip.de^
+||hizlibaslangic.abrdns.com^
+||bnafd246.duckdns.org^
 ||bgnbrdansnkzlerden.lol^
 ||agstskmpny.duckdns.org^
 ||njreanbva.duckdns.org^
@@ -467545,15 +467557,3 @@
 ||isbankasikredikartiborcusorgulama.com^
 ||finasnbank.com^
 ||finansbankasikredikartiborcsorgulama.com^
-||bkm-ekpress.com^
-||tlyuklemeci.com^
-||tlmerkez.com^
-||kredikartiborcogrenme.com^
-||yapikrediborcsorgulama.org^
-||yapikredl.com^
-||turkcell89.biz^
-||turkcell56.com^
-||turkcell98.com^
-||datamatikpanel.org^
-||bkmkredikartiborcsorgulama.com^
-||tahsilatmerkeziniz.com^
