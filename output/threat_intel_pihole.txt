@@ -1,4 +1,9 @@
 # TC-SGB Threat Intelligence — Pi-hole hosts format
+0.0.0.0 tr-alisveris-e-islemlerim.online
+0.0.0.0 galevino-torusemi.lol
+0.0.0.0 sahibinden-getilan.tr-alisveris-e-islemlerim.online
+0.0.0.0 ponedari-sumafelo.lol
+0.0.0.0 gece-izeltass.dnsup.net
 0.0.0.0 aracmuayenehizmettlerinn.com
 0.0.0.0 rafaelbabax.shop
 0.0.0.0 haberler1256236.shop
@@ -467575,8 +467580,3 @@
 0.0.0.0 assortmentba.bid
 0.0.0.0 vsopgoodj.top
 0.0.0.0 jetonlyseath.top
-0.0.0.0 restomerav.top
-0.0.0.0 springfile.org
-0.0.0.0 akbank-direct.com
-0.0.0.0 webmaster-service3290.tripod.com
-0.0.0.0 nato-mail.com

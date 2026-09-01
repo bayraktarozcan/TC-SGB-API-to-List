@@ -15306,6 +15306,11 @@ table inet filter {
         type dns_name
         flags interval
         elements = {
+            tr-alisveris-e-islemlerim.online,
+            galevino-torusemi.lol,
+            sahibinden-getilan.tr-alisveris-e-islemlerim.online,
+            ponedari-sumafelo.lol,
+            gece-izeltass.dnsup.net,
             aracmuayenehizmettlerinn.com,
             rafaelbabax.shop,
             haberler1256236.shop,
@@ -482882,11 +482887,6 @@ table inet filter {
             assortmentba.bid,
             vsopgoodj.top,
             jetonlyseath.top,
-            restomerav.top,
-            springfile.org,
-            akbank-direct.com,
-            webmaster-service3290.tripod.com,
-            nato-mail.com,
         }
     }
 }
