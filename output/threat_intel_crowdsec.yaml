@@ -107049,17 +107049,3 @@
     scope: IP
     type: ban
     value: 178.20.230.2
-- decisions:
-  - duration: 168h
-    origin: TC-SGB-Intel
-    scenario: 'Threat intelligence: BP'
-    scope: IP
-    type: ban
-    value: 37.61.238.59
-- decisions:
-  - duration: 168h
-    origin: TC-SGB-Intel
-    scenario: 'Threat intelligence: MI'
-    scope: IP
-    type: ban
-    value: 188.127.239.53
