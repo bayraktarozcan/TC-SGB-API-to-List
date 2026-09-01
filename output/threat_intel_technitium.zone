@@ -5,7 +5,7 @@ $ORIGIN threatint.local.
 $TTL 300
 
 @ IN SOA ns1.threatint.local. admin.threatint.local. (
-    2026083101  ; serial
+    2026090101  ; serial
     3600       ; refresh (1 hour)
     600        ; retry (10 min)
     86400      ; expire (1 day)
@@ -17,6 +17,11 @@ $TTL 300
 ns1 IN A 127.0.0.1
 
 ; Blocked domains
+tr-alisveris-e-islemlerim.online. IN A 0.0.0.0
+galevino-torusemi.lol. IN A 0.0.0.0
+sahibinden-getilan.tr-alisveris-e-islemlerim.online. IN A 0.0.0.0
+ponedari-sumafelo.lol. IN A 0.0.0.0
+gece-izeltass.dnsup.net. IN A 0.0.0.0
 aracmuayenehizmettlerinn.com. IN A 0.0.0.0
 rafaelbabax.shop. IN A 0.0.0.0
 haberler1256236.shop. IN A 0.0.0.0
@@ -467593,8 +467598,3 @@ shcserv.com. IN A 0.0.0.0
 assortmentba.bid. IN A 0.0.0.0
 vsopgoodj.top. IN A 0.0.0.0
 jetonlyseath.top. IN A 0.0.0.0
-restomerav.top. IN A 0.0.0.0
-springfile.org. IN A 0.0.0.0
-akbank-direct.com. IN A 0.0.0.0
-webmaster-service3290.tripod.com. IN A 0.0.0.0
-nato-mail.com. IN A 0.0.0.0

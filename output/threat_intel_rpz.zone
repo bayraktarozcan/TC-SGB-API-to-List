@@ -1,7 +1,7 @@
 $ORIGIN threatintel.rpz.
 $TTL 300
 @ IN SOA localhost. admin.localhost. (
-    2026083101  ; serial
+    2026090101  ; serial
     3600       ; refresh
     600        ; retry
     86400      ; expire
@@ -9,6 +9,11 @@ $TTL 300
 )
 @ IN NS localhost.
 
+tr-alisveris-e-islemlerim.online CNAME .
+galevino-torusemi.lol CNAME .
+sahibinden-getilan.tr-alisveris-e-islemlerim.online CNAME .
+ponedari-sumafelo.lol CNAME .
+gece-izeltass.dnsup.net CNAME .
 aracmuayenehizmettlerinn.com CNAME .
 rafaelbabax.shop CNAME .
 haberler1256236.shop CNAME .
@@ -467585,8 +467590,3 @@ shcserv.com CNAME .
 assortmentba.bid CNAME .
 vsopgoodj.top CNAME .
 jetonlyseath.top CNAME .
-restomerav.top CNAME .
-springfile.org CNAME .
-akbank-direct.com CNAME .
-webmaster-service3290.tripod.com CNAME .
-nato-mail.com CNAME .
