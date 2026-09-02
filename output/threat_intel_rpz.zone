@@ -1,7 +1,7 @@
 $ORIGIN threatintel.rpz.
 $TTL 300
 @ IN SOA localhost. admin.localhost. (
-    2026090101  ; serial
+    2026090201  ; serial
     3600       ; refresh
     600        ; retry
     86400      ; expire
@@ -9,6 +9,42 @@ $TTL 300
 )
 @ IN NS localhost.
 
+basvursendmn.sbs CNAME .
+geltatleyeburdfahereyvar81.click CNAME .
+basvursendr.sbs CNAME .
+agstssnkmpny.duckdns.org CNAME .
+bencalsyrmhrsrndvlrdan.lol CNAME .
+ceptetebde-emekli.my-homeip.de CNAME .
+a-life-groundweb.myonlineportal.ch CNAME .
+yenigunleremerhbadiylm.duckdns.org CNAME .
+teb-cepte-emekliye.my-homeip.de CNAME .
+honeycombcreativeex3q2zcommercehub.cfd CNAME .
+a3xvpexriverglobaef3f.cfd CNAME .
+asdfsdfsdf.duckdns.org CNAME .
+sipsapsop.click CNAME .
+timberwavecommerce.cfd CNAME .
+hizmetservisleriburada.sbs CNAME .
+kayalaronlinehizmtler.duckdns.org CNAME .
+eylulcspkmpny.duckdns.org CNAME .
+clearhorizonplatform.cfd CNAME .
+dogruduydunkralbenim.duckdns.org CNAME .
+odemeni-gerceklestir.com CNAME .
+cengaverkel.xyz CNAME .
+ciceklerinizsepette.click CNAME .
+182hatti.click CNAME .
+ptt-postgov.sbs CNAME .
+pazarama.siparislerkapimda.com CNAME .
+tr-alisveris-getislem.online CNAME .
+papara-online.com.ph CNAME .
+qbknrsprmsynsr.xyz CNAME .
+kryxndqvpmzctfwlh7qx.sbs CNAME .
+mhtsrscgdsg.site CNAME .
+lndirimtakipcileriyiz.com CNAME .
+urbanmeadowcollectivexeq.cfd CNAME .
+teklifonunde.abrdns.com CNAME .
+marketimcebimde.com.ph CNAME .
+knnasi.net CNAME .
+mhssrrrahas.site CNAME .
 taskafatst.xyz CNAME .
 haberler1245321.shop CNAME .
 hlmnket.net CNAME .
@@ -467549,39 +467585,3 @@ turkishcargotakip.org CNAME .
 vakifposmatik.com CNAME .
 onlinesorgusistem.com CNAME .
 hizlifaturamode.com CNAME .
-hizliborcsorgula.com CNAME .
-onlinebankaciliksubesi.com CNAME .
-onlinesorgusistemi.com CNAME .
-fatura-odeme.info CNAME .
-aamadmiurdunews.com CNAME .
-interiorismocasamayor.com CNAME .
-guvenlisgkodemeservisi.com CNAME .
-oibsmetu.com CNAME .
-guvenliborcsorgulama.com CNAME .
-guvenlikredikartiborcsorgulama.com CNAME .
-noyshare.com CNAME .
-tutarkesin.com CNAME .
-onlinekredikartisorgu.com CNAME .
-pttgiris-islemler.com CNAME .
-guvenlikredikartisorgu.com CNAME .
-e-tlyuklemeler.com CNAME .
-onlineborcsorgu.com CNAME .
-faturaodemepanelleri.com CNAME .
-epttawm.com CNAME .
-akbankdirect.eu CNAME .
-edevletsifresi.info CNAME .
-edevletkapisi.info CNAME .
-edevletim.info CNAME .
-edevletgirisi.info CNAME .
-e-devletgiris.info CNAME .
-halepvakfi.com CNAME .
-onlineborcsorgulama.com CNAME .
-halepyardim.org CNAME .
-garantikredikartiborcusorgula.com CNAME .
-onlineodememerkezi.net CNAME .
-telekomfatura.org CNAME .
-edevleturkiye.com CNAME .
-halepeyardim.org CNAME .
-xn--online-noktalar-mlc.com CNAME .
-akbanklimitsorgulama.org CNAME .
-pttinternetgirisi.com CNAME .
