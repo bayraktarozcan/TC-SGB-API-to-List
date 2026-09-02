@@ -1,6 +1,20 @@
 - decisions:
   - duration: 168h
     origin: TC-SGB-Intel
+    scenario: 'Threat intelligence: MC'
+    scope: IP
+    type: ban
+    value: 220.123.222.114
+- decisions:
+  - duration: 168h
+    origin: TC-SGB-Intel
+    scenario: 'Threat intelligence: MC'
+    scope: IP
+    type: ban
+    value: 112.254.25.161
+- decisions:
+  - duration: 168h
+    origin: TC-SGB-Intel
     scenario: 'Threat intelligence: CA'
     scope: IP
     type: ban
@@ -107042,10 +107056,3 @@
     scope: IP
     type: ban
     value: 143.95.229.66
-- decisions:
-  - duration: 168h
-    origin: TC-SGB-Intel
-    scenario: 'Threat intelligence: BP'
-    scope: IP
-    type: ban
-    value: 178.20.230.2
