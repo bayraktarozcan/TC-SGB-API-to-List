@@ -15296,10 +15296,3 @@ add threat_intel 222.186.34.194
 add threat_intel 217.23.12.146
 add threat_intel 217.172.172.10
 add threat_intel 217.23.6.14
-add threat_intel 112.196.54.138
-add threat_intel 169.54.233.125
-add threat_intel 212.92.127.112
-add threat_intel 208.100.26.235
-add threat_intel 208.100.26.233
-add threat_intel 218.65.30.46
-add threat_intel 116.31.116.38
