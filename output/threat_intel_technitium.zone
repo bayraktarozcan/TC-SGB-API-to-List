@@ -5,7 +5,7 @@ $ORIGIN threatint.local.
 $TTL 300
 
 @ IN SOA ns1.threatint.local. admin.threatint.local. (
-    2026090301  ; serial
+    2026090401  ; serial
     3600       ; refresh (1 hour)
     600        ; retry (10 min)
     86400      ; expire (1 day)
@@ -17,6 +17,39 @@ $TTL 300
 ns1 IN A 127.0.0.1
 
 ; Blocked domains
+ziraa-t-login-int.my-homeip.de. IN A 0.0.0.0
+diji-teb.my-homeip.de. IN A 0.0.0.0
+gizlieyllkmpnysiwax.giize.com. IN A 0.0.0.0
+cepte-tepli-firsat.my-homeip.de. IN A 0.0.0.0
+enuygunsigorta.my-homeip.de. IN A 0.0.0.0
+al-g.myonlineportal.ch. IN A 0.0.0.0
+alisverishizmetin-20.sbs. IN A 0.0.0.0
+alisverishizmetin-25.sbs. IN A 0.0.0.0
+alisverishizmetin-30.sbs. IN A 0.0.0.0
+alisverishizmetin-35.sbs. IN A 0.0.0.0
+alisverishizmetin-40.sbs. IN A 0.0.0.0
+alisverishizmetin-50.sbs. IN A 0.0.0.0
+edosyauzlasma.com. IN A 0.0.0.0
+bp-garantibbva-anna.ph. IN A 0.0.0.0
+eylulkmpnykcmz.duckdns.org. IN A 0.0.0.0
+panelsorgu.buzz. IN A 0.0.0.0
+sorgupaneli.world. IN A 0.0.0.0
+kediciksorgupaneli.online. IN A 0.0.0.0
+belsis.buzz. IN A 0.0.0.0
+edosyasorgu.com. IN A 0.0.0.0
+cekememezlikvar.sbs. IN A 0.0.0.0
+sizvarsakbizvarizbizsetisaglariz.sbs. IN A 0.0.0.0
+panel.alwaysdata.net. IN A 0.0.0.0
+gratis.ghy3.com. IN A 0.0.0.0
+newgnrylevbiitimi.giize.com. IN A 0.0.0.0
+avscehwvsvanasb.org. IN A 0.0.0.0
+gizlieyllkmpnysi.mywire.org. IN A 0.0.0.0
+14745155571455.webredirect.org. IN A 0.0.0.0
+ruhsuzpanel2.site. IN A 0.0.0.0
+pluskurumsal.net. IN A 0.0.0.0
+cebtetep-com.my-homeip.de. IN A 0.0.0.0
+ttagnlerndyzbizz.giize.com. IN A 0.0.0.0
+haberler53454321.shop. IN A 0.0.0.0
 eylulkmpnybslngc.duckdns.org. IN A 0.0.0.0
 caydanlikkampholding.com. IN A 0.0.0.0
 mhhssrrtabga.site. IN A 0.0.0.0
@@ -467564,31 +467597,3 @@ intineras.online. IN A 0.0.0.0
 intphegeusque.online. IN A 0.0.0.0
 intunguiebantque.online. IN A 0.0.0.0
 zonellar.xyz. IN A 0.0.0.0
-nasoft.xyz. IN A 0.0.0.0
-rebramarg.xyz. IN A 0.0.0.0
-dofassi.xyz. IN A 0.0.0.0
-intarbitraris.online. IN A 0.0.0.0
-vestopay.xyz. IN A 0.0.0.0
-intfremitumque.online. IN A 0.0.0.0
-intspeluncis.online. IN A 0.0.0.0
-softwator.xyz. IN A 0.0.0.0
-intachivom.online. IN A 0.0.0.0
-intamplexum.online. IN A 0.0.0.0
-usecooka.xyz. IN A 0.0.0.0
-intcommune.online. IN A 0.0.0.0
-intcurabimus.online. IN A 0.0.0.0
-regreg.xyz. IN A 0.0.0.0
-intstuprandae.online. IN A 0.0.0.0
-inttransmitteretque.online. IN A 0.0.0.0
-featmainn.xyz. IN A 0.0.0.0
-biggha.xyz. IN A 0.0.0.0
-intcomparavitque.online. IN A 0.0.0.0
-conthis.xyz. IN A 0.0.0.0
-view-ternet.com. IN A 0.0.0.0
-accrbloog.xyz. IN A 0.0.0.0
-simpletrustedhome.com. IN A 0.0.0.0
-onesavetrusted.com. IN A 0.0.0.0
-searnew.xyz. IN A 0.0.0.0
-intermarketsollution.com. IN A 0.0.0.0
-delahigh.xyz. IN A 0.0.0.0
-trulkigh.xyz. IN A 0.0.0.0
