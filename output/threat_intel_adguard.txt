@@ -1,6 +1,14 @@
 ! Title: TC-SGB Threat Intelligence Blocklist
-! Last updated: 2026-09-04T15:56:16.826543+00:00
+! Last updated: 2026-09-04T20:24:33.847932+00:00
 ! Homepage: https://siberguvenlik.gov.tr
+||nabandxnsnamsn.org^
+||hmnbasvrkrdgrnt.lol^
+||dijitalonline-kampanyaliurunler.duckdns.org^
+||favelotu-mikadese.lol^
+||batrakossvkad.click^
+||trinstroisbank.com^
+||formentor.klasna.solm.batrakossvkad.click^
+||teb-emekliye.my-homeip.de^
 ||stanley15.shop^
 ||stanley20.shop^
 ||gratis.ask4tree.com^
@@ -467569,11 +467577,3 @@
 ||redbuiilder.xyz^
 ||spotcallty.xyz^
 ||krimintis.xyz^
-||boosbuilder.com^
-||whatnright.xyz^
-||proffbuilder.com^
-||bourna.xyz^
-||simpletrustedadvisors.com^
-||happwrong.xyz^
-||memytel.xyz^
-||intdomos.online^
