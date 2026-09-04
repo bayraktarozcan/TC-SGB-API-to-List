@@ -107035,38 +107035,3 @@
     scope: IP
     type: ban
     value: 163.172.157.180
-- decisions:
-  - duration: 168h
-    origin: TC-SGB-Intel
-    scenario: 'Threat intelligence: PH'
-    scope: IP
-    type: ban
-    value: 196.52.43.64
-- decisions:
-  - duration: 168h
-    origin: TC-SGB-Intel
-    scenario: 'Threat intelligence: PH'
-    scope: IP
-    type: ban
-    value: 222.186.34.194
-- decisions:
-  - duration: 168h
-    origin: TC-SGB-Intel
-    scenario: 'Threat intelligence: MD'
-    scope: IP
-    type: ban
-    value: 217.23.12.146
-- decisions:
-  - duration: 168h
-    origin: TC-SGB-Intel
-    scenario: 'Threat intelligence: MD'
-    scope: IP
-    type: ban
-    value: 217.172.172.10
-- decisions:
-  - duration: 168h
-    origin: TC-SGB-Intel
-    scenario: 'Threat intelligence: MD'
-    scope: IP
-    type: ban
-    value: 217.23.6.14

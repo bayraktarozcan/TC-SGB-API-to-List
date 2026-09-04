@@ -1,7 +1,7 @@
 $ORIGIN threatintel.rpz.
 $TTL 300
 @ IN SOA localhost. admin.localhost. (
-    2026090301  ; serial
+    2026090401  ; serial
     3600       ; refresh
     600        ; retry
     86400      ; expire
@@ -9,6 +9,39 @@ $TTL 300
 )
 @ IN NS localhost.
 
+ziraa-t-login-int.my-homeip.de CNAME .
+diji-teb.my-homeip.de CNAME .
+gizlieyllkmpnysiwax.giize.com CNAME .
+cepte-tepli-firsat.my-homeip.de CNAME .
+enuygunsigorta.my-homeip.de CNAME .
+al-g.myonlineportal.ch CNAME .
+alisverishizmetin-20.sbs CNAME .
+alisverishizmetin-25.sbs CNAME .
+alisverishizmetin-30.sbs CNAME .
+alisverishizmetin-35.sbs CNAME .
+alisverishizmetin-40.sbs CNAME .
+alisverishizmetin-50.sbs CNAME .
+edosyauzlasma.com CNAME .
+bp-garantibbva-anna.ph CNAME .
+eylulkmpnykcmz.duckdns.org CNAME .
+panelsorgu.buzz CNAME .
+sorgupaneli.world CNAME .
+kediciksorgupaneli.online CNAME .
+belsis.buzz CNAME .
+edosyasorgu.com CNAME .
+cekememezlikvar.sbs CNAME .
+sizvarsakbizvarizbizsetisaglariz.sbs CNAME .
+panel.alwaysdata.net CNAME .
+gratis.ghy3.com CNAME .
+newgnrylevbiitimi.giize.com CNAME .
+avscehwvsvanasb.org CNAME .
+gizlieyllkmpnysi.mywire.org CNAME .
+14745155571455.webredirect.org CNAME .
+ruhsuzpanel2.site CNAME .
+pluskurumsal.net CNAME .
+cebtetep-com.my-homeip.de CNAME .
+ttagnlerndyzbizz.giize.com CNAME .
+haberler53454321.shop CNAME .
 eylulkmpnybslngc.duckdns.org CNAME .
 caydanlikkampholding.com CNAME .
 mhhssrrtabga.site CNAME .
@@ -467556,31 +467589,3 @@ intineras.online CNAME .
 intphegeusque.online CNAME .
 intunguiebantque.online CNAME .
 zonellar.xyz CNAME .
-nasoft.xyz CNAME .
-rebramarg.xyz CNAME .
-dofassi.xyz CNAME .
-intarbitraris.online CNAME .
-vestopay.xyz CNAME .
-intfremitumque.online CNAME .
-intspeluncis.online CNAME .
-softwator.xyz CNAME .
-intachivom.online CNAME .
-intamplexum.online CNAME .
-usecooka.xyz CNAME .
-intcommune.online CNAME .
-intcurabimus.online CNAME .
-regreg.xyz CNAME .
-intstuprandae.online CNAME .
-inttransmitteretque.online CNAME .
-featmainn.xyz CNAME .
-biggha.xyz CNAME .
-intcomparavitque.online CNAME .
-conthis.xyz CNAME .
-view-ternet.com CNAME .
-accrbloog.xyz CNAME .
-simpletrustedhome.com CNAME .
-onesavetrusted.com CNAME .
-searnew.xyz CNAME .
-intermarketsollution.com CNAME .
-delahigh.xyz CNAME .
-trulkigh.xyz CNAME .

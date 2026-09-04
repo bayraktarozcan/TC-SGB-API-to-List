@@ -15291,8 +15291,3 @@ add threat_intel 82.94.251.227
 add threat_intel 62.138.10.60
 add threat_intel 60.191.38.77
 add threat_intel 163.172.157.180
-add threat_intel 196.52.43.64
-add threat_intel 222.186.34.194
-add threat_intel 217.23.12.146
-add threat_intel 217.172.172.10
-add threat_intel 217.23.6.14
