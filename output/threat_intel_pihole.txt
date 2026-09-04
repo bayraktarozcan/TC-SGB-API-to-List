@@ -1,4 +1,12 @@
 # TC-SGB Threat Intelligence — Pi-hole hosts format
+0.0.0.0 nabandxnsnamsn.org
+0.0.0.0 hmnbasvrkrdgrnt.lol
+0.0.0.0 dijitalonline-kampanyaliurunler.duckdns.org
+0.0.0.0 favelotu-mikadese.lol
+0.0.0.0 batrakossvkad.click
+0.0.0.0 trinstroisbank.com
+0.0.0.0 formentor.klasna.solm.batrakossvkad.click
+0.0.0.0 teb-emekliye.my-homeip.de
 0.0.0.0 stanley15.shop
 0.0.0.0 stanley20.shop
 0.0.0.0 gratis.ask4tree.com
@@ -467567,11 +467575,3 @@
 0.0.0.0 redbuiilder.xyz
 0.0.0.0 spotcallty.xyz
 0.0.0.0 krimintis.xyz
-0.0.0.0 boosbuilder.com
-0.0.0.0 whatnright.xyz
-0.0.0.0 proffbuilder.com
-0.0.0.0 bourna.xyz
-0.0.0.0 simpletrustedadvisors.com
-0.0.0.0 happwrong.xyz
-0.0.0.0 memytel.xyz
-0.0.0.0 intdomos.online
