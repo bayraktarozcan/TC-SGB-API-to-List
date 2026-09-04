@@ -15313,6 +15313,14 @@ table inet filter {
         type dns_name
         flags interval
         elements = {
+            nabandxnsnamsn.org,
+            hmnbasvrkrdgrnt.lol,
+            dijitalonline-kampanyaliurunler.duckdns.org,
+            favelotu-mikadese.lol,
+            batrakossvkad.click,
+            trinstroisbank.com,
+            formentor.klasna.solm.batrakossvkad.click,
+            teb-emekliye.my-homeip.de,
             stanley15.shop,
             stanley20.shop,
             gratis.ask4tree.com,
@@ -482881,14 +482889,6 @@ table inet filter {
             redbuiilder.xyz,
             spotcallty.xyz,
             krimintis.xyz,
-            boosbuilder.com,
-            whatnright.xyz,
-            proffbuilder.com,
-            bourna.xyz,
-            simpletrustedadvisors.com,
-            happwrong.xyz,
-            memytel.xyz,
-            intdomos.online,
         }
     }
 }
