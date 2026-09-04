@@ -1,6 +1,26 @@
 ! Title: TC-SGB Threat Intelligence Blocklist
-! Last updated: 2026-09-04T03:11:20.754910+00:00
+! Last updated: 2026-09-04T10:44:53.419662+00:00
 ! Homepage: https://siberguvenlik.gov.tr
+||cepte-tep-den.my-homeip.de^
+||bva-request.shop^
+||guvenlihavuzum2026.com^
+||simplehomeskills.com^
+||megthegullo.com^
+||catalystboostfunding.com^
+||guardiancapitalway.com^
+||digitalcapitalboost.com^
+||guardiangrowthfunding.com^
+||giresunilozelidare.cyou^
+||mhhsrssbhsa.site^
+||mimecast-microsoft-teams-meeting.com^
+||pazarama.siparisimhizli.com^
+||pazarama.urundetayi.com^
+||urundetayi.com^
+||sahibinden-paramguvende.ilan-hizmetin.online^
+||ilan-hizmetin.online^
+||mh1rsf0rm123.com^
+||hizlgecisnyuklemesi.art^
+||ykleodmehgs.cfd^
 ||ziraa-t-login-int.my-homeip.de^
 ||diji-teb.my-homeip.de^
 ||gizlieyllkmpnysiwax.giize.com^
@@ -467559,25 +467579,3 @@
 ||inttempestatum.online^
 ||pergindi.xyz^
 ||intvererentur.online^
-||singleana.xyz^
-||intardea.online^
-||inttransiverant.online^
-||londonma.xyz^
-||intaterque.online^
-||intqua.online^
-||bridgeperf.xyz^
-||intpotes.online^
-||sugarmomy.xyz^
-||intdehiscaveratque.online^
-||intcommittitis.online^
-||coopsonic.xyz^
-||intminareturque.online^
-||tripogg.xyz^
-||intacciderant.online^
-||intsanxique.online^
-||milleyes.xyz^
-||intconcelebrant.online^
-||intineras.online^
-||intphegeusque.online^
-||intunguiebantque.online^
-||zonellar.xyz^
