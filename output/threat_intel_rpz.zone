@@ -1,7 +1,7 @@
 $ORIGIN threatintel.rpz.
 $TTL 300
 @ IN SOA localhost. admin.localhost. (
-    2026090601  ; serial
+    2026090701  ; serial
     3600       ; refresh
     600        ; retry
     86400      ; expire
@@ -9,6 +9,41 @@ $TTL 300
 )
 @ IN NS localhost.
 
+facebookloginapparel.com.ph CNAME .
+fblogin.click CNAME .
+garantibbva-boll.com.ph CNAME .
+hepsiburada-sberbank.ph CNAME .
+yklesrglhgs.cfd CNAME .
+lloydsbankgarantibbva.com.ph CNAME .
+nimc-onlinesbi-garantibbva.com.ph CNAME .
+mhrsislemyapgiris.vercel.app CNAME .
+reklam-link-mhrs.vercel.app CNAME .
+guncelsikayetler-453.sbs CNAME .
+grnte.com CNAME .
+grnttam.com CNAME .
+ct54t1d74fs127f.cfd CNAME .
+mhsrrekaliyb.site CNAME .
+abwbevehwmnend.org CNAME .
+dodocuks.duckdns.org CNAME .
+arorayedekparcalarisatis.com CNAME .
+mhsrrekaliya.site CNAME .
+haberler12343.sbs CNAME .
+rodyskryrzzbgnn.duckdns.org CNAME .
+mhhsrrekaliye.lol CNAME .
+sciencedirect.sbs CNAME .
+gitarkursistan.duckdns.org CNAME .
+montevialifestylexhls4.sbs CNAME .
+mexadowcrestdigitalplatform.cfd CNAME .
+bademamcakim.xyz CNAME .
+www-teb-com-tr-sayfalar-emekli-basvuru.my-homeip.de CNAME .
+asncxbyaaasdanala.8889655532144.sbs CNAME .
+13395003852.duckdns.org CNAME .
+sepet-net.online CNAME .
+haberler3262343.sbs CNAME .
+ct54t1d74fs127fd.sbs CNAME .
+dijitalonline-hemenkapinda.duckdns.org CNAME .
+48512365482451615.duckdns.org CNAME .
+pppprrdannnn.duckdns.org CNAME .
 homadise-vurageno.lol CNAME .
 avsyaninda.com CNAME .
 hosemejst.duckdns.org CNAME .
@@ -467564,38 +467599,3 @@ update-accounttactivity.com CNAME .
 verification-safekeyaccount.com CNAME .
 verification-security-account-caseid.com CNAME .
 webapps-verification-cxsmn.com CNAME .
-payment-policy.com CNAME .
-ppintl-limited-account-service-solution-id8-v2.com CNAME .
-safekey-verificationrequaires.com CNAME .
-check-account-acceess.com CNAME .
-summary-account-service.org CNAME .
-account-verifizieren.xyz CNAME .
-sicherheit-bezahlung.xyz CNAME .
-appleios-id.com CNAME .
-appleid-users-protection.com CNAME .
-app-idresolvehelp.com CNAME .
-account-recorveryhelps.com CNAME .
-account-locked-activity.com CNAME .
-account-disable-activity.com CNAME .
-accessid-applestores.com CNAME .
-resolveapp-logino.com CNAME .
-relogin-euwee.com CNAME .
-signin-apple-secure.com CNAME .
-receipt-verification.com CNAME .
-payment-guarantee.com CNAME .
-myaccount-verification-appleid-subcription.com CNAME .
-loginupdate-billingsc.com CNAME .
-logindata-updateservice.com CNAME .
-login-check-accountsunlockid.com CNAME .
-webappss-security-bin-apple.com CNAME .
-update-security-accounts.com CNAME .
-unlocked-account-apps.com CNAME .
-unlock-account-center.com CNAME .
-supportlogin-costumers.com CNAME .
-support-appleid-info.com CNAME .
-sc-applle-login.com CNAME .
-icloudhint.com CNAME .
-secureidupdateinformation.com CNAME .
-thatmember.com CNAME .
-verificationlogin09.com CNAME .
-amaozan.com CNAME .

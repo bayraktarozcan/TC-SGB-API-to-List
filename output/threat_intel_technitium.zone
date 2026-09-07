@@ -5,7 +5,7 @@ $ORIGIN threatint.local.
 $TTL 300
 
 @ IN SOA ns1.threatint.local. admin.threatint.local. (
-    2026090601  ; serial
+    2026090701  ; serial
     3600       ; refresh (1 hour)
     600        ; retry (10 min)
     86400      ; expire (1 day)
@@ -17,6 +17,41 @@ $TTL 300
 ns1 IN A 127.0.0.1
 
 ; Blocked domains
+facebookloginapparel.com.ph. IN A 0.0.0.0
+fblogin.click. IN A 0.0.0.0
+garantibbva-boll.com.ph. IN A 0.0.0.0
+hepsiburada-sberbank.ph. IN A 0.0.0.0
+yklesrglhgs.cfd. IN A 0.0.0.0
+lloydsbankgarantibbva.com.ph. IN A 0.0.0.0
+nimc-onlinesbi-garantibbva.com.ph. IN A 0.0.0.0
+mhrsislemyapgiris.vercel.app. IN A 0.0.0.0
+reklam-link-mhrs.vercel.app. IN A 0.0.0.0
+guncelsikayetler-453.sbs. IN A 0.0.0.0
+grnte.com. IN A 0.0.0.0
+grnttam.com. IN A 0.0.0.0
+ct54t1d74fs127f.cfd. IN A 0.0.0.0
+mhsrrekaliyb.site. IN A 0.0.0.0
+abwbevehwmnend.org. IN A 0.0.0.0
+dodocuks.duckdns.org. IN A 0.0.0.0
+arorayedekparcalarisatis.com. IN A 0.0.0.0
+mhsrrekaliya.site. IN A 0.0.0.0
+haberler12343.sbs. IN A 0.0.0.0
+rodyskryrzzbgnn.duckdns.org. IN A 0.0.0.0
+mhhsrrekaliye.lol. IN A 0.0.0.0
+sciencedirect.sbs. IN A 0.0.0.0
+gitarkursistan.duckdns.org. IN A 0.0.0.0
+montevialifestylexhls4.sbs. IN A 0.0.0.0
+mexadowcrestdigitalplatform.cfd. IN A 0.0.0.0
+bademamcakim.xyz. IN A 0.0.0.0
+www-teb-com-tr-sayfalar-emekli-basvuru.my-homeip.de. IN A 0.0.0.0
+asncxbyaaasdanala.8889655532144.sbs. IN A 0.0.0.0
+13395003852.duckdns.org. IN A 0.0.0.0
+sepet-net.online. IN A 0.0.0.0
+haberler3262343.sbs. IN A 0.0.0.0
+ct54t1d74fs127fd.sbs. IN A 0.0.0.0
+dijitalonline-hemenkapinda.duckdns.org. IN A 0.0.0.0
+48512365482451615.duckdns.org. IN A 0.0.0.0
+pppprrdannnn.duckdns.org. IN A 0.0.0.0
 homadise-vurageno.lol. IN A 0.0.0.0
 avsyaninda.com. IN A 0.0.0.0
 hosemejst.duckdns.org. IN A 0.0.0.0
@@ -467572,38 +467607,3 @@ update-accounttactivity.com. IN A 0.0.0.0
 verification-safekeyaccount.com. IN A 0.0.0.0
 verification-security-account-caseid.com. IN A 0.0.0.0
 webapps-verification-cxsmn.com. IN A 0.0.0.0
-payment-policy.com. IN A 0.0.0.0
-ppintl-limited-account-service-solution-id8-v2.com. IN A 0.0.0.0
-safekey-verificationrequaires.com. IN A 0.0.0.0
-check-account-acceess.com. IN A 0.0.0.0
-summary-account-service.org. IN A 0.0.0.0
-account-verifizieren.xyz. IN A 0.0.0.0
-sicherheit-bezahlung.xyz. IN A 0.0.0.0
-appleios-id.com. IN A 0.0.0.0
-appleid-users-protection.com. IN A 0.0.0.0
-app-idresolvehelp.com. IN A 0.0.0.0
-account-recorveryhelps.com. IN A 0.0.0.0
-account-locked-activity.com. IN A 0.0.0.0
-account-disable-activity.com. IN A 0.0.0.0
-accessid-applestores.com. IN A 0.0.0.0
-resolveapp-logino.com. IN A 0.0.0.0
-relogin-euwee.com. IN A 0.0.0.0
-signin-apple-secure.com. IN A 0.0.0.0
-receipt-verification.com. IN A 0.0.0.0
-payment-guarantee.com. IN A 0.0.0.0
-myaccount-verification-appleid-subcription.com. IN A 0.0.0.0
-loginupdate-billingsc.com. IN A 0.0.0.0
-logindata-updateservice.com. IN A 0.0.0.0
-login-check-accountsunlockid.com. IN A 0.0.0.0
-webappss-security-bin-apple.com. IN A 0.0.0.0
-update-security-accounts.com. IN A 0.0.0.0
-unlocked-account-apps.com. IN A 0.0.0.0
-unlock-account-center.com. IN A 0.0.0.0
-supportlogin-costumers.com. IN A 0.0.0.0
-support-appleid-info.com. IN A 0.0.0.0
-sc-applle-login.com. IN A 0.0.0.0
-icloudhint.com. IN A 0.0.0.0
-secureidupdateinformation.com. IN A 0.0.0.0
-thatmember.com. IN A 0.0.0.0
-verificationlogin09.com. IN A 0.0.0.0
-amaozan.com. IN A 0.0.0.0
