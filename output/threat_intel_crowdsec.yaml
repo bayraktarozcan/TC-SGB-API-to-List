@@ -107112,24 +107112,3 @@
     scope: IP
     type: ban
     value: 209.126.136.2
-- decisions:
-  - duration: 168h
-    origin: TC-SGB-Intel
-    scenario: 'Threat intelligence: MD'
-    scope: IP
-    type: ban
-    value: 95.85.38.103
-- decisions:
-  - duration: 168h
-    origin: TC-SGB-Intel
-    scenario: 'Threat intelligence: MD'
-    scope: IP
-    type: ban
-    value: 185.62.189.232
-- decisions:
-  - duration: 168h
-    origin: TC-SGB-Intel
-    scenario: 'Threat intelligence: MD'
-    scope: IP
-    type: ban
-    value: 121.201.9.204
