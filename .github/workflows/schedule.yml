@@ -69,6 +69,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.AUTO_MERGE_TOKEN }}
         run: |
+          set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add -f output/ ':!output/raw_records.json' \
@@ -80,12 +81,32 @@ jobs:
             echo "No changes to commit"
             exit 0
           fi
+
+          # Retry gh calls that fail with transient API errors (e.g. HTTP 502).
+          # The PR URL (stdout of the wrapped command) is preserved because the
+          # helper's own messages go to stderr.
+          gh_retry() {
+            local attempt=0
+            until "$@"; do
+              attempt=$((attempt + 1))
+              if [ "$attempt" -ge 5 ]; then
+                echo "gh API call still failing after ${attempt} attempts: $*" >&2
+                return 1
+              fi
+              echo "Transient gh failure (attempt ${attempt}/5); retrying: $*" >&2
+              sleep $((attempt * 10))
+            done
+          }
+
           TIMESTAMP=$(date -u +"%Y%m%d-%H%M%S")
           BRANCH="scheduled-fetch-${TIMESTAMP}"
           RUN_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
           # Never more than one open scheduled-fetch PR at a time.
-          # Supersede a stuck one (behind main or with failing checks) so stale branches don't pile up.
+          # Supersede a stuck one (behind main or with failing checks) so stale
+          # branches don't pile up. If the open PR is still on track, re-arm
+          # auto-merge on it (a prior run may have created the PR but aborted in a
+          # transient API failure before enabling auto-merge) and let it merge.
           for NUM in $(gh pr list --state open --json number,headRefName \
               --jq '.[] | select(.headRefName | startswith("scheduled-fetch-")) | .number'); do
             STUCK=$(gh pr view "$NUM" --json mergeStateStatus,statusCheckRollup \
@@ -98,23 +119,38 @@ jobs:
               gh pr close "$NUM" --comment "Superseded by newer IoC data run." || true
               git push origin --delete "$HEAD" 2>/dev/null || true
             else
-              echo "Open scheduled PR #${NUM} is still on track; skipping PR creation this run."
+              echo "Open scheduled PR #${NUM} is still on track; re-arming auto-merge."
+              gh_retry gh pr merge --squash --auto --delete-branch "$NUM" || \
+                echo "WARNING: could not arm auto-merge on PR #${NUM}; will be retried next run."
               exit 0
             fi
           done
 
           git checkout -b "${BRANCH}"
           git commit -m "chore: update IoC data ${TIMESTAMP}"
-          git push origin "${BRANCH}"
-          PR_URL=$(gh pr create \
-            --base main \
-            --head "${BRANCH}" \
-            --title "chore: update IoC data ${TIMESTAMP}" \
-            --body "Automated IoC data update from scheduled pipeline.
+          gh_retry git push origin "${BRANCH}"
 
-          ${RUN_URL}")
+          if ! PR_URL=$(gh_retry gh pr create \
+              --base main \
+              --head "${BRANCH}" \
+              --title "chore: update IoC data ${TIMESTAMP}" \
+              --body "Automated IoC data update from scheduled pipeline.
+
+          ${RUN_URL}"); then
+            # A transient API error (e.g. HTTP 502) may have created the PR but
+            # dropped the response. Recover by looking the PR up instead of failing.
+            echo "gh pr create reported an error; checking whether the PR already exists."
+            PR_URL=$(gh pr list --head "${BRANCH}" --state open \
+              --json url --jq '.[0].url // empty' 2>/dev/null || true)
+            if [ -z "$PR_URL" ]; then
+              echo "PR creation failed and no recovery PR was found."
+              exit 1
+            fi
+            echo "Recovered existing PR: ${PR_URL}"
+          fi
           echo "Created PR: ${PR_URL}"
-          gh pr merge --auto --squash --delete-branch "${PR_URL}" || true
+          gh_retry gh pr merge --squash --auto --delete-branch "${PR_URL}" || \
+            echo "WARNING: could not arm auto-merge on ${PR_URL}; will be retried next run."
 
           # Keep the PR mergeable under strict branch protection: native auto-merge does
           # NOT update the branch, so if main advances while checks run, update it here.
@@ -124,7 +160,7 @@ jobs:
             echo "[wait ${i}] ${STATE}"
             case "$STATE" in
               MERGED/*) echo "✓ Merged"; exit 0 ;;
-              */BEHIND) echo "  main advanced; updating branch"; gh pr update-branch "${PR_URL}" || true ;;
+              */BEHIND) echo "  main advanced; updating branch"; gh_retry gh pr update-branch "${PR_URL}" || true ;;
               *) : ;; # checks pending or failing — keep waiting
             esac
             sleep 30
