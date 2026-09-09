@@ -1,6 +1,25 @@
 ! Title: TC-SGB Threat Intelligence Blocklist
-! Last updated: 2026-09-09T03:23:35.453405+00:00
+! Last updated: 2026-09-09T10:53:37.465634+00:00
 ! Homepage: https://siberguvenlik.gov.tr
+||siparis-onayim.online^
+||pazarama.online-siparisler-burda.com^
+||turkpatent-gov-tr.com^
+||101-extra-sadece-bugune-ozel-mobil-alisveris-cep-tr.cepteal-tr.online^
+||tuv-arac-muayene-randevu.blogspot.com^
+||kaitaelleme3434.sbs^
+||naazlisubesindyzz.duckdns.org^
+||oyaktraderplus.com^
+||metakaitareklamofflinebee.sbs^
+||kbc-trendyol.ph^
+||fsafgt435gyw4g.lol^
+||istanbulbelgimrandevutr.xyz^
+||yklmednsnrhgs.cfd^
+||snryklendrdnhgs.cfd^
+||bilgial.site^
+||kaita3elleme3434.sbs^
+||2metaofflinereklam.sbs^
+||bn-araba-cekilisin.online^
+||c-e-p-t-e-t-e-b-ayricalikli-firsatlar.my-homeip.de^
 ||sanalkontor.shop^
 ||adayislermleri.info^
 ||foto3969.link^
@@ -467621,20 +467640,3 @@
 ||garantibireysel.com^
 ||yapikkredi.com^
 ||akbankk.net^
-||bireyselbankacilik-sube.com^
-||turkiyefiinans-tr.com^
-||wechaatt.gdn^
-||xn--nternetsube-yapkred-f5cpe.com^
-||xn--garantisubes-tsa72e.com^
-||e-garanti.net^
-||www-akbank.net^
-||vakifbk.com^
-||xn--yapkredii-xpb.com^
-||e-akbankgirisi.com^
-||xn--ypkredi-pwa3i.com^
-||e-ziraatgirisi.com^
-||v-vodafonefaturasiodeme.com^
-||hesap.cf^
-||cepsubeindir.com^
-||xn--pkred-wqa9q2p.com^
-||xn--yapkred-tfbbd.com^

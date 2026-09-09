@@ -1,5 +1,8 @@
 create threat_intel hash:ip family inet hashsize 4096 maxelem 500000
 create threat_intel6 hash:ip family inet6 hashsize 4096 maxelem 500000
+add threat_intel 179.43.175.2
+add threat_intel 184.184.15.195
+add threat_intel 50.80.61.80
 add threat_intel 146.103.99.177
 add threat_intel 46.151.29.58
 add threat_intel 23.111.14.143
@@ -15296,8 +15299,3 @@ add threat_intel 95.141.115.108
 add threat_intel 111.90.139.247
 add threat_intel 84.200.16.242
 add threat_intel 51.15.40.233
-add threat_intel 138.68.242.68
-add threat_intel 5.45.66.161
-add threat_intel 148.251.52.203
-add threat_intel 193.203.99.113
-add threat_intel 193.203.99.115

@@ -17,6 +17,25 @@ $TTL 300
 ns1 IN A 127.0.0.1
 
 ; Blocked domains
+siparis-onayim.online. IN A 0.0.0.0
+pazarama.online-siparisler-burda.com. IN A 0.0.0.0
+turkpatent-gov-tr.com. IN A 0.0.0.0
+101-extra-sadece-bugune-ozel-mobil-alisveris-cep-tr.cepteal-tr.online. IN A 0.0.0.0
+tuv-arac-muayene-randevu.blogspot.com. IN A 0.0.0.0
+kaitaelleme3434.sbs. IN A 0.0.0.0
+naazlisubesindyzz.duckdns.org. IN A 0.0.0.0
+oyaktraderplus.com. IN A 0.0.0.0
+metakaitareklamofflinebee.sbs. IN A 0.0.0.0
+kbc-trendyol.ph. IN A 0.0.0.0
+fsafgt435gyw4g.lol. IN A 0.0.0.0
+istanbulbelgimrandevutr.xyz. IN A 0.0.0.0
+yklmednsnrhgs.cfd. IN A 0.0.0.0
+snryklendrdnhgs.cfd. IN A 0.0.0.0
+bilgial.site. IN A 0.0.0.0
+kaita3elleme3434.sbs. IN A 0.0.0.0
+2metaofflinereklam.sbs. IN A 0.0.0.0
+bn-araba-cekilisin.online. IN A 0.0.0.0
+c-e-p-t-e-t-e-b-ayricalikli-firsatlar.my-homeip.de. IN A 0.0.0.0
 sanalkontor.shop. IN A 0.0.0.0
 adayislermleri.info. IN A 0.0.0.0
 foto3969.link. IN A 0.0.0.0
@@ -467637,20 +467656,3 @@ giris-halkbank.com. IN A 0.0.0.0
 garantibireysel.com. IN A 0.0.0.0
 yapikkredi.com. IN A 0.0.0.0
 akbankk.net. IN A 0.0.0.0
-bireyselbankacilik-sube.com. IN A 0.0.0.0
-turkiyefiinans-tr.com. IN A 0.0.0.0
-wechaatt.gdn. IN A 0.0.0.0
-xn--nternetsube-yapkred-f5cpe.com. IN A 0.0.0.0
-xn--garantisubes-tsa72e.com. IN A 0.0.0.0
-e-garanti.net. IN A 0.0.0.0
-www-akbank.net. IN A 0.0.0.0
-vakifbk.com. IN A 0.0.0.0
-xn--yapkredii-xpb.com. IN A 0.0.0.0
-e-akbankgirisi.com. IN A 0.0.0.0
-xn--ypkredi-pwa3i.com. IN A 0.0.0.0
-e-ziraatgirisi.com. IN A 0.0.0.0
-v-vodafonefaturasiodeme.com. IN A 0.0.0.0
-hesap.cf. IN A 0.0.0.0
-cepsubeindir.com. IN A 0.0.0.0
-xn--pkred-wqa9q2p.com. IN A 0.0.0.0
-xn--yapkred-tfbbd.com. IN A 0.0.0.0
