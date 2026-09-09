@@ -6,6 +6,9 @@ table inet filter {
         type ipv4_addr
         flags interval
         elements = {
+            179.43.175.2,
+            184.184.15.195,
+            50.80.61.80,
             146.103.99.177,
             46.151.29.58,
             23.111.14.143,
@@ -15296,11 +15299,6 @@ table inet filter {
             111.90.139.247,
             84.200.16.242,
             51.15.40.233,
-            138.68.242.68,
-            5.45.66.161,
-            148.251.52.203,
-            193.203.99.113,
-            193.203.99.115,
         }
     }
     set threat_intel6 {
@@ -15319,6 +15317,25 @@ table inet filter {
         type dns_name
         flags interval
         elements = {
+            siparis-onayim.online,
+            pazarama.online-siparisler-burda.com,
+            turkpatent-gov-tr.com,
+            101-extra-sadece-bugune-ozel-mobil-alisveris-cep-tr.cepteal-tr.online,
+            tuv-arac-muayene-randevu.blogspot.com,
+            kaitaelleme3434.sbs,
+            naazlisubesindyzz.duckdns.org,
+            oyaktraderplus.com,
+            metakaitareklamofflinebee.sbs,
+            kbc-trendyol.ph,
+            fsafgt435gyw4g.lol,
+            istanbulbelgimrandevutr.xyz,
+            yklmednsnrhgs.cfd,
+            snryklendrdnhgs.cfd,
+            bilgial.site,
+            kaita3elleme3434.sbs,
+            2metaofflinereklam.sbs,
+            bn-araba-cekilisin.online,
+            c-e-p-t-e-t-e-b-ayricalikli-firsatlar.my-homeip.de,
             sanalkontor.shop,
             adayislermleri.info,
             foto3969.link,
@@ -482939,23 +482956,6 @@ table inet filter {
             garantibireysel.com,
             yapikkredi.com,
             akbankk.net,
-            bireyselbankacilik-sube.com,
-            turkiyefiinans-tr.com,
-            wechaatt.gdn,
-            xn--nternetsube-yapkred-f5cpe.com,
-            xn--garantisubes-tsa72e.com,
-            e-garanti.net,
-            www-akbank.net,
-            vakifbk.com,
-            xn--yapkredii-xpb.com,
-            e-akbankgirisi.com,
-            xn--ypkredi-pwa3i.com,
-            e-ziraatgirisi.com,
-            v-vodafonefaturasiodeme.com,
-            hesap.cf,
-            cepsubeindir.com,
-            xn--pkred-wqa9q2p.com,
-            xn--yapkred-tfbbd.com,
         }
     }
 }
