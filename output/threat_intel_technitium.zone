@@ -5,7 +5,7 @@ $ORIGIN threatint.local.
 $TTL 300
 
 @ IN SOA ns1.threatint.local. admin.threatint.local. (
-    2026090901  ; serial
+    2026091001  ; serial
     3600       ; refresh (1 hour)
     600        ; retry (10 min)
     86400      ; expire (1 day)
@@ -17,6 +17,43 @@ $TTL 300
 ns1 IN A 127.0.0.1
 
 ; Blocked domains
+paribu-cark.com. IN A 0.0.0.0
+paribu--araba.com. IN A 0.0.0.0
+lndirimtakiptett.com. IN A 0.0.0.0
+cekilisfirsatlari.online. IN A 0.0.0.0
+boynertronline.shop. IN A 0.0.0.0
+haberler452344.sbs. IN A 0.0.0.0
+ziraat-yenilenensubemiz.com.ph. IN A 0.0.0.0
+sponsorcekilis.online. IN A 0.0.0.0
+sponsorlucekilisin.online. IN A 0.0.0.0
+cekilisler.online. IN A 0.0.0.0
+odullucekilis.online. IN A 0.0.0.0
+sponsorlu-cekilisin.online. IN A 0.0.0.0
+firsateylulayi.duckdns.org. IN A 0.0.0.0
+sponsporlucekilisim.online. IN A 0.0.0.0
+sponsorlucekilis.online. IN A 0.0.0.0
+kampanyali-cekilisin.online. IN A 0.0.0.0
+aidatcepdestekmobilkapisi-gov-tr.com.ph. IN A 0.0.0.0
+aidat-iades-web-grs-e-devlet-gov-tr.com.ph. IN A 0.0.0.0
+paramguvende.cfd. IN A 0.0.0.0
+cekilisim.online. IN A 0.0.0.0
+sponsorlu-cekilisim.online. IN A 0.0.0.0
+kampanyali-cekilis.online. IN A 0.0.0.0
+cekilisin.online. IN A 0.0.0.0
+kampanyali-cekilisim.online. IN A 0.0.0.0
+kampanyalicekilis.online. IN A 0.0.0.0
+cekilisfirsati.online. IN A 0.0.0.0
+cekilismerkezi.online. IN A 0.0.0.0
+sponsorlu-kampanyalar.online. IN A 0.0.0.0
+sponsorlu-kampanya.online. IN A 0.0.0.0
+buyukcekilis.online. IN A 0.0.0.0
+cekiliskampanyasi.online. IN A 0.0.0.0
+hizlgcsdldr.click. IN A 0.0.0.0
+gratis.jonestonic.com. IN A 0.0.0.0
+edvs-tapursvnnuszs.info. IN A 0.0.0.0
+hizlidoldurmagcs.web.app. IN A 0.0.0.0
+falanfilanintermilan.sbs. IN A 0.0.0.0
+metakaitaoffline.sbs. IN A 0.0.0.0
 metorekotekox312z.sbs. IN A 0.0.0.0
 mhrs-randevu-islem.vercel.app. IN A 0.0.0.0
 eylulfirstlari.duckdns.org. IN A 0.0.0.0
@@ -467620,40 +467657,3 @@ bireysel-ziraatbanka.com. IN A 0.0.0.0
 mobil-isbank.com. IN A 0.0.0.0
 i-subegiris.com. IN A 0.0.0.0
 xn--yapkred-3db1e.com. IN A 0.0.0.0
-onlineislemmerkeziyapikredi.com. IN A 0.0.0.0
-login-yapikredi.top. IN A 0.0.0.0
-e-yapikredi.xyz. IN A 0.0.0.0
-e-yapikredii.com. IN A 0.0.0.0
-xn--yapredi-tfb8c.com. IN A 0.0.0.0
-yapikrediborcumusorgulama.net. IN A 0.0.0.0
-bireyselsube-yapikredi.com. IN A 0.0.0.0
-xn--yapkrediubem-34b36d.com. IN A 0.0.0.0
-yapikredicekilis.com. IN A 0.0.0.0
-yapikredionlinesube.com. IN A 0.0.0.0
-xn--yapkredi-i80d.com. IN A 0.0.0.0
-interaktifislemyapimkredim.com. IN A 0.0.0.0
-xn--pikredi-owa6v.com. IN A 0.0.0.0
-xn--yapkrediekili-pgb81imv.com. IN A 0.0.0.0
-subesiyapikredi.com. IN A 0.0.0.0
-yaplkredl.com. IN A 0.0.0.0
-onlineislemyapikredi.com. IN A 0.0.0.0
-elsssee.gdn. IN A 0.0.0.0
-bireyselykb.com. IN A 0.0.0.0
-yapikredibireyselgiris.com. IN A 0.0.0.0
-724kontormerkezi.com. IN A 0.0.0.0
-xn--yapked-r9ad53a.com. IN A 0.0.0.0
-xn--yapikrdi-y30d.com. IN A 0.0.0.0
-xn--xnyapkrediube-1zb71d-qu2l.com. IN A 0.0.0.0
-ienpara.com. IN A 0.0.0.0
-xn--yapkedi-tfb93a.com. IN A 0.0.0.0
-yapikredisubesi.com. IN A 0.0.0.0
-internetyapikredii.com. IN A 0.0.0.0
-sanalfaturaode.com. IN A 0.0.0.0
-xn--yapkrediube-1zb71d.com. IN A 0.0.0.0
-xn--yapkrd-t3a1ppc.com. IN A 0.0.0.0
-yapikredimobilcik.com. IN A 0.0.0.0
-xn--yapikrdi-p1a.com. IN A 0.0.0.0
-xn--iyapkredi-ypb.com. IN A 0.0.0.0
-xn--yapkd-esa61cd53a.com. IN A 0.0.0.0
-interaktifislem-yapikredi.com. IN A 0.0.0.0
-internetyapikredim.com. IN A 0.0.0.0

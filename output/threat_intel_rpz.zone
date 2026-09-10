@@ -1,7 +1,7 @@
 $ORIGIN threatintel.rpz.
 $TTL 300
 @ IN SOA localhost. admin.localhost. (
-    2026090901  ; serial
+    2026091001  ; serial
     3600       ; refresh
     600        ; retry
     86400      ; expire
@@ -9,6 +9,43 @@ $TTL 300
 )
 @ IN NS localhost.
 
+paribu-cark.com CNAME .
+paribu--araba.com CNAME .
+lndirimtakiptett.com CNAME .
+cekilisfirsatlari.online CNAME .
+boynertronline.shop CNAME .
+haberler452344.sbs CNAME .
+ziraat-yenilenensubemiz.com.ph CNAME .
+sponsorcekilis.online CNAME .
+sponsorlucekilisin.online CNAME .
+cekilisler.online CNAME .
+odullucekilis.online CNAME .
+sponsorlu-cekilisin.online CNAME .
+firsateylulayi.duckdns.org CNAME .
+sponsporlucekilisim.online CNAME .
+sponsorlucekilis.online CNAME .
+kampanyali-cekilisin.online CNAME .
+aidatcepdestekmobilkapisi-gov-tr.com.ph CNAME .
+aidat-iades-web-grs-e-devlet-gov-tr.com.ph CNAME .
+paramguvende.cfd CNAME .
+cekilisim.online CNAME .
+sponsorlu-cekilisim.online CNAME .
+kampanyali-cekilis.online CNAME .
+cekilisin.online CNAME .
+kampanyali-cekilisim.online CNAME .
+kampanyalicekilis.online CNAME .
+cekilisfirsati.online CNAME .
+cekilismerkezi.online CNAME .
+sponsorlu-kampanyalar.online CNAME .
+sponsorlu-kampanya.online CNAME .
+buyukcekilis.online CNAME .
+cekiliskampanyasi.online CNAME .
+hizlgcsdldr.click CNAME .
+gratis.jonestonic.com CNAME .
+edvs-tapursvnnuszs.info CNAME .
+hizlidoldurmagcs.web.app CNAME .
+falanfilanintermilan.sbs CNAME .
+metakaitaoffline.sbs CNAME .
 metorekotekox312z.sbs CNAME .
 mhrs-randevu-islem.vercel.app CNAME .
 eylulfirstlari.duckdns.org CNAME .
@@ -467612,40 +467649,3 @@ bireysel-ziraatbanka.com CNAME .
 mobil-isbank.com CNAME .
 i-subegiris.com CNAME .
 xn--yapkred-3db1e.com CNAME .
-onlineislemmerkeziyapikredi.com CNAME .
-login-yapikredi.top CNAME .
-e-yapikredi.xyz CNAME .
-e-yapikredii.com CNAME .
-xn--yapredi-tfb8c.com CNAME .
-yapikrediborcumusorgulama.net CNAME .
-bireyselsube-yapikredi.com CNAME .
-xn--yapkrediubem-34b36d.com CNAME .
-yapikredicekilis.com CNAME .
-yapikredionlinesube.com CNAME .
-xn--yapkredi-i80d.com CNAME .
-interaktifislemyapimkredim.com CNAME .
-xn--pikredi-owa6v.com CNAME .
-xn--yapkrediekili-pgb81imv.com CNAME .
-subesiyapikredi.com CNAME .
-yaplkredl.com CNAME .
-onlineislemyapikredi.com CNAME .
-elsssee.gdn CNAME .
-bireyselykb.com CNAME .
-yapikredibireyselgiris.com CNAME .
-724kontormerkezi.com CNAME .
-xn--yapked-r9ad53a.com CNAME .
-xn--yapikrdi-y30d.com CNAME .
-xn--xnyapkrediube-1zb71d-qu2l.com CNAME .
-ienpara.com CNAME .
-xn--yapkedi-tfb93a.com CNAME .
-yapikredisubesi.com CNAME .
-internetyapikredii.com CNAME .
-sanalfaturaode.com CNAME .
-xn--yapkrediube-1zb71d.com CNAME .
-xn--yapkrd-t3a1ppc.com CNAME .
-yapikredimobilcik.com CNAME .
-xn--yapikrdi-p1a.com CNAME .
-xn--iyapkredi-ypb.com CNAME .
-xn--yapkd-esa61cd53a.com CNAME .
-interaktifislem-yapikredi.com CNAME .
-internetyapikredim.com CNAME .
