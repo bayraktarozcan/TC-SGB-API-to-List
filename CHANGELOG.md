@@ -7,6 +7,26 @@
 All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [v0.3.1.0] — 2026-09-10
+
+### Added
+
+- **Deterministic output timestamps** — `generate_adguard`, `generate_rpz`, `generate_technitium` and `generate_suricata` accept an optional `generated_at`; when absent the timestamp falls back to the newest IoC `date`, so outputs are byte-stable for identical input sets (no more time-of-run flakiness in regression tests)
+- **New tests**: +25 — `value`-shape `validate` records, API-fetch branch, skip-validation and `max_criticality` branches, client reopen-after-close, canonical cross-type dedup, non-mutating metadata merge, helper coverage (477 tests passing)
+
+### Changed
+
+- **Weekly cadence everywhere** — README (EN+TR), `docs/index.html` (EN+TR), wiki, and the scheduled-release note now state the weekly Friday 22:00 UTC schedule instead of the stale "every 6 hours"
+- **`cmd_validate` is resilient** — accepts both API (`url`) and fetch-snapshot (`value`) record shapes, skips non-dict/malformed records with a warning instead of crashing the whole run, and fails with a clear error on non-list JSON
+- **No overlapping scheduled runs** — `schedule.yml` gained a `concurrency` group so a new fetch waits for the previous one instead of running in parallel
+- **Cross-type dedup canonicalization** — the domain index lower-cases and strips trailing dots (`EVIL.COM.` ≡ `evil.com`); `_merge_metadata` now returns a copy and never mutates its inputs
+- **CLI polish** — parser `prog` is now `tc-sgb`; `--formats` tolerates whitespace around comma-separated values
+
+### Fixed
+
+- **`PipelineStats.summary()` ordering** — "After dedup" was printed before "After quality"; the quality stage now prints in its real pipeline position
+- **Unused mypy override removed** — the `tests.*` section that mypy flagged as unused
+
 ## [v0.3.0.0] — 2026-08-28
 
 ### Added
@@ -129,6 +149,26 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 Bu projedeki tüm dikkat çekici değişiklikler bu dosyada belgelenecektir.
 Biçim, [Keep a Changelog](https://keepachangelog.com/)'a dayanmaktadır.
+
+## [v0.3.1.0] — 2026-09-10
+
+### Eklenen
+
+- **Deterministik çıktı zaman damgaları** — `generate_adguard`, `generate_rpz`, `generate_technitium` ve `generate_suricata` isteğe bağlı `generated_at` parametresini kabul eder; yoksa zaman damgası en yeni IoC `date` değerine döner, böylece aynı girdi kümesi için çıktılar bayt-bazlı kararlıdır (regresyon testlerinde artık çalışma-anı tutarsızlığı yok)
+- **Yeni testler**: +25 — `value` biçimli `validate` kayıtları, API-çekme dalı, skip-validation ve `max_criticality` dalları, kapatma-sonrası yeniden açma, kanonik çapraz tür tekilleştirme, mutasyon yapmayan meta veri birleştirme, yardımcı fonksiyon kapsamı (477 test geçiyor)
+
+### Değiştirilen
+
+- **Haftalık hat düzeni her yerde** — README (EN+TR), `docs/index.html` (EN+TR), wiki ve zamanlanmış sürüm notu artık haftalık Cuma 22:00 UTC programını belirtiyor (eski "her 6 saatte bir" yerine)
+- **`cmd_validate` artık dayanıklı** — hem API (`url`) hem de çekim-anlık görüntüsü (`value`) kayıt şekillerini kabul eder, dict olmayan/hatalı kayıtları tüm çalışmayı kırmak yerine uyarıyla atlar ve list olmayan JSON için net bir hata verir
+- **Örtüşen zamanlanmış çalıştırma yok** — `schedule.yml` artık önceki çalıştırma bitmeden yenisi başlamasın diye `concurrency` grubuna sahip
+- **Çapraz tür tekilleştirme kanonikleştirmesi** — alan adı dizini küçük harfe çevirir ve sondaki noktaları siler (`EVIL.COM.` ≡ `evil.com`); `_merge_metadata` artık bir kopya döndürür ve girdilerini asla değiştirmez
+- **CLI cilası** — ayrıştırıcı `prog` değeri artık `tc-sgb`; `--formats` virgülle ayrılmış değerlerin etrafındaki boşlukları yok sayar
+
+### Düzeltilen
+
+- **`PipelineStats.summary()` sıralaması** — "After dedup" daha önce "After quality" satırından önce yazdırılıyordu; kalite aşaması artık gerçek hat konumunda görünüyor
+- **Kullanılmayan mypy override kaldırıldı** — mypy'nin kullanılmadığını işaretlediği `tests.*` bölümü silindi
 
 ## [v0.3.0.0] — 2026-08-28
 

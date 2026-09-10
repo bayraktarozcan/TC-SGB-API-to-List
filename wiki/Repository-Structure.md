@@ -150,7 +150,7 @@ TC-SGB-API-to-List/
 
 ### Tests (`tests/`)
 
-Flat structure — no subdirectories. 15 files total, 452 tests, 99% coverage.
+Flat structure — no subdirectories. 15 files total, 477 tests, 99% coverage.
 
 | File | Focus |
 |------|-------|
