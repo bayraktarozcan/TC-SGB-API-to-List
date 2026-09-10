@@ -422,7 +422,7 @@ async def generate_outputs_parallel(records, output_dir):
 name: Performance Tests
 on:
   schedule:
-    - cron: "0 2 * * *"  # Daily at 2 AM
+    - cron: "0 22 * * 5"  # Weekly on Friday 22:00 UTC
 
 jobs:
   benchmark:
@@ -867,7 +867,7 @@ async def generate_outputs_parallel(records, output_dir):
 name: Performance Tests
 on:
   schedule:
-    - cron: "0 2 * * *"  # Daily at 2 AM
+    - cron: "0 22 * * 5"  # Weekly on Friday 22:00 UTC
 
 jobs:
   benchmark:

@@ -310,10 +310,10 @@ def generate_checksums(output_dir: Path) -> Path:
 
 ```yaml
 # .github/workflows/scheduled.yml
-name: Daily Pipeline
+name: Weekly Pipeline
 on:
   schedule:
-    - cron: "0 6 * * *"  # Daily at 6 AM UTC
+    - cron: "0 22 * * 5"  # Weekly on Friday 22:00 UTC
 
 jobs:
   fetch-and-process:
@@ -707,10 +707,10 @@ def generate_checksums(output_dir: Path) -> Path:
 
 ```yaml
 # .github/workflows/scheduled.yml
-name: Daily Pipeline
+name: Weekly Pipeline
 on:
   schedule:
-    - cron: "0 6 * * *"  # Daily at 6 AM UTC
+    - cron: "0 22 * * 5"  # Weekly on Friday 22:00 UTC
 
 jobs:
   fetch-and-process:

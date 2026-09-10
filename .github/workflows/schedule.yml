@@ -5,6 +5,10 @@ on:
     - cron: "0 22 * * 5"
   workflow_dispatch:
 
+concurrency:
+  group: scheduled-fetch
+  cancel-in-progress: false
+
 permissions:
   contents: write
   pull-requests: write
@@ -72,7 +76,7 @@ jobs:
           if ! gh release view "${TAG}" >/dev/null 2>&1; then
             gh release create "${TAG}" \
               --title "IoC Data (large formats)" \
-              --notes "Rolling release: large-format IoC outputs refreshed every 6 hours. Stable assets at https://github.com/${{ github.repository }}/releases/download/${TAG}/" \
+              --notes "Rolling release: large-format IoC outputs refreshed every week (Friday 22:00 UTC). Stable assets at https://github.com/${{ github.repository }}/releases/download/${TAG}/" \
               --target main
           fi
           gh release upload "${TAG}" --clobber -- \

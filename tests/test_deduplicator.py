@@ -6,8 +6,10 @@ from unittest.mock import patch
 
 from scripts.src.deduplicator import (
     DeduplicationResult,
+    _canonical_domain,
     _extract_domain_from_url,
     _make_dedup_key,
+    _merge_metadata,
     deduplicate,
 )
 from scripts.src.models import DescriptionCategory, IOCType, ScoredIOC, Source
@@ -161,6 +163,16 @@ class TestDeduplicate:
         result = deduplicate(iocs)
         assert len(result.kept) == 2
 
+    def test_domain_index_canonicalizes(self):
+        """P2-7: parenthesized-domain cross-type index uses canonical domain."""
+        iocs = [
+            _make_scored_ioc("EVIL.COM.", IOCType.DOMAIN, quality_score=50.0),
+            _make_scored_ioc("https://evil.com/path", IOCType.URL, quality_score=90.0),
+        ]
+        result = deduplicate(iocs)
+        assert len(result.kept) == 1
+        assert result.kept[0].ioc_type == IOCType.URL
+
     def test_deterministic_results(self):
         iocs = [_make_scored_ioc("x.com", quality_score=float(i)) for i in range(10)]
         r1 = deduplicate(iocs)
@@ -224,3 +236,50 @@ class TestMakeDedupKey:
     def test_strips_whitespace_and_trailing_dot(self):
         key = _make_dedup_key("  EVIL.COM.  ", IOCType.DOMAIN)
         assert key == "domain|evil.com"
+
+
+# ---------------------------------------------------------------------------
+# _canonical_domain helper
+# ---------------------------------------------------------------------------
+
+
+class TestCanonicalDomain:
+    def test_lowercases_and_strips_trailing_dot(self):
+        assert _canonical_domain("EVIL.COM.") == "evil.com"
+
+    def test_strips_whitespace(self):
+        assert _canonical_domain("  EVIL.COM  ") == "evil.com"
+
+    def test_unchanged_lowercase(self):
+        assert _canonical_domain("evil.com") == "evil.com"
+
+
+# ---------------------------------------------------------------------------
+# _merge_metadata non-mutation
+# ---------------------------------------------------------------------------
+
+
+class TestMergeMetadata:
+    def test_inputs_not_mutated(self):
+        primary = _make_scored_ioc("a.com", quality_score=90.0, source=Source.USOM)
+        secondary = _make_scored_ioc("a.com", quality_score=50.0, source=Source.IHBAR)
+        merged = _merge_metadata(primary, secondary)
+        assert primary.source == Source.USOM
+        assert secondary.source == Source.IHBAR
+        assert merged.source == Source.USOM
+
+    def test_picks_secondary_when_primary_none(self):
+        primary = _make_scored_ioc("a.com", quality_score=90.0, source=None)
+        secondary = _make_scored_ioc("a.com", quality_score=50.0, source=Source.IHBAR)
+        merged = _merge_metadata(primary, secondary)
+        assert merged.source == Source.IHBAR
+        # primary remains untouched
+        assert primary.source is None
+
+    def test_keeps_primary_desc_when_set(self):
+        primary = _make_scored_ioc("a.com", quality_score=90.0, desc=DescriptionCategory.PHISHING)
+        secondary = _make_scored_ioc(
+            "a.com", quality_score=50.0, desc=DescriptionCategory.MALWARE_CMD_CENTER
+        )
+        merged = _merge_metadata(primary, secondary)
+        assert merged.desc == DescriptionCategory.PHISHING

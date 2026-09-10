@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import sqlite3
+from datetime import UTC, datetime
 
 import pytest
 
@@ -87,11 +88,10 @@ class TestNextDNSRegression:
 
 class TestAdGuardRegression:
     def test_stable_output(self, stable_iocs):
-        out1 = generate_adguard(stable_iocs)
-        out2 = generate_adguard(stable_iocs)
-        lines1 = [line for line in out1.split("\n") if not line.startswith("! Last updated")]
-        lines2 = [line for line in out2.split("\n") if not line.startswith("! Last updated")]
-        assert lines1 == lines2
+        ts = datetime(2024, 1, 15, 12, 0, 0, tzinfo=UTC)
+        out1 = generate_adguard(stable_iocs, generated_at=ts)
+        out2 = generate_adguard(stable_iocs, generated_at=ts)
+        assert out1 == out2
 
     def test_domain_count(self, stable_iocs):
         out = generate_adguard(stable_iocs)
@@ -177,8 +177,9 @@ class TestUnboundRegression:
 
 class TestRPZRegression:
     def test_stable_output(self, stable_iocs):
-        out1 = generate_rpz(stable_iocs)
-        out2 = generate_rpz(stable_iocs)
+        ts = datetime(2024, 1, 15, 12, 0, 0, tzinfo=UTC)
+        out1 = generate_rpz(stable_iocs, generated_at=ts)
+        out2 = generate_rpz(stable_iocs, generated_at=ts)
         assert out1 == out2
 
     def test_has_soa(self, stable_iocs):
@@ -188,8 +189,9 @@ class TestRPZRegression:
 
 class TestTechnitiumRegression:
     def test_stable_output(self, stable_iocs):
-        out1 = generate_technitium(stable_iocs)
-        out2 = generate_technitium(stable_iocs)
+        ts = datetime(2024, 1, 15, 12, 0, 0, tzinfo=UTC)
+        out1 = generate_technitium(stable_iocs, generated_at=ts)
+        out2 = generate_technitium(stable_iocs, generated_at=ts)
         assert out1 == out2
 
 
@@ -216,8 +218,9 @@ class TestIpsetRegression:
 
 class TestSuricataRegression:
     def test_stable_output(self, stable_iocs):
-        out1 = generate_suricata(stable_iocs)
-        out2 = generate_suricata(stable_iocs)
+        ts = datetime(2024, 1, 15, 12, 0, 0, tzinfo=UTC)
+        out1 = generate_suricata(stable_iocs, generated_at=ts)
+        out2 = generate_suricata(stable_iocs, generated_at=ts)
         assert out1 == out2
 
     def test_json_lines_count(self, stable_iocs):

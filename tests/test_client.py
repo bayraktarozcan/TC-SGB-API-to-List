@@ -323,6 +323,23 @@ async def test_close_when_already_closed():
 
 
 @pytest.mark.asyncio
+async def test_reopen_after_close():
+    """A closed client can be used again: _get_client re-creates the session."""
+    client = AsyncAPIClient()
+    await client._get_client()
+    first = client._client
+    assert first is not None
+    await client.close()
+    assert client._client is None
+    await client._get_client()
+    second = client._client
+    assert second is not None
+    assert second is not first
+    assert not second.is_closed
+    await client.close()
+
+
+@pytest.mark.asyncio
 async def test_aenter_aexit():
     async with AsyncAPIClient() as client:
         assert client._client is not None
