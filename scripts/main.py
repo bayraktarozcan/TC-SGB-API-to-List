@@ -20,8 +20,10 @@ import sys
 import time
 from datetime import datetime
 from pathlib import Path
+from typing import Any
 
 from dotenv import load_dotenv
+from pydantic import ValidationError
 
 # Ensure the scripts package is importable.
 _SCRIPTS_DIR = Path(__file__).resolve().parent
@@ -50,6 +52,44 @@ def _setup_logging(verbose: bool = False) -> None:
     # Quiet down noisy libraries.
     logging.getLogger("httpx").setLevel(logging.WARNING)
     logging.getLogger("httpcore").setLevel(logging.WARNING)
+
+
+# ---------------------------------------------------------------------------
+# Small helpers
+# ---------------------------------------------------------------------------
+
+
+def _parse_formats(value: str | None) -> list[str] | None:
+    """Split a comma-separated ``--formats`` value into a clean list (or None)."""
+    if not value:
+        return None
+    formats = [fmt.strip() for fmt in value.split(",") if fmt.strip()]
+    return formats or None
+
+
+def _coerce_address_record(raw: dict[str, Any]) -> AddressRecord | None:
+    """Adapt a raw JSON record to an AddressRecord.
+
+    Accepts both the API shape (``url`` key) and the snapshot shape written by
+    ``cmd_fetch`` (``value`` key).  Returns None when neither is usable.
+    """
+    if "url" in raw:
+        try:
+            return AddressRecord.model_validate(raw)
+        except ValidationError:
+            return None
+    if "value" in raw:
+        return AddressRecord(
+            id=raw.get("id", 0),
+            url=raw.get("value") or "",
+            type=raw.get("type") or "",
+            desc=raw.get("desc") or "",
+            source=raw.get("source") or "",
+            date=raw.get("date") or "",
+            criticality_level=raw.get("criticality_level", 10),
+            connectiontype=raw.get("connectiontype") or "",
+        )
+    return None
 
 
 # ---------------------------------------------------------------------------
@@ -104,7 +144,7 @@ async def cmd_fetch(args: argparse.Namespace) -> None:
         print(f"\nSaved {len(raw_data)} records to {raw_path}")
 
         # Generate output files
-        formats = args.formats.split(",") if hasattr(args, "formats") and args.formats else None
+        formats = _parse_formats(args.formats) if hasattr(args, "formats") else None
         results = generate_all(scored, str(output_dir), formats=formats)
 
         print("\n" + stats.summary())
@@ -160,7 +200,7 @@ async def cmd_generate(args: argparse.Namespace) -> None:
     output_dir = Path(args.output)
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    formats = args.formats.split(",") if args.formats else None
+    formats = _parse_formats(args.formats) if hasattr(args, "formats") else None
     results = generate_all(scored, str(output_dir), formats=formats)
 
     print("\nGenerated files:")
@@ -216,7 +256,26 @@ async def cmd_validate(args: argparse.Namespace) -> None:
                 print(f"Error: Input file not found: {input_path}", file=sys.stderr)
                 sys.exit(1)
             raw_data = json.loads(input_path.read_text(encoding="utf-8"))
-            records = [AddressRecord.model_validate(r) for r in raw_data]
+            if not isinstance(raw_data, list):
+                print(
+                    f"Error: Expected a JSON list of records, got {type(raw_data).__name__}.",
+                    file=sys.stderr,
+                )
+                sys.exit(1)
+            records: list[AddressRecord] = []
+            for raw in raw_data:
+                if not isinstance(raw, dict):
+                    print(
+                        "Warning: Skipping record "
+                        f"(expected object, got {type(raw).__name__}): {raw}",
+                        file=sys.stderr,
+                    )
+                    continue
+                record = _coerce_address_record(raw)
+                if record is None:
+                    print(f"Warning: Skipping record (unusable): {raw}", file=sys.stderr)
+                    continue
+                records.append(record)
         else:
             print("Fetching from API...")
             max_pages = (
@@ -295,7 +354,7 @@ async def cmd_health(args: argparse.Namespace) -> None:
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        prog="tc-sgb-intel",
+        prog="tc-sgb",
         description=(
             "TC-SGB Threat Intelligence Pipeline — "
             "Fetch, validate, and export IoCs from the "

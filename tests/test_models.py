@@ -231,6 +231,17 @@ class TestPipelineStats:
         assert "Fetched:          100" in s
         assert "By type:" in s
 
+    def test_summary_ordering(self):
+        """Quality stage is displayed before dedup stage."""
+        ps = PipelineStats(
+            after_validation=80,
+            after_normalization=75,
+            after_quality=50,
+            after_dedup=40,
+        )
+        s = ps.summary()
+        assert s.index("After quality:") < s.index("After dedup:")
+
     def test_summary_with_errors(self):
         ps = PipelineStats(errors=["err1", "err2", "err3"])
         s = ps.summary()

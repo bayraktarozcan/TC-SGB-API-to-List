@@ -33,6 +33,11 @@ def _extract_domain_from_url(url: str) -> str | None:
     return None
 
 
+def _canonical_domain(value: str) -> str:
+    """Canonical form of a domain value for the cross-type index."""
+    return value.strip().lower().rstrip(".")
+
+
 def _make_dedup_key(value: str, ioc_type: IOCType) -> str:
     """Create a canonical dedup key."""
     value = value.strip().lower().rstrip(".")
@@ -50,14 +55,21 @@ def _make_dedup_key(value: str, ioc_type: IOCType) -> str:
 
 
 def _merge_metadata(primary: ScoredIOC, secondary: ScoredIOC) -> ScoredIOC:
-    """Merge missing metadata from secondary into primary."""
-    if primary.source is None:
-        primary.source = secondary.source
-    if primary.desc is None:
-        primary.desc = secondary.desc
-    if primary.connectiontype is None:
-        primary.connectiontype = secondary.connectiontype
-    return primary
+    """Merge missing metadata from ``secondary`` into a copy of ``primary``.
+
+    Returns a NEW ScoredIOC — the inputs are never mutated.
+    """
+    return primary.model_copy(
+        update={
+            "source": primary.source if primary.source is not None else secondary.source,
+            "desc": primary.desc if primary.desc is not None else secondary.desc,
+            "connectiontype": (
+                primary.connectiontype
+                if primary.connectiontype is not None
+                else secondary.connectiontype
+            ),
+        }
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -155,7 +167,7 @@ def deduplicate(
 
         primary[pkey] = ioc
         if ioc.ioc_type == IOCType.DOMAIN:
-            domain_index[ioc.value] = pkey
+            domain_index[_canonical_domain(ioc.value)] = pkey
 
     kept = list(primary.values())
     removed_count = len(scored_iocs) - len(kept)

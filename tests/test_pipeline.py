@@ -119,6 +119,14 @@ class TestPipelineValidate:
         assert len(validated) >= 3
         assert rejected >= 1
 
+    def test_skip_validation_returns_all_as_domain(self, records):
+        """skip_validation marks every record as DOMAIN and rejects nothing."""
+        p = Pipeline(skip_validation=True)
+        validated, rejected = p._stage_validate(records)
+        assert rejected == 0
+        assert len(validated) == len(records)
+        assert all(v.ioc_type == IOCType.DOMAIN for v in validated)
+
     def test_empty_record_rejected(self, pipeline, records):
         _validated, rejected = pipeline._stage_validate(records)
         assert rejected >= 1
@@ -383,6 +391,26 @@ class TestPipelineExceptionBranches:
         with patch("scripts.src.pipeline.score_ioc", side_effect=fake_score):
             scored, rejected = p._stage_quality([n1])
         assert len(scored) == 0
+        assert rejected == 1
+
+    def test_quality_rejects_above_max_criticality(self):
+        """Line 186: score_ioc returns criticality above max_criticality."""
+        from scripts.src.models import NormalizedIOC, ScoredIOC
+
+        p = Pipeline(min_quality_score=0, max_criticality=1)
+        n1 = NormalizedIOC(value="a.com", ioc_type=IOCType.DOMAIN, criticality_level=1)
+        n2 = NormalizedIOC(value="b.com", ioc_type=IOCType.DOMAIN, criticality_level=5)
+
+        def fake_score(n):
+            cl = 1 if n.value == "a.com" else 5
+            return ScoredIOC(
+                value=n.value, ioc_type=n.ioc_type, quality_score=90.0, criticality_level=cl
+            )
+
+        with patch("scripts.src.pipeline.score_ioc", side_effect=fake_score):
+            scored, rejected = p._stage_quality([n1, n2])
+        assert len(scored) == 1
+        assert scored[0].value == "a.com"
         assert rejected == 1
 
 

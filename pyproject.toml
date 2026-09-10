@@ -114,10 +114,6 @@ warn_unreachable = true
 show_error_codes = true
 pretty = true
 
-[[tool.mypy.overrides]]
-module = ["tests.*"]
-disallow_untyped_defs = false
-
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = ["test_*.py"]

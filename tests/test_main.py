@@ -11,6 +11,8 @@ from unittest.mock import AsyncMock, patch
 import pytest
 
 from scripts.main import (
+    _coerce_address_record,
+    _parse_formats,
     build_parser,
     cmd_fetch,
     cmd_generate,
@@ -20,6 +22,7 @@ from scripts.main import (
     main,
 )
 from scripts.src.models import (
+    AddressRecord,
     ConnectionTypeRecord,
     DescriptionRecord,
     PipelineStats,
@@ -49,6 +52,62 @@ def _make_args(**overrides) -> Namespace:
 
 def _write_raw_json(path: Path, items: list[dict]) -> None:
     path.write_text(json.dumps(items, indent=2, ensure_ascii=False), encoding="utf-8")
+
+
+# ---------------------------------------------------------------------------
+# _parse_formats / _coerce_address_record
+# ---------------------------------------------------------------------------
+
+
+class TestParseFormats:
+    def test_none_returns_none(self):
+        assert _parse_formats(None) is None
+
+    def test_empty_string_returns_none(self):
+        assert _parse_formats("") is None
+        assert _parse_formats("   ") is None
+
+    def test_splits_and_strips(self):
+        assert _parse_formats("adguard, rpz ,technitium") == ["adguard", "rpz", "technitium"]
+
+    def test_all_empty_parts_returns_none(self):
+        assert _parse_formats(" , , ") is None
+
+
+class TestCoerceAddressRecord:
+    def test_url_shape(self):
+        record = _coerce_address_record({"id": 7, "url": "evil.com", "type": "domain"})
+        assert record is not None
+        assert record.url == "evil.com"
+        assert record.id == 7
+
+    def test_value_shape(self):
+        record = _coerce_address_record(
+            {
+                "id": 7,
+                "value": "evil.com",
+                "type": "domain",
+                "desc": "PH",
+                "source": "US",
+                "date": "2024-01-01",
+                "criticality_level": 2,
+                "connectiontype": "PH",
+            }
+        )
+        assert record is not None
+        assert record.url == "evil.com"
+        assert record.criticality_level == 2
+
+    def test_url_shape_wins_over_value(self):
+        record = _coerce_address_record({"id": 1, "url": "a.com", "value": "b.com"})
+        assert record is not None
+        assert record.url == "a.com"
+
+    def test_malformed_url_shape_returns_none(self):
+        assert _coerce_address_record({"url": "a.com", "value": "b.com"}) is None
+
+    def test_missing_both_returns_none(self):
+        assert _coerce_address_record({"id": 1}) is None
 
 
 # ---------------------------------------------------------------------------
@@ -228,6 +287,84 @@ class TestCmdValidate:
         assert "4 valid" in out
         assert "0 rejected" in out
 
+    async def test_validate_with_scored_raw_records(self, temp_dir: Path, capsys):
+        """P0-1: records written by ``cmd_fetch`` (``value`` key) are validated correctly."""
+        src = temp_dir / "raw_records.json"
+        items = [
+            {
+                "id": 101,
+                "value": "example-phishing.net",
+                "type": "domain",
+                "desc": "PH",
+                "source": "US",
+                "date": "2024-01-01",
+                "criticality_level": 2,
+                "connectiontype": "PH",
+            },
+            {
+                "id": 102,
+                "value": "cnc-malware.xyz",
+                "type": "domain",
+                "desc": "MC",
+                "source": "SO",
+                "date": "2024-01-02",
+                "criticality_level": 1,
+                "connectiontype": "BC",
+            },
+            {
+                "id": 103,
+                "value": "192.0.2.1",
+                "type": "ip",
+                "desc": "CA",
+                "source": "RS",
+                "date": "2024-01-03",
+                "criticality_level": 3,
+                "connectiontype": "AC",
+            },
+            {
+                "id": 104,
+                "value": "https://drop.evil.top/mal.exe",
+                "type": "url",
+                "desc": "MU",
+                "source": "IH",
+                "date": "2024-01-04",
+                "criticality_level": 4,
+                "connectiontype": "MF",
+            },
+        ]
+        _write_raw_json(src, items)
+        with patch("scripts.main.AsyncAPIClient", return_value=AsyncMock()):
+            await cmd_validate(_make_args(input=str(src)))
+        out = capsys.readouterr().out
+        assert "4 valid" in out
+        assert "0 rejected" in out
+
+    async def test_validate_skips_non_dict_records(self, temp_dir: Path, capsys):
+        src = temp_dir / "raw_records.json"
+        _write_raw_json(src, ["not-a-dict", 123, None])
+        with patch("scripts.main.AsyncAPIClient", return_value=AsyncMock()):
+            await cmd_validate(_make_args(input=str(src)))
+        captured = capsys.readouterr()
+        assert "0 valid" in captured.out
+        assert "Skipping record" in captured.err
+
+    async def test_validate_skips_malformed_records(self, temp_dir: Path, capsys):
+        src = temp_dir / "raw_records.json"
+        _write_raw_json(src, [{"no_value_or_url": True}])
+        with patch("scripts.main.AsyncAPIClient", return_value=AsyncMock()):
+            await cmd_validate(_make_args(input=str(src)))
+        captured = capsys.readouterr()
+        assert "0 valid" in captured.out
+        assert "Skipping record" in captured.err
+
+    async def test_validate_rejects_non_list_json(self, temp_dir: Path):
+        src = temp_dir / "raw_records.json"
+        src.write_text('{"bad": "not-a-list"}', encoding="utf-8")
+        with patch("scripts.main.AsyncAPIClient", return_value=AsyncMock()):
+            with pytest.raises(SystemExit) as exc:
+                await cmd_validate(_make_args(input=str(src)))
+            assert exc.value.code == 1
+
     async def test_validate_missing_input(self, temp_dir: Path):
         with (
             patch("scripts.main.AsyncAPIClient", return_value=AsyncMock()),
@@ -246,6 +383,37 @@ class TestCmdValidate:
 
         out = capsys.readouterr().out
         assert "rejected" in out
+
+    async def test_validate_fetch_from_api(self, capsys):
+        client = AsyncMock()
+        client.fetch_addresses = AsyncMock(
+            return_value=[
+                AddressRecord(
+                    id=1,
+                    url="evil.com",
+                    type="domain",
+                    desc="PH",
+                    source="US",
+                    date="2024-01-01",
+                    criticality_level=3,
+                    connectiontype="PH",
+                ),
+                AddressRecord(
+                    id=2,
+                    url="bad.net",
+                    type="domain",
+                    desc="MC",
+                    source="SO",
+                    date="2024-01-02",
+                    criticality_level=1,
+                    connectiontype="BC",
+                ),
+            ]
+        )
+        with patch("scripts.main.AsyncAPIClient", return_value=client):
+            await cmd_validate(_make_args(input=None, max_records=100))
+        out = capsys.readouterr().out
+        assert "2 valid" in out
 
 
 # ---------------------------------------------------------------------------
