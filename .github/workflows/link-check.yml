@@ -29,7 +29,9 @@ jobs:
         uses: lycheeverse/lychee-action@v2
         with:
           # file:// = author-machine absolute paths, never valid in CI
+          # compare/{...} = release-note template placeholders, filled per release
           args: >-
             --no-progress --verbose --max-retries 2 --exclude '^file://'
+            --exclude 'compare/%7B'
             './**/*.md'
           fail: true
