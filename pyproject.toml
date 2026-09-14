@@ -10,7 +10,7 @@ readme = "README.md"
 license = "MIT"
 requires-python = ">=3.11"
 authors = [
-    { name = "Ozcan Bayraktar", email = "bayraktarozcan@users.noreply.github.com" },
+    { name = "Ozcan Bayraktar" },
 ]
 classifiers = [
     "Development Status :: 4 - Beta",
