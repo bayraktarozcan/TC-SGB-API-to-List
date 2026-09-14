@@ -1,0 +1,35 @@
+# TC-SGB-API-to-List — Link Check
+# Checks Markdown links weekly and on PRs touching docs. Fails only in Actions tab.
+
+name: "Link Check"
+
+on:
+  schedule:
+    - cron: "30 6 * * 1"
+  pull_request:
+    branches: [main]
+    paths:
+      - "**/*.md"
+  workflow_dispatch:
+
+concurrency:
+  group: link-check-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  lychee:
+    name: Check Links
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Check links
+        uses: lycheeverse/lychee-action@v2
+        with:
+          # file:// = author-machine absolute paths, never valid in CI
+          args: >-
+            --no-progress --verbose --max-retries 2 --exclude '^file://'
+            './**/*.md'
+          fail: true

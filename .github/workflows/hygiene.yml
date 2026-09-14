@@ -1,0 +1,33 @@
+# TC-SGB-API-to-List — Hygiene
+# Lints workflow files with actionlint. Fails only in Actions tab.
+# Note: codespell was evaluated and rejected — it flags correct Turkish words
+# (bu, sistem, grup) and splits non-ASCII words into false fragments (nce, lke).
+
+name: "Hygiene"
+
+on:
+  schedule:
+    - cron: "45 6 * * 1"
+  pull_request:
+    branches: [main]
+    paths:
+      - ".github/workflows/**"
+  workflow_dispatch:
+
+concurrency:
+  group: hygiene-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  actionlint:
+    name: Lint Workflows
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Run actionlint
+        uses: rhysd/actionlint@v1.7.12
+        with:
+          fail-on-error: true
