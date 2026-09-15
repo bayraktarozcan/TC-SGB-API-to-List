@@ -20,7 +20,11 @@ permissions:
 
 jobs:
   auto-merge:
-    if: contains(github.event.pull_request.labels.*.name, 'auto-merge')
+    # Same-repo heads only: a fork PR must never reach the merge steps,
+    # even if mislabeled. Scheduled + owner PRs are always same-repo.
+    if: >-
+      contains(github.event.pull_request.labels.*.name, 'auto-merge') &&
+      github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
