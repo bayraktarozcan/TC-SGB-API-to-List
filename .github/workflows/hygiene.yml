@@ -29,3 +29,17 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - name: Run actionlint
         uses: rhysd/actionlint@914e7df21a07ef503a81201c76d2b11c789d3fca # v1.7.12
+      - name: Verify YAML files are LF
+        run: |
+          set -euo pipefail
+          : > "$RUNNER_TEMP/yaml_crlf.txt"
+          while IFS= read -r -d '' f; do
+            if LC_ALL=C grep -q "$(printf '\r')" -- "$f"; then
+              printf '%s\n' "$f" >> "$RUNNER_TEMP/yaml_crlf.txt"
+            fi
+          done < <(git ls-files -z '*.yml' '*.yaml')
+          if [ -s "$RUNNER_TEMP/yaml_crlf.txt" ]; then
+            echo "CRLF found in tracked YAML files:" >&2
+            cat "$RUNNER_TEMP/yaml_crlf.txt" >&2
+            exit 1
+          fi
