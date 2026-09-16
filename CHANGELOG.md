@@ -7,6 +7,16 @@
 All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [Unreleased]
+
+### Added
+
+- **GitLab CI pipeline** — new `.gitlab-ci.yml` mirrors the GitHub quality gates (lint, test, security, build) on GitLab shared runners, with pip caching, coverage reporting, and pipeline/coverage badges in the README
+
+### Changed
+
+- **Weekday schedule** — the scheduled fetch pipeline now runs weekdays at 06:00 UTC (`cron: "0 6 * * 1-5"`) instead of Friday 22:00 UTC; the repo diet removed the LFS/storage pressure that motivated the weekly cadence, so IoC feeds refresh ~4× more often
+
 ## [v0.3.1.0] — 2026-09-10
 
 ### Added
@@ -149,6 +159,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 Bu projedeki tüm dikkat çekici değişiklikler bu dosyada belgelenecektir.
 Biçim, [Keep a Changelog](https://keepachangelog.com/)'a dayanmaktadır.
+
+## [Yayınlanmamış]
+
+### Eklenen
+
+- **GitLab CI hattı** — yeni `.gitlab-ci.yml`, GitHub kalite kapılarını (lint, test, güvenlik, derleme) GitLab paylaşımlı koşucularında yansıtır; pip önbelleği, kapsama raporu ve README'de hat/kapsama rozetleriyle
+
+### Değiştirilen
+
+- **Hafta içi zamanlama** — zamanlanmış çekim hattı, Cuma 22:00 UTC yerine artık hafta içi 06:00 UTC'de çalışır (`cron: "0 6 * * 1-5"`); repo diyeti haftalık düzeni gerektiren LFS/depolama baskısını kaldırdığı için IoC akışları ~4 kat daha sık tazelenir
 
 ## [v0.3.1.0] — 2026-09-10
 

@@ -1,0 +1,86 @@
+---
+image: python:3.11-slim
+
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  PIP_NO_CACHE_DIR: "0"
+
+default:
+  interruptible: true
+  retry:
+    max: 2
+    when:
+      - runner_system_failure
+      - stuck_or_timeout_failure
+
+cache:
+  key:
+    files:
+      - requirements.txt
+      - pyproject.toml
+  paths:
+    - .cache/pip
+
+stages:
+  - lint
+  - test
+  - security
+  - build
+
+.deps_base: &deps_base
+  before_script:
+    - python -m pip install --upgrade pip setuptools wheel
+    - pip install -e ".[dev]"
+
+lint:
+  <<: *deps_base
+  stage: lint
+  script:
+    - ruff check scripts/ tests/
+    - ruff format --check scripts/ tests/
+    - mypy scripts/
+
+test:
+  <<: *deps_base
+  stage: test
+  needs:
+    - lint
+  coverage: '/TOTAL.*(\d+(?:\.\d+)?)%/'
+  script:
+    - pytest --cov=scripts --cov-report=xml --cov-report=term-missing -v
+  artifacts:
+    when: always
+    paths:
+      - coverage.xml
+    expire_in: 7 days
+
+security:
+  <<: *deps_base
+  stage: security
+  needs:
+    - lint
+  script:
+    - pip-audit --ignore-vuln PYSEC-2026-1845 --ignore-vuln PYSEC-2026-3447
+    - bandit -r scripts/ -f json -o bandit-report.json
+    - bandit -r scripts/
+  artifacts:
+    when: always
+    paths:
+      - bandit-report.json
+    expire_in: 7 days
+
+build:
+  stage: build
+  needs:
+    - test
+    - security
+  before_script:
+    - python -m pip install --upgrade pip setuptools wheel
+    - pip install build
+  script:
+    - python -m build
+  artifacts:
+    when: on_success
+    paths:
+      - dist/
+    expire_in: 7 days

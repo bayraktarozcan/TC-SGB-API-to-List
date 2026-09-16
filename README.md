@@ -7,6 +7,8 @@
 **Automated Threat Intelligence Pipeline for the T.C. Siber Güvenlik Başkanlığı (Cyber Security Presidency) API**
 
 [![CI](https://github.com/bayraktarozcan/TC-SGB-API-to-List/actions/workflows/ci.yml/badge.svg)](https://github.com/bayraktarozcan/TC-SGB-API-to-List/actions/workflows/ci.yml)
+[![GitLab Pipeline](https://gitlab.com/bayraktarozcan/TC-SGB-API-to-List/badges/main/pipeline.svg)](https://gitlab.com/bayraktarozcan/TC-SGB-API-to-List/-/pipelines)
+[![GitLab Coverage](https://gitlab.com/bayraktarozcan/TC-SGB-API-to-List/badges/main/coverage.svg)](https://gitlab.com/bayraktarozcan/TC-SGB-API-to-List/-/graphs/main/charts)
 [![Scheduled Pipeline](https://github.com/bayraktarozcan/TC-SGB-API-to-List/actions/workflows/schedule.yml/badge.svg)](https://github.com/bayraktarozcan/TC-SGB-API-to-List/actions/workflows/schedule.yml)
 [![CodeQL](https://github.com/bayraktarozcan/TC-SGB-API-to-List/actions/workflows/codeql.yml/badge.svg)](https://github.com/bayraktarozcan/TC-SGB-API-to-List/actions/workflows/codeql.yml)
 [![Pages](https://github.com/bayraktarozcan/TC-SGB-API-to-List/actions/workflows/deploy.yml/badge.svg)](https://github.com/bayraktarozcan/TC-SGB-API-to-List/actions/workflows/deploy.yml)
@@ -33,7 +35,7 @@ TC-SGB-API-to-List fetches IoC (Indicator of Compromise) data from the TC SGB pu
   - Firewall: nftables, ipset
   - IDS/IPS: Suricata, CrowdSec
   - Data: CSV, JSON, YAML, SQLite
-- **Scheduled Pipeline** — GitHub Actions cron for automated updates every week (Friday 22:00 UTC)
+- **Scheduled Pipeline** — GitHub Actions cron for automated updates on weekdays (Mon–Fri 06:00 UTC)
 - **Bilingual Documentation** — Full English and Turkish documentation
 
 ## Quick Start
@@ -66,7 +68,7 @@ tc-sgb health
 
 ### Data Download
 
-Latest pre-generated IoC outputs are published automatically (weekly, Friday 22:00 UTC) to the rolling GitHub Release `ioc-data`. The five large-format files are distributed through stable download URLs (small formats remain tracked in the `output/` directory):
+Latest pre-generated IoC outputs are published automatically (Mon–Fri, 06:00 UTC) to the rolling GitHub Release `ioc-data`. The five large-format files are distributed through stable download URLs (small formats remain tracked in the `output/` directory):
 
 | Format | File | Size (approx.) |
 |--------|------|----------------|
@@ -183,6 +185,8 @@ This tool is provided as-is for legitimate cybersecurity research and defense pu
 **T.C. Siber Güvenlik Başkanlığı (Cyber Security Presidency) API'si için Otomatik Tehdit İstihbaratı Hattı**
 
 [![CI](https://github.com/bayraktarozcan/TC-SGB-API-to-List/actions/workflows/ci.yml/badge.svg)](https://github.com/bayraktarozcan/TC-SGB-API-to-List/actions/workflows/ci.yml)
+[![GitLab Pipeline](https://gitlab.com/bayraktarozcan/TC-SGB-API-to-List/badges/main/pipeline.svg)](https://gitlab.com/bayraktarozcan/TC-SGB-API-to-List/-/pipelines)
+[![GitLab Coverage](https://gitlab.com/bayraktarozcan/TC-SGB-API-to-List/badges/main/coverage.svg)](https://gitlab.com/bayraktarozcan/TC-SGB-API-to-List/-/graphs/main/charts)
 [![Scheduled Pipeline](https://github.com/bayraktarozcan/TC-SGB-API-to-List/actions/workflows/schedule.yml/badge.svg)](https://github.com/bayraktarozcan/TC-SGB-API-to-List/actions/workflows/schedule.yml)
 [![CodeQL](https://github.com/bayraktarozcan/TC-SGB-API-to-List/actions/workflows/codeql.yml/badge.svg)](https://github.com/bayraktarozcan/TC-SGB-API-to-List/actions/workflows/codeql.yml)
 [![Pages](https://github.com/bayraktarozcan/TC-SGB-API-to-List/actions/workflows/deploy.yml/badge.svg)](https://github.com/bayraktarozcan/TC-SGB-API-to-List/actions/workflows/deploy.yml)
@@ -209,7 +213,7 @@ TC-SGB-API-to-List, TC SGB kamu API'sinden (`https://siberguvenlik.gov.tr/api/`)
   - Güvenlik Duvarı: nftables, ipset
   - IDS/IPS: Suricata, CrowdSec
   - Veri: CSV, JSON, YAML, SQLite
-- **Zamanlanmış Hat** — Her hafta (Cuma 22:00 UTC) otomatik güncellemeler için GitHub Actions cron zamanlayıcısı
+- **Zamanlanmış Hat** — Hafta içi her gün (Pzt–Cum 06:00 UTC) otomatik güncellemeler için GitHub Actions cron zamanlayıcısı
 - **Çift Dilli Dokümantasyon** — Tam İngilizce ve Türkçe dokümantasyon
 
 ## Hızlı Başlangıç
@@ -242,7 +246,7 @@ tc-sgb health
 
 ### Veri İndirme
 
-En güncel önceden üretilmiş IoC çıktıları (her hafta, Cuma 22:00 UTC) yuvarlanan GitHub Release'i `ioc-data`'da otomatik olarak yayınlanır. Beş büyük biçim dosyası kararlı indirme bağlantıları üzerinden dağıtılır (küçük biçimler `output/` dizininde izlenmeye devam eder):
+En güncel önceden üretilmiş IoC çıktıları (Pzt–Cum, 06:00 UTC) yuvarlanan GitHub Release'i `ioc-data`'da otomatik olarak yayınlanır. Beş büyük biçim dosyası kararlı indirme bağlantıları üzerinden dağıtılır (küçük biçimler `output/` dizininde izlenmeye devam eder):
 
 | Biçim | Dosya | Yaklaşık Boyut |
 |-------|-------|----------------|
