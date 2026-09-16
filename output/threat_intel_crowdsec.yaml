@@ -1,6 +1,342 @@
 - decisions:
   - duration: 168h
     origin: TC-SGB-Intel
+    scenario: 'Threat intelligence: MI'
+    scope: IP
+    type: ban
+    value: 45.155.90.234
+- decisions:
+  - duration: 168h
+    origin: TC-SGB-Intel
+    scenario: 'Threat intelligence: MI'
+    scope: IP
+    type: ban
+    value: 91.203.61.27
+- decisions:
+  - duration: 168h
+    origin: TC-SGB-Intel
+    scenario: 'Threat intelligence: CA'
+    scope: IP
+    type: ban
+    value: 102.220.161.87
+- decisions:
+  - duration: 168h
+    origin: TC-SGB-Intel
+    scenario: 'Threat intelligence: CA'
+    scope: IP
+    type: ban
+    value: 185.177.72.66
+- decisions:
+  - duration: 168h
+    origin: TC-SGB-Intel
+    scenario: 'Threat intelligence: PH'
+    scope: IP
+    type: ban
+    value: 64.89.163.46
+- decisions:
+  - duration: 168h
+    origin: TC-SGB-Intel
+    scenario: 'Threat intelligence: MC'
+    scope: IP
+    type: ban
+    value: 206.166.251.164
+- decisions:
+  - duration: 168h
+    origin: TC-SGB-Intel
+    scenario: 'Threat intelligence: MC'
+    scope: IP
+    type: ban
+    value: 45.32.102.91
+- decisions:
+  - duration: 168h
+    origin: TC-SGB-Intel
+    scenario: 'Threat intelligence: MC'
+    scope: IP
+    type: ban
+    value: 62.60.135.34
+- decisions:
+  - duration: 168h
+    origin: TC-SGB-Intel
+    scenario: 'Threat intelligence: MC'
+    scope: IP
+    type: ban
+    value: 72.62.67.33
+- decisions:
+  - duration: 168h
+    origin: TC-SGB-Intel
+    scenario: 'Threat intelligence: MC'
+    scope: IP
+    type: ban
+    value: 74.93.203.1
+- decisions:
+  - duration: 168h
+    origin: TC-SGB-Intel
+    scenario: 'Threat intelligence: MC'
+    scope: IP
+    type: ban
+    value: 49.207.2.143
+- decisions:
+  - duration: 168h
+    origin: TC-SGB-Intel
+    scenario: 'Threat intelligence: MC'
+    scope: IP
+    type: ban
+    value: 103.125.162.173
+- decisions:
+  - duration: 168h
+    origin: TC-SGB-Intel
+    scenario: 'Threat intelligence: CA'
+    scope: IP
+    type: ban
+    value: 180.76.240.16
+- decisions:
+  - duration: 168h
+    origin: TC-SGB-Intel
+    scenario: 'Threat intelligence: CA'
+    scope: IP
+    type: ban
+    value: 180.149.231.6
+- decisions:
+  - duration: 168h
+    origin: TC-SGB-Intel
+    scenario: 'Threat intelligence: MC'
+    scope: IP
+    type: ban
+    value: 87.120.196.171
+- decisions:
+  - duration: 168h
+    origin: TC-SGB-Intel
+    scenario: 'Threat intelligence: MC'
+    scope: IP
+    type: ban
+    value: 31.77.9.121
+- decisions:
+  - duration: 168h
+    origin: TC-SGB-Intel
+    scenario: 'Threat intelligence: MC'
+    scope: IP
+    type: ban
+    value: 95.85.251.18
+- decisions:
+  - duration: 168h
+    origin: TC-SGB-Intel
+    scenario: 'Threat intelligence: MC'
+    scope: IP
+    type: ban
+    value: 193.148.56.97
+- decisions:
+  - duration: 168h
+    origin: TC-SGB-Intel
+    scenario: 'Threat intelligence: MC'
+    scope: IP
+    type: ban
+    value: 62.106.66.148
+- decisions:
+  - duration: 168h
+    origin: TC-SGB-Intel
+    scenario: 'Threat intelligence: MC'
+    scope: IP
+    type: ban
+    value: 8.218.50.207
+- decisions:
+  - duration: 168h
+    origin: TC-SGB-Intel
+    scenario: 'Threat intelligence: MI'
+    scope: IP
+    type: ban
+    value: 124.167.20.113
+- decisions:
+  - duration: 168h
+    origin: TC-SGB-Intel
+    scenario: 'Threat intelligence: MI'
+    scope: IP
+    type: ban
+    value: 200.52.196.233
+- decisions:
+  - duration: 168h
+    origin: TC-SGB-Intel
+    scenario: 'Threat intelligence: MI'
+    scope: IP
+    type: ban
+    value: 153.117.50.248
+- decisions:
+  - duration: 168h
+    origin: TC-SGB-Intel
+    scenario: 'Threat intelligence: MI'
+    scope: IP
+    type: ban
+    value: 45.148.10.240
+- decisions:
+  - duration: 168h
+    origin: TC-SGB-Intel
+    scenario: 'Threat intelligence: MI'
+    scope: IP
+    type: ban
+    value: 185.79.139.16
+- decisions:
+  - duration: 168h
+    origin: TC-SGB-Intel
+    scenario: 'Threat intelligence: MI'
+    scope: IP
+    type: ban
+    value: 171.244.37.97
+- decisions:
+  - duration: 168h
+    origin: TC-SGB-Intel
+    scenario: 'Threat intelligence: MI'
+    scope: IP
+    type: ban
+    value: 112.109.219.147
+- decisions:
+  - duration: 168h
+    origin: TC-SGB-Intel
+    scenario: 'Threat intelligence: MI'
+    scope: IP
+    type: ban
+    value: 87.236.176.187
+- decisions:
+  - duration: 168h
+    origin: TC-SGB-Intel
+    scenario: 'Threat intelligence: MI'
+    scope: IP
+    type: ban
+    value: 45.148.10.121
+- decisions:
+  - duration: 168h
+    origin: TC-SGB-Intel
+    scenario: 'Threat intelligence: MI'
+    scope: IP
+    type: ban
+    value: 91.92.40.236
+- decisions:
+  - duration: 168h
+    origin: TC-SGB-Intel
+    scenario: 'Threat intelligence: MI'
+    scope: IP
+    type: ban
+    value: 71.30.205.149
+- decisions:
+  - duration: 168h
+    origin: TC-SGB-Intel
+    scenario: 'Threat intelligence: MI'
+    scope: IP
+    type: ban
+    value: 80.97.160.31
+- decisions:
+  - duration: 168h
+    origin: TC-SGB-Intel
+    scenario: 'Threat intelligence: MI'
+    scope: IP
+    type: ban
+    value: 64.89.160.222
+- decisions:
+  - duration: 168h
+    origin: TC-SGB-Intel
+    scenario: 'Threat intelligence: MI'
+    scope: IP
+    type: ban
+    value: 94.154.43.69
+- decisions:
+  - duration: 168h
+    origin: TC-SGB-Intel
+    scenario: 'Threat intelligence: MI'
+    scope: IP
+    type: ban
+    value: 77.239.124.131
+- decisions:
+  - duration: 168h
+    origin: TC-SGB-Intel
+    scenario: 'Threat intelligence: MC'
+    scope: IP
+    type: ban
+    value: 155.254.120.23
+- decisions:
+  - duration: 168h
+    origin: TC-SGB-Intel
+    scenario: 'Threat intelligence: MC'
+    scope: IP
+    type: ban
+    value: 185.125.188.57
+- decisions:
+  - duration: 168h
+    origin: TC-SGB-Intel
+    scenario: 'Threat intelligence: MC'
+    scope: IP
+    type: ban
+    value: 185.125.188.58
+- decisions:
+  - duration: 168h
+    origin: TC-SGB-Intel
+    scenario: 'Threat intelligence: MC'
+    scope: IP
+    type: ban
+    value: 185.125.188.59
+- decisions:
+  - duration: 168h
+    origin: TC-SGB-Intel
+    scenario: 'Threat intelligence: MC'
+    scope: IP
+    type: ban
+    value: 45.61.176.88
+- decisions:
+  - duration: 168h
+    origin: TC-SGB-Intel
+    scenario: 'Threat intelligence: MC'
+    scope: IP
+    type: ban
+    value: 185.125.188.60
+- decisions:
+  - duration: 168h
+    origin: TC-SGB-Intel
+    scenario: 'Threat intelligence: MC'
+    scope: IP
+    type: ban
+    value: 137.184.111.69
+- decisions:
+  - duration: 168h
+    origin: TC-SGB-Intel
+    scenario: 'Threat intelligence: MC'
+    scope: IP
+    type: ban
+    value: 220.246.124.92
+- decisions:
+  - duration: 168h
+    origin: TC-SGB-Intel
+    scenario: 'Threat intelligence: MC'
+    scope: IP
+    type: ban
+    value: 185.190.58.172
+- decisions:
+  - duration: 168h
+    origin: TC-SGB-Intel
+    scenario: 'Threat intelligence: MC'
+    scope: IP
+    type: ban
+    value: 105.188.75.16
+- decisions:
+  - duration: 168h
+    origin: TC-SGB-Intel
+    scenario: 'Threat intelligence: MC'
+    scope: IP
+    type: ban
+    value: 223.144.227.110
+- decisions:
+  - duration: 168h
+    origin: TC-SGB-Intel
+    scenario: 'Threat intelligence: MC'
+    scope: IP
+    type: ban
+    value: 178.62.63.125
+- decisions:
+  - duration: 168h
+    origin: TC-SGB-Intel
+    scenario: 'Threat intelligence: MC'
+    scope: IP
+    type: ban
+    value: 182.62.201.69
+- decisions:
+  - duration: 168h
+    origin: TC-SGB-Intel
     scenario: 'Threat intelligence: MC'
     scope: IP
     type: ban
