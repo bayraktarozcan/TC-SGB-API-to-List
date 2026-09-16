@@ -13,6 +13,13 @@ default:
       - runner_system_failure
       - stuck_or_timeout_failure
 
+workflow:
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_PIPELINE_SOURCE == "pipeline"
+    - when: never
+
 cache:
   key:
     files:
