@@ -119,13 +119,21 @@ class TestPipelineValidate:
         assert len(validated) >= 3
         assert rejected >= 1
 
-    def test_skip_validation_returns_all_as_domain(self, records):
-        """skip_validation marks every record as DOMAIN and rejects nothing."""
+    def test_skip_validation_passes_and_infers_types(self, records):
+        """skip_validation rejects nothing and infers IoC types."""
         p = Pipeline(skip_validation=True)
         validated, rejected = p._stage_validate(records)
         assert rejected == 0
         assert len(validated) == len(records)
-        assert all(v.ioc_type == IOCType.DOMAIN for v in validated)
+        types = {v.ioc_type for v in validated}
+        assert IOCType.DOMAIN in types
+        assert IOCType.IP in types
+
+    def test_skip_validation_empty_value_defaults_to_domain(self):
+        p = Pipeline(skip_validation=True)
+        validated, rejected = p._stage_validate([AddressRecord(id=1, url="", type="")])
+        assert rejected == 0
+        assert validated[0].ioc_type == IOCType.DOMAIN
 
     def test_empty_record_rejected(self, pipeline, records):
         _validated, rejected = pipeline._stage_validate(records)

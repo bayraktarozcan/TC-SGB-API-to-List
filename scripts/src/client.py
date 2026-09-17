@@ -49,10 +49,18 @@ class AsyncAPIClient:
         rate_limit: float | None = None,
         timeout: float | None = None,
     ):
-        self.base_url = (base_url or os.getenv("TC_SGB_API_BASE_URL") or BASE_URL).rstrip("/")
-        self.max_retries = max_retries or int(os.getenv("TC_SGB_MAX_RETRIES", "3"))
-        self.rate_limit = rate_limit or float(os.getenv("TC_SGB_RATE_LIMIT_PER_SECOND", "5"))
-        self.timeout = timeout or float(os.getenv("TC_SGB_REQUEST_TIMEOUT", "60"))
+        self.base_url = (base_url or BASE_URL).rstrip("/")
+        self.max_retries = (
+            max_retries if max_retries is not None else int(os.getenv("TC_SGB_MAX_RETRIES", "3"))
+        )
+        self.rate_limit = (
+            rate_limit
+            if rate_limit is not None
+            else float(os.getenv("TC_SGB_RATE_LIMIT_PER_SECOND", "5"))
+        )
+        self.timeout = (
+            timeout if timeout is not None else float(os.getenv("TC_SGB_REQUEST_TIMEOUT", "60"))
+        )
         self._last_request_time: float = 0.0
         self._request_count: int = 0
         self._client: httpx.AsyncClient | None = None
@@ -108,7 +116,7 @@ class AsyncAPIClient:
                 if response.status_code == 429:
                     last_response = response
                     wait = 2 ** (attempt + 1)
-                    logger.warning(f"Rate limited (429). Waiting {wait}s before retry...")
+                    logger.warning("Rate limited (429). Waiting %s before retry...", wait)
                     await asyncio.sleep(wait)
                     continue
                 if response.status_code >= 500:
@@ -139,7 +147,7 @@ class AsyncAPIClient:
                 )
                 await asyncio.sleep(wait)
             except httpx.TransportError as e:
-                logger.error(f"Network error: {e}")
+                logger.error("Network error: %s", e)
                 if attempt < self.max_retries - 1:
                     await asyncio.sleep(2**attempt)
                 else:
@@ -149,7 +157,7 @@ class AsyncAPIClient:
                         url=url,
                     ) from e
             except ValueError as e:
-                logger.error(f"Invalid JSON response from {endpoint}: {e}")
+                logger.error("Invalid JSON response from %s: %s", endpoint, e)
                 if attempt < self.max_retries - 1:
                     await asyncio.sleep(2**attempt)
                 else:
@@ -209,12 +217,15 @@ class AsyncAPIClient:
                     record = model_class.model_validate(item)
                     all_records.append(record)
                 except Exception as e:
-                    logger.warning(f"Failed to parse record: {e}")
+                    logger.warning("Failed to parse record: %s", e)
                     continue
 
             logger.info(
-                f"Page {page}: fetched {len(models_list)} records "
-                f"(total so far: {len(all_records)}/{total_count})"
+                "Page %d: fetched %d records (total so far: %d/%d)",
+                page,
+                len(models_list),
+                len(all_records),
+                total_count,
             )
 
             # Check if we've fetched all pages
@@ -223,7 +234,7 @@ class AsyncAPIClient:
                 break
 
             if max_pages > 0 and page >= max_pages:
-                logger.info(f"Reached max_pages limit ({max_pages})")
+                logger.info("Reached max_pages limit (%s)", max_pages)
                 break
 
             # If count is 0, we're done
@@ -245,7 +256,7 @@ class AsyncAPIClient:
             per_page=per_page,
             max_pages=max_pages,
         )
-        logger.info(f"Fetched {len(records)} address records total")
+        logger.info("Fetched %d address records total", len(records))
         return records
 
     async def fetch_descriptions(self) -> list[DescriptionRecord]:
@@ -253,7 +264,7 @@ class AsyncAPIClient:
         data = await self._request("/api/address-description/index")
         models_list = data.get("models", [])
         records = [DescriptionRecord.model_validate(item) for item in models_list]
-        logger.info(f"Fetched {len(records)} description records")
+        logger.info("Fetched %d description records", len(records))
         return records
 
     async def fetch_connection_types(self) -> list[ConnectionTypeRecord]:
@@ -261,7 +272,7 @@ class AsyncAPIClient:
         data = await self._request("/api/address-connection-type/index")
         models_list = data.get("models", [])
         records = [ConnectionTypeRecord.model_validate(item) for item in models_list]
-        logger.info(f"Fetched {len(records)} connection type records")
+        logger.info("Fetched %d connection type records", len(records))
         return records
 
     async def fetch_sources(self) -> list[SourceRecord]:
@@ -269,7 +280,7 @@ class AsyncAPIClient:
         data = await self._request("/api/address-source/index")
         models_list = data.get("models", [])
         records = [SourceRecord.model_validate(item) for item in models_list]
-        logger.info(f"Fetched {len(records)} source records")
+        logger.info("Fetched %d source records", len(records))
         return records
 
     async def fetch_incidents(self) -> list[IncidentRecord]:
@@ -277,7 +288,7 @@ class AsyncAPIClient:
         data = await self._request("/api/incident/index")
         models_list = data.get("models", [])
         records = [IncidentRecord.model_validate(item) for item in models_list]
-        logger.info(f"Fetched {len(records)} incident records")
+        logger.info("Fetched %d incident records", len(records))
         return records
 
     async def fetch_announcements(self) -> list[AnnouncementRecord]:
@@ -285,7 +296,7 @@ class AsyncAPIClient:
         data = await self._request("/api/announcement/index")
         models_list = data.get("models", [])
         records = [AnnouncementRecord.model_validate(item) for item in models_list]
-        logger.info(f"Fetched {len(records)} announcement records")
+        logger.info("Fetched %d announcement records", len(records))
         return records
 
     async def fetch_metadata(self) -> dict[str, Any]:
@@ -310,7 +321,7 @@ class AsyncAPIClient:
             )
             return "totalCount" in data
         except Exception as e:
-            logger.error(f"Health check failed: {e}")
+            logger.error("Health check failed: %s", e)
             return False
 
     async def fetch_address_count(self) -> dict[str, int]:

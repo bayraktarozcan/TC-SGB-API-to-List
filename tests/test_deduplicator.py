@@ -96,6 +96,53 @@ class TestDeduplicate:
         assert len(result.kept) == 1
         assert result.kept[0].ioc_type == IOCType.DOMAIN
 
+    def test_url_replaces_domain_merges_metadata(self):
+        domain = _make_scored_ioc(
+            "evil.com",
+            IOCType.DOMAIN,
+            quality_score=50.0,
+            desc=DescriptionCategory.PHISHING,
+            source=Source.USOM,
+        )
+        url = _make_scored_ioc("https://evil.com/path", IOCType.URL, quality_score=90.0)
+        result = deduplicate([domain, url])
+        assert len(result.kept) == 1
+        kept = result.kept[0]
+        assert kept.ioc_type == IOCType.URL
+        assert kept.desc == DescriptionCategory.PHISHING
+        assert kept.source == Source.USOM
+
+    def test_url_replaces_domain_keeps_own_metadata(self):
+        url_desc = DescriptionCategory.MALWARE_DIST_URL
+        url = _make_scored_ioc(
+            "https://evil.com/path",
+            IOCType.URL,
+            quality_score=90.0,
+            desc=url_desc,
+        )
+        domain = _make_scored_ioc(
+            "evil.com",
+            IOCType.DOMAIN,
+            quality_score=50.0,
+            desc=DescriptionCategory.MALWARE_DIST_DOMAIN,
+            source=Source.USOM,
+        )
+        result = deduplicate([domain, url])
+        assert len(result.kept) == 1
+        assert result.kept[0].desc == url_desc
+
+    def test_url_replaces_domain_without_merge(self):
+        domain = _make_scored_ioc(
+            "evil.com",
+            IOCType.DOMAIN,
+            quality_score=50.0,
+            desc=DescriptionCategory.PHISHING,
+        )
+        url = _make_scored_ioc("https://evil.com/path", IOCType.URL, quality_score=90.0)
+        result = deduplicate([domain, url], merge_metadata=False)
+        assert len(result.kept) == 1
+        assert result.kept[0].desc is None
+
     def test_empty_input(self):
         result = deduplicate([])
         assert result.kept == []

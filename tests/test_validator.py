@@ -165,6 +165,12 @@ class TestIsValidDomain:
         errors = _is_valid_domain("a" * 200 + "." + "b" * 50 + ".com")
         assert any("253 characters" in e for e in errors)
 
+    def test_punycode_tld_accepted(self):
+        assert _is_valid_domain("example.xn--p1ai") == []
+
+    def test_unicode_domain_accepted(self):
+        assert _is_valid_domain("münchen.de") == []
+
 
 # ---------------------------------------------------------------------------
 # _infer_ioc_type
@@ -209,6 +215,13 @@ class TestValidateIOC:
 
     def test_valid_domain(self):
         r = AddressRecord(id=1, url="example-phishing.net", desc="PH", source="US")
+        result = validate_ioc(r)
+        assert result is not None
+        assert result.ioc_type == IOCType.DOMAIN
+        assert result.validation_errors == []
+
+    def test_unicode_domain_valid(self):
+        r = AddressRecord(id=1, url="münchen.de", desc="PH", source="US")
         result = validate_ioc(r)
         assert result is not None
         assert result.ioc_type == IOCType.DOMAIN

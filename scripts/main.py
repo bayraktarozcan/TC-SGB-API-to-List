@@ -16,6 +16,7 @@ import asyncio
 import json
 import logging
 import math
+import os
 import sys
 import time
 from datetime import datetime
@@ -43,7 +44,8 @@ from scripts.src.pipeline import Pipeline
 
 def _setup_logging(verbose: bool = False) -> None:
     load_dotenv()
-    level = logging.DEBUG if verbose else logging.INFO
+    env_level = os.getenv("TC_SGB_LOG_LEVEL", "INFO").upper()
+    level = logging.DEBUG if verbose else getattr(logging, env_level, logging.INFO)
     logging.basicConfig(
         level=level,
         format="%(asctime)s [%(levelname)-7s] %(name)s: %(message)s",
@@ -65,6 +67,13 @@ def _parse_formats(value: str | None) -> list[str] | None:
         return None
     formats = [fmt.strip() for fmt in value.split(",") if fmt.strip()]
     return formats or None
+
+
+def _resolve_output_dir(args: argparse.Namespace) -> Path:
+    """Resolve the output directory: ``--output``, else ``$TC_SGB_OUTPUT_DIR``, else ``output``."""
+    if args.output is not None:
+        return Path(args.output)
+    return Path(os.getenv("TC_SGB_OUTPUT_DIR", "output"))
 
 
 def _coerce_address_record(raw: dict[str, Any]) -> AddressRecord | None:
@@ -99,7 +108,7 @@ def _coerce_address_record(raw: dict[str, Any]) -> AddressRecord | None:
 
 async def cmd_fetch(args: argparse.Namespace) -> None:
     """Fetch all IoCs from the SGB API and save raw data."""
-    output_dir = Path(args.output)
+    output_dir = _resolve_output_dir(args)
     output_dir.mkdir(parents=True, exist_ok=True)
 
     client = AsyncAPIClient(
@@ -197,7 +206,7 @@ async def cmd_generate(args: argparse.Namespace) -> None:
 
     print(f"Loaded {len(scored)} records from {input_path}")
 
-    output_dir = Path(args.output)
+    output_dir = _resolve_output_dir(args)
     output_dir.mkdir(parents=True, exist_ok=True)
 
     formats = _parse_formats(args.formats) if hasattr(args, "formats") else None
@@ -369,8 +378,8 @@ def build_parser() -> argparse.ArgumentParser:
         p.add_argument(
             "--output",
             "-o",
-            default="output",
-            help="Output directory (default: output).",
+            default=None,
+            help="Output directory (default: $TC_SGB_OUTPUT_DIR or 'output').",
         )
         p.add_argument(
             "--per-page",
@@ -422,7 +431,12 @@ def build_parser() -> argparse.ArgumentParser:
         required=True,
         help="Path to raw JSON file from fetch.",
     )
-    p_gen.add_argument("--output", "-o", default="output", help="Output directory.")
+    p_gen.add_argument(
+        "--output",
+        "-o",
+        default=None,
+        help="Output directory (default: $TC_SGB_OUTPUT_DIR or 'output').",
+    )
     p_gen.add_argument(
         "--formats",
         default=None,
@@ -447,7 +461,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_health = subparsers.add_parser("health", help="Check API health and connectivity.")
     p_health.add_argument("--rps", type=float, default=5.0, help="Requests per second.")
     p_health.add_argument("--timeout", type=float, default=60.0, help="HTTP timeout.")
-    p_health.add_argument("--retries", type=int, default=3, help="Max retries.")
+    p_health.add_argument("--retries", type=int, default=5, help="Max retries.")
 
     return parser
 

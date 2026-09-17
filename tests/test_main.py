@@ -13,6 +13,7 @@ import pytest
 from scripts.main import (
     _coerce_address_record,
     _parse_formats,
+    _resolve_output_dir,
     build_parser,
     cmd_fetch,
     cmd_generate,
@@ -120,7 +121,7 @@ class TestBuildParser:
         parser = build_parser()
         args = parser.parse_args(["fetch"])
         assert args.command == "fetch"
-        assert args.output == "output"
+        assert args.output is None
         assert args.per_page == 9999
         assert args.rps == 5.0
         assert args.timeout == 60.0
@@ -142,6 +143,22 @@ class TestBuildParser:
         parser = build_parser()
         with pytest.raises(SystemExit):
             parser.parse_args(["nope"])
+
+
+class TestResolveOutputDir:
+    def test_cli_flag_wins(self, temp_dir):
+        args = _make_args(output=str(temp_dir / "out"))
+        assert _resolve_output_dir(args) == temp_dir / "out"
+
+    def test_env_var_used_when_no_flag(self, monkeypatch, temp_dir):
+        monkeypatch.setenv("TC_SGB_OUTPUT_DIR", str(temp_dir / "env-out"))
+        args = _make_args(output=None)
+        assert _resolve_output_dir(args) == temp_dir / "env-out"
+
+    def test_default_when_nothing_set(self, monkeypatch):
+        monkeypatch.delenv("TC_SGB_OUTPUT_DIR", raising=False)
+        args = _make_args(output=None)
+        assert _resolve_output_dir(args) == Path("output")
 
 
 # ---------------------------------------------------------------------------

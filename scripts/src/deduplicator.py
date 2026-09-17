@@ -159,7 +159,10 @@ def deduplicate(
                 if domain_existing and ioc.quality_score > domain_existing.quality_score:
                     merge_log.append(f"URL {ioc.value} replaced domain {domain} (higher score)")
                     del primary[existing_key]
-                    primary[pkey] = ioc
+                    if merge_metadata:
+                        primary[pkey] = _merge_metadata(ioc, domain_existing)
+                    else:
+                        primary[pkey] = ioc
                     domain_index[domain] = pkey
                 else:
                     merge_log.append(f"URL {ioc.value} dropped — domain {domain} already present")

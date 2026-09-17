@@ -19,7 +19,7 @@ from .models import (
 )
 from .normalizer import normalize_ioc
 from .quality import DEFAULT_QUALITY_THRESHOLD, score_ioc
-from .validator import validate_ioc
+from .validator import _infer_ioc_type, validate_ioc
 
 logger = logging.getLogger(__name__)
 
@@ -107,7 +107,7 @@ class Pipeline:
         )
         self.stats.total_fetched = len(records)
         duration = time.monotonic() - start
-        logger.info(f"Fetched {len(records)} IoCs in {duration:.1f}s")
+        logger.info("Fetched %d IoCs in %.1fs", len(records), duration)
         return records, duration
 
     def _stage_validate(self, records: list[AddressRecord]) -> tuple[list[ValidatedIOC], int]:
@@ -116,7 +116,11 @@ class Pipeline:
         if self.skip_validation:
             logger.info("Stage 2/5: Validation skipped (--skip-validation)")
             validated = [
-                ValidatedIOC(raw_url=r.url, ioc_type=IOCType.DOMAIN, original_id=r.id)
+                ValidatedIOC(
+                    raw_url=r.url,
+                    ioc_type=_infer_ioc_type(r.url) or IOCType.DOMAIN,
+                    original_id=r.id,
+                )
                 for r in records
             ]
             return validated, 0
@@ -133,10 +137,10 @@ class Pipeline:
                 else:
                     validated.append(result)
             except Exception as e:
-                logger.debug(f"Validation error for record {record.id}: {e}")
+                logger.debug("Validation error for record %s: %s", record.id, e)
                 rejected += 1
 
-        logger.info(f"Validated {len(validated)}, rejected {rejected}")
+        logger.info("Validated %d, rejected %d", len(validated), rejected)
         return validated, rejected
 
     def _stage_normalize(self, validated: list[ValidatedIOC]) -> list[NormalizedIOC]:
@@ -150,9 +154,9 @@ class Pipeline:
                 if n is not None:
                     normalized.append(n)
             except Exception as e:
-                logger.debug(f"Normalization error: {e}")
+                logger.debug("Normalization error: %s", e)
 
-        logger.info(f"Normalized {len(normalized)} IoCs")
+        logger.info("Normalized %d IoCs", len(normalized))
         return normalized
 
     def _stage_dedup(self, scored: list[ScoredIOC]) -> tuple[list[ScoredIOC], int]:
@@ -186,10 +190,10 @@ class Pipeline:
                     continue
                 scored.append(s)
             except Exception as e:
-                logger.debug(f"Quality scoring error: {e}")
+                logger.debug("Quality scoring error: %s", e)
                 rejected += 1
 
-        logger.info(f"Scored {len(scored)}, rejected {rejected}")
+        logger.info("Scored %d, rejected %d", len(scored), rejected)
         return scored, rejected
 
     def _compute_stats(self, scored: list[ScoredIOC]) -> None:

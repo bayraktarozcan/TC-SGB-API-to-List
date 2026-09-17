@@ -62,7 +62,9 @@ RESERVED_DOMAINS: set[str] = {
 MAX_LABEL_LEN = 63
 MAX_DOMAIN_LEN = 253
 
-_DOMAIN_RE = re.compile(r"^(?!-)[A-Za-z0-9-]{1,63}(?<!-)(\.[A-Za-z0-9-]{1,63})*\.[A-Za-z]{2,}$")
+_DOMAIN_RE = re.compile(
+    r"^(?!-)[A-Za-z0-9-]{1,63}(?<!-)(\.[A-Za-z0-9-]{1,63})*\.(?:[A-Za-z]{2,}|xn--[a-z0-9-]{1,63})$"
+)
 
 
 def _is_valid_ip(value: str) -> bool:
@@ -120,6 +122,10 @@ def _is_valid_domain(domain: str) -> list[str]:
     if len(lower) == 0:
         errors.append("empty domain")
         return errors
+    try:
+        lower = lower.encode("idna").decode("ascii").lower().rstrip(".")
+    except UnicodeError:
+        pass
     if len(lower) > MAX_DOMAIN_LEN:
         errors.append(f"domain exceeds {MAX_DOMAIN_LEN} characters")
     labels = lower.split(".")

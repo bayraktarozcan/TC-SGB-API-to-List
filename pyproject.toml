@@ -69,6 +69,7 @@ select = [
     "TCH",   # flake8-type-checking
     "RUF",   # ruff-specific
     "C4",    # flake8-comprehensions
+    "G004",  # flake8-logging-format — no f-string logging
     "PT",    # flake8-pytest-style
     "RET",   # flake8-return
     "PTH",   # flake8-use-pathlib

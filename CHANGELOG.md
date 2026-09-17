@@ -11,11 +11,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ### Added
 
-- **GitLab CI pipeline** — new `.gitlab-ci.yml` mirrors the GitHub quality gates (lint, test, security, build) on GitLab shared runners, with pip caching, coverage reporting, and pipeline/coverage badges in the README
+- **Environment-driven configuration** — the CLI honors `TC_SGB_LOG_LEVEL` and `TC_SGB_OUTPUT_DIR` (`--output` falls back to the environment variable, then to `output`)
 
 ### Changed
 
+- **GitLab CI disabled** — `.gitlab-ci.yml` stays defined in the repo but CI/CD is turned off at the project level; the GitLab-native pipeline/coverage badges were removed because they cannot render while CI is disabled
 - **Weekday schedule** — the scheduled fetch pipeline now runs weekdays at 06:00 UTC (`cron: "0 6 * * 1-5"`) instead of Friday 22:00 UTC; the repo diet removed the LFS/storage pressure that motivated the weekly cadence, so IoC feeds refresh ~4× more often
+- **`health --retries` aligned** — now defaults to 5, matching `fetch`/`stats`/`validate`
+
+### Fixed
+
+- **`or` swallowed falsy flags** — `AsyncAPIClient(max_retries=0)` / `rate_limit=0` / `timeout=0` are now respected (`is not None` guards), so rate limiting can be genuinely disabled
+- **IDN/punycode domains were dropped** — validation now IDNA-encodes before domain checks and accepts `xn--…` TLDs, so unicode international domains pass validation instead of being rejected before normalization
+- **`--skip-validation` mistyped IoCs** — skipped records keep an inferred type (IP, IP6, URL, …) instead of being stamped as DOMAIN unconditionally
+- **Metadata lost on cross-type dedup** — when a higher-scored URL replaces a domain, the domain's metadata is merged into the replacement
+- **Logging used f-string interpolation** — logger calls now use lazy `%`-style args, enforced by ruff `G004`
 
 ## [v0.3.1.0] — 2026-09-10
 
