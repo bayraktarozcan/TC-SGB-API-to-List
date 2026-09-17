@@ -7,8 +7,6 @@
 **Automated Threat Intelligence Pipeline for the T.C. Siber Güvenlik Başkanlığı (Cyber Security Presidency) API**
 
 [![CI](https://github.com/bayraktarozcan/TC-SGB-API-to-List/actions/workflows/ci.yml/badge.svg)](https://github.com/bayraktarozcan/TC-SGB-API-to-List/actions/workflows/ci.yml)
-[![GitLab Pipeline](https://gitlab.com/bayraktarozcan/TC-SGB-API-to-List/badges/main/pipeline.svg)](https://gitlab.com/bayraktarozcan/TC-SGB-API-to-List/-/pipelines)
-[![GitLab Coverage](https://gitlab.com/bayraktarozcan/TC-SGB-API-to-List/badges/main/coverage.svg)](https://gitlab.com/bayraktarozcan/TC-SGB-API-to-List/-/graphs/main/charts)
 [![Scheduled Pipeline](https://github.com/bayraktarozcan/TC-SGB-API-to-List/actions/workflows/schedule.yml/badge.svg)](https://github.com/bayraktarozcan/TC-SGB-API-to-List/actions/workflows/schedule.yml)
 [![CodeQL](https://github.com/bayraktarozcan/TC-SGB-API-to-List/actions/workflows/codeql.yml/badge.svg)](https://github.com/bayraktarozcan/TC-SGB-API-to-List/actions/workflows/codeql.yml)
 [![Pages](https://github.com/bayraktarozcan/TC-SGB-API-to-List/actions/workflows/deploy.yml/badge.svg)](https://github.com/bayraktarozcan/TC-SGB-API-to-List/actions/workflows/deploy.yml)
@@ -185,8 +183,6 @@ This tool is provided as-is for legitimate cybersecurity research and defense pu
 **T.C. Siber Güvenlik Başkanlığı (Cyber Security Presidency) API'si için Otomatik Tehdit İstihbaratı Hattı**
 
 [![CI](https://github.com/bayraktarozcan/TC-SGB-API-to-List/actions/workflows/ci.yml/badge.svg)](https://github.com/bayraktarozcan/TC-SGB-API-to-List/actions/workflows/ci.yml)
-[![GitLab Pipeline](https://gitlab.com/bayraktarozcan/TC-SGB-API-to-List/badges/main/pipeline.svg)](https://gitlab.com/bayraktarozcan/TC-SGB-API-to-List/-/pipelines)
-[![GitLab Coverage](https://gitlab.com/bayraktarozcan/TC-SGB-API-to-List/badges/main/coverage.svg)](https://gitlab.com/bayraktarozcan/TC-SGB-API-to-List/-/graphs/main/charts)
 [![Scheduled Pipeline](https://github.com/bayraktarozcan/TC-SGB-API-to-List/actions/workflows/schedule.yml/badge.svg)](https://github.com/bayraktarozcan/TC-SGB-API-to-List/actions/workflows/schedule.yml)
 [![CodeQL](https://github.com/bayraktarozcan/TC-SGB-API-to-List/actions/workflows/codeql.yml/badge.svg)](https://github.com/bayraktarozcan/TC-SGB-API-to-List/actions/workflows/codeql.yml)
 [![Pages](https://github.com/bayraktarozcan/TC-SGB-API-to-List/actions/workflows/deploy.yml/badge.svg)](https://github.com/bayraktarozcan/TC-SGB-API-to-List/actions/workflows/deploy.yml)
