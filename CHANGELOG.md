@@ -18,6 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 - **GitLab CI disabled** — `.gitlab-ci.yml` stays defined in the repo but CI/CD is turned off at the project level; the GitLab-native pipeline/coverage badges were removed because they cannot render while CI is disabled
 - **Weekday schedule** — the scheduled fetch pipeline now runs weekdays at 06:00 UTC (`cron: "0 6 * * 1-5"`) instead of Friday 22:00 UTC; the repo diet removed the LFS/storage pressure that motivated the weekly cadence, so IoC feeds refresh ~4× more often
 - **`health --retries` aligned** — now defaults to 5, matching `fetch`/`stats`/`validate`
+- **Privacy statement strengthened** — `PRIVACY.md` now states explicitly that the project collects, stores, sells, or shares no user data and is committed to maintaining that stance, and asks users to review the SGB website's policies periodically as rules can change
 
 ### Fixed
 
