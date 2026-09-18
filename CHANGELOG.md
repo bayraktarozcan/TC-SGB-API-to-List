@@ -20,6 +20,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 - **`health --retries` aligned** — now defaults to 5, matching `fetch`/`stats`/`validate`
 - **Privacy statement strengthened** — `PRIVACY.md` now states explicitly that the project collects, stores, sells, or shares no user data and is committed to maintaining that stance, and asks users to review the SGB website's policies periodically as rules can change
 - **Governance files** — `NOTICE` added with dependency license attributions; `CODEOWNERS` (moved to the repository root) now also requires owner review for `tests/` and root-level docs
+- **Dual-language coverage completed** — `pull_request_template.md` and `AGENTS.md` now use the repo's `[English] | [Türkçe]` two-section structure, matching README, CHANGELOG, wiki pages, and the other root docs
 
 ### Fixed
 

@@ -1,3 +1,7 @@
+[English](#-english) | [Türkçe](#-türkçe)
+
+<a id="-english"></a>
+
 # AGENTS.md
 
 Guidance for AI coding agents working in this repository.
@@ -51,3 +55,61 @@ findings. Do not drop below it.
   mirrored in the README; GitHub Actions hosts the scheduled IoC update pipeline.
 - `TC_SGB_LOG_LEVEL` and `TC_SGB_OUTPUT_DIR` are honored by the CLI; `.env`
   files are read via `load_dotenv`.
+
+<a id="-türkçe"></a>
+
+# AGENTS.md (Türkçe)
+
+Bu depoda çalışan yapay zekâ kodlama aracıları için rehber.
+
+## Proje genel bakışı
+
+TC-SGB tehdit istihbaratı hattı: [T.C. Siber Güvenlik Başkanlığı](https://siberguvenlik.gov.tr)
+API'sinden IoC'leri (İhlal Göstergesi) çeker, doğrular, normalleştirir,
+puanlar ve tekilleştirir; ardından 16 biçime dışa aktarır.
+
+- Python `>=3.11`, paketler `pyproject.toml` içinde; çalışma bağımlılıkları
+  `httpx`, `pydantic`, `python-dotenv`, `pyyaml`.
+- Kaynak kod `scripts/src/` altındadır; CLI giriş noktası `scripts/main.py`.
+- Testler `tests/` içindedir (pytest, `asyncio_mode = auto`).
+
+## Kalite çıtası (iş tamamlandı denmeden önce her zaman çalıştırın)
+
+Projenin `.venv` sanal ortamını kullanın:
+
+```powershell
+& .venv\Scripts\python.exe -m ruff check scripts/ tests/
+& .venv\Scripts\python.exe -m ruff format --check scripts/ tests/
+& .venv\Scripts\python.exe -m mypy scripts/
+& .venv\Scripts\python.exe -m bandit -r scripts/
+& .venv\Scripts\python.exe -m pytest --cov=scripts --cov-report=term-missing -q
+```
+
+Son kontrol itibarıyla taban: 480+ test geçiyor, ~%99 kapsam, sıfır
+ruff/mypy/bandit bulgusu. Bu seviyenin altına düşülmez.
+
+## Kurallar
+
+- Commit mesajları için Conventional Commits (bkz. `CONTRIBUTING.md`).
+- f-string ile loglama yok: `logger.*` çağrıları tembel `%`-stili argüman kullanır;
+  ruff kuralı `G004` ile zorunlu kılınır.
+- Falsy olabilen yapıcı (constructor) bayraklarını `or` ile değil, `is not None`
+  ile test edin (`rate_limit=0`, `timeout=0` veya `max_retries=0` anlamlıdır).
+- Uluslararası alan adları doğrulama ve normalleştirmeden önce IDNA ile punycode
+  biçimine kodlanır; `xn--` TLD'leri geçerlidir.
+- `os.path` yerine Path API'lerini tercih edin; satır uzunluğu ≤ 100 tutun;
+  mevcut modül yapısını izleyin (models → client → validator → normalizer →
+  quality → dedup).
+- İstenmedikçe yorum eklemeyin.
+
+## Depo gerçekleri
+
+- GitLab CI/CD ve GitHub Actions'ın ikisi de aktiftir. GitLab pipeline'ları
+  GitLab paylaşımlı runner'larında çalışır (proje seviyesi CI etkin); `origin`
+  uzak kaynağı hem GitHub'a hem GitLab'a iter; bu yüzden tek bir
+  `git push origin main` ikisini de günceller ve iki pipeline'ı da tetikler.
+- GitLab yerel pipeline/coverage rozetleri proje seviyesinde yapılandırılmıştır ve
+  README'ye yansıtılmıştır; GitHub Actions zamanlanmış IoC güncelleme
+  pipeline'ına ev sahipliği yapar.
+- CLI tarafında `TC_SGB_LOG_LEVEL` ve `TC_SGB_OUTPUT_DIR` desteklenir; `.env`
+  dosyaları `load_dotenv` üzerinden okunur.
