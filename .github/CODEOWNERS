@@ -4,3 +4,7 @@
 # CI/CD and security config require owner review
 .github/ @bayraktarozcan
 scripts/ @bayraktarozcan
+
+# Tests and repo governance/security docs also require owner review
+tests/ @bayraktarozcan
+/*.md @bayraktarozcan

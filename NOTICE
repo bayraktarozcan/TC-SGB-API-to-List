@@ -1,0 +1,32 @@
+TC-SGB-API-to-List — Threat Intelligence Pipeline for TC SGB API
+
+Copyright (c) 2026 bayraktarozcan (ÖZCAN BAYRAKTAR)
+Licensed under the MIT License (see LICENSE).
+
+Third-party notices
+-------------------
+
+This distribution relies on the following direct runtime dependencies. The
+licenses below are as declared by the respective projects:
+
+  httpx          BSD-3-Clause
+  pydantic       MIT
+  python-dotenv  BSD-3-Clause
+  PyYAML         MIT
+
+Development, test, and build dependencies:
+
+  pytest         MIT
+  pytest-asyncio Apache-2.0
+  pytest-cov     MIT
+  hypothesis     MPL-2.0
+  mypy           MIT
+  ruff           MIT
+  bandit         Apache-2.0
+  pip-audit      Apache-2.0
+  types-PyYAML   Apache-2.0
+
+Transitive dependencies (for example anyio, httpcore, certifi, idna, sniffio,
+h11, typing-extensions, annotated-types, and pydantic-core) may carry
+attributions and notices of their own. Consult each package's own metadata and
+license files to remain in compliance when redistributing this software.
