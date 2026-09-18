@@ -9,6 +9,7 @@
 > **MANDATORY: Every release MUST be bilingual (English + Turkish), following the exact same format as README.md.**
 > Use the combined template below — English block first, then `---` separator, then Turkish block.
 > Each block has its own anchor, headings, and descriptions — never mix languages within a section.
+> **MANDATORY: Only the latest release is supported. When publishing a new release, update the previous release title to `[DEPRECATED]`** (see SECURITY.md; the rolling `ioc-data` release is exempt).
 
 ---
 
@@ -151,6 +152,7 @@ tc-sgb health
 > **ZORUNLU: Her release çift dilli (İngilizce + Türkçe) olmalıdır, README.md ile aynı biçim bire bir izlenmelidir.**
 > Birleşik şablonu kullanın — önce İngilizce blok, ardından `---` ayracı, sonra Türkçe blok.
 > Her bloğun kendi çapa noktası, başlıkları ve açıklamaları vardır — bir bölüm içinde diller asla karıştırılmaz.
+> **ZORUNLU: Yalnızca en son sürüm desteklenir. Yeni bir sürüm yayınlarken önceki sürümün başlığını `[DEPRECATED]` olarak güncelleyin** (bkz. SECURITY.md; yuvarlanan `ioc-data` release'i muaftır).
 
 ---
 
@@ -163,6 +165,7 @@ tc-sgb health
 > **MANDATORY: Every release MUST be bilingual (English + Turkish), following the exact same format as README.md.**
 > Use the combined template below — English block first, then `---` separator, then Turkish block.
 > Each block has its own anchor, headings, and descriptions — never mix languages within a section.
+> **MANDATORY: Only the latest release is supported. When publishing a new release, update the previous release title to `[DEPRECATED]`** (see SECURITY.md; the rolling `ioc-data` release is exempt).
 
 ---
 

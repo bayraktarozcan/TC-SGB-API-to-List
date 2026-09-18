@@ -6,11 +6,17 @@
 
 ## Supported Versions
 
-| Version | Supported |
-|---------|-----------|
-| 0.3.x   | Yes       |
-| 0.2.x   | Yes       |
-| 0.1.x   | No        |
+**Only the latest release is supported.** When a new version is published, every
+previous release is immediately deprecated and receives no security fixes, bug
+fixes, or support. Deprecated releases are marked `[DEPRECATED]` in their GitHub
+release title. The rolling `ioc-data` release is exempt — it is not a software
+version and always hosts the current IoC dataset.
+
+| Version | Supported          |
+|---------|--------------------|
+| 0.3.x   | Yes — latest only  |
+| 0.2.x   | No — deprecated    |
+| 0.1.x   | No — deprecated    |
 
 ## Reporting a Vulnerability
 
@@ -82,11 +88,18 @@ When using this tool:
 
 ## Desteklenen Sürümler
 
-| Sürüm | Destekleniyor |
-|-------|---------------|
-| 0.3.x | Evet       |
-| 0.2.x | Evet       |
-| 0.1.x | Hayır      |
+**Yalnızca en son sürüm desteklenir.** Yeni bir sürüm yayınlandığında, önceki
+tüm sürümler derhal kullanımdan kaldırılır ve güvenlik düzeltmesi, hata
+düzeltmesi veya destek almaz. Kullanımdan kaldırılan sürümler, GitHub sürüm
+başlıklarında `[DEPRECATED]` olarak işaretlenir. Yuvarlanan `ioc-data`
+release'i bu kuraldan muaftır — bir yazılım sürümü değildir ve her zaman güncel
+IoC veri kümesini barındırır.
+
+| Sürüm | Destekleniyor         |
+|-------|-----------------------|
+| 0.3.x | Evet — yalnızca en son |
+| 0.2.x | Hayır — kullanımdan kaldırıldı |
+| 0.1.x | Hayır — kullanımdan kaldırıldı |
 
 ## Güvenlik Açığı Bildirme
 

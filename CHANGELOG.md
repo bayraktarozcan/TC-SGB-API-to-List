@@ -21,6 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 - **Privacy statement strengthened** — `PRIVACY.md` now states explicitly that the project collects, stores, sells, or shares no user data and is committed to maintaining that stance, and asks users to review the SGB website's policies periodically as rules can change
 - **Governance files** — `NOTICE` added with dependency license attributions; `CODEOWNERS` (moved to the repository root) now also requires owner review for `tests/` and root-level docs
 - **Dual-language coverage completed** — `pull_request_template.md` and `AGENTS.md` now use the repo's `[English] | [Türkçe]` two-section structure, matching README, CHANGELOG, wiki pages, and the other root docs
+- **Only the latest release supported** — whenever a new version is published, every previous release is immediately deprecated and marked `[DEPRECATED]` in its GitHub release title; `SECURITY.md` and the release-note template now state that only the latest release receives fixes, and the rolling `ioc-data` release is exempt because it always hosts the current dataset
 
 ### Fixed
 
@@ -183,6 +184,7 @@ Biçim, [Keep a Changelog](https://keepachangelog.com/)'a dayanmaktadır.
 ### Değiştirilen
 
 - **Hafta içi zamanlama** — zamanlanmış çekim hattı, Cuma 22:00 UTC yerine artık hafta içi 06:00 UTC'de çalışır (`cron: "0 6 * * 1-5"`); repo diyeti haftalık düzeni gerektiren LFS/depolama baskısını kaldırdığı için IoC akışları ~4 kat daha sık tazelenir
+- **Yalnızca en son sürüm desteklenir** — yeni bir sürüm yayınlandığında önceki tüm sürümler derhal kullanımdan kaldırılır ve GitHub sürüm başlıklarında `[DEPRECATED]` olarak işaretlenir; `SECURITY.md` ve sürüm notu şablonu artık yalnızca en son sürümün düzeltme aldığını belirtir ve yuvarlanan `ioc-data` release'i her zaman güncel veriyi barındırdığı için muaf tutulur
 
 ## [v0.3.1.0] — 2026-09-10
 
