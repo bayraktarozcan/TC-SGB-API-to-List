@@ -19,7 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 - **Weekday schedule** — the scheduled fetch pipeline now runs weekdays at 06:00 UTC (`cron: "0 6 * * 1-5"`) instead of Friday 22:00 UTC; the repo diet removed the LFS/storage pressure that motivated the weekly cadence, so IoC feeds refresh ~4× more often
 - **`health --retries` aligned** — now defaults to 5, matching `fetch`/`stats`/`validate`
 - **Privacy statement strengthened** — `PRIVACY.md` now states explicitly that the project collects, stores, sells, or shares no user data and is committed to maintaining that stance, and asks users to review the SGB website's policies periodically as rules can change
-- **Governance files** — `NOTICE` added with dependency license attributions; `.github/CODEOWNERS` now also requires owner review for `tests/` and root-level docs
+- **Governance files** — `NOTICE` added with dependency license attributions; `CODEOWNERS` (moved to the repository root) now also requires owner review for `tests/` and root-level docs
 
 ### Fixed
 
@@ -28,6 +28,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 - **`--skip-validation` mistyped IoCs** — skipped records keep an inferred type (IP, IP6, URL, …) instead of being stamped as DOMAIN unconditionally
 - **Metadata lost on cross-type dedup** — when a higher-scored URL replaces a domain, the domain's metadata is merged into the replacement
 - **Logging used f-string interpolation** — logger calls now use lazy `%`-style args, enforced by ruff `G004`
+- **GitLab coverage badge misread the TOTAL line** — the coverage regex matched greedily and captured a single digit (`9` → `9.0%`); it now anchors on the pytest `TOTAL` summary line and reads `99%`
 
 ## [v0.3.1.0] — 2026-09-10
 
