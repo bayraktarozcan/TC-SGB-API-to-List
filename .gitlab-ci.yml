@@ -52,7 +52,7 @@ test:
   stage: test
   needs:
     - lint
-  coverage: '/TOTAL.*(\d+(?:\.\d+)?)%/'
+  coverage: '/(?:^|\s)TOTAL\s+\d+\s+\d+\s+(\d+(?:\.\d+)?)%/'
   script:
     - pytest --cov=scripts --cov-report=xml --cov-report=term-missing -v
   artifacts:
