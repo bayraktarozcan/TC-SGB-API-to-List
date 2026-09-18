@@ -43,10 +43,11 @@ findings. Do not drop below it.
 
 ## Repository facts
 
-- GitLab CI/CD is intentionally disabled (`jobs_enabled=false`); `.gitlab-ci.yml`
-  stays defined but must NOT be re-enabled via pipeline runs — it does not run.
-- GitHub Actions is the active CI; the `origin` remote pushes to both GitHub and
-  GitLab, so a single `git push origin main` updates both.
-- GitLab-native pipeline/coverage badges were removed; do not re-add them.
+- GitLab CI/CD and GitHub Actions are both active. GitLab pipelines run on GitLab
+  shared runners (project-level CI is enabled); the `origin` remote pushes to
+  both GitHub and GitLab, so a single `git push origin main` updates both and
+  triggers both pipelines.
+- GitLab-native pipeline/coverage badges are configured at the project level and
+  mirrored in the README; GitHub Actions hosts the scheduled IoC update pipeline.
 - `TC_SGB_LOG_LEVEL` and `TC_SGB_OUTPUT_DIR` are honored by the CLI; `.env`
   files are read via `load_dotenv`.
