@@ -115,9 +115,11 @@ pip install -r requirements.txt
 # Recommended minimal permissions
 permissions:
   contents: read          # Read repository
-  contents: write         # Create releases (release.yaml only)
-  packages: write         # Publish to PyPI (release.yaml only)
-  security-events: write  # Upload SARIF results
+  contents: write         # Push branches / create releases (schedule.yml, auto-merge.yml)
+  pull-requests: write    # Open and update PRs (schedule.yml, auto-merge.yml)
+  pages: write            # Deploy to GitHub Pages (deploy.yml)
+  id-token: write         # OIDC token for Pages deploy (deploy.yml)
+  security-events: write  # Upload SARIF results (codeql.yml)
 ```
 
 ### Workflow Security Matrix
@@ -125,8 +127,12 @@ permissions:
 | Workflow | Trigger | Permissions | Risk |
 |----------|---------|-------------|------|
 | `ci.yml` | push, PR | contents: read | LOW |
-| `release.yaml` | tag push | contents: write, packages: write | MEDIUM |
-| `scheduled.yml` | cron | contents: read, write | MEDIUM |
+| `codeql.yml` | push, PR, schedule | contents: read, security-events: write | LOW |
+| `hygiene.yml` | schedule, manual | contents: read | LOW |
+| `link-check.yml` | schedule, manual | contents: read | LOW |
+| `deploy.yml` | push to main | contents: read, pages: write, id-token: write | LOW |
+| `schedule.yml` | schedule (weekdays), manual | contents: write, pull-requests: write | MEDIUM |
+| `auto-merge.yml` | PR | contents: write, pull-requests: write | MEDIUM |
 
 ### Potential Attack Vectors
 
@@ -171,7 +177,7 @@ permissions:
 +---------------------------------------------------+
 |                                                   |
 |  Required Secrets:                                |
-|  - PYPI_API_TOKEN          (release.yaml)          |
+|  - AUTO_MERGE_TOKEN        (schedule.yml)          |
 |  - (No other secrets required)                    |
 |                                                   |
 |  Best Practices:                                  |
@@ -524,9 +530,11 @@ pip install -r requirements.txt
 # Önerilen minimum izinler
 permissions:
   contents: read          # Depoyu oku
-  contents: write         # Sürüm oluştur (yalnızca release.yaml)
-  packages: write         # PyPI'ya yayınla (yalnızca release.yaml)
-  security-events: write  # SARIF sonuçlarını yükle
+  contents: write         # Dal it / sürüm oluştur (schedule.yml, auto-merge.yml)
+  pull-requests: write    # PR aç ve güncelle (schedule.yml, auto-merge.yml)
+  pages: write            # GitHub Pages'e dağıt (deploy.yml)
+  id-token: write         # Pages dağıtımı için OIDC jetonu (deploy.yml)
+  security-events: write  # SARIF sonuçlarını yükle (codeql.yml)
 ```
 
 ### İş Akışı Güvenlik Matrisi
@@ -534,8 +542,12 @@ permissions:
 | İş Akışı | Tetikleyici | İzinler | Risk |
 |----------|-------------|---------|------|
 | `ci.yml` | push, PR | contents: read | DÜŞÜK |
-| `release.yaml` | etiket push | contents: write, packages: write | ORTA |
-| `scheduled.yml` | cron | contents: read, write | ORTA |
+| `codeql.yml` | push, PR, zamanlama | contents: read, security-events: write | DÜŞÜK |
+| `hygiene.yml` | zamanlama, manuel | contents: read | DÜŞÜK |
+| `link-check.yml` | zamanlama, manuel | contents: read | DÜŞÜK |
+| `deploy.yml` | main'e push | contents: read, pages: write, id-token: write | DÜŞÜK |
+| `schedule.yml` | zamanlama (hafta içi), manuel | contents: write, pull-requests: write | ORTA |
+| `auto-merge.yml` | PR | contents: write, pull-requests: write | ORTA |
 
 ### Olası Saldırı Vektörleri
 
@@ -580,7 +592,7 @@ permissions:
 +---------------------------------------------------+
 |                                                   |
 |  Gerekli Gizli Anahtarlar:                        |
-|  - PYPI_API_TOKEN          (release.yaml)          |
+|  - AUTO_MERGE_TOKEN        (schedule.yml)          |
 |  - (Diğer gizli anahtar gerekmez)                |
 |                                                   |
 |  En İyi Uygulamalar:                              |

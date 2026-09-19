@@ -95,7 +95,6 @@ TC-SGB-API-to-List/
 │   ├── _Sidebar.md
 │   ├── API-Analysis.md
 │   ├── Architecture.md
-│   ├── Audit-Report.md
 │   ├── Data-Flow.md
 │   ├── Data-Model.md
 │   ├── Home.md
@@ -150,7 +149,7 @@ TC-SGB-API-to-List/
 
 ### Tests (`tests/`)
 
-Flat structure — no subdirectories. 15 files total, 477 tests, 99% coverage.
+Flat structure — no subdirectories. 15 files total, 487 tests, 99% coverage.
 
 | File | Focus |
 |------|-------|
@@ -239,12 +238,17 @@ requires = ["setuptools>=68.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "tc-sgb"
-version = "0.2.0.0"
-description = "Threat Intelligence Pipeline for TC SGB API"
+name = "tc-sgb-api-list"
+version = "0.3.1.0"
+description = "Threat Intelligence Pipeline for TC SGB API — IoC fetcher, validator, and multi-format exporter"
 requires-python = ">=3.11"
 license = "MIT"
-dependencies = ["httpx>=0.27,<1", "pydantic>=2.0,<3", "rich>=13.0,<14"]
+dependencies = [
+    "httpx>=0.28,<1",
+    "pydantic>=2.10,<3",
+    "python-dotenv>=1.0,<2",
+    "pyyaml>=6.0,<7",
+]
 
 [project.scripts]
 tc-sgb = "scripts.main:main"
@@ -359,7 +363,6 @@ TC-SGB-API-to-List/
 │   ├── _Sidebar.md
 │   ├── API-Analysis.md
 │   ├── Architecture.md
-│   ├── Audit-Report.md
 │   ├── Data-Flow.md
 │   ├── Data-Model.md
 │   ├── Home.md
@@ -414,7 +417,7 @@ TC-SGB-API-to-List/
 
 ### Testler (`tests/`)
 
-Düz yapı — alt dizin yok. Toplam 15 dosya, 452 test, %99 kapsama.
+Düz yapı — alt dizin yok. Toplam 15 dosya, 487 test, %99 kapsama.
 
 | Dosya | Odak |
 |-------|------|
@@ -503,12 +506,17 @@ requires = ["setuptools>=68.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "tc-sgb"
-version = "0.2.0.0"
-description = "Threat Intelligence Pipeline for TC SGB API"
+name = "tc-sgb-api-list"
+version = "0.3.1.0"
+description = "Threat Intelligence Pipeline for TC SGB API — IoC fetcher, validator, and multi-format exporter"
 requires-python = ">=3.11"
 license = "MIT"
-dependencies = ["httpx>=0.27,<1", "pydantic>=2.0,<3", "rich>=13.0,<14"]
+dependencies = [
+    "httpx>=0.28,<1",
+    "pydantic>=2.10,<3",
+    "python-dotenv>=1.0,<2",
+    "pyyaml>=6.0,<7",
+]
 
 [project.scripts]
 tc-sgb = "scripts.main:main"

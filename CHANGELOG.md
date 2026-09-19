@@ -16,7 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 ### Changed
 
 - **GitLab CI re-enabled with badges** — after completing the account-level identity verification, project-level CI/CD is on again, so `.gitlab-ci.yml` pipelines run on GitLab shared runners; the GitLab-native pipeline and coverage badges were restored in the project and in the README
-- **Weekday schedule** — the scheduled fetch pipeline now runs weekdays at 06:00 UTC (`cron: "0 6 * * 1-5"`) instead of Friday 22:00 UTC; the repo diet removed the LFS/storage pressure that motivated the weekly cadence, so IoC feeds refresh ~4× more often
+- **Weekday schedule** — the scheduled fetch pipeline now runs weekdays at 06:00 UTC (`cron: "0 6 * * 1-5"`) instead of Friday 22:00 UTC; the repo diet removed the LFS/storage pressure that motivated the weekly cadence, so IoC feeds refresh ~5× more often
 - **`health --retries` aligned** — now defaults to 5, matching `fetch`/`stats`/`validate`
 - **Privacy statement strengthened** — `PRIVACY.md` now states explicitly that the project collects, stores, sells, or shares no user data and is committed to maintaining that stance, and asks users to review the SGB website's policies periodically as rules can change
 - **Governance files** — `NOTICE` added with dependency license attributions; `CODEOWNERS` (moved to the repository root) now also requires owner review for `tests/` and root-level docs
@@ -179,12 +179,26 @@ Biçim, [Keep a Changelog](https://keepachangelog.com/)'a dayanmaktadır.
 
 ### Eklenen
 
-- **GitLab CI hattı** — yeni `.gitlab-ci.yml`, GitHub kalite kapılarını (lint, test, güvenlik, derleme) GitLab paylaşımlı koşucularında yansıtır; pip önbelleği, kapsama raporu ve README'de hat/kapsama rozetleriyle
+- **Ortam değişkeniyle yapılandırma** — CLI, `TC_SGB_LOG_LEVEL` ve `TC_SGB_OUTPUT_DIR` değişkenlerini dikkate alır (`--output` önce ortam değişkenine, sonra `output` dizinine düşer)
 
 ### Değiştirilen
 
-- **Hafta içi zamanlama** — zamanlanmış çekim hattı, Cuma 22:00 UTC yerine artık hafta içi 06:00 UTC'de çalışır (`cron: "0 6 * * 1-5"`); repo diyeti haftalık düzeni gerektiren LFS/depolama baskısını kaldırdığı için IoC akışları ~4 kat daha sık tazelenir
+- **GitLab CI rozetlerle yeniden etkin** — hesap düzeyindeki kimlik doğrulama tamamlandıktan sonra proje düzeyi CI/CD yeniden açıldı, böylece `.gitlab-ci.yml` hatları GitLab paylaşımlı koşucularında çalışır; GitLab yerel hat ve kapsama rozetleri projede ve README'de geri getirildi
+- **Hafta içi zamanlama** — zamanlanmış çekim hattı, Cuma 22:00 UTC yerine artık hafta içi 06:00 UTC'de çalışır (`cron: "0 6 * * 1-5"`); repo diyeti haftalık düzeni gerektiren LFS/depolama baskısını kaldırdığı için IoC akışları ~5 kat daha sık tazelenir
+- **`health --retries` hizalandı** — artık `fetch`/`stats`/`validate` ile eşleşecek şekilde varsayılan olarak 5
+- **Gizlilik bildirimi güçlendirildi** — `PRIVACY.md` artık projenin hiçbir kullanıcı verisi toplamadığını, depolamadığını, satmadığını veya paylaşmadığını ve bu tutumu sürdürme taahhüdünü açıkça belirtir; kurallar değişebileceği için kullanıcılardan SGB web sitesinin politikalarını düzenli olarak gözden geçirmelerini ister
+- **Yönetişim dosyaları** — bağımlılık lisansı atıflarıyla `NOTICE` eklendi; (depo köküne taşınan) `CODEOWNERS` artık `tests/` ve kök düzeyindeki dokümanlar için de sahip incelemesi gerektirir
+- **İki dilli kapsam tamamlandı** — `pull_request_template.md` ve `AGENTS.md` artık deponun `[English] | [Türkçe]` iki bölümlü yapısını kullanır; README, CHANGELOG, wiki sayfaları ve diğer kök dokümanlarla eşleşir
 - **Yalnızca en son sürüm desteklenir** — yeni bir sürüm yayınlandığında önceki tüm sürümler derhal kullanımdan kaldırılır ve GitHub sürüm başlıklarında `[DEPRECATED]` olarak işaretlenir; `SECURITY.md` ve sürüm notu şablonu artık yalnızca en son sürümün düzeltme aldığını belirtir ve yuvarlanan `ioc-data` release'i her zaman güncel veriyi barındırdığı için muaf tutulur
+
+### Düzeltilen
+
+- **`or` falsy bayrakları yutuyordu** — `AsyncAPIClient(max_retries=0)` / `rate_limit=0` / `timeout=0` artık dikkate alınır (`is not None` kontrolleri), böylece hız sınırlama gerçekten kapatılabilir
+- **IDN/punycode alan adları düşürülüyordu** — doğrulama artık alan adı kontrollerinden önce IDNA kodlaması yapar ve `xn--…` TLD'lerini kabul eder, böylece unicode uluslararası alan adları reddedilmek yerine doğrulamayı geçer
+- **`--skip-validation` IoC türlerini yanlış atıyordu** — atlanan kayıtlar koşulsuz DOMAIN olarak damgalanmak yerine çıkarımsal bir tür (IP, IP6, URL, …) korur
+- **Çapraz tür tekilleştirmede meta veri kaybı** — daha yüksek puanlı bir URL bir alan adının yerini aldığında, alan adının meta verisi değiştirilen kayda birleştirilir
+- **Günlükleme f-string interpolasyonu kullanıyordu** — logger çağrıları artık tembel `%`-stili argümanlar kullanır; ruff `G004` ile zorunlu kılınır
+- **GitLab kapsama rozeti TOTAL satırını yanlış okuyordu** — kapsama regex'i açgözlü eşleşip tek bir rakam yakalıyordu (`9` → `9.0%`); artık pytest `TOTAL` özet satırına sabitlenir ve `99%` okur
 
 ## [v0.3.1.0] — 2026-09-10
 

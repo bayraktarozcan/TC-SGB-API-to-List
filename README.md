@@ -1,6 +1,6 @@
-[English](#english) | [Türkçe](#turkish)
+[English](#-english) | [Türkçe](#-türkçe)
 
-<a id="english"></a>
+<a id="-english"></a>
 
 # TC-SGB-API-to-List
 
@@ -155,7 +155,7 @@ mypy scripts/
 
 ## Roadmap
 
-- [x] Core pipeline (fetch → validate → normalize → dedup → score → output)
+- [x] Core pipeline (fetch → validate → normalize → score → dedup → output)
 - [x] 16 output formats
 - [x] CI/CD with GitHub Actions
 - [x] Comprehensive test suite
@@ -178,7 +178,7 @@ This tool is provided as-is for legitimate cybersecurity research and defense pu
 
 ---
 
-<a id="turkish"></a>
+<a id="-türkçe"></a>
 
 # TC-SGB-API-to-List
 
@@ -333,7 +333,7 @@ mypy scripts/
 
 ## Yol Haritası
 
-- [x] Çekirdek hat (çek → doğrula → normalleştir → tekilleştir → puanla → çıktı)
+- [x] Çekirdek hat (çek → doğrula → normalleştir → puanla → tekilleştir → çıktı)
 - [x] 16 çıktı biçimi
 - [x] GitHub Actions ile CI/CD
 - [x] Kapsamlı test paketi

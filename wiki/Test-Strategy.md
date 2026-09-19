@@ -45,18 +45,20 @@ This document defines the comprehensive testing strategy for the TC-SGB-API-to-L
 
 | Module | File | Test Count | Focus |
 |--------|------|------------|-------|
-| client.py | test_client.py | ~30 | HTTP calls, retry, rate limiting |
-| models.py | test_models.py | ~35 | Validation, serialization, enums |
-| validator.py | test_validator.py | ~50 | All 12 validation rules |
-| normalizer.py | test_normalizer.py | ~32 | Type-specific normalization |
-| deduplicator.py | test_deduplicator.py | ~32 | Exact, semantic, subdomain dedup |
-| quality.py | test_quality.py | ~49 | Statistics, FP detection, scoring |
-| outputs.py | test_outputs.py | ~70 | All 16 output formats |
-| pipeline.py | test_pipeline.py | ~37 | Orchestration, error handling |
-| regression.py | test_regression.py | ~31 | Output stability |
-| fuzz.py | test_fuzz.py | ~23 | Property-based & fuzz testing |
-| performance.py | test_performance.py | ~18 | Throughput benchmarks |
-| models.py | test_models.py | ~35 | Pydantic model validation |
+| client.py | test_client.py | 31 | HTTP calls, retry, rate limiting |
+| models.py | test_models.py | 36 | Validation, serialization, enums |
+| validator.py | test_validator.py | 70 | All validation rules |
+| normalizer.py | test_normalizer.py | 32 | Type-specific normalization |
+| deduplicator.py | test_deduplicator.py | 38 | Exact, semantic, subdomain dedup |
+| quality.py | test_quality.py | 51 | Statistics, FP detection, scoring |
+| outputs.py | test_outputs.py | 78 | All 16 output formats |
+| pipeline.py | test_pipeline.py | 34 | Orchestration, error handling |
+| regression.py | test_regression.py | 27 | Output stability |
+| fuzz.py | test_fuzz.py | 23 | Property-based & fuzz testing |
+| performance.py | test_performance.py | 18 | Throughput benchmarks |
+| changelog.py | test_changelog.py | 15 | Changelog generation & diff engine |
+| main.py | test_main.py | 34 | CLI entry point & pipeline wiring |
+| **Total** | 13 test files | **487** | — |
 
 **Example Unit Test**:
 
@@ -274,7 +276,9 @@ pytest -m performance --benchmark-only
 |  Fuzz:               5 passed, 0 crashes                            |
 |  Performance:        6 passed, 0 regressions                        |
 |                                                                     |
-|  Coverage: 94.2% (branch)                                           |
+|  Total: 487 tests, 0 failed                                          |
+|                                                                     |
+|  Coverage: 99% (branch)                                             |
 |                                                                     |
 |  Duration: 45.2s                                                    |
 +=====================================================================+
@@ -543,7 +547,7 @@ pytest tests/test_validator.py::test_valid_record_passes
 
 | Metrik | Eşik | Uygulama |
 |--------|-----------|-------------|
-| Kod Kapsamı | >= %100 | CI birleştirmeyi engeller (testlerin kodun her satırını çalıştırıp çalıştırmadığını ölçer) |
+| Kod Kapsamı | >= %90 | CI birleştirmeyi engeller (testlerin kodun her satırını çalıştırıp çalıştırmadığını ölçer) |
 | Birim Testleri | %100 geçiş | CI birleştirmeyi engeller |
 | Entegrasyon Testleri | %100 geçiş | CI birleştirmeyi engeller |
 | Tip Denetimi | 0 hata | CI birleştirmeyi engeller |
@@ -557,7 +561,7 @@ pytest tests/test_validator.py::test_valid_record_passes
 |  Test Raporu Biçimi                                                  |
 +=====================================================================+
 |                                                                     |
-|  Toplam: 452 test, 0 başarısız                                     |
+|  Toplam: 487 test, 0 başarısız                                     |
 |                                                                     |
 |  Kapsam: %99 (testlerin kodun her satırını çalıştırıp               |
 |  çalıştırmadığını ölçer)                                           |

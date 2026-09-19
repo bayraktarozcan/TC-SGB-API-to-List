@@ -17,18 +17,18 @@ TC-SGB-API-to-List is an automated threat intelligence pipeline that ingests Ind
 |----------|-------|
 | **API Source** | TC SGB Threat Intelligence API (`https://siberguvenlik.gov.tr`) |
 | **Auth Required** | None (public API) |
-| **Pipeline Stages** | Fetch → Validate → Normalize → Dedup → Score → Output |
+| **Pipeline Stages** | Fetch → Validate → Normalize → Score → Dedup → Output |
 | **Output Formats** | 16 (JSON, CSV, NextDNS, AdGuard, Pi-hole, dnsmasq, Unbound, RPZ, Technitium, MikroTik, nftables, ipset, Suricata, CrowdSec, YAML, SQLite) |
 | **Python Version** | 3.11+ |
 | **License** | MIT |
-| **Test Suite** | 477 tests, 99% coverage |
+| **Test Suite** | 487 tests, 99% coverage |
 
 ---
 
 ## Architecture at a Glance
 
 ```
-TC SGB API ──► Fetch ──► Validate ──► Normalize ──► Dedup ──► Score ──► Output (16 formats)
+TC SGB API ──► Fetch ──► Validate ──► Normalize ──► Score ──► Dedup ──► Output (16 formats)
 ```
 
 ---
@@ -81,7 +81,6 @@ tc-sgb generate -i output/raw_records.json
 - [Risk Analysis](Risk-Analysis) — Risk assessment and mitigation
 - [Roadmap](Roadmap) — Future plans and milestones
 - [Legal Notices](Legal-Notices) — Legal and compliance notices
-- [Audit Report](Audit-Report) — Documentation audit findings
 
 ---
 
@@ -101,18 +100,18 @@ TC-SGB-API-to-List, T.C. Siber Güvenlik Başkanlığı (TC SGB) kamu API'sinden
 |---------|-------|
 | **API Kaynağı** | TC SGB Tehdit İstihbaratı API'si (`https://siberguvenlik.gov.tr`) |
 | **Kimlik Doğrulama** | Gerekli değil (kamu API'si) |
-| **Hat Aşamaları** | Çekme → Doğrulama → Normalleştirme → Yineleme Kaldırma → Puanlama → Çıktı |
+| **Hat Aşamaları** | Çekme → Doğrulama → Normalleştirme → Puanlama → Yineleme Kaldırma → Çıktı |
 | **Çıktı Formatları** | 16 (JSON, CSV, NextDNS, AdGuard, Pi-hole, dnsmasq, Unbound, RPZ, Technitium, MikroTik, nftables, ipset, Suricata, CrowdSec, YAML, SQLite) |
 | **Python Sürümü** | 3.11+ |
 | **Lisans** | MIT |
-| **Test Takımı** | 477 test, %99 kapsama |
+| **Test Takımı** | 487 test, %99 kapsama |
 
 ---
 
 ## Mimari Özet
 
 ```
-TC SGB API ──► Çekme ──► Doğrulama ──► Normalleştirme ──► Tekilleştirme ──► Puanlama ──► Çıktı (16 biçim)
+TC SGB API ──► Çekme ──► Doğrulama ──► Normalleştirme ──► Puanlama ──► Tekilleştirme ──► Çıktı (16 biçim)
 ```
 
 ---
@@ -165,4 +164,3 @@ tc-sgb generate -i output/raw_records.json
 - [Risk Analizi](Risk-Analysis#-türkçe) — Risk değerlendirmesi ve azaltma
 - [Yol Haritası](Roadmap#-türkçe) — Gelecek planları ve dönüm noktaları
 - [Yasal Bildirimler](Legal-Notices#-türkçe) — Hukuki ve uyum bildirimleri
-- [Denetim Raporu](Audit-Report#-türkçe) — Dokümantasyon denetim bulguları

@@ -43,18 +43,18 @@ This document defines the ongoing maintenance procedures for the TC-SGB-API-to-L
 ### Automated (GitHub Actions)
 
 ```yaml
-# Daily maintenance tasks (automated)
+# Scheduled maintenance tasks (automated)
 +=====================================================================+
-|  Daily Automated Tasks                                               |
+|  Scheduled Automated Tasks                                           |
 +=====================================================================+
 
-  Task                      Schedule         Action
-  +------------------------+----------------+------------------------+
-  | Pipeline execution      | Daily 06:00 UTC| Fetch & process IoCs   |
-  | Dependency check        | Daily 00:00 UTC| Dependabot scan        |
-  | Test suite              | On every push  | CI pipeline            |
-  | Output validation       | After pipeline | Quality checks         |
-  +------------------------+----------------+------------------------+
+    Task                     Schedule            Action
+  +------------------------+-------------------+------------------------+
+  | Pipeline execution     | Mon-Fri 06:00 UTC | Fetch & process IoCs   |
+  | Dependency check       | Mon 09:00 UTC     | Dependabot scan        |
+  | Test suite             | On every push     | CI pipeline            |
+  | Output validation      | After pipeline    | Quality checks         |
+  +------------------------+-------------------+------------------------+
 ```
 
 ### Manual (Operator)
@@ -489,18 +489,18 @@ Bu belge, TC-SGB-API-to-List projesi için devam eden bakım prosedürlerini, d�
 ### Otomatik (GitHub Actions)
 
 ```yaml
-# Günlük bakım görevleri (otomatik)
+# Zamanlanmış bakım görevleri (otomatik)
 +=====================================================================+
-|  Günlük Otomatik Görevler                                            |
+|  Zamanlanmış Otomatik Görevler                                       |
 +=====================================================================+
 
-  Görev                    Zamanlama          Eylem
-  +------------------------+----------------+------------------------+
-  | Hat çalıştırması       | Günlük 06:00 UTC| IoC'leri çek ve işle  |
-  | Bağımlılık kontrolü    | Günlük 00:00 UTC| Dependabot taraması   |
-  | Test paketi            | Her push'ta     | CI hattı               |
-  | Çıkış doğrulama        | Hat sonrasında   | Kalite kontrolleri     |
-  +------------------------+----------------+------------------------+
+    Görev                    Zamanlama           Eylem
+  +------------------------+-------------------+------------------------+
+  | Hat çalıştırması       | Hafta içi 06:00 UTC| IoC'leri çek ve işle   |
+  | Bağımlılık kontrolü    | Pzt 09:00 UTC     | Dependabot taraması    |
+  | Test paketi            | Her push'ta       | CI hattı               |
+  | Çıkış doğrulama        | Hat sonrasında    | Kalite kontrolleri     |
+  +------------------------+-------------------+------------------------+
 ```
 
 ### Manuel (Operatör)

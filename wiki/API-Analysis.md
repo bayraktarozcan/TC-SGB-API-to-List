@@ -198,8 +198,9 @@ total_pages = ceil(total_records / per_page)
 **Request Headers** (sent by client):
 
 ```
-User-Agent: tc-sgb/0.2.0.0
-Accept: application/json
+User-Agent: python-httpx/<version>   # httpx default — the client sets no custom User-Agent
+Accept: */*
+Accept-Encoding: gzip, deflate, br
 Connection: keep-alive
 ```
 
@@ -527,8 +528,9 @@ total_pages = ceil(toplam_kayit / sayfa_basi)
 **İstek Başlıkları** (istemci tarafından gönderilir):
 
 ```
-User-Agent: tc-sgb/0.2.0.0
-Accept: application/json
+User-Agent: python-httpx/<version>   # httpx varsayılanı — istemci özel User-Agent ayarlamaz
+Accept: */*
+Accept-Encoding: gzip, deflate, br
 Connection: keep-alive
 ```
 
