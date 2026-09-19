@@ -1,6 +1,6 @@
-[English](#-english) | [Türkçe](#-türkçe)
+[English](#english) | [Türkçe](#turkce)
 
-<a id="-english"></a>
+<a id="english"></a>
 
 # Support
 
@@ -29,7 +29,7 @@ response times are not guaranteed.
 
 ---
 
-<a id="-türkçe"></a>
+<a id="turkce"></a>
 
 # Destek
 
