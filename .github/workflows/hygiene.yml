@@ -43,3 +43,13 @@ jobs:
             cat "$RUNNER_TEMP/yaml_crlf.txt" >&2
             exit 1
           fi
+
+  mojibake-deep:
+    name: Deep Mojibake Scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+      - name: Scan full repository history
+        run: python scripts/src/mojibake.py --scope history

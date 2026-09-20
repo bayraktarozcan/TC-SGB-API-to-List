@@ -43,6 +43,9 @@ jobs:
       - name: Mypy
         run: mypy scripts/
 
+      - name: Mojibake scan (HEAD)
+        run: python scripts/src/mojibake.py --scope head
+
   test:
     name: Test
     runs-on: ubuntu-latest

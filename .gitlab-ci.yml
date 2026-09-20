@@ -18,6 +18,7 @@ workflow:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
     - if: $CI_PIPELINE_SOURCE == "pipeline"
+    - if: $CI_PIPELINE_SOURCE == "schedule"
     - when: never
 
 cache:
@@ -46,6 +47,7 @@ lint:
     - ruff check scripts/ tests/
     - ruff format --check scripts/ tests/
     - mypy scripts/
+    - python scripts/src/mojibake.py
 
 test:
   <<: *deps_base
@@ -75,6 +77,16 @@ security:
     paths:
       - bandit-report.json
     expire_in: 7 days
+
+# Full-history blob scan. Enable weekly via a GitLab schedule with the
+# MOJIBAKE_DEEP="true" variable (schedule pipelines are allowed above).
+deep-mojibake:
+  stage: security
+  needs: []
+  rules:
+    - if: '$MOJIBAKE_DEEP == "true"'
+  script:
+    - python scripts/src/mojibake.py --scope history
 
 build:
   stage: build
