@@ -176,6 +176,7 @@ def _iter_history_blobs(root: Path) -> Iterator[tuple[str, bytes]]:
         try:
             proc.terminate()
         except OSError:
+            # process already exited; nothing to clean up
             pass
         proc.wait()
 
