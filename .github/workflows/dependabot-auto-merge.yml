@@ -59,14 +59,6 @@ jobs:
           esac
           echo "pr_number=$PR_NUMBER" >> "$GITHUB_OUTPUT"
 
-      - name: Approve
-        if: steps.pr.outputs.pr_number != ''
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          gh pr review --approve -R "$GITHUB_REPOSITORY" ${{ steps.pr.outputs.pr_number }} \
-            || echo "Already approved or no permission"
-
       - name: Arm native auto-merge
         if: steps.pr.outputs.pr_number != ''
         env:
