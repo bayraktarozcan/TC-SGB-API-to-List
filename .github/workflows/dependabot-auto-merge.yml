@@ -59,6 +59,18 @@ jobs:
           esac
           echo "pr_number=$PR_NUMBER" >> "$GITHUB_OUTPUT"
 
+      - name: Update branch if behind
+        if: steps.pr.outputs.pr_number != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          PR_NUMBER=${{ steps.pr.outputs.pr_number }}
+          if gh api -X PUT "repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER/update-branch" --jq '.message' 2>/dev/null; then
+            echo "Branch updated for #$PR_NUMBER"
+          else
+            echo "Branch already up to date or update skipped"
+          fi
+
       - name: Arm native auto-merge
         if: steps.pr.outputs.pr_number != ''
         env:
