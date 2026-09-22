@@ -8,6 +8,7 @@ from pathlib import Path
 
 import pytest
 
+from scripts.src import mojibake
 from scripts.src.mojibake import (
     check_bytes,
     is_binary,
@@ -178,8 +179,6 @@ def test_main_not_a_git_repo_exit_two(tmp_path: Path, monkeypatch) -> None:
 
 
 def test_main_git_missing_exit_two(monkeypatch) -> None:
-    import scripts.src.mojibake as mojibake
-
     monkeypatch.setattr(
         mojibake, "_git_exe", lambda: (_ for _ in ()).throw(FileNotFoundError("no git"))
     )
@@ -246,8 +245,6 @@ class _FakePopen:
 
 
 def _patch_batch(monkeypatch, revs: str, stream: bytes) -> None:
-    import scripts.src.mojibake as mojibake
-
     monkeypatch.setattr(mojibake, "_run_git", lambda root, *args: revs)
 
     def fake_popen(args, stdin, stdout, cwd):
@@ -258,8 +255,6 @@ def _patch_batch(monkeypatch, revs: str, stream: bytes) -> None:
 
 
 def _iter(monkeypatch, revs: str, stream: bytes) -> list[tuple[str, bytes]]:
-    import scripts.src.mojibake as mojibake
-
     _patch_batch(monkeypatch, revs, stream)
     return list(mojibake._iter_history_blobs(Path()))
 
@@ -290,8 +285,6 @@ def test_history_tree_skipped_not_yielded(monkeypatch) -> None:
 
 
 def test_history_pipe_error_raises(monkeypatch) -> None:
-    import scripts.src.mojibake as mojibake
-
     monkeypatch.setattr(mojibake, "_run_git", lambda root, *args: "aabb\n")
 
     def fake_popen(args, stdin, stdout, cwd):

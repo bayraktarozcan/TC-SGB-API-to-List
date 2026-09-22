@@ -125,6 +125,7 @@ def _is_valid_domain(domain: str) -> list[str]:
     try:
         lower = lower.encode("idna").decode("ascii").lower().rstrip(".")
     except UnicodeError:
+        # non-ASCII label; keep original input for downstream checks
         pass
     if len(lower) > MAX_DOMAIN_LEN:
         errors.append(f"domain exceeds {MAX_DOMAIN_LEN} characters")

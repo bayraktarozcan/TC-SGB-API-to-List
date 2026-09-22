@@ -107,6 +107,17 @@ test(client): add retry logic unit tests
 - [ ] Documentation updated (if applicable)
 - [ ] CHANGELOG.md updated (if applicable)
 
+### Known GitHub environment quirk
+
+> **Note:** the automated `scheduled-fetch` IoC update PRs may show a failed
+> `Code scanning AI findings` / `GitHub Advanced Security` run even though the
+> repository itself is healthy. GitHub's AI code scanning executes as a Copilot
+> agent task using the `claude-opus-5` model; when that model is not supported
+> by the account's plan, both the scan and its review task fail with
+> `400 The requested model is not supported`. This is cosmetic — auto-merge
+> proceeds regardless. To drop the failed check, disable AI code scanning under
+> *Settings → Code security and analysis*.
+
 ## Reporting Issues
 
 - Use [GitHub Issues](https://github.com/bayraktarozcan/TC-SGB-API-to-List/issues)
@@ -224,6 +235,17 @@ test(client): yeniden deneme mantığı birim testleri ekle
 - [ ] Sabit kodlanmış gizli anahtar veya kimlik bilgisi yok
 - [ ] Dokümantasyon güncellendi (gerekirse)
 - [ ] CHANGELOG.md güncellendi (gerekirse)
+
+### Bilinen GitHub ortam tuhaflığı
+
+> **Not:** otomatik `scheduled-fetch` IoC güncelleme PR'larında depo sağlıklı
+> olsa bile `Code scanning AI findings` / `GitHub Advanced Security` run'u
+> başarısız görünebilir. GitHub'ın AI kod taraması, incelemeyi `claude-opus-5`
+> modelini kullanan bir Copilot agent task'i olarak yürütür; bu model hesabın
+> planında desteklenmiyorsa hem tarama hem de inceleme görevi
+> `400 The requested model is not supported` hatasıyla başarısız olur. Bu yalnızca
+> görseldir — auto-merge buna rağmen devam eder. Başarısız check'i istemiyorsanız
+> *Settings → Code security and analysis* altındaki AI kod taramasını kapatın.
 
 ## Sorun Bildirme
 
