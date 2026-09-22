@@ -1,0 +1,72 @@
+name: Dependabot Auto-Merge
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: "PR number to arm auto-merge for (dependabot PRs only)"
+        required: false
+        type: number
+
+concurrency:
+  group: dependabot-auto-merge-${{ github.head_ref || github.event.inputs.pr_number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  pull-requests: write
+  checks: read
+
+jobs:
+  auto-merge:
+    # Dependabot branches are always same-repo; forks must never reach the merge step.
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.actor == 'dependabot[bot]' &&
+       startsWith(github.head_ref, 'dependabot/') &&
+       github.event.pull_request.head.repo.full_name == github.repository)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Resolve PR
+        id: pr
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            PR_NUMBER="${{ inputs.pr_number }}"
+            if [ -z "$PR_NUMBER" ]; then
+              echo "workflow_dispatch without pr_number; nothing to do."
+              exit 0
+            fi
+          else
+            PR_NUMBER="${{ github.event.pull_request.number }}"
+          fi
+          AUTHOR=$(gh pr view "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --json author --jq .author.login)
+          HEADREF=$(gh pr view "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --json headRefName --jq .headRefName)
+          case "$AUTHOR:$HEADREF" in
+            'dependabot[bot]':dependabot/*|app/dependabot:dependabot/*) ;;
+            *)
+              echo "PR #$PR_NUMBER is by $AUTHOR on $HEADREF; not a dependabot PR, skipping."
+              exit 1
+              ;;
+          esac
+          echo "pr_number=$PR_NUMBER" >> "$GITHUB_OUTPUT"
+
+      - name: Arm native auto-merge
+        if: steps.pr.outputs.pr_number != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          PR_NUMBER=${{ steps.pr.outputs.pr_number }}
+          if gh pr merge --auto --squash --delete-branch -R "$GITHUB_REPOSITORY" "$PR_NUMBER"; then
+            echo "Native auto-merge armed for #$PR_NUMBER"
+          else
+            echo "Could not arm auto-merge yet; retried on the next pull_request event."
+          fi
