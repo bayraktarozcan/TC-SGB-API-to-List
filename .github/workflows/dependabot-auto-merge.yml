@@ -64,7 +64,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh pr review --approve "$GITHUB_REPOSITORY/pull/${{ steps.pr.outputs.pr_number }}" \
+          gh pr review --approve -R "$GITHUB_REPOSITORY" ${{ steps.pr.outputs.pr_number }} \
             || echo "Already approved or no permission"
 
       - name: Arm native auto-merge
@@ -72,9 +72,9 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          PR="$GITHUB_REPOSITORY/pull/${{ steps.pr.outputs.pr_number }}"
-          if gh pr merge --auto --squash --delete-branch "$PR"; then
-            echo "Native auto-merge armed for #${{ steps.pr.outputs.pr_number }}"
+          PR_NUMBER=${{ steps.pr.outputs.pr_number }}
+          if gh pr merge --auto --squash --delete-branch -R "$GITHUB_REPOSITORY" "$PR_NUMBER"; then
+            echo "Native auto-merge armed for #$PR_NUMBER"
           else
             echo "Could not arm auto-merge yet; retried on the next pull_request event."
           fi
