@@ -166,3 +166,8 @@ site/
 *.bak
 *.orig
 *.tmp
+
+# Local documentation mirrors
+# AGENTS-TR.md - local Turkish mirror of AGENTS.md (human review only, never committed)
+# AGENTS-TR.md - AGENTS.md yerel Türkçe yansıması (yalnızca insan denetimi, asla commit edilmez)
+AGENTS-TR.md
