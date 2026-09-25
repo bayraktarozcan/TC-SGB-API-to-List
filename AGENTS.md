@@ -48,7 +48,9 @@ findings. Do not drop below it.
   both GitHub and GitLab, so a single `git push origin main` updates both and
   triggers both pipelines.
 - GitLab-native pipeline/coverage badges are configured at the project level and
-  mirrored in the README; GitHub Actions hosts the scheduled IoC update pipeline.
+  mirrored in the README; GitHub Actions hosts the scheduled IoC update pipeline
+  and, once each update merges, also mirrors `main` plus the GitLab `ioc-data`
+  release listing on GitLab.
 - `TC_SGB_LOG_LEVEL` and `TC_SGB_OUTPUT_DIR` are honored by the CLI; `.env`
   files are read via `load_dotenv`.
 
@@ -61,4 +63,4 @@ committed source of truth is this English file.
 Rule: whenever this file changes, AGENTS-TR.md must be refreshed in the same
 session, keeping its `sync-sha` equal to the value on the final line of this
 file.
-<!-- mirror-sync: sync-sha=6a444cb00c6519dd5a25189db3d74675cd809dc1 -->
+<!-- mirror-sync: sync-sha=4cff4233016701f5e1cee880db0490868f0054cb -->
