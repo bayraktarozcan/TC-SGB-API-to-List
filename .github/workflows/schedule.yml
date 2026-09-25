@@ -181,10 +181,57 @@ jobs:
               --jq '"\(.state)/\(.mergeStateStatus)"')
             echo "[wait ${i}] ${STATE}"
             case "$STATE" in
-              MERGED/*) echo "✓ Merged"; exit 0 ;;
+              MERGED/*) echo "✓ Merged"; echo "MIRROR=true" >> "${GITHUB_ENV}"; exit 0 ;;
               */BEHIND) echo "  main advanced; updating branch"; gh_retry gh pr update-branch "${PR_URL}" || true ;;
               *) : ;; # checks pending or failing — keep waiting
             esac
             sleep 30
           done
           echo "Auto-merge still pending after wait window; PR left open."
+
+      - name: Mirror IoC data to GitLab main and release
+        if: env.MIRROR == 'true'
+        env:
+          GITLAB_PUSH_TOKEN: ${{ secrets.GITLAB_PUSH_TOKEN }}
+        run: |
+          set -euo pipefail
+          : "${GITLAB_PUSH_TOKEN:?Missing GITLAB_PUSH_TOKEN repo secret (GitLab PAT with 'api' and 'write_repository' scopes); add it to the GitHub repo secrets to mirror IoC data to GitLab.}"
+          GITLAB_PROJECT="bayraktarozcan/TC-SGB-API-to-List"
+          GITLAB_URLENCODED="bayraktarozcan%2FTC-SGB-API-to-List"
+          GITLAB_REMOTE="https://oauth2:${GITLAB_PUSH_TOKEN}@gitlab.com/${GITLAB_PROJECT}.git"
+
+          git fetch origin main
+          git checkout -f main
+          git reset --hard origin/main
+
+          git remote add gitlab-push "${GITLAB_REMOTE}" 2>/dev/null || \
+            git remote set-url gitlab-push "${GITLAB_REMOTE}"
+          git push gitlab-push main:main
+          git tag -f ioc-data HEAD
+          git push gitlab-push ioc-data --force || \
+            echo "WARNING: could not update the ioc-data tag on GitLab"
+
+          LINKS=$(jq -nc --arg repo "${{ github.repository }}" --arg tag ioc-data '
+            ["threat_intel_json.json", "threat_intel_yaml.yaml", "threat_intel_sqlite.db",
+             "raw_records.json", "threat_intel_suricata.json"]
+            | map({name: ., url: ("https://github.com/" + $repo + "/releases/download/" + $tag + "/" + .), link_type: "other"})')
+
+          BODY=$(jq -nc --argjson links "$LINKS" '{
+            tag_name: "ioc-data",
+            name: "IoC Data (large formats)",
+            description: "Rolling release: large-format IoC outputs refreshed on weekdays (Mon-Fri 06:00 UTC) and mirrored to this GitLab release after each merged data update.",
+            assets: { links: $links }
+          }')
+
+          curl -fsS -o /dev/null -X DELETE \
+            --header "PRIVATE-TOKEN: ${GITLAB_PUSH_TOKEN}" \
+            "https://gitlab.com/api/v4/projects/${GITLAB_URLENCODED}/releases/ioc-data" || true
+
+          curl -fsS -o /dev/null --fail-with-body \
+            --header "PRIVATE-TOKEN: ${GITLAB_PUSH_TOKEN}" \
+            --header "Content-Type: application/json" \
+            --data "${BODY}" \
+            "https://gitlab.com/api/v4/projects/${GITLAB_URLENCODED}/releases"
+
+          echo "Mirrored main + ioc-data tag to GitLab and refreshed release:"
+          echo "https://gitlab.com/${GITLAB_PROJECT}/-/releases/ioc-data"
