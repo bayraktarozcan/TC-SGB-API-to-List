@@ -1,4 +1,5 @@
 # TC-SGB Threat Intelligence — Pi-hole hosts format
+0.0.0.0 gratis.blohm.com
 0.0.0.0 aneviirnadvm.online
 0.0.0.0 www-cepte-frst-sync.myonlineportal.ch
 0.0.0.0 yonlendiring.space

@@ -17,6 +17,7 @@ $TTL 300
 ns1 IN A 127.0.0.1
 
 ; Blocked domains
+gratis.blohm.com. IN A 0.0.0.0
 aneviirnadvm.online. IN A 0.0.0.0
 www-cepte-frst-sync.myonlineportal.ch. IN A 0.0.0.0
 yonlendiring.space. IN A 0.0.0.0
