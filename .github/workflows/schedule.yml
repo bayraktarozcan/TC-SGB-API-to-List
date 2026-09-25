@@ -4,6 +4,12 @@ on:
   schedule:
     - cron: "0 6 * * 1-5"
   workflow_dispatch:
+    inputs:
+      refresh_gitlab_release:
+        description: Force refresh of the GitLab ioc-data release even without data changes
+        required: false
+        type: boolean
+        default: false
 
 concurrency:
   group: scheduled-fetch
@@ -190,7 +196,7 @@ jobs:
           echo "Auto-merge still pending after wait window; PR left open."
 
       - name: Mirror IoC data to GitLab main and release
-        if: env.MIRROR == 'true'
+        if: env.MIRROR == 'true' || inputs.refresh_gitlab_release == 'true'
         env:
           GITLAB_PUSH_TOKEN: ${{ secrets.GITLAB_PUSH_TOKEN }}
         run: |
