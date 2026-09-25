@@ -1,6 +1,7 @@
 ! Title: TC-SGB Threat Intelligence Blocklist
-! Last updated: 2026-09-25T22:29:36.572100
+! Last updated: 2026-09-25T23:09:28.918564
 ! Homepage: https://siberguvenlik.gov.tr
+||gratis.blohm.com^
 ||aneviirnadvm.online^
 ||www-cepte-frst-sync.myonlineportal.ch^
 ||yonlendiring.space^

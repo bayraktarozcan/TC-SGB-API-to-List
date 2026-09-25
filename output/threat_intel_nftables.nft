@@ -15443,6 +15443,7 @@ table inet filter {
         type dns_name
         flags interval
         elements = {
+            gratis.blohm.com,
             aneviirnadvm.online,
             www-cepte-frst-sync.myonlineportal.ch,
             yonlendiring.space,

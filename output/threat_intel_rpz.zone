@@ -9,6 +9,7 @@ $TTL 300
 )
 @ IN NS localhost.
 
+gratis.blohm.com CNAME .
 aneviirnadvm.online CNAME .
 www-cepte-frst-sync.myonlineportal.ch CNAME .
 yonlendiring.space CNAME .
