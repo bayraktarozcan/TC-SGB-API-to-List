@@ -233,7 +233,7 @@ jobs:
             --header "PRIVATE-TOKEN: ${GITLAB_PUSH_TOKEN}" \
             "https://gitlab.com/api/v4/projects/${GITLAB_URLENCODED}/releases/ioc-data" || true
 
-          curl -fsS -o /dev/null --fail-with-body \
+          curl -fsS -o /dev/null \
             --header "PRIVATE-TOKEN: ${GITLAB_PUSH_TOKEN}" \
             --header "Content-Type: application/json" \
             --data "${BODY}" \
