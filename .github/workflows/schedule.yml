@@ -4,12 +4,6 @@ on:
   schedule:
     - cron: "0 6 * * 1-5"
   workflow_dispatch:
-    inputs:
-      refresh_gitlab_release:
-        description: Force refresh of the GitLab ioc-data release even without data changes
-        required: false
-        type: boolean
-        default: false
 
 concurrency:
   group: scheduled-fetch
@@ -71,7 +65,7 @@ jobs:
       - name: Run tests
         run: pytest tests/ -v --tb=short
 
-      - name: Publish large-format assets to rolling release
+      - name: Publish all output assets to rolling release
         if: success()
         continue-on-error: true
         env:
@@ -81,17 +75,37 @@ jobs:
           TAG="ioc-data"
           if ! gh release view "${TAG}" >/dev/null 2>&1; then
             gh release create "${TAG}" \
-              --title "IoC Data (large formats)" \
-              --notes "Rolling release: large-format IoC outputs refreshed on weekdays (Mon–Fri 06:00 UTC). Stable assets at https://github.com/${{ github.repository }}/releases/download/${TAG}/" \
+              --title "IoC Data (all formats)" \
+              --notes "Rolling release: all IoC outputs (16 formats + raw_records.json + fetch logs) refreshed on weekdays (Mon–Fri 06:00 UTC). Stable assets at https://github.com/${{ github.repository }}/releases/download/${TAG}/" \
               --target main
           fi
+          shopt -s nullglob
           gh release upload "${TAG}" --clobber -- \
-            output/threat_intel_json.json \
-            output/threat_intel_yaml.yaml \
-            output/threat_intel_sqlite.db \
+            output/threat_intel_* \
             output/raw_records.json \
-            output/threat_intel_suricata.json
-          echo "Large-format assets published to ${TAG}"
+            output/logs/*.md
+          echo "All output assets published to ${TAG}"
+
+      - name: Write output manifest
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib, json, pathlib
+          out = pathlib.Path("output")
+          man = {"formats": {}}
+          paths = sorted(out.glob("threat_intel_*"))
+          paths.append(out / "raw_records.json")
+          for p in paths:
+              if not p.is_file():
+                  continue
+              digest = hashlib.sha256()
+              with p.open("rb") as fh:
+                  for block in iter(lambda: fh.read(1 << 20), b""):
+                      digest.update(block)
+              man["formats"][p.name] = {"bytes": p.stat().st_size, "sha256": digest.hexdigest()}
+          out.joinpath("manifest.json").write_text(json.dumps(man, indent=2, sort_keys=True) + "\n")
+          print("Wrote manifest for", len(man["formats"]), "artifacts")
+          PY
 
       - name: Commit, create PR, and auto-merge if changed
         env:
@@ -100,11 +114,7 @@ jobs:
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add -f output/ ':!output/raw_records.json' \
-            ':!output/threat_intel_json.json' \
-            ':!output/threat_intel_sqlite.db' \
-            ':!output/threat_intel_suricata.json' \
-            ':!output/threat_intel_yaml.yaml'
+          git add -f output/manifest.json
           if git diff --cached --quiet; then
             echo "No changes to commit"
             exit 0
@@ -187,57 +197,10 @@ jobs:
               --jq '"\(.state)/\(.mergeStateStatus)"')
             echo "[wait ${i}] ${STATE}"
             case "$STATE" in
-              MERGED/*) echo "✓ Merged"; echo "MIRROR=true" >> "${GITHUB_ENV}"; exit 0 ;;
+              MERGED/*) echo "✓ Merged"; exit 0 ;;
               */BEHIND) echo "  main advanced; updating branch"; gh_retry gh pr update-branch "${PR_URL}" || true ;;
               *) : ;; # checks pending or failing — keep waiting
             esac
             sleep 30
           done
           echo "Auto-merge still pending after wait window; PR left open."
-
-      - name: Mirror IoC data to GitLab main and release
-        if: env.MIRROR == 'true' || inputs.refresh_gitlab_release == 'true'
-        env:
-          GITLAB_PUSH_TOKEN: ${{ secrets.GITLAB_PUSH_TOKEN }}
-        run: |
-          set -euo pipefail
-          : "${GITLAB_PUSH_TOKEN:?Missing GITLAB_PUSH_TOKEN repo secret (GitLab PAT with 'api' and 'write_repository' scopes); add it to the GitHub repo secrets to mirror IoC data to GitLab.}"
-          GITLAB_PROJECT="bayraktarozcan/TC-SGB-API-to-List"
-          GITLAB_URLENCODED="bayraktarozcan%2FTC-SGB-API-to-List"
-          GITLAB_REMOTE="https://oauth2:${GITLAB_PUSH_TOKEN}@gitlab.com/${GITLAB_PROJECT}.git"
-
-          git fetch origin main
-          git checkout -f main
-          git reset --hard origin/main
-
-          git remote add gitlab-push "${GITLAB_REMOTE}" 2>/dev/null || \
-            git remote set-url gitlab-push "${GITLAB_REMOTE}"
-          git push gitlab-push main:main
-          git tag -f ioc-data HEAD
-          git push gitlab-push ioc-data --force || \
-            echo "WARNING: could not update the ioc-data tag on GitLab"
-
-          LINKS=$(jq -nc --arg repo "${{ github.repository }}" --arg tag ioc-data '
-            ["threat_intel_json.json", "threat_intel_yaml.yaml", "threat_intel_sqlite.db",
-             "raw_records.json", "threat_intel_suricata.json"]
-            | map({name: ., url: ("https://github.com/" + $repo + "/releases/download/" + $tag + "/" + .), link_type: "other"})')
-
-          BODY=$(jq -nc --argjson links "$LINKS" '{
-            tag_name: "ioc-data",
-            name: "IoC Data (large formats)",
-            description: "Rolling release: large-format IoC outputs refreshed on weekdays (Mon-Fri 06:00 UTC) and mirrored to this GitLab release after each merged data update.",
-            assets: { links: $links }
-          }')
-
-          curl -fsS -o /dev/null -X DELETE \
-            --header "PRIVATE-TOKEN: ${GITLAB_PUSH_TOKEN}" \
-            "https://gitlab.com/api/v4/projects/${GITLAB_URLENCODED}/releases/ioc-data" || true
-
-          curl -fsS -o /dev/null \
-            --header "PRIVATE-TOKEN: ${GITLAB_PUSH_TOKEN}" \
-            --header "Content-Type: application/json" \
-            --data "${BODY}" \
-            "https://gitlab.com/api/v4/projects/${GITLAB_URLENCODED}/releases"
-
-          echo "Mirrored main + ioc-data tag to GitLab and refreshed release:"
-          echo "https://gitlab.com/${GITLAB_PROJECT}/-/releases/ioc-data"

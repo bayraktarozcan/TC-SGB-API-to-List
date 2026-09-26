@@ -1,0 +1,68 @@
+name: Refresh GitLab ioc-data release
+description: >-
+  Push main to GitLab, move the ioc-data tag, and rewrite the GitLab release so
+  its asset links mirror the current GitHub ioc-data release (all formats).
+inputs: {}
+
+
+runs:
+  using: composite
+  steps:
+    - name: Validate GitLab push token
+      shell: bash
+      run: |
+        set -euo pipefail
+        : "${GITLAB_PUSH_TOKEN:?Missing GITLAB_PUSH_TOKEN repo secret (GitLab PAT with 'api' and 'write_repository' scopes); add it to the GitHub repo secrets to mirror IoC data to GitLab.}"
+
+    - name: Mirror main and ioc-data tag to GitLab
+      shell: bash
+      run: |
+        set -euo pipefail
+        GITLAB_PROJECT="bayraktarozcan/TC-SGB-API-to-List"
+        GITLAB_REMOTE="https://oauth2:${GITLAB_PUSH_TOKEN}@gitlab.com/${GITLAB_PROJECT}.git"
+
+        git fetch origin main
+        git checkout -f main
+        git reset --hard origin/main
+
+        git remote add gitlab-push "${GITLAB_REMOTE}" 2>/dev/null || \
+          git remote set-url gitlab-push "${GITLAB_REMOTE}"
+        git push gitlab-push main:main
+        git tag -f ioc-data HEAD
+        git push gitlab-push ioc-data --force || \
+          echo "WARNING: could not update the ioc-data tag on GitLab"
+
+    - name: Rewrite GitLab release from GitHub assets
+      shell: bash
+      run: |
+        set -euo pipefail
+        GITLAB_PROJECT="bayraktarozcan/TC-SGB-API-to-List"
+        GITLAB_URLENCODED="bayraktarozcan%2FTC-SGB-API-to-List"
+        TAG="ioc-data"
+
+        NAMES=$(gh release view "${TAG}" --json assets \
+          --jq '[.assets[].name] | sort | unique' 2>/dev/null || echo '[]')
+
+        LINKS=$(jq -n --argjson names "$NAMES" \
+          --arg repo "${{ github.repository }}" --arg tag "${TAG}" '
+          $names | map({name: ., url: ("https://github.com/" + $repo + "/releases/download/" + $tag + "/" + .), link_type: "other"})')
+
+        BODY=$(jq -n --argjson links "$LINKS" '{
+          tag_name: "ioc-data",
+          name: "IoC Data (all formats)",
+          description: "Rolling release: all IoC outputs (16 formats + raw_records.json + fetch logs) mirrored to this GitLab release after each push to GitHub main.",
+          assets: { links: $links }
+        }')
+
+        curl -fsS -o /dev/null -X DELETE \
+          --header "PRIVATE-TOKEN: ${GITLAB_PUSH_TOKEN}" \
+          "https://gitlab.com/api/v4/projects/${GITLAB_URLENCODED}/releases/${TAG}" || true
+
+        curl -fsS -o /dev/null \
+          --header "PRIVATE-TOKEN: ${GITLAB_PUSH_TOKEN}" \
+          --header "Content-Type: application/json" \
+          --data "${BODY}" \
+          "https://gitlab.com/api/v4/projects/${GITLAB_URLENCODED}/releases"
+
+        echo "Refreshed GitLab release ($(jq length <<< "${LINKS}") asset links):"
+        echo "https://gitlab.com/${GITLAB_PROJECT}/-/releases/${TAG}"
