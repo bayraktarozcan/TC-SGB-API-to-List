@@ -4,6 +4,7 @@
 Usage:
     python scripts/main.py fetch [--max-records N] [--output DIR]
     python scripts/main.py generate [--input FILE] [--formats FMT,...] [--output DIR]
+    python scripts/main.py index [--output DIR] [--tag NAME] [--base-url URL]
     python scripts/main.py stats [--max-records N]
     python scripts/main.py validate [--input FILE] [--max-records N]
     python scripts/main.py health
@@ -34,7 +35,7 @@ if str(_SCRIPTS_DIR.parent) not in sys.path:
 from scripts.src.changelog import generate_changelog
 from scripts.src.client import AsyncAPIClient
 from scripts.src.models import AddressRecord
-from scripts.src.outputs import generate_all
+from scripts.src.outputs import generate_all, write_catalog
 from scripts.src.pipeline import Pipeline
 
 # ---------------------------------------------------------------------------
@@ -215,6 +216,18 @@ async def cmd_generate(args: argparse.Namespace) -> None:
     print("\nGenerated files:")
     for fmt, path in results.items():
         print(f"  {fmt:15s} -> {path}")
+
+
+async def cmd_index(args: argparse.Namespace) -> None:
+    """Write the artifact manifest plus a browsable blocklists catalog."""
+    output_dir = _resolve_output_dir(args)
+    manifest = write_catalog(
+        output_dir,
+        release_tag=args.tag,
+        release_base_url=args.base_url,
+    )
+    count = len(manifest["formats"])
+    print(f"Wrote manifest + {count} blocklist entries to {output_dir}")
 
 
 async def cmd_stats(args: argparse.Namespace) -> None:
@@ -447,6 +460,24 @@ def build_parser() -> argparse.ArgumentParser:
     p_stats = subparsers.add_parser("stats", help="Fetch and display API metadata and statistics.")
     add_common_args(p_stats)
 
+    # index
+    p_index = subparsers.add_parser(
+        "index",
+        help="Write manifest.json and the browsable blocklists catalog.",
+    )
+    p_index.add_argument(
+        "--output",
+        "-o",
+        default=None,
+        help="Output directory (default: $TC_SGB_OUTPUT_DIR or 'output').",
+    )
+    p_index.add_argument("--tag", default="ioc-data", help="Rolling release tag name.")
+    p_index.add_argument(
+        "--base-url",
+        default=None,
+        help="Release download base URL (default: $TC_SGB_RELEASE_BASE_URL or GitHub release).",
+    )
+
     # validate
     p_val = subparsers.add_parser("validate", help="Validate IoCs from file or API.")
     p_val.add_argument(
@@ -484,6 +515,7 @@ def main() -> None:
     cmd_map = {
         "fetch": cmd_fetch,
         "generate": cmd_generate,
+        "index": cmd_index,
         "stats": cmd_stats,
         "validate": cmd_validate,
         "health": cmd_health,

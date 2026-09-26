@@ -18,6 +18,7 @@ from scripts.main import (
     cmd_fetch,
     cmd_generate,
     cmd_health,
+    cmd_index,
     cmd_stats,
     cmd_validate,
     main,
@@ -46,6 +47,8 @@ def _make_args(**overrides) -> Namespace:
         "max_records": None,
         "formats": None,
         "input": None,
+        "tag": "ioc-data",
+        "base_url": None,
     }
     defaults.update(overrides)
     return Namespace(**defaults)
@@ -253,6 +256,39 @@ class TestCmdGenerate:
 
         assert "Skipping record" in capsys.readouterr().err
         assert (out / "threat_intel_pihole.txt").exists()
+
+
+# ---------------------------------------------------------------------------
+# cmd_index
+# ---------------------------------------------------------------------------
+
+
+class TestCmdIndex:
+    async def test_index_writes_catalog(self, temp_dir: Path, capsys):
+        out = temp_dir / "out"
+        out.mkdir()
+        (out / "threat_intel_pihole.txt").write_text("evil.example.com\n", encoding="utf-8")
+        (out / "raw_records.json").write_text("[]\n", encoding="utf-8")
+
+        await cmd_index(_make_args(output=str(out), base_url="https://ex.com/dl"))
+
+        assert (out / "manifest.json").is_file()
+        assert (out / "blocklists" / "pihole.json").is_file()
+        assert (out / "blocklists" / "index.json").is_file()
+        assert "2 blocklist entries" in capsys.readouterr().out
+
+    async def test_index_custom_tag(self, temp_dir: Path):
+        out = temp_dir / "tagged"
+        out.mkdir()
+        (out / "threat_intel_pihole.txt").write_text("x\n", encoding="utf-8")
+        (out / "raw_records.json").write_text("[]\n", encoding="utf-8")
+
+        await cmd_index(_make_args(output=str(out), tag="v9", base_url="https://ex.com/dl"))
+
+        import json
+
+        entry = json.loads((out / "blocklists" / "pihole.json").read_text(encoding="utf-8"))
+        assert entry["release_tag"] == "v9"
 
 
 # ---------------------------------------------------------------------------

@@ -8,9 +8,11 @@ for the SQLite database which needs a file path.
 from __future__ import annotations
 
 import csv
+import hashlib
 import io
 import json
 import logging
+import os
 import sqlite3
 from collections.abc import Sequence
 from datetime import UTC, datetime
@@ -25,6 +27,45 @@ logger = logging.getLogger(__name__)
 
 # YAML setup — use safe dumper if available.
 _yaml_dumper: type[yaml.SafeDumper] = yaml.SafeDumper
+
+FORMAT_EXTENSIONS: dict[str, str] = {
+    "nextdns": ".txt",
+    "adguard": ".txt",
+    "pihole": ".txt",
+    "dnsmasq": ".conf",
+    "unbound": ".conf",
+    "rpz": ".zone",
+    "technitium": ".zone",
+    "mikrotik": ".rsc",
+    "nftables": ".nft",
+    "ipset": ".ipset",
+    "suricata": ".json",
+    "crowdsec": ".yaml",
+    "csv": ".csv",
+    "json": ".json",
+    "yaml": ".yaml",
+    "sqlite": ".db",
+}
+
+FORMAT_TITLES: dict[str, str] = {
+    "nextdns": "NextDNS plain domain list",
+    "adguard": "AdGuard AdBlock filter list",
+    "pihole": "Pi-hole hosts format",
+    "dnsmasq": "dnsmasq configuration",
+    "unbound": "Unbound local-zone configuration",
+    "rpz": "RPZ response policy zone file",
+    "technitium": "Technitium DNS server zone file",
+    "mikrotik": "MikroTik RouterOS address-list script",
+    "nftables": "nftables sets",
+    "ipset": "ipset list",
+    "suricata": "Suricata EVE JSON events",
+    "crowdsec": "CrowdSec decision list YAML",
+    "csv": "CSV table of all IoCs",
+    "json": "JSON array of all IoCs",
+    "yaml": "YAML sequence of all IoCs",
+    "sqlite": "SQLite database of all IoCs",
+    "raw_records": "Raw API snapshot with quality scores",
+}
 
 
 def _domains_only(iocs: Sequence[ScoredIOC]) -> list[ScoredIOC]:
@@ -659,31 +700,12 @@ def generate_all(
     active_formats = formats or list(FORMAT_REGISTRY.keys())
     results: dict[str, str] = {}
 
-    ext_map = {
-        "nextdns": ".txt",
-        "adguard": ".txt",
-        "pihole": ".txt",
-        "dnsmasq": ".conf",
-        "unbound": ".conf",
-        "rpz": ".zone",
-        "technitium": ".zone",
-        "mikrotik": ".rsc",
-        "nftables": ".nft",
-        "ipset": ".ipset",
-        "suricata": ".json",
-        "crowdsec": ".yaml",
-        "csv": ".csv",
-        "json": ".json",
-        "yaml": ".yaml",
-        "sqlite": ".db",
-    }
-
     for fmt in active_formats:
         gen_func = FORMAT_REGISTRY.get(fmt)
         if gen_func is None:
             logger.warning("Unknown format: %s", fmt)
             continue
-        ext = ext_map.get(fmt, ".out")
+        ext = FORMAT_EXTENSIONS.get(fmt, ".out")
         filepath = output_dir / f"threat_intel_{fmt}{ext}"
         try:
             if fmt == "sqlite":
@@ -698,3 +720,108 @@ def generate_all(
             results[fmt] = f"ERROR: {exc}"
 
     return results
+
+
+# ---------------------------------------------------------------------------
+# Catalog / manifest
+# ---------------------------------------------------------------------------
+
+
+def _sha256_file(path: Path) -> tuple[int, str]:
+    """Return (size, sha256 hex digest) for a binary file."""
+    digest = hashlib.sha256()
+    with path.open("rb") as fh:
+        for block in iter(lambda: fh.read(1 << 20), b""):
+            digest.update(block)
+    return path.stat().st_size, digest.hexdigest()
+
+
+def _catalog_artifacts(output_dir: Path) -> list[Path]:
+    """Ordered list of publishable artifacts (16 formats + raw snapshot)."""
+    paths = sorted(output_dir.glob("threat_intel_*"))
+    raw = output_dir / "raw_records.json"
+    if raw.is_file():
+        paths.append(raw)
+    return [p for p in paths if p.is_file()]
+
+
+def _artifact_format(name: str) -> str:
+    stem = Path(name).stem
+    return stem[len("threat_intel_") :] if stem.startswith("threat_intel_") else stem
+
+
+def _resolve_base_url(release_tag: str, release_base_url: str | None) -> str:
+    """Resolve the rolling-release download base URL for ``raw_url`` fields."""
+    if release_base_url is not None:
+        return release_base_url
+    env_url = os.getenv("TC_SGB_RELEASE_BASE_URL")
+    if env_url:
+        return env_url.rstrip("/")
+    repo = os.getenv("GITHUB_REPOSITORY", "bayraktarozcan/TC-SGB-API-to-List")
+    return f"https://github.com/{repo}/releases/download/{release_tag}"
+
+
+def write_catalog(
+    output_dir: str | Path,
+    *,
+    release_tag: str = "ioc-data",
+    release_base_url: str | None = None,
+) -> dict[str, dict[str, Any]]:
+    """Write ``manifest.json`` plus a browsable ``blocklists/`` catalog.
+
+    One JSON per released artifact carries its size, sha256 digest and a stable
+    ``raw_url`` into the rolling GitHub release, so every format can be inspected
+    in a browser without downloading.  The manifest keeps the same schema as the
+    pipeline's original change-detection file.
+
+    Returns the manifest map (``{"formats": {file: {bytes, sha256}}}``).
+    """
+    output_dir = Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    base_url = _resolve_base_url(release_tag, release_base_url)
+    manifest: dict[str, dict[str, Any]] = {"formats": {}}
+    entries: list[dict[str, Any]] = []
+
+    for path in _catalog_artifacts(output_dir):
+        size, digest = _sha256_file(path)
+        name = path.name
+        fmt = _artifact_format(name)
+        manifest["formats"][name] = {"bytes": size, "sha256": digest}
+        entries.append(
+            {
+                "format": fmt,
+                "title": FORMAT_TITLES.get(fmt, fmt),
+                "file": name,
+                "extension": path.suffix,
+                "bytes": size,
+                "sha256": digest,
+                "release_tag": release_tag,
+                "raw_url": f"{base_url}/{name}",
+            }
+        )
+
+    entries.sort(key=lambda entry: entry["file"])
+    output_dir.joinpath("manifest.json").write_text(
+        json.dumps(manifest, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+
+    blocklists_dir = output_dir / "blocklists"
+    blocklists_dir.mkdir(parents=True, exist_ok=True)
+    index = {
+        "registry_version": 1,
+        "release_tag": release_tag,
+        "artifacts": entries,
+    }
+    blocklists_dir.joinpath("index.json").write_text(
+        json.dumps(index, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    for entry in entries:
+        blocklists_dir.joinpath(f"{entry['format']}.json").write_text(
+            json.dumps(entry, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
+
+    return manifest
