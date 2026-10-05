@@ -1,10 +1,10 @@
 {
-  "bytes": 40003062,
+  "bytes": 40004577,
   "extension": ".rsc",
   "file": "threat_intel_mikrotik.rsc",
   "format": "mikrotik",
   "raw_url": "https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/download/ioc-data/threat_intel_mikrotik.rsc",
   "release_tag": "ioc-data",
-  "sha256": "df96d67a4c466deccef3aa010c07f6dae0a3ba4d249d80777326e6fbf8908543",
+  "sha256": "c528f3e2835d1c4a029bfcb8238cbce7bf954d605c14f8386ed977a3fe3a01fa",
   "title": "MikroTik RouterOS address-list script"
 }
