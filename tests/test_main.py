@@ -285,8 +285,6 @@ class TestCmdIndex:
 
         await cmd_index(_make_args(output=str(out), tag="v9", base_url="https://ex.com/dl"))
 
-        import json
-
         entry = json.loads((out / "blocklists" / "pihole.json").read_text(encoding="utf-8"))
         assert entry["release_tag"] == "v9"
 
