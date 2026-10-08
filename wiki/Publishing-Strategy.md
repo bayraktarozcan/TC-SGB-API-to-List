@@ -58,6 +58,16 @@ Each GitHub release includes:
 | Checksums | SHA-256 for all artifacts | ~1 KB |
 | Release notes | Auto-generated from PRs | ~10 KB |
 
+### Brave / AdGuard filter list
+
+Release-asset links are served as file downloads, which Brave rejects as custom
+filter lists. The AdGuard output is therefore also mirrored as plain text on the
+rolling single-commit `filter-lists` branch (no history kept, never needs Git LFS),
+refreshed on weekdays by the Scheduled Fetch workflow:
+
+- Subscription URL: <https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/threat_intel_adguard.txt>
+- Subscribe in Brave via `brave://adblock` → Add filter list via URL.
+
 ### Release Process
 
 ```
@@ -454,6 +464,16 @@ Her GitHub sürümü şunları içerir:
 | Çıkış örnekleri | Örnek çıkış dosyaları | ~1 MB |
 | Doğrulama toplamları | Tüm artifactlar için SHA-256 | ~1 KB |
 | Sürüm notları | PR'lardan otomatik oluşturulmuş | ~10 KB |
+
+### Brave / AdGuard filtre listesi
+
+Release bağlantıları dosya indirme olarak sunulur ve Brave bunları özel filtre listesi
+olarak kabul etmez. Bu yüzden AdGuard çıktısı, yuvarlanan tek-commit'lik `filter-lists`
+dalında düz metin olarak da aynalanır (tarih tutulmaz, Git LFS gerekmez); Scheduled Fetch
+workflow'u ile hafta içi güncellenir:
+
+- Abonelik URL'si: <https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/threat_intel_adguard.txt>
+- Brave'de `brave://adblock` → Add filter list via URL ile abone olun.
 
 ### Yayın Süreci
 
