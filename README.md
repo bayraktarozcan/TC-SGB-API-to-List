@@ -79,6 +79,11 @@ Latest pre-generated IoC outputs are published automatically (Mon–Fri, 06:00 U
 | Structured YAML | [threat_intel_yaml.yaml](https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/download/ioc-data/threat_intel_yaml.yaml) | 97 MB |
 
 > Download via `wget`/`curl`/`Invoke-WebRequest` or browse the [release page](https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/tag/ioc-data). All other formats are generated to `output/` when you run the pipeline locally.
+>
+> **Brave / AdGuard users:** release-asset links are served as file downloads, which
+> Brave rejects as custom filter lists. Subscribe to the
+> [plain-text mirror](https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/threat_intel_adguard.txt)
+> instead (`brave://adblock` → Add filter list via URL); it is refreshed on weekdays.
 
 ## Project Structure
 
@@ -257,6 +262,11 @@ En güncel önceden üretilmiş IoC çıktıları (Pzt–Cum, 06:00 UTC) yuvarla
 | Yapılandırılmış YAML | [threat_intel_yaml.yaml](https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/download/ioc-data/threat_intel_yaml.yaml) | 97 MB |
 
 > `wget`/`curl`/`Invoke-WebRequest` ile indirin veya [release sayfasını](https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/tag/ioc-data) inceleyin. Diğer tüm biçimler hattı yerel olarak çalıştırdığınızda `output/` dizinine üretilir.
+>
+> **Brave / AdGuard kullanıcıları:** release bağlantıları dosya indirme olarak sunulur ve
+> Brave bunları özel filtre listesi olarak kabul etmez. Bunun yerine hafta içi güncellenen
+> [düz metin aynayı](https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/threat_intel_adguard.txt)
+> kullanın (`brave://adblock` → Add filter list via URL).
 
 ## Proje Yapısı
 
