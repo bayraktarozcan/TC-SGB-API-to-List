@@ -1,10 +1,10 @@
 {
-  "bytes": 309027,
+  "bytes": 14306344,
   "extension": ".txt",
   "file": "threat_intel_pihole.txt",
   "format": "pihole",
   "raw_url": "https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/download/ioc-data/threat_intel_pihole.txt",
   "release_tag": "ioc-data",
-  "sha256": "dfcb6da4c7bcf9e850bcd653af687f7e6a7080a09938f985132075d713aada71",
+  "sha256": "b4d38937f048e5be18496799f3f962f19c5df1f11b539973f3838bdce3946e0b",
   "title": "Pi-hole hosts format"
 }
