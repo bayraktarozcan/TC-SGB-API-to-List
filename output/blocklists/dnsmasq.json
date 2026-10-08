@@ -1,10 +1,10 @@
 {
-  "bytes": 18518416,
+  "bytes": 18518915,
   "extension": ".conf",
   "file": "threat_intel_dnsmasq.conf",
   "format": "dnsmasq",
   "raw_url": "https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/download/ioc-data/threat_intel_dnsmasq.conf",
   "release_tag": "ioc-data",
-  "sha256": "d6abec095fd70600b10cc11c21c2eb75ebc672e3df3f692ab8d42fd290bb4ab5",
+  "sha256": "42d14440bdb3cca5bd2459920fa4dcc49407aa3c310e7361fb6866a6b711e7e9",
   "title": "dnsmasq configuration"
 }
