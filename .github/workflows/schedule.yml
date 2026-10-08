@@ -86,6 +86,72 @@ jobs:
             output/logs/*.md
           echo "All output assets published to ${TAG}"
 
+      - name: Publish Brave-compatible filter list branch
+        if: success()
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.AUTO_MERGE_TOKEN }}
+        run: |
+          set -euo pipefail
+          SRC="output/threat_intel_adguard.txt"
+          if [ ! -f "${SRC}" ]; then
+            echo "AdGuard output not found; skipping filter-list publish."
+            echo "::warning::filter-lists branch not updated: AdGuard output missing."
+            exit 0
+          fi
+          # GitHub blocks files >100 MiB in git and warns >50 MiB
+          # (docs: "About large files on GitHub"). Stay far below both so the
+          # branch never needs Git LFS (quota-metered, disabled when exceeded).
+          # Skip loudly rather than failing the pipeline if the list ever
+          # outgrows git; the branch keeps serving the last good snapshot.
+          SIZE="$(wc -c < "${SRC}" | tr -d ' ')"
+          if [ "${SIZE}" -ge 94371840 ]; then
+            echo "AdGuard output ${SIZE} bytes >= 90 MiB; skipping filter-list publish."
+            echo "::warning::filter-lists branch not updated: AdGuard output >= 90 MiB."
+            exit 0
+          fi
+          if [ "${SIZE}" -ge 52428800 ]; then
+            echo "WARNING: AdGuard output ${SIZE} bytes >= 50 MiB; monitor list growth."
+          fi
+          # Rolling single-commit branch: history is intentionally not kept, so the
+          # daily ~12 MB snapshot never bloats the repository. raw.githubusercontent.com
+          # serves branch files as text/plain with no redirect, which is what Brave
+          # accepts as a custom filter list (release assets use an attachment
+          # disposition and fail with "download failed" in Brave).
+          BRANCH="filter-lists"
+          WORK="$(mktemp -d)"
+          git init -q -b "${BRANCH}" "${WORK}"
+          # Byte-faithful staging on any OS: disable CRLF conversion so the
+          # branch file is always identical to the release asset. (Without this,
+          # a Windows runner would stage a normalized copy and trip the assertion.)
+          git -C "${WORK}" config core.autocrlf false
+          git -C "${WORK}" config user.name "github-actions[bot]"
+          git -C "${WORK}" config user.email "github-actions[bot]@users.noreply.github.com"
+          cp "${SRC}" "${WORK}/threat_intel_adguard.txt"
+          cat > "${WORK}/README.md" <<'EOF'
+          # TC-SGB `filter-lists` branch
+
+          Rolling single-commit mirror of `threat_intel_adguard.txt` for Brave / AdGuard
+          custom filter-list subscriptions. Refreshed on weekdays by the `Scheduled Fetch`
+          workflow; history is not kept (force-pushed) so daily snapshots never bloat the repo.
+
+          Brave'de abone ol: `brave://adblock` → Add filter list via URL:
+
+              https://raw.githubusercontent.com/${{ github.repository }}/filter-lists/threat_intel_adguard.txt
+          EOF
+          git -C "${WORK}" add threat_intel_adguard.txt README.md
+          # Prove full content is staged: a Git LFS pointer would stage ~130 bytes
+          # instead of the source size. The branch tree carries no .gitattributes,
+          # so LFS substitution is impossible by construction; this asserts it.
+          if [ "$(git -C "${WORK}" cat-file -s :threat_intel_adguard.txt)" -ne "${SIZE}" ]; then
+            echo "Staged blob size mismatch; refusing to push."
+            exit 1
+          fi
+          git -C "${WORK}" commit -q -m "chore: update Brave/AdGuard filter list $(date -u +%Y%m%d-%H%M%S)"
+          git -C "${WORK}" remote add origin "https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git"
+          git -C "${WORK}" push --force origin "${BRANCH}"
+          echo "Published filter list to branch ${BRANCH}"
+
       - name: Write output catalog (manifest + blocklists)
         run: python scripts/main.py index
 

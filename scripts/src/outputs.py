@@ -122,6 +122,7 @@ def generate_adguard(
     ts = _resolve_timestamp(iocs, generated_at).isoformat()
     header = (
         "! Title: TC-SGB Threat Intelligence Blocklist\n"
+        "! Expires: 2 days\n"
         f"! Last updated: {ts}\n"
         "! Homepage: https://siberguvenlik.gov.tr\n"
     )
