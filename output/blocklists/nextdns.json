@@ -1,10 +1,10 @@
 {
-  "bytes": 232757,
+  "bytes": 10562178,
   "extension": ".txt",
   "file": "threat_intel_nextdns.txt",
   "format": "nextdns",
   "raw_url": "https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/download/ioc-data/threat_intel_nextdns.txt",
   "release_tag": "ioc-data",
-  "sha256": "f392a0db4edafcba3052f4b0090e9c434a3a4022c44fa6dd2102e9bd1cea7247",
+  "sha256": "ee452a8aebb39f6dcac1ad6a628d45250078f4505cc98ed1adfc8c4e324530f8",
   "title": "NextDNS plain domain list"
 }
