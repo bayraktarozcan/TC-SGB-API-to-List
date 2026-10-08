@@ -108,6 +108,14 @@ class TestAdGuard:
     def test_header(self, scored_iocs):
         out = generate_adguard(scored_iocs)
         assert "! Title:" in out
+        assert "! Expires:" in out
+
+    def test_header_order(self, scored_iocs):
+        lines = generate_adguard(scored_iocs).split("\n")
+        assert lines[0].startswith("! Title:")
+        assert lines[1].startswith("! Expires:")
+        assert lines[2].startswith("! Last updated:")
+        assert lines[3].startswith("! Homepage:")
 
     def test_domain_rules(self, scored_iocs):
         out = generate_adguard(scored_iocs)
