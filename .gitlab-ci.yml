@@ -57,12 +57,20 @@ test:
     - lint
   coverage: '/(?:^|\s)TOTAL\s+\d+\s+\d+\s+(\d+(?:\.\d+)?)%/'
   script:
-    - pytest --cov=scripts --cov-report=xml --cov-report=term-missing -v
+    - pytest -m "not slow" --cov=scripts --cov-report=xml --cov-report=term-missing -v
   artifacts:
     when: always
     paths:
       - coverage.xml
     expire_in: 7 days
+
+perf:
+  <<: *deps_base
+  stage: test
+  needs:
+    - lint
+  script:
+    - pytest -m slow --tb=short -v
 
 security:
   <<: *deps_base
@@ -78,6 +86,16 @@ security:
     paths:
       - bandit-report.json
     expire_in: 7 days
+
+secret-scan:
+  stage: security
+  needs: []
+  script:
+    - apt-get update && apt-get install -y --no-install-recommends curl ca-certificates && rm -rf /var/lib/apt/lists/*
+    - curl -sSL -o /tmp/gitleaks.tar.gz https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_linux_x64.tar.gz
+    - echo "551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb  /tmp/gitleaks.tar.gz" | sha256sum -c -
+    - tar xzf /tmp/gitleaks.tar.gz -C /tmp gitleaks
+    - /tmp/gitleaks detect --source . -v
 
 # Full-history blob scan. Enable weekly via a GitLab schedule with the
 # MOJIBAKE_DEEP="true" variable (schedule pipelines are allowed above).
@@ -96,7 +114,7 @@ build:
     - security
   before_script:
     - python -m pip install --upgrade pip setuptools wheel
-    - pip install build
+    - pip install build==1.6.1
   script:
     - python -m build
   artifacts:
