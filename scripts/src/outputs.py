@@ -10,6 +10,7 @@ from __future__ import annotations
 import csv
 import hashlib
 import io
+import ipaddress
 import json
 import logging
 import os
@@ -18,6 +19,7 @@ from collections.abc import Sequence
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlparse
 
 import yaml
 
@@ -111,14 +113,86 @@ def generate_nextdns(iocs: Sequence[ScoredIOC], path: str | Path | None = None) 
 # ---------------------------------------------------------------------------
 
 
+def _normalize_rule_host(host: str) -> str | None:
+    """Normalize a hostname for an ``||host^`` rule; None if unusable."""
+    host = host.strip().lower().rstrip(".")
+    if not host or any(char in host for char in (" ", "/", "@", "%")):
+        return None
+    try:
+        host = host.encode("idna").decode("ascii")
+    except UnicodeError:
+        return None
+    if len(host) > 253:
+        return None
+    return host
+
+
+def _bare_ip(value: str) -> str | None:
+    """Return the canonical form if *value* is a bare IP address, else None."""
+    try:
+        return str(ipaddress.ip_address(value.strip()))
+    except ValueError:
+        return None
+
+
+def _host_from_url(value: str) -> str | None:
+    """Extract the hostname from a URL IoC value; None if none found."""
+    text = value.strip()
+    if not text:
+        return None
+    try:
+        parsed = urlparse(text if "://" in text else f"https://{text}")
+        host = parsed.hostname
+    except ValueError:
+        return None
+    if not host:
+        return None
+    return host.rstrip(".")
+
+
+def _adguard_rule_hosts(iocs: Sequence[ScoredIOC]) -> list[str]:
+    """Collect deduplicated, order-stable rule hosts for the AdGuard list.
+
+    Sources: domain IoCs first, then hosts promoted from URL IoCs, then bare
+    IP literals. CIDR ranges are skipped (invalid rule syntax).
+    """
+    seen: set[str] = set()
+    hosts: list[str] = []
+
+    def _emit(host: str) -> None:
+        if host not in seen:
+            seen.add(host)
+            hosts.append(host)
+
+    for ioc in _domains_only(iocs):
+        _emit(ioc.value)
+    for ioc in iocs:
+        if ioc.ioc_type == IOCType.URL:
+            host = _host_from_url(ioc.value)
+            if host is None:
+                continue
+            bare = _bare_ip(host)
+            if bare is not None:
+                _emit(bare)
+                continue
+            normalized = _normalize_rule_host(host)
+            if normalized is not None:
+                _emit(normalized)
+        elif ioc.ioc_type in (IOCType.IP, IOCType.IP6, IOCType.IP6NET):
+            bare = _bare_ip(ioc.value)
+            if bare is not None:
+                _emit(bare)
+    return hosts
+
+
 def generate_adguard(
     iocs: Sequence[ScoredIOC],
     path: str | Path | None = None,
     *,
     generated_at: datetime | None = None,
 ) -> str:
-    """Generate AdGuard blocklist: ||domain^"""
-    lines = [f"||{ioc.value}^" for ioc in _domains_only(iocs)]
+    """Generate AdGuard blocklist: ||domain^ plus promoted URL hosts and IP literals."""
+    lines = [f"||{host}^" for host in _adguard_rule_hosts(iocs)]
     ts = _resolve_timestamp(iocs, generated_at).isoformat()
     header = (
         "! Title: TC-SGB Threat Intelligence Blocklist\n"

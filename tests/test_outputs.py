@@ -121,10 +121,55 @@ class TestAdGuard:
         out = generate_adguard(scored_iocs)
         assert "||evil-phish.com^" in out
 
-    def test_domains_only(self, scored_iocs):
+    def test_rule_sources(self, scored_iocs):
         out = generate_adguard(scored_iocs)
         lines = [line for line in out.split("\n") if line.startswith("||")]
-        assert len(lines) == 2  # only 2 domains in fixture
+        assert "||evil-phish.com^" in lines
+        assert "||malware-cnc.evil.net^" in lines
+        assert "||drop.evil.top^" in lines  # host promoted from URL IoC
+        assert "||192.0.2.1^" in lines  # bare IP literal
+        assert len(lines) == 4
+
+    def test_url_host_dedup(self):
+        iocs = [
+            ScoredIOC(
+                value="https://dup.example.com/a",
+                ioc_type=IOCType.URL,
+                quality_score=90.0,
+            ),
+            ScoredIOC(
+                value="https://dup.example.com/b?x=1",
+                ioc_type=IOCType.URL,
+                quality_score=91.0,
+            ),
+        ]
+        out = generate_adguard(iocs)
+        rules = [line for line in out.split("\n") if line.startswith("||")]
+        assert rules == ["||dup.example.com^"]
+
+    def test_url_ip_host(self):
+        iocs = [
+            ScoredIOC(
+                value="http://203.0.113.7/login",
+                ioc_type=IOCType.URL,
+                quality_score=90.0,
+            ),
+        ]
+        out = generate_adguard(iocs)
+        assert "||203.0.113.7^" in out
+
+    def test_cidr_and_garbage_skipped(self):
+        iocs = [
+            ScoredIOC(
+                value="2001:db8::/32",
+                ioc_type=IOCType.IP6NET,
+                quality_score=90.0,
+            ),
+            ScoredIOC(value="http://", ioc_type=IOCType.URL, quality_score=90.0),
+        ]
+        out = generate_adguard(iocs)
+        assert "/32" not in out
+        assert [line for line in out.split("\n") if line.startswith("||")] == []
 
 
 class TestPiHole:

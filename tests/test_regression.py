@@ -93,10 +93,14 @@ class TestAdGuardRegression:
         out2 = generate_adguard(stable_iocs, generated_at=ts)
         assert out1 == out2
 
-    def test_domain_count(self, stable_iocs):
+    def test_rule_count(self, stable_iocs):
         out = generate_adguard(stable_iocs)
-        domain_lines = [line for line in out.split("\n") if line.startswith("||")]
-        assert len(domain_lines) == 2
+        rule_lines = [line for line in out.split("\n") if line.startswith("||")]
+        assert rule_lines == [
+            "||evil-phish.com^",
+            "||spam.xyz^",
+            "||192.0.2.1^",
+        ]
 
 
 class TestJSONRegression:
