@@ -1,4 +1,4 @@
-[English](#-english) | [Türkçe](#-türkçe)
+﻿[English](#-english) | [Türkçe](#-türkçe)
 
 <a id="-english"></a>
 
@@ -132,6 +132,22 @@ TC-SGB-API-to-List/
 | [Risk Analysis](wiki/Risk-Analysis.md) | Risk assessment and mitigation |
 | [Roadmap](wiki/Roadmap.md) | Development roadmap |
 | [Legal Notices](wiki/Legal-Notices.md) | Legal and compliance notices |
+
+### Project documents
+
+| Document | Description |
+|----------|-------------|
+| [Changelog](CHANGELOG.md) | Version history |
+| [Contributing](CONTRIBUTING.md) | Contribution guidelines |
+| [Security](SECURITY.md) | Security reporting process |
+| [Support](SUPPORT.md) | Where to ask questions and how to report an issue |
+| [Privacy](PRIVACY.md) | What the project collects, stores, and transmits |
+| [Code of Conduct](CODE_OF_CONDUCT.md) | Code of conduct |
+| [Release notes](RELEASE-NOTE-TEMPLATE.md) | Skeleton that release notes follow |
+| [Agent guide](AGENTS.md) | Operating rules for humans and coding agents |
+| [License](LICENSE) | License terms |
+| [Notice](NOTICE) | Third-party attribution and trademark notices |
+| [Code owners](CODEOWNERS) | Defines code owners |
 
 ## Configuration
 
@@ -315,6 +331,22 @@ TC-SGB-API-to-List/
 | [Risk Analizi](wiki/Risk-Analysis.md) | Risk değerlendirmesi ve azaltma |
 | [Yol Haritası](wiki/Roadmap.md) | Geliştirme yol haritası |
 | [Yasal Bildirimler](wiki/Legal-Notices.md) | Hukuki ve uyum bildirimleri |
+
+### Proje belgeleri
+
+| Belge | Açıklama |
+|-------|----------|
+| [Değişiklik Günlüğü](CHANGELOG.md) | Sürüm geçmişi |
+| [Katkıda Bulunma](CONTRIBUTING.md) | Katkı yönergeleri |
+| [Güvenlik](SECURITY.md) | Güvenlik bildirim süreci |
+| [Destek](SUPPORT.md) | Soru sorma ve sorun bildirme yeri |
+| [Gizlilik](PRIVACY.md) | Projenin ne topladığı, sakladığı ve ilettiği |
+| [Davranış Kuralları](CODE_OF_CONDUCT.md) | Davranış kuralları |
+| [Sürüm notları](RELEASE-NOTE-TEMPLATE.md) | Sürüm notlarının izlediği iskelet |
+| [Ajan kılavuzu](AGENTS.md) | İnsanlar ve kodlama ajanları için çalışma kuralları |
+| [Lisans](LICENSE) | Lisans koşulları |
+| [Bildirim](NOTICE) | Üçüncü taraf atıfları ve marka bildirimleri |
+| [Kod sahipleri](CODEOWNERS) | Kod sahiplerini tanımlar |
 
 ## Yapılandırma
 
