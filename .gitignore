@@ -71,6 +71,8 @@ bandit-report.json
 .DS_Store
 .DS_Store?
 ._*
+# Re-include a misplaced marker so it shows up in `git status` (see AGENTS.md).
+!._dont_migrate_
 .Spotlight-V100
 .Trashes
 Thumbs.db
@@ -103,6 +105,9 @@ logs/
 # Data output
 output/
 test-output/
+
+# Scratch space (named once in the AGENTS.md project layer; cleared at task end)
+/scratch/
 
 # Runtime data cache
 data/*.json

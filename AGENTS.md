@@ -56,6 +56,112 @@ findings. Do not drop below it.
 - `TC_SGB_LOG_LEVEL` and `TC_SGB_OUTPUT_DIR` are honored by the CLI; `.env`
   files are read via `load_dotenv`.
 
+## Layout
+
+Single-purpose directories; generated artifacts never live beside sources.
+
+| Path | Purpose |
+|------|---------|
+| `scripts/` | CLI entry point (`main.py`) plus the pipeline package (`src/`) |
+| `scripts/src/` | Pipeline stages: models → client → validator → normalizer → quality → dedup → outputs |
+| `tests/` | Pytest suite: unit, regression, fuzz (`test_fuzz.py`), performance (`test_performance.py`, `slow`), repo guards (`test_repo_conventions.py`) |
+| `wiki/` | Tracked bilingual documentation; serves the Docs role under its historical name (deep-linked everywhere, see Bypasses) |
+| `docs/` | GitHub Pages landing page (`index.html`, vanilla, no external libraries) |
+| `schema/` | JSON Schema plus OpenAPI description of the source API |
+| `data/` | Runtime data cache (payloads are gitignored; reserved) |
+| `examples/` | Reserved for usage examples (currently a placeholder) |
+| `benchmark/` | Performance benchmarks (results are gitignored) |
+| `output/` | Generated IoC artifacts; only `manifest.json` plus `blocklists/` are tracked, the rest is release-only |
+| `.github/` | Actions workflows, Dependabot config, issue/PR templates, custom actions |
+| `.gitlab-ci.yml` | GitLab pipeline mirroring the GitHub checks |
+| `filter-lists` branch | Rolling single-commit Brave/AdGuard mirror (lives off `main`) |
+
+## Versions
+
+Four-part scheme `MAJOR.MINOR.FEATURE.FIX` with a `v` prefix on tags and
+CHANGELOG headings (evidence: `v0.2.0.0` → `v0.2.0.1` carried a fix batch,
+`v0.2.0.0` → `v0.3.0.0` a feature batch).
+
+- Current: `0.3.1.0`.
+- Stated in: `pyproject.toml` (`version`), `CHANGELOG.md` newest headings
+  (EN and TR), `wiki/Repository-Structure.md` quotes (EN and TR).
+- Pinned by `tests/test_repo_conventions.py::TestVersionParity` (oracle:
+  `pyproject.toml`).
+
+## Commands
+
+Setup, then the quality gate above (single local gate command); CI runs the
+same checks (see `.github/workflows/ci.yml`, `.gitlab-ci.yml`).
+
+- Setup: `pip install -e ".[dev]"` then `pip install -r requirements.txt`
+  (Python `>=3.11`; 3.15 dev-verified).
+- CLI verbs: `tc-sgb fetch | generate | index | stats | validate | health`.
+- Local gate = the Quality gate block (ruff, ruff format, mypy, bandit, pytest).
+
+## Naming
+
+Source files follow their language idiom (`snake_case` Python modules,
+`test_*.py` tests); documentation files are HyphenatedPascalCase; root files
+are UPPER; all committed paths are English with no whitespace.
+
+Exemptions (each with its reason):
+
+| Name | Reason |
+|------|--------|
+| Lowercase directories (`scripts/`, `tests/`, `wiki/`, `docs/`, `data/`, `output/`, `benchmark/`, `examples/`, `schema/`) | Python ecosystem idiom; renaming churns every path, tool config, and CI reference |
+| `wiki/` instead of `Docs/` | Historical name, deep-linked everywhere; serves the Docs role (see Bypasses) |
+| `.github/`, `.idea/`, `.venv/`, caches (`.hypothesis/`, `.pytest_cache/`, `.ruff_cache/`, `.mypy_cache/`) | Platform- or tool-owned/generated paths |
+| `docs/index.html` | Pages data contract (site root lookup) |
+| `filter-lists` branch | Rolling data mirror (single commit, force-pushed) |
+| `scheduled-fetch-*` branches | Automation working branches, deleted after merge |
+| `dependabot/*` branches | Tool-generated names |
+
+## Hidden layers
+
+- Scratch directory (named once, here): `/scratch/` (pattern in `.gitignore`;
+  cleared at task end, recreated on demand, never committed).
+- `.venv/`, `output/`, and tool caches are exempt build output: no markers, no
+  tests over them beyond the repo-convention guards.
+- No hidden layers currently exist; `AGENTS-TR.md` is a gitignored mirror file,
+  not a directory (see Local mirror).
+
+## Toolchain
+
+- Floor: Python `>=3.11` (CI runs 3.11); local dev verified on 3.15.
+- `pip` + `pyproject.toml` + `requirements.txt`; `pytest` + `coverage`;
+  `ruff` (lint and format); `mypy` (strict); `bandit`; `pip-audit`;
+  `hypothesis`.
+- Shells: `bash` on CI runners, PowerShell 5.1+ locally; `gh` CLI for
+  GitHub operations.
+- Note: with no C compiler on 3.15, PyYAML installs pure-Python via
+  `PYYAML_FORCE_LIBYAML=0` (C sources need MSVC); CI runners use prebuilt wheels.
+
+## Releases
+
+- Rolling `ioc-data` release (weekdays 06:00 UTC, `schedule.yml`) plus version
+  tags `v*`; hosts are GitHub and GitLab (`mirror-gitlab.yml` plus the
+  `refresh-gitlab-release` action keep tag, title, notes, and assets in parity).
+- `filter-lists` branch refreshes on every fetch; release notes are bilingual.
+
+## Bypasses
+
+Gates that do not hold by design, and what runs afterward instead:
+
+- Scheduled-fetch `continue-on-error` steps (release upload, branch publish):
+  the pipeline stays green and the branch keeps serving its last good snapshot;
+  `::warning::` annotations fire instead of failing.
+- Auto-merge arming on labeled/scheduled PRs runs the workflow's own test gate
+  instead of human review (same-repo heads only).
+- The CONTRIBUTING-documented AI-scan visual failure lets auto-merge proceed
+  instead of blocking on a check that cannot pass.
+- Dependabot `deps()`/`ci()` prefixes are tool-controlled; squash titles are
+  normalized to Conventional Commits on merge instead.
+- No transitive lockfile: direct runtime/build deps are pinned exact, but a
+  frozen file without regeneration automation would rot silently, so ranges
+  plus Dependabot stand in until lock tooling is adopted.
+- `wiki/` serves the Docs role instead of a `Docs/` folder; renaming would
+  break deep links across README, docs, workflows, and history.
+
 ## Local mirror (AGENTS-TR.md)
 
 AGENTS-TR.md is the one-to-one Turkish translation of this file, kept only for
@@ -624,4 +730,4 @@ Runtimes use the current LTS line (Node.js LTS, .NET LTS); build output goes thr
 - `.git/` is the **internal Git repository structure**, not a project config file.
 
 **Guiding rule:** "It looks special" does not mean "It is a standard special file." The meaning of any file is determined by the software that reads and interprets it.
-<!-- mirror-sync: sync-sha=f3a31bf6448b60bdac143b057edbd7038339d03a -->
+<!-- mirror-sync: sync-sha=b4c0929ed14771ed3269d7ceb68cf2f889f4db59 -->
