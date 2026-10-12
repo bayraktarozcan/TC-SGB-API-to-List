@@ -45,10 +45,10 @@ lint:
   <<: *deps_base
   stage: lint
   script:
-    - ruff check scripts/ tests/
-    - ruff format --check scripts/ tests/
-    - mypy scripts/
-    - python scripts/src/mojibake.py
+    - ruff check Scripts/ Tests/
+    - ruff format --check Scripts/ Tests/
+    - mypy Scripts/
+    - python Scripts/src/mojibake.py
 
 test:
   <<: *deps_base
@@ -57,7 +57,7 @@ test:
     - lint
   coverage: '/(?:^|\s)TOTAL\s+\d+\s+\d+\s+(\d+(?:\.\d+)?)%/'
   script:
-    - pytest -m "not slow" --cov=scripts --cov-report=xml --cov-report=term-missing -v
+    - pytest -m "not slow" --cov=Scripts --cov-report=xml --cov-report=term-missing -v
   artifacts:
     when: always
     paths:
@@ -79,8 +79,8 @@ security:
     - lint
   script:
     - pip-audit --ignore-vuln PYSEC-2026-1845 --ignore-vuln PYSEC-2026-3447
-    - bandit -r scripts/ -f json -o bandit-report.json
-    - bandit -r scripts/
+    - bandit -r Scripts/ -f json -o bandit-report.json
+    - bandit -r Scripts/
   artifacts:
     when: always
     paths:
@@ -105,7 +105,7 @@ deep-mojibake:
   rules:
     - if: '$MOJIBAKE_DEEP == "true"'
   script:
-    - python scripts/src/mojibake.py --scope history
+    - python Scripts/src/mojibake.py --scope history
 
 build:
   stage: build

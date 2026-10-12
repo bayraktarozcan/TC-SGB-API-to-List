@@ -35,7 +35,7 @@ TC-SGB-API-to-List fetches IoC (Indicator of Compromise) data from the TC SGB pu
   - Firewall: nftables, ipset
   - IDS/IPS: Suricata, CrowdSec
   - Data: CSV, JSON, YAML, SQLite
-- **Scheduled Pipeline** — GitHub Actions cron for automated updates on weekdays (Mon–Fri 06:00 UTC)
+- **Scheduled Pipeline** — GitHub Actions cron for automated updates every day (19:00 UTC)
 - **Bilingual Documentation** — Full English and Turkish documentation
 
 ## Quick Start
@@ -60,7 +60,7 @@ pip install -e .
 tc-sgb fetch
 
 # Generate outputs from previously saved raw data
-tc-sgb generate -i output/raw_records.json
+tc-sgb generate -i Output/raw_records.json
 
 # Fetch and display health status
 tc-sgb health
@@ -68,7 +68,7 @@ tc-sgb health
 
 ### Data Download
 
-Latest pre-generated IoC outputs are published automatically (Mon–Fri, 06:00 UTC) to the rolling GitHub Release `ioc-data`. The five large-format files are distributed through stable download URLs (small formats remain tracked in the `output/` directory):
+Latest pre-generated IoC outputs are published automatically (daily, 19:00 UTC) to the rolling GitHub Release `ioc-data`. The five large-format files are distributed through stable download URLs (small formats remain tracked in the `Output/` directory):
 
 | Format | File | Size (approx.) |
 |--------|------|----------------|
@@ -78,18 +78,18 @@ Latest pre-generated IoC outputs are published automatically (Mon–Fri, 06:00 U
 | Suricata JSON | [threat_intel_suricata.json](https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/download/ioc-data/threat_intel_suricata.json) | 203 MB |
 | Structured YAML | [threat_intel_yaml.yaml](https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/download/ioc-data/threat_intel_yaml.yaml) | 97 MB |
 
-> Download via `wget`/`curl`/`Invoke-WebRequest` or browse the [release page](https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/tag/ioc-data). All other formats are generated to `output/` when you run the pipeline locally.
+> Download via `wget`/`curl`/`Invoke-WebRequest` or browse the [release page](https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/tag/ioc-data). All other formats are generated to `Output/` when you run the pipeline locally.
 >
 > **Brave / AdGuard users:** release-asset links are served as file downloads, which
 > Brave rejects as custom filter lists. Subscribe to the
 > [plain-text mirror](https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/threat_intel_adguard.txt)
-> instead (`brave://adblock` → Add filter list via URL); it is refreshed on weekdays.
+> instead (`brave://adblock` → Add filter list via URL); it is refreshed daily.
 
 ## Project Structure
 
 ```
 TC-SGB-API-to-List/
-├── scripts/
+├── Scripts/
 │   ├── main.py                  # CLI entry point
 │   └── src/
 │       ├── models.py            # Pydantic data models
@@ -100,13 +100,13 @@ TC-SGB-API-to-List/
 │       ├── quality.py           # Quality scoring
 │       ├── outputs.py           # 16 output format generators
 │       └── pipeline.py          # Pipeline orchestrator
-├── tests/                       # Test suite
-├── wiki/                        # Documentation (bilingual)
-├── schema/                      # JSON Schema & OpenAPI spec
-├── data/                        # Runtime data cache
-├── output/                      # Generated IoC output files (small formats tracked; large formats via `ioc-data` release)
-├── examples/                    # Usage examples
-├── benchmark/                   # Performance benchmarks
+├── Tests/                       # Test suite
+├── Docs/                        # Documentation (bilingual)
+├── Schema/                      # JSON Schema & OpenAPI spec
+├── Data/                        # Runtime data cache
+├── Output/                      # Generated IoC output files (small formats tracked; large formats via `ioc-data` release)
+├── Examples/                    # Usage examples
+├── Benchmark/                   # Performance benchmarks
 └── .github/workflows/           # CI/CD pipelines
 ```
 
@@ -114,24 +114,24 @@ TC-SGB-API-to-List/
 
 | Document | Description |
 |----------|-------------|
-| [Architecture](wiki/Architecture.md) | System design and component overview |
-| [Data Flow](wiki/Data-Flow.md) | Pipeline data flow and transformations |
-| [Module Architecture](wiki/Module-Architecture.md) | Module responsibilities and interfaces |
-| [Repository Structure](wiki/Repository-Structure.md) | Directory layout and file purposes |
-| [API Analysis](wiki/API-Analysis.md) | TC SGB API endpoints and capabilities |
-| [Data Model](wiki/Data-Model.md) | Pydantic models and schemas |
-| [Threat Model](wiki/Threat-Model.md) | STRIDE threat analysis |
-| [Security Analysis](wiki/Security-Analysis.md) | Security posture and hardening |
-| [License Analysis](wiki/License-Analysis.md) | Legal and licensing considerations |
-| [Test Strategy](wiki/Test-Strategy.md) | Testing approach and coverage |
-| [Regression Strategy](wiki/Regression-Strategy.md) | Regression testing methodology |
-| [Performance Strategy](wiki/Performance-Strategy.md) | Performance benchmarks and optimization |
-| [Versioning Strategy](wiki/Versioning-Strategy.md) | Semantic versioning approach |
-| [Publishing Strategy](wiki/Publishing-Strategy.md) | Distribution and publishing |
-| [Maintenance Plan](wiki/Maintenance-Plan.md) | Ongoing maintenance procedures |
-| [Risk Analysis](wiki/Risk-Analysis.md) | Risk assessment and mitigation |
-| [Roadmap](wiki/Roadmap.md) | Development roadmap |
-| [Legal Notices](wiki/Legal-Notices.md) | Legal and compliance notices |
+| [Architecture](Docs/Architecture.md) | System design and component overview |
+| [Data Flow](Docs/Data-Flow.md) | Pipeline data flow and transformations |
+| [Module Architecture](Docs/Module-Architecture.md) | Module responsibilities and interfaces |
+| [Repository Structure](Docs/Repository-Structure.md) | Directory layout and file purposes |
+| [API Analysis](Docs/API-Analysis.md) | TC SGB API endpoints and capabilities |
+| [Data Model](Docs/Data-Model.md) | Pydantic models and schemas |
+| [Threat Model](Docs/Threat-Model.md) | STRIDE threat analysis |
+| [Security Analysis](Docs/Security-Analysis.md) | Security posture and hardening |
+| [License Analysis](Docs/License-Analysis.md) | Legal and licensing considerations |
+| [Test Strategy](Docs/Test-Strategy.md) | Testing approach and coverage |
+| [Regression Strategy](Docs/Regression-Strategy.md) | Regression testing methodology |
+| [Performance Strategy](Docs/Performance-Strategy.md) | Performance benchmarks and optimization |
+| [Versioning Strategy](Docs/Versioning-Strategy.md) | Semantic versioning approach |
+| [Publishing Strategy](Docs/Publishing-Strategy.md) | Distribution and publishing |
+| [Maintenance Plan](Docs/Maintenance-Plan.md) | Ongoing maintenance procedures |
+| [Risk Analysis](Docs/Risk-Analysis.md) | Risk assessment and mitigation |
+| [Roadmap](Docs/Roadmap.md) | Development roadmap |
+| [Legal Notices](Docs/Legal-Notices.md) | Legal and compliance notices |
 
 ### Project documents
 
@@ -165,13 +165,13 @@ pip install -e ".[dev]"
 pip install -r requirements.txt
 
 # Run tests
-pytest tests/ -v
+pytest Tests/ -v
 
 # Run linter
-ruff check scripts/ tests/
+ruff check Scripts/ Tests/
 
 # Run type checker
-mypy scripts/
+mypy Scripts/
 ```
 
 ## Roadmap
@@ -191,7 +191,7 @@ Contributions are welcome! Please read our [contributing guidelines](CONTRIBUTIN
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE). See [LEGAL_NOTICES](wiki/Legal-Notices.md) for important legal information regarding data redistribution.
+This project is licensed under the [MIT License](LICENSE). See [LEGAL_NOTICES](Docs/Legal-Notices.md) for important legal information regarding data redistribution.
 
 ## Disclaimer
 
@@ -234,7 +234,7 @@ TC-SGB-API-to-List, TC SGB kamu API'sinden (`https://siberguvenlik.gov.tr/api/`)
   - Güvenlik Duvarı: nftables, ipset
   - IDS/IPS: Suricata, CrowdSec
   - Veri: CSV, JSON, YAML, SQLite
-- **Zamanlanmış Hat** — Hafta içi her gün (Pzt–Cum 06:00 UTC) otomatik güncellemeler için GitHub Actions cron zamanlayıcısı
+- **Zamanlanmış Hat** — Her gün (19:00 UTC) otomatik güncellemeler için GitHub Actions cron zamanlayıcısı
 - **Çift Dilli Dokümantasyon** — Tam İngilizce ve Türkçe dokümantasyon
 
 ## Hızlı Başlangıç
@@ -259,7 +259,7 @@ pip install -e .
 tc-sgb fetch
 
 # Daha önce kaydedilmiş ham veriden çıktı üret
-tc-sgb generate -i output/raw_records.json
+tc-sgb generate -i Output/raw_records.json
 
 # Sağlık durumunu görüntüle
 tc-sgb health
@@ -267,7 +267,7 @@ tc-sgb health
 
 ### Veri İndirme
 
-En güncel önceden üretilmiş IoC çıktıları (Pzt–Cum, 06:00 UTC) yuvarlanan GitHub Release'i `ioc-data`'da otomatik olarak yayınlanır. Beş büyük biçim dosyası kararlı indirme bağlantıları üzerinden dağıtılır (küçük biçimler `output/` dizininde izlenmeye devam eder):
+En güncel önceden üretilmiş IoC çıktıları (her gün, 19:00 UTC) yuvarlanan GitHub Release'i `ioc-data`'da otomatik olarak yayınlanır. Beş büyük biçim dosyası kararlı indirme bağlantıları üzerinden dağıtılır (küçük biçimler `Output/` dizininde izlenmeye devam eder):
 
 | Biçim | Dosya | Yaklaşık Boyut |
 |-------|-------|----------------|
@@ -277,10 +277,10 @@ En güncel önceden üretilmiş IoC çıktıları (Pzt–Cum, 06:00 UTC) yuvarla
 | Suricata JSON | [threat_intel_suricata.json](https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/download/ioc-data/threat_intel_suricata.json) | 203 MB |
 | Yapılandırılmış YAML | [threat_intel_yaml.yaml](https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/download/ioc-data/threat_intel_yaml.yaml) | 97 MB |
 
-> `wget`/`curl`/`Invoke-WebRequest` ile indirin veya [release sayfasını](https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/tag/ioc-data) inceleyin. Diğer tüm biçimler hattı yerel olarak çalıştırdığınızda `output/` dizinine üretilir.
+> `wget`/`curl`/`Invoke-WebRequest` ile indirin veya [release sayfasını](https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/tag/ioc-data) inceleyin. Diğer tüm biçimler hattı yerel olarak çalıştırdığınızda `Output/` dizinine üretilir.
 >
 > **Brave / AdGuard kullanıcıları:** release bağlantıları dosya indirme olarak sunulur ve
-> Brave bunları özel filtre listesi olarak kabul etmez. Bunun yerine hafta içi güncellenen
+> Brave bunları özel filtre listesi olarak kabul etmez. Bunun yerine her gün güncellenen
 > [düz metin aynayı](https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/threat_intel_adguard.txt)
 > kullanın (`brave://adblock` → Add filter list via URL).
 
@@ -288,7 +288,7 @@ En güncel önceden üretilmiş IoC çıktıları (Pzt–Cum, 06:00 UTC) yuvarla
 
 ```
 TC-SGB-API-to-List/
-├── scripts/
+├── Scripts/
 │   ├── main.py                  # CLI giriş noktası
 │   └── src/
 │       ├── models.py            # Pydantic veri modelleri
@@ -299,13 +299,13 @@ TC-SGB-API-to-List/
 │       ├── quality.py           # Kalite puanlama
 │       ├── outputs.py           # 16 çıktı biçimi üreteçleri
 │       └── pipeline.py          # Hat koordinatörü
-├── tests/                       # Test paketi
-├── wiki/                        # Dokümantasyon (çift dilli)
-├── schema/                      # JSON Schema ve OpenAPI belirtimi
-├── data/                        # Çalışma zamanı veri önbelleği
-├── output/                      # Üretilen IoC çıktı dosyaları (küçük biçimler izlenir; büyük biçimler `ioc-data` release'i aracılığıyla)
-├── examples/                    # Kullanım örnekleri
-├── benchmark/                   # Performans karşılaştırmaları
+├── Tests/                       # Test paketi
+├── Docs/                        # Dokümantasyon (çift dilli)
+├── Schema/                      # JSON Schema ve OpenAPI belirtimi
+├── Data/                        # Çalışma zamanı veri önbelleği
+├── Output/                      # Üretilen IoC çıktı dosyaları (küçük biçimler izlenir; büyük biçimler `ioc-data` release'i aracılığıyla)
+├── Examples/                    # Kullanım örnekleri
+├── Benchmark/                   # Performans karşılaştırmaları
 └── .github/workflows/           # CI/CD hatları
 ```
 
@@ -313,24 +313,24 @@ TC-SGB-API-to-List/
 
 | Belge | Açıklama |
 |-------|----------|
-| [Mimari](wiki/Architecture.md) | Sistem tasarımı ve bileşen genel bakışı |
-| [Veri Akışı](wiki/Data-Flow.md) | Hat veri akışı ve dönüşümleri |
-| [Modül Mimarisi](wiki/Module-Architecture.md) | Modül sorumlulukları ve arayüzleri |
-| [Depo Yapısı](wiki/Repository-Structure.md) | Dizin yerleşimi ve dosya amaçları |
-| [API Analizi](wiki/API-Analysis.md) | TC SGB API uç noktaları ve yetenekleri |
-| [Veri Modeli](wiki/Data-Model.md) | Pydantic modelleri ve şemaları |
-| [Tehdit Modeli](wiki/Threat-Model.md) | STRIDE tehdit analizi |
-| [Güvenlik Analizi](wiki/Security-Analysis.md) | Güvenlik duruşu ve sertleştirme |
-| [Lisans Analizi](wiki/License-Analysis.md) | Hukuki ve lisanslama hususları |
-| [Test Stratejisi](wiki/Test-Strategy.md) | Test yaklaşımı ve kapsama |
-| [Regresyon Stratejisi](wiki/Regression-Strategy.md) | Regresyon test metodolojisi |
-| [Performans Stratejisi](wiki/Performance-Strategy.md) | Performans karşılaştırmaları ve optimizasyon |
-| [Sürüm Stratejisi](wiki/Versioning-Strategy.md) | Semantik sürümleme yaklaşımı |
-| [Yayın Stratejisi](wiki/Publishing-Strategy.md) | Dağıtım ve yayınlanma |
-| [Bakım Planı](wiki/Maintenance-Plan.md) | Sürekli bakım prosedürleri |
-| [Risk Analizi](wiki/Risk-Analysis.md) | Risk değerlendirmesi ve azaltma |
-| [Yol Haritası](wiki/Roadmap.md) | Geliştirme yol haritası |
-| [Yasal Bildirimler](wiki/Legal-Notices.md) | Hukuki ve uyum bildirimleri |
+| [Mimari](Docs/Architecture.md) | Sistem tasarımı ve bileşen genel bakışı |
+| [Veri Akışı](Docs/Data-Flow.md) | Hat veri akışı ve dönüşümleri |
+| [Modül Mimarisi](Docs/Module-Architecture.md) | Modül sorumlulukları ve arayüzleri |
+| [Depo Yapısı](Docs/Repository-Structure.md) | Dizin yerleşimi ve dosya amaçları |
+| [API Analizi](Docs/API-Analysis.md) | TC SGB API uç noktaları ve yetenekleri |
+| [Veri Modeli](Docs/Data-Model.md) | Pydantic modelleri ve şemaları |
+| [Tehdit Modeli](Docs/Threat-Model.md) | STRIDE tehdit analizi |
+| [Güvenlik Analizi](Docs/Security-Analysis.md) | Güvenlik duruşu ve sertleştirme |
+| [Lisans Analizi](Docs/License-Analysis.md) | Hukuki ve lisanslama hususları |
+| [Test Stratejisi](Docs/Test-Strategy.md) | Test yaklaşımı ve kapsama |
+| [Regresyon Stratejisi](Docs/Regression-Strategy.md) | Regresyon test metodolojisi |
+| [Performans Stratejisi](Docs/Performance-Strategy.md) | Performans karşılaştırmaları ve optimizasyon |
+| [Sürüm Stratejisi](Docs/Versioning-Strategy.md) | Semantik sürümleme yaklaşımı |
+| [Yayın Stratejisi](Docs/Publishing-Strategy.md) | Dağıtım ve yayınlanma |
+| [Bakım Planı](Docs/Maintenance-Plan.md) | Sürekli bakım prosedürleri |
+| [Risk Analizi](Docs/Risk-Analysis.md) | Risk değerlendirmesi ve azaltma |
+| [Yol Haritası](Docs/Roadmap.md) | Geliştirme yol haritası |
+| [Yasal Bildirimler](Docs/Legal-Notices.md) | Hukuki ve uyum bildirimleri |
 
 ### Proje belgeleri
 
@@ -364,13 +364,13 @@ pip install -e ".[dev]"
 pip install -r requirements.txt
 
 # Testleri çalıştır
-pytest tests/ -v
+pytest Tests/ -v
 
 # Linter'ı çalıştır
-ruff check scripts/ tests/
+ruff check Scripts/ Tests/
 
 # Tip kontrolcüyü çalıştır
-mypy scripts/
+mypy Scripts/
 ```
 
 ## Yol Haritası
@@ -390,7 +390,7 @@ Katkılar memnuniyetle karşılanmaktadır! Lütfen pull request göndermeden ö
 
 ## Lisans
 
-Bu proje [MIT Lisansı](LICENSE) altında lisanslanmıştır. Veri yeniden dağıtımı ile ilgili önemli yasal bilgiler için [YASAL BİLDİRİMLER](wiki/Legal-Notices.md) dosyasına bakın.
+Bu proje [MIT Lisansı](LICENSE) altında lisanslanmıştır. Veri yeniden dağıtımı ile ilgili önemli yasal bilgiler için [YASAL BİLDİRİMLER](Docs/Legal-Notices.md) dosyasına bakın.
 
 ## Sorumluluk Reddi
 

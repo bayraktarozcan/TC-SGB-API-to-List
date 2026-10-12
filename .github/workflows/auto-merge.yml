@@ -43,10 +43,10 @@ jobs:
           pip install -e ".[dev]"
 
       - name: Ruff lint
-        run: ruff check scripts/ tests/
+        run: ruff check Scripts/ Tests/
 
       - name: Ruff format check
-        run: ruff format --check scripts/ tests/
+        run: ruff format --check Scripts/ Tests/
 
       - name: Run tests
         run: pytest --tb=short
