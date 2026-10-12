@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://tc-sgb-api-list.local/schemas/address.schema.json",
-  "title": "Address IOC",
-  "description": "An IP address indicator of compromise (IOC) record.",
+  "title": "Address IoC",
+  "description": "An IP address indicator of compromise (IoC) record.",
   "type": "object",
   "required": [
     "id",
@@ -15,7 +15,7 @@
     "id": {
       "type": "string",
       "format": "uuid",
-      "description": "Unique identifier for the IOC record."
+      "description": "Unique identifier for the IoC record."
     },
     "ip": {
       "type": "string",
@@ -32,14 +32,14 @@
       "type": "string",
       "enum": ["address"],
       "const": "address",
-      "description": "IOC type discriminator."
+      "description": "IoC type discriminator."
     },
     "confidence": {
       "type": "integer",
       "minimum": 0,
       "maximum": 100,
       "default": 50,
-      "description": "Confidence score (0-100) in the IOC's validity."
+      "description": "Confidence score (0-100) in the IoC's validity."
     },
     "tags": {
       "type": "array",

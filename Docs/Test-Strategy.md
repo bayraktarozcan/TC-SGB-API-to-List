@@ -65,13 +65,13 @@ This document defines the comprehensive testing strategy for the TC-SGB-API-to-L
 ```python
 import pytest
 from Scripts.src.validator import validate_ioc
-from Scripts.src.models import AddressRecord, IOCType
+from Scripts.src.models import AddressRecord, IoCType
 
 
 def test_valid_record_passes():
     record = AddressRecord(
         id="1",
-        type=IOCType.DOMAIN,
+        type=IoCType.DOMAIN,
         value="evil.com",
         first_seen="2025-01-15T10:00:00Z",
         last_seen="2025-01-20T10:00:00Z",
@@ -86,7 +86,7 @@ def test_empty_value_rejected():
     with pytest.raises(ValidationError, match="min_length"):
         AddressRecord(
             id="1",
-            type=IOCType.DOMAIN,
+            type=IoCType.DOMAIN,
             value="",
             first_seen="2025-01-15T10:00:00Z",
             last_seen="2025-01-20T10:00:00Z",
@@ -152,19 +152,19 @@ exclude_lines = [
 ```python
 # Tests/conftest.py
 import pytest
-from Scripts.src.models import IOCRecord, IOCType, IOCStatus
+from Scripts.src.models import IoCRecord, IoCType, IoCStatus
 
 
 @pytest.fixture
 def sample_ioc_record():
     """Create a valid IoC record for testing."""
-    return IOCRecord(
+    return IoCRecord(
         id=1,
-        type=IOCType.DOMAIN,
+        type=IoCType.DOMAIN,
         value="evil-example.com",
         first_seen="2025-01-15T10:00:00Z",
         last_seen="2025-01-20T14:30:00Z",
-        status=IOCStatus.ACTIVE,
+        status=IoCStatus.ACTIVE,
     )
 
 
@@ -172,13 +172,13 @@ def sample_ioc_record():
 def sample_ioc_batch():
     """Create a batch of IoC records for testing."""
     return [
-        IOCRecord(
+        IoCRecord(
             id=i,
-            type=IOCType.DOMAIN,
+            type=IoCType.DOMAIN,
             value=f"evil{i}.com",
             first_seen="2025-01-15T10:00:00Z",
             last_seen="2025-01-20T14:30:00Z",
-            status=IOCStatus.ACTIVE,
+            status=IoCStatus.ACTIVE,
         )
         for i in range(1, 101)
     ]
@@ -378,13 +378,13 @@ Bu belge, TC-SGB-API-to-List projesi için kapsamlı test stratejisini tanımlar
 ```python
 import pytest
 from Scripts.src.validator import validate_ioc
-from Scripts.src.models import AddressRecord, IOCType
+from Scripts.src.models import AddressRecord, IoCType
 
 
 def test_valid_record_passes():
     record = AddressRecord(
         id="1",
-        type=IOCType.DOMAIN,
+        type=IoCType.DOMAIN,
         value="evil.com",
         first_seen="2025-01-15T10:00:00Z",
         last_seen="2025-01-20T10:00:00Z",
@@ -399,7 +399,7 @@ def test_empty_value_rejected():
     with pytest.raises(ValidationError, match="min_length"):
         AddressRecord(
             id="1",
-            type=IOCType.DOMAIN,
+            type=IoCType.DOMAIN,
             value="",
             first_seen="2025-01-15T10:00:00Z",
             last_seen="2025-01-20T10:00:00Z",
@@ -465,19 +465,19 @@ exclude_lines = [
 ```python
 # Tests/conftest.py
 import pytest
-from Scripts.src.models import IOCRecord, IOCType, IOCStatus
+from Scripts.src.models import IoCRecord, IoCType, IoCStatus
 
 
 @pytest.fixture
 def sample_ioc_record():
     """Create a valid IoC record for testing."""
-    return IOCRecord(
+    return IoCRecord(
         id=1,
-        type=IOCType.DOMAIN,
+        type=IoCType.DOMAIN,
         value="evil-example.com",
         first_seen="2025-01-15T10:00:00Z",
         last_seen="2025-01-20T14:30:00Z",
-        status=IOCStatus.ACTIVE,
+        status=IoCStatus.ACTIVE,
     )
 
 
@@ -485,13 +485,13 @@ def sample_ioc_record():
 def sample_ioc_batch():
     """Create a batch of IoC records for testing."""
     return [
-        IOCRecord(
+        IoCRecord(
             id=i,
-            type=IOCType.DOMAIN,
+            type=IoCType.DOMAIN,
             value=f"evil{i}.com",
             first_seen="2025-01-15T10:00:00Z",
             last_seen="2025-01-20T14:30:00Z",
-            status=IOCStatus.ACTIVE,
+            status=IoCStatus.ACTIVE,
         )
         for i in range(1, 101)
     ]

@@ -5,7 +5,7 @@ from __future__ import annotations
 
 from Scripts.src.models import (
     AddressRecord,
-    IOCType,
+    IoCType,
 )
 from Scripts.src.validator import (
     _has_private_suffix,
@@ -177,27 +177,27 @@ class TestIsValidDomain:
 # ---------------------------------------------------------------------------
 
 
-class TestInferIOCType:
+class TestInferIoCType:
     def test_ipv4(self):
-        assert _infer_ioc_type("8.8.8.8") == IOCType.IP
+        assert _infer_ioc_type("8.8.8.8") == IoCType.IP
 
     def test_ipv6(self):
-        assert _infer_ioc_type("2001:db8::1") == IOCType.IP6
+        assert _infer_ioc_type("2001:db8::1") == IoCType.IP6
 
     def test_ipv4_cidr(self):
-        assert _infer_ioc_type("10.0.0.0/8") == IOCType.IP
+        assert _infer_ioc_type("10.0.0.0/8") == IoCType.IP
 
     def test_ipv6_cidr(self):
-        assert _infer_ioc_type("2001:db8::/32") == IOCType.IP6NET
+        assert _infer_ioc_type("2001:db8::/32") == IoCType.IP6NET
 
     def test_domain(self):
-        assert _infer_ioc_type("evil.com") == IOCType.DOMAIN
+        assert _infer_ioc_type("evil.com") == IoCType.DOMAIN
 
     def test_url_http(self):
-        assert _infer_ioc_type("http://evil.com/path") == IOCType.URL
+        assert _infer_ioc_type("http://evil.com/path") == IoCType.URL
 
     def test_url_https(self):
-        assert _infer_ioc_type("https://evil.com/path?q=1") == IOCType.URL
+        assert _infer_ioc_type("https://evil.com/path?q=1") == IoCType.URL
 
     def test_invalid_returns_none(self):
         assert _infer_ioc_type("") is None
@@ -208,7 +208,7 @@ class TestInferIOCType:
 # ---------------------------------------------------------------------------
 
 
-class TestValidateIOC:
+class TestValidateIoC:
     def test_empty_record(self):
         r = AddressRecord(id=1, url="")
         assert validate_ioc(r) is None
@@ -217,27 +217,27 @@ class TestValidateIOC:
         r = AddressRecord(id=1, url="example-phishing.net", desc="PH", source="US")
         result = validate_ioc(r)
         assert result is not None
-        assert result.ioc_type == IOCType.DOMAIN
+        assert result.ioc_type == IoCType.DOMAIN
         assert result.validation_errors == []
 
     def test_unicode_domain_valid(self):
         r = AddressRecord(id=1, url="münchen.de", desc="PH", source="US")
         result = validate_ioc(r)
         assert result is not None
-        assert result.ioc_type == IOCType.DOMAIN
+        assert result.ioc_type == IoCType.DOMAIN
         assert result.validation_errors == []
 
     def test_valid_ip(self):
         r = AddressRecord(id=1, url="192.0.2.1", desc="CA", source="RS")
         result = validate_ioc(r)
         assert result is not None
-        assert result.ioc_type == IOCType.IP
+        assert result.ioc_type == IoCType.IP
 
     def test_valid_url(self):
         r = AddressRecord(id=1, url="https://evil.com/path", desc="MU", source="IH")
         result = validate_ioc(r)
         assert result is not None
-        assert result.ioc_type == IOCType.URL
+        assert result.ioc_type == IoCType.URL
 
     def test_rfc6761_domain(self):
         r = AddressRecord(id=1, url="localhost")
@@ -288,7 +288,7 @@ class TestValidateIOC:
         r = AddressRecord(id=1, url="2001:db8::/32", type="ip6net")
         result = validate_ioc(r)
         assert result is not None
-        assert result.ioc_type == IOCType.IP6NET
+        assert result.ioc_type == IoCType.IP6NET
 
     def test_invalid_ip_address(self):
         r = AddressRecord(id=1, url="999.999.999.999", type="ip")
@@ -307,7 +307,7 @@ class TestInvalidAPITypes:
         record = AddressRecord(id=1, url="evil.com", type="invalid_type_xyz")
         validated, rejected = validate_records_batch([record])
         assert len(validated) == 1
-        assert validated[0].ioc_type == IOCType.DOMAIN
+        assert validated[0].ioc_type == IoCType.DOMAIN
 
     def test_missing_type_falls_back(self):
         record = AddressRecord(id=1, url="evil.com", type="")
@@ -369,7 +369,7 @@ class TestIPUrlForm:
         record = AddressRecord(id=1, url="http://1.2.3.4/path", type="ip")
         validated, rejected = validate_records_batch([record])
         assert len(validated) == 1
-        assert validated[0].ioc_type == IOCType.IP
+        assert validated[0].ioc_type == IoCType.IP
         assert validated[0].raw_url == "http://1.2.3.4/path"
 
 

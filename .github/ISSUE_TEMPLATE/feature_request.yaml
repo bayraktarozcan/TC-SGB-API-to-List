@@ -16,7 +16,7 @@ body:
       label: "Category / Kategori"
       options:
         - New Output Format / Yeni Çıktı Formatı
-        - New IOC Source / Yeni IoC Kaynağı
+        - New IoC Source / Yeni IoC Kaynağı
         - Pipeline Enhancement / Hat İyileştirmesi
         - Documentation / Dokümantasyon
         - CI/CD / Automation / Otomasyon

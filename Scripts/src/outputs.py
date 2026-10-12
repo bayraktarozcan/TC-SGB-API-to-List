@@ -1,6 +1,6 @@
 """Output generators for all 16 supported threat-intel / DNS-filter formats.
 
-Each generator accepts a list of ScoredIOC objects and writes (or returns) the
+Each generator accepts a list of ScoredIoC objects and writes (or returns) the
 format-specific output.  They are pure functions — no I/O is performed except
 for the SQLite database which needs a file path.
 """
@@ -23,7 +23,7 @@ from urllib.parse import urlparse
 
 import yaml
 
-from .models import IOCType, ScoredIOC
+from .models import IoCType, ScoredIoC
 
 logger = logging.getLogger(__name__)
 
@@ -70,17 +70,17 @@ FORMAT_TITLES: dict[str, str] = {
 }
 
 
-def _domains_only(iocs: Sequence[ScoredIOC]) -> list[ScoredIOC]:
+def _domains_only(iocs: Sequence[ScoredIoC]) -> list[ScoredIoC]:
     """Filter to domain-type IoCs only (used by most DNS filter formats)."""
-    return [ioc for ioc in iocs if ioc.ioc_type == IOCType.DOMAIN]
+    return [ioc for ioc in iocs if ioc.ioc_type == IoCType.DOMAIN]
 
 
-def _domains_and_urls(iocs: Sequence[ScoredIOC]) -> list[ScoredIOC]:
+def _domains_and_urls(iocs: Sequence[ScoredIoC]) -> list[ScoredIoC]:
     """Domains and URLs."""
-    return [ioc for ioc in iocs if ioc.ioc_type in (IOCType.DOMAIN, IOCType.URL)]
+    return [ioc for ioc in iocs if ioc.ioc_type in (IoCType.DOMAIN, IoCType.URL)]
 
 
-def _resolve_timestamp(iocs: Sequence[ScoredIOC], generated_at: datetime | None) -> datetime:
+def _resolve_timestamp(iocs: Sequence[ScoredIoC], generated_at: datetime | None) -> datetime:
     """Resolve the timestamp stamped into an output file.
 
     Deterministic given the same IoC set: the newest IoC date wins when present,
@@ -99,7 +99,7 @@ def _resolve_timestamp(iocs: Sequence[ScoredIOC], generated_at: datetime | None)
 # ---------------------------------------------------------------------------
 
 
-def generate_nextdns(iocs: Sequence[ScoredIOC], path: str | Path | None = None) -> str:
+def generate_nextdns(iocs: Sequence[ScoredIoC], path: str | Path | None = None) -> str:
     """Generate NextDNS-format plain domain list (one per line)."""
     lines = [ioc.value for ioc in _domains_only(iocs)]
     content = "\n".join(lines) + ("\n" if lines else "")
@@ -150,7 +150,7 @@ def _host_from_url(value: str) -> str | None:
     return host.rstrip(".")
 
 
-def _adguard_rule_hosts(iocs: Sequence[ScoredIOC]) -> list[str]:
+def _adguard_rule_hosts(iocs: Sequence[ScoredIoC]) -> list[str]:
     """Collect deduplicated, order-stable rule hosts for the AdGuard list.
 
     Sources: domain IoCs first, then hosts promoted from URL IoCs, then bare
@@ -167,7 +167,7 @@ def _adguard_rule_hosts(iocs: Sequence[ScoredIOC]) -> list[str]:
     for ioc in _domains_only(iocs):
         _emit(ioc.value)
     for ioc in iocs:
-        if ioc.ioc_type == IOCType.URL:
+        if ioc.ioc_type == IoCType.URL:
             host = _host_from_url(ioc.value)
             if host is None:
                 continue
@@ -178,7 +178,7 @@ def _adguard_rule_hosts(iocs: Sequence[ScoredIOC]) -> list[str]:
             normalized = _normalize_rule_host(host)
             if normalized is not None:
                 _emit(normalized)
-        elif ioc.ioc_type in (IOCType.IP, IOCType.IP6, IOCType.IP6NET):
+        elif ioc.ioc_type in (IoCType.IP, IoCType.IP6, IoCType.IP6NET):
             bare = _bare_ip(ioc.value)
             if bare is not None:
                 _emit(bare)
@@ -186,7 +186,7 @@ def _adguard_rule_hosts(iocs: Sequence[ScoredIOC]) -> list[str]:
 
 
 def generate_adguard(
-    iocs: Sequence[ScoredIOC],
+    iocs: Sequence[ScoredIoC],
     path: str | Path | None = None,
     *,
     generated_at: datetime | None = None,
@@ -211,7 +211,7 @@ def generate_adguard(
 # ---------------------------------------------------------------------------
 
 
-def generate_pihole(iocs: Sequence[ScoredIOC], path: str | Path | None = None) -> str:
+def generate_pihole(iocs: Sequence[ScoredIoC], path: str | Path | None = None) -> str:
     """Generate Pi-hole hosts format: 0.0.0.0 domain"""
     lines = [f"0.0.0.0 {ioc.value}" for ioc in _domains_only(iocs)]
     header = "# TC-SGB Threat Intelligence — Pi-hole hosts format\n"
@@ -226,7 +226,7 @@ def generate_pihole(iocs: Sequence[ScoredIOC], path: str | Path | None = None) -
 # ---------------------------------------------------------------------------
 
 
-def generate_dnsmasq(iocs: Sequence[ScoredIOC], path: str | Path | None = None) -> str:
+def generate_dnsmasq(iocs: Sequence[ScoredIoC], path: str | Path | None = None) -> str:
     """Generate dnsmasq config: address=/domain/0.0.0.0"""
     lines = [f"address=/{ioc.value}/0.0.0.0" for ioc in _domains_only(iocs)]
     content = "\n".join(lines) + ("\n" if lines else "")
@@ -240,7 +240,7 @@ def generate_dnsmasq(iocs: Sequence[ScoredIOC], path: str | Path | None = None) 
 # ---------------------------------------------------------------------------
 
 
-def generate_unbound(iocs: Sequence[ScoredIOC], path: str | Path | None = None) -> str:
+def generate_unbound(iocs: Sequence[ScoredIoC], path: str | Path | None = None) -> str:
     """Generate Unbound config: local-zone: \"domain\" always_nxdomain"""
     lines = [f'local-zone: "{ioc.value}" always_nxdomain' for ioc in _domains_only(iocs)]
     header = "# TC-SGB Threat Intelligence — Unbound config\nserver:\n"
@@ -256,7 +256,7 @@ def generate_unbound(iocs: Sequence[ScoredIOC], path: str | Path | None = None) 
 
 
 def generate_rpz(
-    iocs: Sequence[ScoredIOC],
+    iocs: Sequence[ScoredIoC],
     path: str | Path | None = None,
     *,
     generated_at: datetime | None = None,
@@ -288,7 +288,7 @@ def generate_rpz(
 
 
 def generate_technitium(
-    iocs: Sequence[ScoredIOC],
+    iocs: Sequence[ScoredIoC],
     path: str | Path | None = None,
     *,
     generated_at: datetime | None = None,
@@ -324,24 +324,24 @@ def generate_technitium(
 # ---------------------------------------------------------------------------
 
 
-def generate_mikrotik(iocs: Sequence[ScoredIOC], path: str | Path | None = None) -> str:
+def generate_mikrotik(iocs: Sequence[ScoredIoC], path: str | Path | None = None) -> str:
     """Generate MikroTik RouterOS firewall address-list script."""
     lines = [
         "# TC-SGB Threat Intelligence — MikroTik address-list\n"
         "# Import with: /import file-name=threat_intel.rsc\n"
     ]
     for ioc in iocs:
-        if ioc.ioc_type == IOCType.IP:
+        if ioc.ioc_type == IoCType.IP:
             lines.append(
                 f"/ip firewall address-list add list=threat_intel"
                 f' address={ioc.value} comment="SGB-Intel"'
             )
-        elif ioc.ioc_type == IOCType.IP6:
+        elif ioc.ioc_type == IoCType.IP6:
             lines.append(
                 f"/ipv6 firewall address-list add list=threat_intel"
                 f' address={ioc.value} comment="SGB-Intel"'
             )
-        elif ioc.ioc_type == IOCType.DOMAIN:
+        elif ioc.ioc_type == IoCType.DOMAIN:
             lines.append(f'/ip dns static add name={ioc.value} address=0.0.0.0 comment="SGB-Intel"')
     content = "\n".join(lines) + "\n"
     if path:
@@ -354,7 +354,7 @@ def generate_mikrotik(iocs: Sequence[ScoredIOC], path: str | Path | None = None)
 # ---------------------------------------------------------------------------
 
 
-def generate_nftables(iocs: Sequence[ScoredIOC], path: str | Path | None = None) -> str:
+def generate_nftables(iocs: Sequence[ScoredIoC], path: str | Path | None = None) -> str:
     """Generate nftables set for blocking."""
     header = (
         "# TC-SGB Threat Intelligence — nftables set\n"
@@ -365,11 +365,11 @@ def generate_nftables(iocs: Sequence[ScoredIOC], path: str | Path | None = None)
     ipv6_lines: list[str] = []
     domain_lines: list[str] = []
     for ioc in iocs:
-        if ioc.ioc_type == IOCType.IP:
+        if ioc.ioc_type == IoCType.IP:
             ipv4_lines.append(f"            {ioc.value},")
-        elif ioc.ioc_type == IOCType.IP6:
+        elif ioc.ioc_type == IoCType.IP6:
             ipv6_lines.append(f"            {ioc.value},")
-        elif ioc.ioc_type == IOCType.DOMAIN:
+        elif ioc.ioc_type == IoCType.DOMAIN:
             domain_lines.append(f"            {ioc.value},")
 
     content = header
@@ -415,16 +415,16 @@ def generate_nftables(iocs: Sequence[ScoredIOC], path: str | Path | None = None)
 # ---------------------------------------------------------------------------
 
 
-def generate_ipset(iocs: Sequence[ScoredIOC], path: str | Path | None = None) -> str:
+def generate_ipset(iocs: Sequence[ScoredIoC], path: str | Path | None = None) -> str:
     """Generate ipset list format."""
     lines = [
         "create threat_intel hash:ip family inet hashsize 4096 maxelem 500000",
         "create threat_intel6 hash:ip family inet6 hashsize 4096 maxelem 500000",
     ]
     for ioc in iocs:
-        if ioc.ioc_type == IOCType.IP:
+        if ioc.ioc_type == IoCType.IP:
             lines.append(f"add threat_intel {ioc.value}")
-        elif ioc.ioc_type == IOCType.IP6:
+        elif ioc.ioc_type == IoCType.IP6:
             lines.append(f"add threat_intel6 {ioc.value}")
     content = "\n".join(lines) + ("\n" if lines else "")
     if path:
@@ -438,7 +438,7 @@ def generate_ipset(iocs: Sequence[ScoredIOC], path: str | Path | None = None) ->
 
 
 def generate_suricata(
-    iocs: Sequence[ScoredIOC],
+    iocs: Sequence[ScoredIoC],
     path: str | Path | None = None,
     *,
     generated_at: datetime | None = None,
@@ -453,7 +453,7 @@ def generate_suricata(
             "event_type": "alert",
             "src_ip": "0.0.0.0",  # nosec B104 — placeholder IP for Suricata EVE JSON output
             "src_port": 0,
-            "dest_ip": ioc.value if ioc.ioc_type in (IOCType.IP, IOCType.IP6) else "0.0.0.0",  # nosec B104
+            "dest_ip": ioc.value if ioc.ioc_type in (IoCType.IP, IoCType.IP6) else "0.0.0.0",  # nosec B104
             "dest_port": 0,
             "proto": "ip",
             "alert": {
@@ -486,11 +486,11 @@ def generate_suricata(
 # ---------------------------------------------------------------------------
 
 
-def generate_crowdsec(iocs: Sequence[ScoredIOC], path: str | Path | None = None) -> str:
+def generate_crowdsec(iocs: Sequence[ScoredIoC], path: str | Path | None = None) -> str:
     """Generate CrowdSec decision list YAML format."""
     decisions: list[dict[str, Any]] = []
     for ioc in iocs:
-        if ioc.ioc_type not in (IOCType.IP, IOCType.IP6):
+        if ioc.ioc_type not in (IoCType.IP, IoCType.IP6):
             continue
         decisions.append(
             {
@@ -524,7 +524,7 @@ def generate_crowdsec(iocs: Sequence[ScoredIOC], path: str | Path | None = None)
 # ---------------------------------------------------------------------------
 
 
-def generate_csv(iocs: Sequence[ScoredIOC], path: str | Path | None = None) -> str:
+def generate_csv(iocs: Sequence[ScoredIoC], path: str | Path | None = None) -> str:
     """Generate CSV with all IoC fields."""
     output = io.StringIO()
     writer = csv.writer(output)
@@ -568,7 +568,7 @@ def generate_csv(iocs: Sequence[ScoredIOC], path: str | Path | None = None) -> s
 # ---------------------------------------------------------------------------
 
 
-def generate_json(iocs: Sequence[ScoredIOC], path: str | Path | None = None) -> str:
+def generate_json(iocs: Sequence[ScoredIoC], path: str | Path | None = None) -> str:
     """Generate pretty-printed JSON array."""
     data = [
         {
@@ -596,7 +596,7 @@ def generate_json(iocs: Sequence[ScoredIOC], path: str | Path | None = None) -> 
 # ---------------------------------------------------------------------------
 
 
-def generate_yaml(iocs: Sequence[ScoredIOC], path: str | Path | None = None) -> str:
+def generate_yaml(iocs: Sequence[ScoredIoC], path: str | Path | None = None) -> str:
     """Generate YAML sequence."""
     data = [
         {
@@ -674,7 +674,7 @@ def _connect_sqlite_with_schema(path: Path) -> sqlite3.Connection:
     return conn
 
 
-def generate_sqlite(iocs: Sequence[ScoredIOC], path: str | Path | None = None) -> str:
+def generate_sqlite(iocs: Sequence[ScoredIoC], path: str | Path | None = None) -> str:
     """Generate a SQLite database with the IoCs.
 
     Returns the path to the created database as a string.
@@ -749,7 +749,7 @@ FORMAT_REGISTRY: dict[str, Any] = {
 
 
 def generate_all(
-    iocs: Sequence[ScoredIOC],
+    iocs: Sequence[ScoredIoC],
     output_dir: str | Path,
     *,
     formats: list[str] | None = None,

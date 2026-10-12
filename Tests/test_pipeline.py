@@ -9,11 +9,11 @@ import pytest
 from Scripts.src.client import AsyncAPIClient
 from Scripts.src.models import (
     AddressRecord,
-    IOCType,
-    NormalizedIOC,
+    IoCType,
+    NormalizedIoC,
     PipelineStats,
-    ScoredIOC,
-    ValidatedIOC,
+    ScoredIoC,
+    ValidatedIoC,
 )
 from Scripts.src.pipeline import Pipeline, run_pipeline_sync
 
@@ -126,14 +126,14 @@ class TestPipelineValidate:
         assert rejected == 0
         assert len(validated) == len(records)
         types = {v.ioc_type for v in validated}
-        assert IOCType.DOMAIN in types
-        assert IOCType.IP in types
+        assert IoCType.DOMAIN in types
+        assert IoCType.IP in types
 
     def test_skip_validation_empty_value_defaults_to_domain(self):
         p = Pipeline(skip_validation=True)
         validated, rejected = p._stage_validate([AddressRecord(id=1, url="", type="")])
         assert rejected == 0
-        assert validated[0].ioc_type == IOCType.DOMAIN
+        assert validated[0].ioc_type == IoCType.DOMAIN
 
     def test_empty_record_rejected(self, pipeline, records):
         _validated, rejected = pipeline._stage_validate(records)
@@ -154,8 +154,8 @@ class TestPipelineValidate:
 class TestPipelineNormalize:
     def test_lowercase_domains(self, pipeline):
         validated = [
-            ValidatedIOC(raw_url="EVIL.COM", ioc_type=IOCType.DOMAIN),
-            ValidatedIOC(raw_url="GOOD.NET", ioc_type=IOCType.DOMAIN),
+            ValidatedIoC(raw_url="EVIL.COM", ioc_type=IoCType.DOMAIN),
+            ValidatedIoC(raw_url="GOOD.NET", ioc_type=IoCType.DOMAIN),
         ]
         normalized = pipeline._stage_normalize(validated)
         assert len(normalized) == 2
@@ -164,8 +164,8 @@ class TestPipelineNormalize:
 
     def test_empty_filtered(self, pipeline):
         validated = [
-            ValidatedIOC(raw_url="", ioc_type=IOCType.DOMAIN),
-            ValidatedIOC(raw_url="good.com", ioc_type=IOCType.DOMAIN),
+            ValidatedIoC(raw_url="", ioc_type=IoCType.DOMAIN),
+            ValidatedIoC(raw_url="good.com", ioc_type=IoCType.DOMAIN),
         ]
         normalized = pipeline._stage_normalize(validated)
         assert len(normalized) == 1
@@ -174,14 +174,14 @@ class TestPipelineNormalize:
 class TestPipelineDedup:
     def test_removes_duplicates(self, pipeline):
         iocs = [
-            ScoredIOC(
-                value="a.com", ioc_type=IOCType.DOMAIN, criticality_level=5, quality_score=80.0
+            ScoredIoC(
+                value="a.com", ioc_type=IoCType.DOMAIN, criticality_level=5, quality_score=80.0
             ),
-            ScoredIOC(
-                value="b.com", ioc_type=IOCType.DOMAIN, criticality_level=3, quality_score=90.0
+            ScoredIoC(
+                value="b.com", ioc_type=IoCType.DOMAIN, criticality_level=3, quality_score=90.0
             ),
-            ScoredIOC(
-                value="a.com", ioc_type=IOCType.DOMAIN, criticality_level=1, quality_score=70.0
+            ScoredIoC(
+                value="a.com", ioc_type=IoCType.DOMAIN, criticality_level=1, quality_score=70.0
             ),
         ]
         deduped, dup_count = pipeline._stage_dedup(iocs)
@@ -193,11 +193,11 @@ class TestPipelineDedup:
 
     def test_no_duplicates(self, pipeline):
         iocs = [
-            ScoredIOC(
-                value="a.com", ioc_type=IOCType.DOMAIN, criticality_level=5, quality_score=80.0
+            ScoredIoC(
+                value="a.com", ioc_type=IoCType.DOMAIN, criticality_level=5, quality_score=80.0
             ),
-            ScoredIOC(
-                value="b.com", ioc_type=IOCType.DOMAIN, criticality_level=3, quality_score=90.0
+            ScoredIoC(
+                value="b.com", ioc_type=IoCType.DOMAIN, criticality_level=3, quality_score=90.0
             ),
         ]
         deduped, dup_count = pipeline._stage_dedup(iocs)
@@ -208,8 +208,8 @@ class TestPipelineDedup:
 class TestPipelineQuality:
     def test_scores_applied(self, pipeline):
         iocs = [
-            NormalizedIOC(value="evil-phish.com", ioc_type=IOCType.DOMAIN, criticality_level=3),
-            NormalizedIOC(value="malware-cnc.net", ioc_type=IOCType.DOMAIN, criticality_level=1),
+            NormalizedIoC(value="evil-phish.com", ioc_type=IoCType.DOMAIN, criticality_level=3),
+            NormalizedIoC(value="malware-cnc.net", ioc_type=IoCType.DOMAIN, criticality_level=1),
         ]
         scored, _rejected = pipeline._stage_quality(iocs)
         assert len(scored) > 0
@@ -219,14 +219,14 @@ class TestPipelineQuality:
     def test_filter_by_min_score(self, pipeline):
         pipeline.min_quality_score = 50.0
         iocs = [
-            NormalizedIOC(
+            NormalizedIoC(
                 value="known-benign.com",
-                ioc_type=IOCType.DOMAIN,
+                ioc_type=IoCType.DOMAIN,
                 criticality_level=10,
             ),
-            NormalizedIOC(
+            NormalizedIoC(
                 value="totally-malicious.xyz",
-                ioc_type=IOCType.DOMAIN,
+                ioc_type=IoCType.DOMAIN,
                 criticality_level=1,
             ),
         ]
@@ -346,7 +346,7 @@ class TestPipelineExceptionBranches:
         def side_effect(rec):
             if rec.id == 2:
                 raise RuntimeError("validate boom")
-            return ValidatedIOC(raw_url=rec.url, ioc_type=IOCType.DOMAIN, original_id=rec.id)
+            return ValidatedIoC(raw_url=rec.url, ioc_type=IoCType.DOMAIN, original_id=rec.id)
 
         with patch("Scripts.src.pipeline.validate_ioc", side_effect=side_effect):
             validated, rejected = pipeline._stage_validate([good, bad])
@@ -355,13 +355,13 @@ class TestPipelineExceptionBranches:
 
     def test_normalize_exception_per_record(self, pipeline):
         """Lines 140-141: normalize_ioc raises for one record."""
-        v1 = ValidatedIOC(raw_url="evil.com", ioc_type=IOCType.DOMAIN, original_id=1)
-        v2 = ValidatedIOC(raw_url="bad.net", ioc_type=IOCType.DOMAIN, original_id=2)
+        v1 = ValidatedIoC(raw_url="evil.com", ioc_type=IoCType.DOMAIN, original_id=1)
+        v2 = ValidatedIoC(raw_url="bad.net", ioc_type=IoCType.DOMAIN, original_id=2)
 
         def side_effect(v):
             if v.original_id == 2:
                 raise RuntimeError("normalize boom")
-            return NormalizedIOC(value=v.raw_url, ioc_type=v.ioc_type)
+            return NormalizedIoC(value=v.raw_url, ioc_type=v.ioc_type)
 
         with patch("Scripts.src.pipeline.normalize_ioc", side_effect=side_effect):
             normalized = pipeline._stage_normalize([v1, v2])
@@ -370,15 +370,15 @@ class TestPipelineExceptionBranches:
 
     def test_quality_exception_per_record(self, pipeline):
         """Lines 172-175: score_ioc raises for one record."""
-        from Scripts.src.models import ScoredIOC
+        from Scripts.src.models import ScoredIoC
 
-        n1 = NormalizedIOC(value="evil.com", ioc_type=IOCType.DOMAIN)
-        n2 = NormalizedIOC(value="bad.net", ioc_type=IOCType.DOMAIN)
+        n1 = NormalizedIoC(value="evil.com", ioc_type=IoCType.DOMAIN)
+        n2 = NormalizedIoC(value="bad.net", ioc_type=IoCType.DOMAIN)
 
         def side_effect(n):
             if n.value == "bad.net":
                 raise RuntimeError("quality boom")
-            return ScoredIOC(value=n.value, ioc_type=n.ioc_type, quality_score=100.0)
+            return ScoredIoC(value=n.value, ioc_type=n.ioc_type, quality_score=100.0)
 
         with patch("Scripts.src.pipeline.score_ioc", side_effect=side_effect):
             scored, rejected = pipeline._stage_quality([n1, n2])
@@ -388,13 +388,13 @@ class TestPipelineExceptionBranches:
 
     def test_quality_rejects_below_threshold(self):
         """Line 172: score_ioc returns score below min_quality_score."""
-        from Scripts.src.models import NormalizedIOC, ScoredIOC
+        from Scripts.src.models import NormalizedIoC, ScoredIoC
 
         p = Pipeline(min_quality_score=999.0)
-        n1 = NormalizedIOC(value="evil.com", ioc_type=IOCType.DOMAIN)
+        n1 = NormalizedIoC(value="evil.com", ioc_type=IoCType.DOMAIN)
 
         def fake_score(n):
-            return ScoredIOC(value=n.value, ioc_type=n.ioc_type, quality_score=50.0)
+            return ScoredIoC(value=n.value, ioc_type=n.ioc_type, quality_score=50.0)
 
         with patch("Scripts.src.pipeline.score_ioc", side_effect=fake_score):
             scored, rejected = p._stage_quality([n1])
@@ -403,15 +403,15 @@ class TestPipelineExceptionBranches:
 
     def test_quality_rejects_above_max_criticality(self):
         """Line 186: score_ioc returns criticality above max_criticality."""
-        from Scripts.src.models import NormalizedIOC, ScoredIOC
+        from Scripts.src.models import NormalizedIoC, ScoredIoC
 
         p = Pipeline(min_quality_score=0, max_criticality=1)
-        n1 = NormalizedIOC(value="a.com", ioc_type=IOCType.DOMAIN, criticality_level=1)
-        n2 = NormalizedIOC(value="b.com", ioc_type=IOCType.DOMAIN, criticality_level=5)
+        n1 = NormalizedIoC(value="a.com", ioc_type=IoCType.DOMAIN, criticality_level=1)
+        n2 = NormalizedIoC(value="b.com", ioc_type=IoCType.DOMAIN, criticality_level=5)
 
         def fake_score(n):
             cl = 1 if n.value == "a.com" else 5
-            return ScoredIOC(
+            return ScoredIoC(
                 value=n.value, ioc_type=n.ioc_type, quality_score=90.0, criticality_level=cl
             )
 
@@ -478,9 +478,9 @@ class TestPipelineStageValidate:
 
 class TestPipelineStageNormalize:
     def test_normalize_exception_handled(self, pipeline):
-        from Scripts.src.models import ValidatedIOC
+        from Scripts.src.models import ValidatedIoC
 
-        good = ValidatedIOC(raw_url="evil.com", ioc_type=IOCType.DOMAIN)
+        good = ValidatedIoC(raw_url="evil.com", ioc_type=IoCType.DOMAIN)
         normalized = pipeline._stage_normalize([good])
         assert len(normalized) == 1
 
@@ -489,11 +489,11 @@ class TestPipelineStageDedup:
     def test_skip_dedup(self, pipeline):
         pipeline.skip_dedup = True
         iocs = [
-            ScoredIOC(
-                value="a.com", ioc_type=IOCType.DOMAIN, criticality_level=5, quality_score=80.0
+            ScoredIoC(
+                value="a.com", ioc_type=IoCType.DOMAIN, criticality_level=5, quality_score=80.0
             ),
-            ScoredIOC(
-                value="a.com", ioc_type=IOCType.DOMAIN, criticality_level=5, quality_score=90.0
+            ScoredIoC(
+                value="a.com", ioc_type=IoCType.DOMAIN, criticality_level=5, quality_score=90.0
             ),
         ]
         deduped, dup_count = pipeline._stage_dedup(iocs)
@@ -503,9 +503,9 @@ class TestPipelineStageDedup:
 
 class TestPipelineStageQuality:
     def test_quality_exception_rejected(self, pipeline):
-        from Scripts.src.models import NormalizedIOC
+        from Scripts.src.models import NormalizedIoC
 
-        iocs = [NormalizedIOC(value="test.com", ioc_type=IOCType.DOMAIN, criticality_level=5)]
+        iocs = [NormalizedIoC(value="test.com", ioc_type=IoCType.DOMAIN, criticality_level=5)]
         scored, rejected = pipeline._stage_quality(iocs)
         assert len(scored) >= 1
 

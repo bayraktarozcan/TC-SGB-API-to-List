@@ -8,7 +8,7 @@ import re
 from hypothesis import HealthCheck, assume, given, settings
 from hypothesis import strategies as st
 
-from Scripts.src.models import IOCType, ValidatedIOC
+from Scripts.src.models import IoCType, ValidatedIoC
 from Scripts.src.normalizer import _normalize_domain, normalize_ioc
 from Scripts.src.quality import _extract_domain, _is_benign_domain, _is_private_ip, score_ioc
 from Scripts.src.validator import (
@@ -131,24 +131,24 @@ class TestIPValidationFuzz:
 # ---------------------------------------------------------------------------
 
 
-class TestIOCTypeInferenceFuzz:
+class TestIoCTypeInferenceFuzz:
     @given(addr=ipv4_strategy)
     @settings(max_examples=100)
     def test_ipv4_detected(self, addr):
         result = _infer_ioc_type(str(addr))
-        assert result == IOCType.IP
+        assert result == IoCType.IP
 
     @given(addr=ipv6_strategy)
     @settings(max_examples=100)
     def test_ipv6_detected(self, addr):
         result = _infer_ioc_type(str(addr))
-        assert result == IOCType.IP6
+        assert result == IoCType.IP6
 
     @given(domain=realistic_domains)
     @settings(max_examples=100)
     def test_domain_or_none(self, domain):
         result = _infer_ioc_type(domain)
-        valid_types = (IOCType.DOMAIN, IOCType.URL, IOCType.IP, IOCType.IP6, IOCType.IP6NET, None)
+        valid_types = (IoCType.DOMAIN, IoCType.URL, IoCType.IP, IoCType.IP6, IoCType.IP6NET, None)
         assert result in valid_types
 
     @given(value=st.just(""))
@@ -159,7 +159,7 @@ class TestIOCTypeInferenceFuzz:
     @settings(max_examples=100)
     def test_url_detected(self, url):
         result = _infer_ioc_type(url)
-        assert result == IOCType.URL
+        assert result == IoCType.URL
 
 
 # ---------------------------------------------------------------------------
@@ -235,7 +235,7 @@ class TestQualityScoringFuzz:
     @given(domain=realistic_domains)
     @settings(max_examples=100)
     def test_score_never_crashes(self, domain):
-        ioc = ValidatedIOC(raw_url=domain, ioc_type=IOCType.DOMAIN)
+        ioc = ValidatedIoC(raw_url=domain, ioc_type=IoCType.DOMAIN)
         normalized = normalize_ioc(ioc)
         assume(normalized is not None)
         scored = score_ioc(normalized)

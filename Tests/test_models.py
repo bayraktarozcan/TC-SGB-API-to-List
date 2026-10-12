@@ -15,34 +15,34 @@ from Scripts.src.models import (
     DescriptionCategory,
     DescriptionRecord,
     IncidentRecord,
-    IOCType,
-    NormalizedIOC,
+    IoCType,
+    NormalizedIoC,
     PaginatedResponse,
     PipelineStats,
-    ScoredIOC,
+    ScoredIoC,
     Source,
     SourceRecord,
-    ValidatedIOC,
+    ValidatedIoC,
 )
 
 
-class TestIOCType:
+class TestIoCType:
     def test_all_values(self):
-        assert set(IOCType) == {
-            IOCType.DOMAIN,
-            IOCType.URL,
-            IOCType.IP,
-            IOCType.IP6,
-            IOCType.IP6NET,
+        assert set(IoCType) == {
+            IoCType.DOMAIN,
+            IoCType.URL,
+            IoCType.IP,
+            IoCType.IP6,
+            IoCType.IP6NET,
         }
 
     def test_string_values(self):
-        assert IOCType.DOMAIN.value == "domain"
-        assert IOCType.IP6.value == "ip6"
-        assert IOCType.IP6NET.value == "ip6net"
+        assert IoCType.DOMAIN.value == "domain"
+        assert IoCType.IP6.value == "ip6"
+        assert IoCType.IP6NET.value == "ip6net"
 
     def test_from_string(self):
-        assert IOCType("url") == IOCType.URL
+        assert IoCType("url") == IoCType.URL
 
 
 class TestDescriptionCategory:
@@ -153,17 +153,17 @@ class TestPaginatedResponse:
         assert p.page == 0
 
 
-class TestValidatedIOC:
+class TestValidatedIoC:
     def test_valid_minimal(self):
-        v = ValidatedIOC(raw_url="evil.com", ioc_type=IOCType.DOMAIN)
+        v = ValidatedIoC(raw_url="evil.com", ioc_type=IoCType.DOMAIN)
         assert v.raw_url == "evil.com"
-        assert v.ioc_type == IOCType.DOMAIN
+        assert v.ioc_type == IoCType.DOMAIN
         assert v.validation_errors == []
 
     def test_with_all_fields(self):
-        v = ValidatedIOC(
+        v = ValidatedIoC(
             raw_url="evil.com",
-            ioc_type=IOCType.DOMAIN,
+            ioc_type=IoCType.DOMAIN,
             desc=DescriptionCategory.PHISHING,
             source=Source.USOM,
             date=datetime(2024, 1, 1),
@@ -176,31 +176,31 @@ class TestValidatedIOC:
         assert v.connectiontype == ConnectionType.PHISHING
 
 
-class TestNormalizedIOC:
+class TestNormalizedIoC:
     def test_valid(self):
-        n = NormalizedIOC(value="evil.com", ioc_type=IOCType.DOMAIN)
+        n = NormalizedIoC(value="evil.com", ioc_type=IoCType.DOMAIN)
         assert n.value == "evil.com"
         assert n.normalization_notes == []
 
     def test_with_notes(self):
-        n = NormalizedIOC(
+        n = NormalizedIoC(
             value="evil.com",
-            ioc_type=IOCType.DOMAIN,
+            ioc_type=IoCType.DOMAIN,
             normalization_notes=["lowercased", "trimmed"],
         )
         assert len(n.normalization_notes) == 2
 
 
-class TestScoredIOC:
+class TestScoredIoC:
     def test_valid(self):
-        s = ScoredIOC(
-            value="evil.com", ioc_type=IOCType.DOMAIN, quality_score=85.0, false_positive_risk="low"
+        s = ScoredIoC(
+            value="evil.com", ioc_type=IoCType.DOMAIN, quality_score=85.0, false_positive_risk="low"
         )
         assert s.quality_score == 85.0
         assert s.false_positive_risk == "low"
 
     def test_defaults(self):
-        s = ScoredIOC(value="x", ioc_type=IOCType.IP)
+        s = ScoredIoC(value="x", ioc_type=IoCType.IP)
         assert s.quality_score == 0.0
         assert s.false_positive_risk == "low"
         assert s.flags == []
@@ -257,26 +257,26 @@ class TestPipelineStats:
 
 class TestSerialization:
     def test_validated_ioc_roundtrip(self):
-        v = ValidatedIOC(
+        v = ValidatedIoC(
             raw_url="evil.com",
-            ioc_type=IOCType.DOMAIN,
+            ioc_type=IoCType.DOMAIN,
             desc=DescriptionCategory.PHISHING,
             source=Source.USOM,
         )
         data = v.model_dump()
-        v2 = ValidatedIOC.model_validate(data)
+        v2 = ValidatedIoC.model_validate(data)
         assert v2.raw_url == v.raw_url
         assert v2.ioc_type == v.ioc_type
 
     def test_scored_ioc_json_roundtrip(self):
-        s = ScoredIOC(
+        s = ScoredIoC(
             value="evil.com",
-            ioc_type=IOCType.DOMAIN,
+            ioc_type=IoCType.DOMAIN,
             quality_score=95.0,
             flags=["benign_domain"],
         )
         j = s.model_dump_json()
-        s2 = ScoredIOC.model_validate_json(j)
+        s2 = ScoredIoC.model_validate_json(j)
         assert s2.quality_score == 95.0
         assert s2.flags == ["benign_domain"]
 

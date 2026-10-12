@@ -11,11 +11,11 @@ from .client import AsyncAPIClient
 from .deduplicator import deduplicate
 from .models import (
     AddressRecord,
-    IOCType,
-    NormalizedIOC,
+    IoCType,
+    NormalizedIoC,
     PipelineStats,
-    ScoredIOC,
-    ValidatedIOC,
+    ScoredIoC,
+    ValidatedIoC,
 )
 from .normalizer import normalize_ioc
 from .quality import DEFAULT_QUALITY_THRESHOLD, score_ioc
@@ -56,7 +56,7 @@ class Pipeline:
         self.skip_dedup = skip_dedup
         self.stats = PipelineStats()
 
-    async def run(self) -> tuple[list[ScoredIOC], PipelineStats]:
+    async def run(self) -> tuple[list[ScoredIoC], PipelineStats]:
         """Execute the full pipeline."""
         start_time = time.monotonic()
         self.stats = PipelineStats()
@@ -110,15 +110,15 @@ class Pipeline:
         logger.info("Fetched %d IoCs in %.1fs", len(records), duration)
         return records, duration
 
-    def _stage_validate(self, records: list[AddressRecord]) -> tuple[list[ValidatedIOC], int]:
+    def _stage_validate(self, records: list[AddressRecord]) -> tuple[list[ValidatedIoC], int]:
         """Stage 2: Validate each IoC."""
-        validated: list[ValidatedIOC]
+        validated: list[ValidatedIoC]
         if self.skip_validation:
             logger.info("Stage 2/5: Validation skipped (--skip-validation)")
             validated = [
-                ValidatedIOC(
+                ValidatedIoC(
                     raw_url=r.url,
-                    ioc_type=_infer_ioc_type(r.url) or IOCType.DOMAIN,
+                    ioc_type=_infer_ioc_type(r.url) or IoCType.DOMAIN,
                     original_id=r.id,
                 )
                 for r in records
@@ -143,10 +143,10 @@ class Pipeline:
         logger.info("Validated %d, rejected %d", len(validated), rejected)
         return validated, rejected
 
-    def _stage_normalize(self, validated: list[ValidatedIOC]) -> list[NormalizedIOC]:
+    def _stage_normalize(self, validated: list[ValidatedIoC]) -> list[NormalizedIoC]:
         """Stage 3: Normalize each validated IoC."""
         logger.info("Stage 3/5: Normalizing IoCs...")
-        normalized: list[NormalizedIOC] = []
+        normalized: list[NormalizedIoC] = []
 
         for v in validated:
             try:
@@ -159,7 +159,7 @@ class Pipeline:
         logger.info("Normalized %d IoCs", len(normalized))
         return normalized
 
-    def _stage_dedup(self, scored: list[ScoredIOC]) -> tuple[list[ScoredIOC], int]:
+    def _stage_dedup(self, scored: list[ScoredIoC]) -> tuple[list[ScoredIoC], int]:
         """Stage 5: Cross-type deduplication using deduplicator module.
 
         Uses quality_score to keep the highest-scored duplicate when the same
@@ -173,10 +173,10 @@ class Pipeline:
         result = deduplicate(scored)
         return result.kept, result.removed_count
 
-    def _stage_quality(self, normalized: list[NormalizedIOC]) -> tuple[list[ScoredIOC], int]:
+    def _stage_quality(self, normalized: list[NormalizedIoC]) -> tuple[list[ScoredIoC], int]:
         """Stage 4: Score quality and filter."""
         logger.info("Stage 4/5: Quality scoring...")
-        scored: list[ScoredIOC] = []
+        scored: list[ScoredIoC] = []
         rejected = 0
 
         for n in normalized:
@@ -196,7 +196,7 @@ class Pipeline:
         logger.info("Scored %d, rejected %d", len(scored), rejected)
         return scored, rejected
 
-    def _compute_stats(self, scored: list[ScoredIOC]) -> None:
+    def _compute_stats(self, scored: list[ScoredIoC]) -> None:
         """Compute aggregate statistics from scored IoCs."""
         for s in scored:
             # By type
@@ -222,10 +222,10 @@ class Pipeline:
 def run_pipeline_sync(
     client: AsyncAPIClient | None = None,
     **kwargs: Any,
-) -> tuple[list[ScoredIOC], PipelineStats]:
+) -> tuple[list[ScoredIoC], PipelineStats]:
     """Synchronous wrapper around the async Pipeline.run()."""
 
-    async def _run() -> tuple[list[ScoredIOC], PipelineStats]:
+    async def _run() -> tuple[list[ScoredIoC], PipelineStats]:
         async with Pipeline(client=client, **kwargs) as pipeline:
             return await pipeline.run()
 

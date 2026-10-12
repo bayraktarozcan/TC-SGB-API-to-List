@@ -150,7 +150,7 @@ This document describes the complete data flow through the TC-SGB-API-to-List th
 |  +------------------------------------------------+
 |                                                   |
 |  Output:                                          |
-|  - valid_records: List[IOCRecord]                 |
+|  - valid_records: List[IoCRecord]                 |
 |  - invalid_records: List[ValidationError]         |
 |  - validation_stats: ValidationReport             |
 |                                                   |
@@ -613,7 +613,7 @@ Bu belge, TC-SGB-API-to-List tehdit istihbaratı hattındaki API alımından nih
 |  +------------------------------------------------+
 |                                                   |
 |  Output:                                          |
-|  - valid_records: List[IOCRecord]                 |
+|  - valid_records: List[IoCRecord]                 |
 |  - invalid_records: List[ValidationError]         |
 |  - validation_stats: ValidationReport             |
 |                                                   |

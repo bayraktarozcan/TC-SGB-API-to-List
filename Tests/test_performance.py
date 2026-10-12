@@ -13,11 +13,11 @@ from Scripts.src.deduplicator import deduplicate
 from Scripts.src.models import (
     ConnectionType,
     DescriptionCategory,
-    IOCType,
-    NormalizedIOC,
-    ScoredIOC,
+    IoCType,
+    NormalizedIoC,
+    ScoredIoC,
     Source,
-    ValidatedIOC,
+    ValidatedIoC,
 )
 from Scripts.src.normalizer import normalize_batch
 from Scripts.src.outputs import (
@@ -35,19 +35,19 @@ def _random_domain(length: int = 12) -> str:
     return "".join(random.choices(chars, k=length)) + ".com"
 
 
-def _generate_iocs(count: int, dup_ratio: float = 0.2) -> list[NormalizedIOC]:
+def _generate_iocs(count: int, dup_ratio: float = 0.2) -> list[NormalizedIoC]:
     """Generate N NormalizedIOCs with a controlled duplicate ratio (for normalize/quality)."""
     unique_count = int(count * (1 - dup_ratio))
-    iocs: list[NormalizedIOC] = []
+    iocs: list[NormalizedIoC] = []
     descs = list(DescriptionCategory)
     sources = list(Source)
     conns = list(ConnectionType)
 
     for i in range(unique_count):
         iocs.append(
-            NormalizedIOC(
+            NormalizedIoC(
                 value=_random_domain(),
-                ioc_type=random.choice([IOCType.DOMAIN, IOCType.IP]),
+                ioc_type=random.choice([IoCType.DOMAIN, IoCType.IP]),
                 desc=random.choice(descs),
                 source=random.choice(sources),
                 date=datetime(2024, 1, 1),
@@ -61,7 +61,7 @@ def _generate_iocs(count: int, dup_ratio: float = 0.2) -> list[NormalizedIOC]:
     for _ in range(dup_count):
         original = random.choice(iocs[:unique_count])
         iocs.append(
-            NormalizedIOC(
+            NormalizedIoC(
                 value=original.value,
                 ioc_type=original.ioc_type,
                 desc=original.desc,
@@ -77,19 +77,19 @@ def _generate_iocs(count: int, dup_ratio: float = 0.2) -> list[NormalizedIOC]:
     return iocs
 
 
-def _generate_scored_for_dedup(count: int, dup_ratio: float = 0.2) -> list[ScoredIOC]:
+def _generate_scored_for_dedup(count: int, dup_ratio: float = 0.2) -> list[ScoredIoC]:
     """Generate N ScoredIOCs with controlled duplicate ratio (for dedup tests)."""
     unique_count = int(count * (1 - dup_ratio))
-    iocs: list[ScoredIOC] = []
+    iocs: list[ScoredIoC] = []
     descs = list(DescriptionCategory)
     sources = list(Source)
     conns = list(ConnectionType)
 
     for i in range(unique_count):
         iocs.append(
-            ScoredIOC(
+            ScoredIoC(
                 value=_random_domain(),
-                ioc_type=random.choice([IOCType.DOMAIN, IOCType.IP]),
+                ioc_type=random.choice([IoCType.DOMAIN, IoCType.IP]),
                 desc=random.choice(descs),
                 source=random.choice(sources),
                 date=datetime(2024, 1, 1),
@@ -105,7 +105,7 @@ def _generate_scored_for_dedup(count: int, dup_ratio: float = 0.2) -> list[Score
     for _ in range(dup_count):
         original = random.choice(iocs[:unique_count])
         iocs.append(
-            ScoredIOC(
+            ScoredIoC(
                 value=original.value,
                 ioc_type=original.ioc_type,
                 desc=original.desc,
@@ -123,13 +123,13 @@ def _generate_scored_for_dedup(count: int, dup_ratio: float = 0.2) -> list[Score
     return iocs
 
 
-def _generate_validated_iocs(count: int) -> list[ValidatedIOC]:
-    iocs: list[ValidatedIOC] = []
+def _generate_validated_iocs(count: int) -> list[ValidatedIoC]:
+    iocs: list[ValidatedIoC] = []
     for i in range(count):
         iocs.append(
-            ValidatedIOC(
+            ValidatedIoC(
                 raw_url=_random_domain(),
-                ioc_type=IOCType.DOMAIN,
+                ioc_type=IoCType.DOMAIN,
                 desc=random.choice(list(DescriptionCategory)),
                 source=random.choice(list(Source)),
                 date=datetime(2024, 1, 1),
@@ -141,13 +141,13 @@ def _generate_validated_iocs(count: int) -> list[ValidatedIOC]:
     return iocs
 
 
-def _generate_scored_iocs(count: int) -> list[ScoredIOC]:
-    iocs: list[ScoredIOC] = []
+def _generate_scored_iocs(count: int) -> list[ScoredIoC]:
+    iocs: list[ScoredIoC] = []
     for i in range(count):
         iocs.append(
-            ScoredIOC(
+            ScoredIoC(
                 value=_random_domain(),
-                ioc_type=random.choice([IOCType.DOMAIN, IOCType.IP]),
+                ioc_type=random.choice([IoCType.DOMAIN, IoCType.IP]),
                 desc=random.choice(list(DescriptionCategory)),
                 source=random.choice(list(Source)),
                 date=datetime(2024, 1, 1),

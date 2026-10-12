@@ -13,7 +13,7 @@ from pydantic import BaseModel, Field
 # ---------------------------------------------------------------------------
 
 
-class IOCType(str, Enum):
+class IoCType(str, Enum):
     DOMAIN = "domain"
     URL = "url"
     IP = "ip"
@@ -150,11 +150,11 @@ class AnnouncementRecord(BaseModel):
 # ---------------------------------------------------------------------------
 
 
-class ValidatedIOC(BaseModel):
+class ValidatedIoC(BaseModel):
     """An IoC that has passed validation."""
 
     raw_url: str
-    ioc_type: IOCType
+    ioc_type: IoCType
     desc: DescriptionCategory | None = None
     source: Source | None = None
     date: datetime | None = None
@@ -164,11 +164,11 @@ class ValidatedIOC(BaseModel):
     validation_errors: list[str] = Field(default_factory=list)
 
 
-class NormalizedIOC(BaseModel):
+class NormalizedIoC(BaseModel):
     """An IoC that has been normalised (lowercase, trimmed, IDN resolved, etc.)."""
 
     value: str
-    ioc_type: IOCType
+    ioc_type: IoCType
     desc: DescriptionCategory | None = None
     source: Source | None = None
     date: datetime | None = None
@@ -178,11 +178,11 @@ class NormalizedIOC(BaseModel):
     normalization_notes: list[str] = Field(default_factory=list)
 
 
-class ScoredIOC(BaseModel):
+class ScoredIoC(BaseModel):
     """An IoC with a quality / confidence score."""
 
     value: str
-    ioc_type: IOCType
+    ioc_type: IoCType
     desc: DescriptionCategory | None = None
     source: Source | None = None
     date: datetime | None = None

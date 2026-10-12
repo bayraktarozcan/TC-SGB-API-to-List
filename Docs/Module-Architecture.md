@@ -104,7 +104,7 @@ max_pages = 0        # 0 = fetch all pages
 #### Enums
 
 ```python
-class IOCType(str, Enum):
+class IoCType(str, Enum):
     DOMAIN = "domain"
     URL = "url"
     IP = "ip"
@@ -197,9 +197,9 @@ class AnnouncementRecord(BaseModel):
 #### Pipeline Models
 
 ```python
-class ValidatedIOC(BaseModel):
+class ValidatedIoC(BaseModel):
     raw_url: str
-    ioc_type: IOCType
+    ioc_type: IoCType
     desc: DescriptionCategory | None = None
     source: Source | None = None
     date: datetime | None = None
@@ -208,9 +208,9 @@ class ValidatedIOC(BaseModel):
     original_id: int = 0
     validation_errors: list[str] = Field(default_factory=list)
 
-class NormalizedIOC(BaseModel):
+class NormalizedIoC(BaseModel):
     value: str
-    ioc_type: IOCType
+    ioc_type: IoCType
     desc: DescriptionCategory | None = None
     source: Source | None = None
     date: datetime | None = None
@@ -219,9 +219,9 @@ class NormalizedIOC(BaseModel):
     original_id: int = 0
     normalization_notes: list[str] = Field(default_factory=list)
 
-class ScoredIOC(BaseModel):
+class ScoredIoC(BaseModel):
     value: str
-    ioc_type: IOCType
+    ioc_type: IoCType
     desc: DescriptionCategory | None = None
     source: Source | None = None
     date: datetime | None = None
@@ -257,13 +257,13 @@ class PipelineStats(BaseModel):
 **Responsibility**: IoC validation, type checking, RFC6761 compliance, format verification.
 
 ```python
-def validate_ioc(record: AddressRecord) -> ValidatedIOC | None:
+def validate_ioc(record: AddressRecord) -> ValidatedIoC | None:
     """Validate a single AddressRecord. Returns None if invalid."""
 
-def validate_records_batch(records: list[AddressRecord]) -> tuple[list[ValidatedIOC], list[tuple[AddressRecord, list[str]]]]:
+def validate_records_batch(records: list[AddressRecord]) -> tuple[list[ValidatedIoC], list[tuple[AddressRecord, list[str]]]]:
     """Validate a batch. Returns (valid, rejected)."""
 
-def _infer_ioc_type(value: str) -> IOCType | None:
+def _infer_ioc_type(value: str) -> IoCType | None:
     """Infer IoC type from value when API type field is unavailable."""
 
 def _is_valid_domain(domain: str) -> list[str]:
@@ -284,7 +284,7 @@ def _is_reserved_domain(domain: str) -> bool:
 | Rule | Check | Action |
 |------|-------|--------|
 | Empty value | URL field is non-empty | Reject |
-| Invalid type | API type matches IOCType enum or can be inferred | Reject |
+| Invalid type | API type matches IoCType enum or can be inferred | Reject |
 | Domain format | RFC952/1035 compliant, max 253 chars, max 63 per label | Reject |
 | RFC6761 | Not localhost, example.com, test.com, etc. | Reject |
 | Private TLD | Not .local, .lan, .home, .internal, etc. | Reject |
@@ -299,10 +299,10 @@ def _is_reserved_domain(domain: str) -> bool:
 **Responsibility**: Format canonicalization, type-specific transformations, metadata standardization.
 
 ```python
-def normalize_ioc(validated: ValidatedIOC) -> NormalizedIOC | None:
-    """Normalize a ValidatedIOC. Returns None if normalization is impossible."""
+def normalize_ioc(validated: ValidatedIoC) -> NormalizedIoC | None:
+    """Normalize a ValidatedIoC. Returns None if normalization is impossible."""
 
-def normalize_batch(validated_list: list[ValidatedIOC]) -> list[NormalizedIOC]:
+def normalize_batch(validated_list: list[ValidatedIoC]) -> list[NormalizedIoC]:
     """Normalize a batch, filtering out invalid results."""
 
 def _normalize_domain(value: str) -> tuple[str, list[str]]:
@@ -334,11 +334,11 @@ def _normalize_ip(value: str) -> tuple[str, list[str]]:
 
 ```python
 class DeduplicationResult:
-    kept: list[ScoredIOC]
+    kept: list[ScoredIoC]
     removed_count: int
     merge_log: list[str]
 
-def deduplicate(scored_iocs: list[ScoredIOC], *, merge_metadata: bool = True) -> DeduplicationResult:
+def deduplicate(scored_iocs: list[ScoredIoC], *, merge_metadata: bool = True) -> DeduplicationResult:
     """Deduplicate IoCs. Keeps the one with the highest quality_score."""
 
 def get_dedup_stats(before: int, after: int) -> dict[str, int]:
@@ -358,13 +358,13 @@ def get_dedup_stats(before: int, after: int) -> dict[str, int]:
 **Responsibility**: Confidence scoring, false-positive risk detection, benign domain/IP filtering.
 
 ```python
-def score_ioc(ioc: NormalizedIOC) -> ScoredIOC:
+def score_ioc(ioc: NormalizedIoC) -> ScoredIoC:
     """Compute quality score (0-100) and false-positive risk."""
 
-def score_iocs(iocs: list[NormalizedIOC], threshold: float = 20.0) -> list[ScoredIOC]:
+def score_iocs(iocs: list[NormalizedIoC], threshold: float = 20.0) -> list[ScoredIoC]:
     """Score a batch, filtering out those below threshold."""
 
-def filter_false_positives(scored: list[ScoredIOC], min_score: float = 20.0) -> tuple[list[ScoredIOC], int]:
+def filter_false_positives(scored: list[ScoredIoC], min_score: float = 20.0) -> tuple[list[ScoredIoC], int]:
     """Filter IoCs below the quality threshold."""
 
 def _extract_domain(value: str) -> str | None:
@@ -406,24 +406,24 @@ risk: score < 20 → "high", score < 50 → "medium" (unless pattern checks alre
 ```python
 FORMAT_REGISTRY: dict[str, Callable | None]
 
-def generate_nextdns(scored: list[ScoredIOC], path: Path) -> str: ...
-def generate_adguard(scored: list[ScoredIOC], path: Path) -> str: ...
-def generate_pihole(scored: list[ScoredIOC], path: Path) -> str: ...
-def generate_dnsmasq(scored: list[ScoredIOC], path: Path) -> str: ...
-def generate_unbound(scored: list[ScoredIOC], path: Path) -> str: ...
-def generate_rpz(scored: list[ScoredIOC], path: Path) -> str: ...
-def generate_technitium(scored: list[ScoredIOC], path: Path) -> str: ...
-def generate_mikrotik(scored: list[ScoredIOC], path: Path) -> str: ...
-def generate_nftables(scored: list[ScoredIOC], path: Path) -> str: ...
-def generate_ipset(scored: list[ScoredIOC], path: Path) -> str: ...
-def generate_suricata(scored: list[ScoredIOC], path: Path) -> str: ...
-def generate_crowdsec(scored: list[ScoredIOC], path: Path) -> str: ...
-def generate_csv(scored: list[ScoredIOC], path: Path) -> str: ...
-def generate_json(scored: list[ScoredIOC], path: Path) -> str: ...
-def generate_yaml(scored: list[ScoredIOC], path: Path) -> str: ...
-def generate_sqlite(scored: list[ScoredIOC], path: Path) -> str: ...
+def generate_nextdns(scored: list[ScoredIoC], path: Path) -> str: ...
+def generate_adguard(scored: list[ScoredIoC], path: Path) -> str: ...
+def generate_pihole(scored: list[ScoredIoC], path: Path) -> str: ...
+def generate_dnsmasq(scored: list[ScoredIoC], path: Path) -> str: ...
+def generate_unbound(scored: list[ScoredIoC], path: Path) -> str: ...
+def generate_rpz(scored: list[ScoredIoC], path: Path) -> str: ...
+def generate_technitium(scored: list[ScoredIoC], path: Path) -> str: ...
+def generate_mikrotik(scored: list[ScoredIoC], path: Path) -> str: ...
+def generate_nftables(scored: list[ScoredIoC], path: Path) -> str: ...
+def generate_ipset(scored: list[ScoredIoC], path: Path) -> str: ...
+def generate_suricata(scored: list[ScoredIoC], path: Path) -> str: ...
+def generate_crowdsec(scored: list[ScoredIoC], path: Path) -> str: ...
+def generate_csv(scored: list[ScoredIoC], path: Path) -> str: ...
+def generate_json(scored: list[ScoredIoC], path: Path) -> str: ...
+def generate_yaml(scored: list[ScoredIoC], path: Path) -> str: ...
+def generate_sqlite(scored: list[ScoredIoC], path: Path) -> str: ...
 
-def generate_all(scored: list[ScoredIOC], output_dir: Path, formats: list[str] | None = None) -> dict[str, str]:
+def generate_all(scored: list[ScoredIoC], output_dir: Path, formats: list[str] | None = None) -> dict[str, str]:
     """Generate all (or selected) output formats. Returns {format: filepath}."""
 ```
 
@@ -469,20 +469,20 @@ class Pipeline:
         skip_dedup: bool = False,
     ) -> None: ...
 
-    async def run(self) -> tuple[list[ScoredIOC], PipelineStats]:
+    async def run(self) -> tuple[list[ScoredIoC], PipelineStats]:
         """Execute the full 5-stage pipeline."""
 
     async def __aenter__(self) -> Pipeline: ...
     async def __aexit__(self, *args) -> None: ...
 
     async def _stage_fetch(self) -> tuple[list[AddressRecord], float]: ...
-    def _stage_validate(self, records: list[AddressRecord]) -> tuple[list[ValidatedIOC], int]: ...
-    def _stage_normalize(self, validated: list[ValidatedIOC]) -> list[NormalizedIOC]: ...
-    def _stage_quality(self, normalized: list[NormalizedIOC]) -> tuple[list[ScoredIOC], int]: ...
-    def _stage_dedup(self, scored: list[ScoredIOC]) -> tuple[list[ScoredIOC], int]: ...
-    def _compute_stats(self, scored: list[ScoredIOC]) -> None: ...
+    def _stage_validate(self, records: list[AddressRecord]) -> tuple[list[ValidatedIoC], int]: ...
+    def _stage_normalize(self, validated: list[ValidatedIoC]) -> list[NormalizedIoC]: ...
+    def _stage_quality(self, normalized: list[NormalizedIoC]) -> tuple[list[ScoredIoC], int]: ...
+    def _stage_dedup(self, scored: list[ScoredIoC]) -> tuple[list[ScoredIoC], int]: ...
+    def _compute_stats(self, scored: list[ScoredIoC]) -> None: ...
 
-def run_pipeline_sync(client: AsyncAPIClient | None = None, **kwargs) -> tuple[list[ScoredIOC], PipelineStats]:
+def run_pipeline_sync(client: AsyncAPIClient | None = None, **kwargs) -> tuple[list[ScoredIoC], PipelineStats]:
     """Synchronous wrapper using asyncio.run()."""
 ```
 
@@ -503,7 +503,7 @@ Pipeline.run()
     |        |
     |        +----> For each record:
     |        |        validate_ioc(record)
-    |        |        → ValidatedIOC or None
+    |        |        → ValidatedIoC or None
     |        |
     |        +----> Returns (valid, rejected_count)
     |
@@ -511,15 +511,15 @@ Pipeline.run()
     |        |
     |        +----> For each validated:
     |        |        normalize_ioc(validated)
-    |        |        → NormalizedIOC or None
+    |        |        → NormalizedIoC or None
     |        |
-    |        +----> Returns list[NormalizedIOC]
+    |        +----> Returns list[NormalizedIoC]
     |
     +----> _stage_quality()
     |        |
     |        +----> For each normalized:
     |        |        score_ioc(normalized)
-    |        |        → ScoredIOC
+    |        |        → ScoredIoC
     |        |        Filter by min_quality_score
     |        |
     |        +----> Returns (scored, rejected_count)
@@ -656,7 +656,7 @@ max_pages = 0        # 0 = tum sayfalari cek
 #### Numaralandırmalar
 
 ```python
-class IOCType(str, Enum):
+class IoCType(str, Enum):
     DOMAIN = "domain"
     URL = "url"
     IP = "ip"
@@ -749,9 +749,9 @@ class AnnouncementRecord(BaseModel):
 #### Pipeline Modelleri
 
 ```python
-class ValidatedIOC(BaseModel):
+class ValidatedIoC(BaseModel):
     raw_url: str
-    ioc_type: IOCType
+    ioc_type: IoCType
     desc: DescriptionCategory | None = None
     source: Source | None = None
     date: datetime | None = None
@@ -760,9 +760,9 @@ class ValidatedIOC(BaseModel):
     original_id: int = 0
     validation_errors: list[str] = Field(default_factory=list)
 
-class NormalizedIOC(BaseModel):
+class NormalizedIoC(BaseModel):
     value: str
-    ioc_type: IOCType
+    ioc_type: IoCType
     desc: DescriptionCategory | None = None
     source: Source | None = None
     date: datetime | None = None
@@ -771,9 +771,9 @@ class NormalizedIOC(BaseModel):
     original_id: int = 0
     normalization_notes: list[str] = Field(default_factory=list)
 
-class ScoredIOC(BaseModel):
+class ScoredIoC(BaseModel):
     value: str
-    ioc_type: IOCType
+    ioc_type: IoCType
     desc: DescriptionCategory | None = None
     source: Source | None = None
     date: datetime | None = None
@@ -809,13 +809,13 @@ class PipelineStats(BaseModel):
 **Sorumluluk**: IoC doğrulama, RFC6761 uyumluluğu, biçim doğrulama.
 
 ```python
-def validate_ioc(record: AddressRecord) -> ValidatedIOC | None:
+def validate_ioc(record: AddressRecord) -> ValidatedIoC | None:
     """Tekil AddressRecord doğrulaması. Geçersizse None döndürür."""
 
-def validate_records_batch(records: list[AddressRecord]) -> tuple[list[ValidatedIOC], list[tuple[AddressRecord, list[str]]]]:
+def validate_records_batch(records: list[AddressRecord]) -> tuple[list[ValidatedIoC], list[tuple[AddressRecord, list[str]]]]:
     """Toplu doğrulama. (geçerli, reddedilen) döndürür."""
 
-def _infer_ioc_type(value: str) -> IOCType | None:
+def _infer_ioc_type(value: str) -> IoCType | None:
     """API tür alanı boşken değerden IoC türü çıkarır."""
 
 def _is_valid_domain(domain: str) -> list[str]:
@@ -836,7 +836,7 @@ def _is_reserved_domain(domain: str) -> bool:
 | Kural | Kontrol | Aksiyon |
 |-------|---------|---------|
 | Bos deger | URL alani dolu olmali | Reddet |
-| Gecersiz tur | API turu IOCType enum ile eslesmeli veya cikarilabilmeli | Reddet |
+| Gecersiz tur | API turu IoCType enum ile eslesmeli veya cikarilabilmeli | Reddet |
 | Domain biçimi | RFC952/1035 uyumlu, maks 253 karakter, etiket basina maks 63 | Reddet |
 | RFC6761 | localhost, example.com, test.com degil | Reddet |
 | Ozel TLD | .local, .lan, .home, .internal degil | Reddet |
@@ -851,10 +851,10 @@ def _is_reserved_domain(domain: str) -> bool:
 **Sorumluluk**: Biçim kanonikleştirme, türe dönüşüm, meta veri standartlaştırma.
 
 ```python
-def normalize_ioc(validated: ValidatedIOC) -> NormalizedIOC | None:
-    """ValidatedIOC normalizasyonu. Mümkün değilse None döndürür."""
+def normalize_ioc(validated: ValidatedIoC) -> NormalizedIoC | None:
+    """ValidatedIoC normalizasyonu. Mümkün değilse None döndürür."""
 
-def normalize_batch(validated_list: list[ValidatedIOC]) -> list[NormalizedIOC]:
+def normalize_batch(validated_list: list[ValidatedIoC]) -> list[NormalizedIoC]:
     """Toplu normalizasyon, geçersiz sonuçları filtreler."""
 
 def _normalize_domain(value: str) -> tuple[str, list[str]]:
@@ -886,11 +886,11 @@ def _normalize_ip(value: str) -> tuple[str, list[str]]:
 
 ```python
 class DeduplicationResult:
-    kept: list[ScoredIOC]
+    kept: list[ScoredIoC]
     removed_count: int
     merge_log: list[str]
 
-def deduplicate(scored_iocs: list[ScoredIOC], *, merge_metadata: bool = True) -> DeduplicationResult:
+def deduplicate(scored_iocs: list[ScoredIoC], *, merge_metadata: bool = True) -> DeduplicationResult:
     """IoC'leri tekrar kaldırır. En yüksek kalite puanı olanı korur."""
 
 def get_dedup_stats(before: int, after: int) -> dict[str, int]:
@@ -910,13 +910,13 @@ def get_dedup_stats(before: int, after: int) -> dict[str, int]:
 **Sorumluluk**: Guven puanlama, yanlis pozitif risk tespiti, masum domain/IP filtreleme.
 
 ```python
-def score_ioc(ioc: NormalizedIOC) -> ScoredIOC:
+def score_ioc(ioc: NormalizedIoC) -> ScoredIoC:
     """Kalite puanı (0-100) ve yanlış pozitif riski hesaplar."""
 
-def score_iocs(iocs: list[NormalizedIOC], threshold: float = 20.0) -> list[ScoredIOC]:
+def score_iocs(iocs: list[NormalizedIoC], threshold: float = 20.0) -> list[ScoredIoC]:
     """Toplu puanlama, eşik altındakileri filtreler."""
 
-def filter_false_positives(scored: list[ScoredIOC], min_score: float = 20.0) -> tuple[list[ScoredIOC], int]:
+def filter_false_positives(scored: list[ScoredIoC], min_score: float = 20.0) -> tuple[list[ScoredIoC], int]:
     """Kalite eşiği altındaki IoC'leri filtreler."""
 
 def _extract_domain(value: str) -> str | None:
@@ -958,24 +958,24 @@ risk: puan < 20 → "high", puan < 50 → "medium" (kalip kontrolleri "high" bel
 ```python
 FORMAT_REGISTRY: dict[str, Callable | None]
 
-def generate_nextdns(scored: list[ScoredIOC], path: Path) -> str: ...
-def generate_adguard(scored: list[ScoredIOC], path: Path) -> str: ...
-def generate_pihole(scored: list[ScoredIOC], path: Path) -> str: ...
-def generate_dnsmasq(scored: list[ScoredIOC], path: Path) -> str: ...
-def generate_unbound(scored: list[ScoredIOC], path: Path) -> str: ...
-def generate_rpz(scored: list[ScoredIOC], path: Path) -> str: ...
-def generate_technitium(scored: list[ScoredIOC], path: Path) -> str: ...
-def generate_mikrotik(scored: list[ScoredIOC], path: Path) -> str: ...
-def generate_nftables(scored: list[ScoredIOC], path: Path) -> str: ...
-def generate_ipset(scored: list[ScoredIOC], path: Path) -> str: ...
-def generate_suricata(scored: list[ScoredIOC], path: Path) -> str: ...
-def generate_crowdsec(scored: list[ScoredIOC], path: Path) -> str: ...
-def generate_csv(scored: list[ScoredIOC], path: Path) -> str: ...
-def generate_json(scored: list[ScoredIOC], path: Path) -> str: ...
-def generate_yaml(scored: list[ScoredIOC], path: Path) -> str: ...
-def generate_sqlite(scored: list[ScoredIOC], path: Path) -> str: ...
+def generate_nextdns(scored: list[ScoredIoC], path: Path) -> str: ...
+def generate_adguard(scored: list[ScoredIoC], path: Path) -> str: ...
+def generate_pihole(scored: list[ScoredIoC], path: Path) -> str: ...
+def generate_dnsmasq(scored: list[ScoredIoC], path: Path) -> str: ...
+def generate_unbound(scored: list[ScoredIoC], path: Path) -> str: ...
+def generate_rpz(scored: list[ScoredIoC], path: Path) -> str: ...
+def generate_technitium(scored: list[ScoredIoC], path: Path) -> str: ...
+def generate_mikrotik(scored: list[ScoredIoC], path: Path) -> str: ...
+def generate_nftables(scored: list[ScoredIoC], path: Path) -> str: ...
+def generate_ipset(scored: list[ScoredIoC], path: Path) -> str: ...
+def generate_suricata(scored: list[ScoredIoC], path: Path) -> str: ...
+def generate_crowdsec(scored: list[ScoredIoC], path: Path) -> str: ...
+def generate_csv(scored: list[ScoredIoC], path: Path) -> str: ...
+def generate_json(scored: list[ScoredIoC], path: Path) -> str: ...
+def generate_yaml(scored: list[ScoredIoC], path: Path) -> str: ...
+def generate_sqlite(scored: list[ScoredIoC], path: Path) -> str: ...
 
-def generate_all(scored: list[ScoredIOC], output_dir: Path, formats: list[str] | None = None) -> dict[str, str]:
+def generate_all(scored: list[ScoredIoC], output_dir: Path, formats: list[str] | None = None) -> dict[str, str]:
     """Tüm (veya seçili) çıktı formatlarını üretir. {format: dosya_yolu} döndürür."""
 ```
 
@@ -1021,20 +1021,20 @@ class Pipeline:
         skip_dedup: bool = False,
     ) -> None: ...
 
-    async def run(self) -> tuple[list[ScoredIOC], PipelineStats]:
+    async def run(self) -> tuple[list[ScoredIoC], PipelineStats]:
         """Tam 5 aşamalı hattı çalıştırır."""
 
     async def __aenter__(self) -> Pipeline: ...
     async def __aexit__(self, *args) -> None: ...
 
     async def _stage_fetch(self) -> tuple[list[AddressRecord], float]: ...
-    def _stage_validate(self, records: list[AddressRecord]) -> tuple[list[ValidatedIOC], int]: ...
-    def _stage_normalize(self, validated: list[ValidatedIOC]) -> list[NormalizedIOC]: ...
-    def _stage_quality(self, normalized: list[NormalizedIOC]) -> tuple[list[ScoredIOC], int]: ...
-    def _stage_dedup(self, scored: list[ScoredIOC]) -> tuple[list[ScoredIOC], int]: ...
-    def _compute_stats(self, scored: list[ScoredIOC]) -> None: ...
+    def _stage_validate(self, records: list[AddressRecord]) -> tuple[list[ValidatedIoC], int]: ...
+    def _stage_normalize(self, validated: list[ValidatedIoC]) -> list[NormalizedIoC]: ...
+    def _stage_quality(self, normalized: list[NormalizedIoC]) -> tuple[list[ScoredIoC], int]: ...
+    def _stage_dedup(self, scored: list[ScoredIoC]) -> tuple[list[ScoredIoC], int]: ...
+    def _compute_stats(self, scored: list[ScoredIoC]) -> None: ...
 
-def run_pipeline_sync(client: AsyncAPIClient | None = None, **kwargs) -> tuple[list[ScoredIOC], PipelineStats]:
+def run_pipeline_sync(client: AsyncAPIClient | None = None, **kwargs) -> tuple[list[ScoredIoC], PipelineStats]:
     """asyncio.run() ile senkron sarmalayıcı."""
 ```
 
@@ -1055,7 +1055,7 @@ Pipeline.run()
     |        |
     |        +----> Her kayit icin:
     |        |        validate_ioc(record)
-    |        |        → ValidatedIOC veya None
+    |        |        → ValidatedIoC veya None
     |        |
     |        +----> (gecerli, reddedilen_sayisi) dondurur
     |
@@ -1063,15 +1063,15 @@ Pipeline.run()
     |        |
     |        +----> Her dogrulanmis icin:
     |        |        normalize_ioc(validated)
-    |        |        → NormalizedIOC veya None
+    |        |        → NormalizedIoC veya None
     |        |
-    |        +----> list[NormalizedIOC] dondurur
+    |        +----> list[NormalizedIoC] dondurur
     |
     +----> _stage_quality()
     |        |
     |        +----> Her normallestirilmis icin:
     |        |        score_ioc(normalized)
-    |        |        → ScoredIOC
+    |        |        → ScoredIoC
     |        |        min_quality_score ile filtreleme
     |        |
     |        +----> (puanlanmis, reddedilen_sayisi) dondurur

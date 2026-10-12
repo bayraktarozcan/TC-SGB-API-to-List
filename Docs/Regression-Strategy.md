@@ -243,13 +243,13 @@ Tests/regression/Data/
 def regression_dataset():
     """Create deterministic regression test dataset."""
     return [
-        IOCRecord(
+        IoCRecord(
             id=i,
-            type=list(IOCType)[i % 5],
+            type=list(IoCType)[i % 5],
             value=f"test{i}.example.com",
             first_seen=f"2025-01-{i:02d}T10:00:00Z",
             last_seen=f"2025-01-{i:02d}T14:00:00Z",
-            status=IOCStatus.ACTIVE,
+            status=IoCStatus.ACTIVE,
         )
         for i in range(1, 101)
     ]
@@ -575,13 +575,13 @@ Tests/regression/Data/
 def regression_dataset():
     """Create deterministic regression test dataset."""
     return [
-        IOCRecord(
+        IoCRecord(
             id=i,
-            type=list(IOCType)[i % 5],
+            type=list(IoCType)[i % 5],
             value=f"test{i}.example.com",
             first_seen=f"2025-01-{i:02d}T10:00:00Z",
             last_seen=f"2025-01-{i:02d}T14:00:00Z",
-            status=IOCStatus.ACTIVE,
+            status=IoCStatus.ACTIVE,
         )
         for i in range(1, 101)
     ]

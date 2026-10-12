@@ -13,8 +13,8 @@ import yaml
 from Scripts.src.models import (
     ConnectionType,
     DescriptionCategory,
-    IOCType,
-    ScoredIOC,
+    IoCType,
+    ScoredIoC,
     Source,
 )
 from Scripts.src.outputs import (
@@ -38,11 +38,11 @@ from Scripts.src.outputs import (
 
 
 @pytest.fixture
-def scored_iocs() -> list[ScoredIOC]:
+def scored_iocs() -> list[ScoredIoC]:
     return [
-        ScoredIOC(
+        ScoredIoC(
             value="evil-phish.com",
-            ioc_type=IOCType.DOMAIN,
+            ioc_type=IoCType.DOMAIN,
             desc=DescriptionCategory.PHISHING,
             source=Source.USOM,
             criticality_level=3,
@@ -50,9 +50,9 @@ def scored_iocs() -> list[ScoredIOC]:
             quality_score=93.0,
             false_positive_risk="low",
         ),
-        ScoredIOC(
+        ScoredIoC(
             value="malware-cnc.evil.net",
-            ioc_type=IOCType.DOMAIN,
+            ioc_type=IoCType.DOMAIN,
             desc=DescriptionCategory.MALWARE_CMD_CENTER,
             source=Source.SOME,
             criticality_level=1,
@@ -60,9 +60,9 @@ def scored_iocs() -> list[ScoredIOC]:
             quality_score=95.0,
             false_positive_risk="low",
         ),
-        ScoredIOC(
+        ScoredIoC(
             value="192.0.2.1",
-            ioc_type=IOCType.IP,
+            ioc_type=IoCType.IP,
             desc=DescriptionCategory.CYBER_ATTACK,
             source=Source.RSA,
             criticality_level=2,
@@ -70,9 +70,9 @@ def scored_iocs() -> list[ScoredIOC]:
             quality_score=88.0,
             false_positive_risk="low",
         ),
-        ScoredIOC(
+        ScoredIoC(
             value="https://drop.evil.top/mal.exe",
-            ioc_type=IOCType.URL,
+            ioc_type=IoCType.URL,
             desc=DescriptionCategory.MALWARE_DIST_URL,
             source=Source.IHBAR,
             criticality_level=4,
@@ -132,14 +132,14 @@ class TestAdGuard:
 
     def test_url_host_dedup(self):
         iocs = [
-            ScoredIOC(
+            ScoredIoC(
                 value="https://dup.example.com/a",
-                ioc_type=IOCType.URL,
+                ioc_type=IoCType.URL,
                 quality_score=90.0,
             ),
-            ScoredIOC(
+            ScoredIoC(
                 value="https://dup.example.com/b?x=1",
-                ioc_type=IOCType.URL,
+                ioc_type=IoCType.URL,
                 quality_score=91.0,
             ),
         ]
@@ -149,9 +149,9 @@ class TestAdGuard:
 
     def test_url_ip_host(self):
         iocs = [
-            ScoredIOC(
+            ScoredIoC(
                 value="http://203.0.113.7/login",
-                ioc_type=IOCType.URL,
+                ioc_type=IoCType.URL,
                 quality_score=90.0,
             ),
         ]
@@ -160,12 +160,12 @@ class TestAdGuard:
 
     def test_cidr_and_garbage_skipped(self):
         iocs = [
-            ScoredIOC(
+            ScoredIoC(
                 value="2001:db8::/32",
-                ioc_type=IOCType.IP6NET,
+                ioc_type=IoCType.IP6NET,
                 quality_score=90.0,
             ),
-            ScoredIOC(value="http://", ioc_type=IOCType.URL, quality_score=90.0),
+            ScoredIoC(value="http://", ioc_type=IoCType.URL, quality_score=90.0),
         ]
         out = generate_adguard(iocs)
         assert "/32" not in out
@@ -531,9 +531,9 @@ class TestIPv6Formats:
     @pytest.fixture
     def ipv6_iocs(self):
         return [
-            ScoredIOC(
+            ScoredIoC(
                 value="2001:db8::1",
-                ioc_type=IOCType.IP6,
+                ioc_type=IoCType.IP6,
                 desc=DescriptionCategory.CYBER_ATTACK,
                 source=Source.RSA,
                 criticality_level=2,
@@ -574,9 +574,9 @@ class TestDomainsAndUrls:
 
         result = _domains_and_urls(scored_iocs)
         types = {ioc.ioc_type for ioc in result}
-        assert IOCType.DOMAIN in types
-        assert IOCType.URL in types
-        assert IOCType.IP not in types
+        assert IoCType.DOMAIN in types
+        assert IoCType.URL in types
+        assert IoCType.IP not in types
 
 
 class TestGenerateAll:
@@ -652,7 +652,7 @@ class TestSqliteDefaultPath:
 
 class TestEmptyInput:
     def test_all_formats_empty(self, temp_dir):
-        iocs: list[ScoredIOC] = []
+        iocs: list[ScoredIoC] = []
         assert generate_nextdns(iocs) == ""
         assert generate_pihole(iocs) != ""
         assert json.loads(generate_json(iocs)) == []

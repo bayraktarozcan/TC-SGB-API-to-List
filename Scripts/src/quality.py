@@ -7,9 +7,9 @@ import re
 from urllib.parse import urlparse
 
 from .models import (
-    IOCType,
-    NormalizedIOC,
-    ScoredIOC,
+    IoCType,
+    NormalizedIoC,
+    ScoredIoC,
 )
 
 # Benign / whitelisted domains that should never appear in threat lists
@@ -115,7 +115,7 @@ def _has_suspicious_patterns(domain: str) -> list[str]:
     return flags
 
 
-def score_ioc(ioc: NormalizedIOC) -> ScoredIOC:
+def score_ioc(ioc: NormalizedIoC) -> ScoredIoC:
     """Compute quality score and false-positive risk for an IoC."""
     score = 100.0
     fp_risk = "low"
@@ -130,13 +130,13 @@ def score_ioc(ioc: NormalizedIOC) -> ScoredIOC:
         fp_risk = "high"
 
     # Benign IP check
-    if ioc.ioc_type in (IOCType.IP, IOCType.IP6) and _is_benign_ip(ioc.value):
+    if ioc.ioc_type in (IoCType.IP, IoCType.IP6) and _is_benign_ip(ioc.value):
         score -= 80
         flags.append("benign_ip")
         fp_risk = "high"
 
     # Private IP check
-    if ioc.ioc_type in (IOCType.IP, IOCType.IP6) and _is_private_ip(ioc.value):
+    if ioc.ioc_type in (IoCType.IP, IoCType.IP6) and _is_private_ip(ioc.value):
         score -= 70
         flags.append("private_ip")
         fp_risk = "high"
@@ -180,7 +180,7 @@ def score_ioc(ioc: NormalizedIOC) -> ScoredIOC:
             fp_risk = "medium"
     # score >= 50: keep whatever fp_risk was set by pattern checks
 
-    return ScoredIOC(
+    return ScoredIoC(
         value=ioc.value,
         ioc_type=ioc.ioc_type,
         desc=ioc.desc,
@@ -199,10 +199,10 @@ DEFAULT_QUALITY_THRESHOLD: float = 20.0
 
 
 def filter_false_positives(
-    scored: list[ScoredIOC], min_score: float = 20.0
-) -> tuple[list[ScoredIOC], int]:
+    scored: list[ScoredIoC], min_score: float = 20.0
+) -> tuple[list[ScoredIoC], int]:
     """Filter out IoCs with quality scores below the threshold."""
-    accepted: list[ScoredIOC] = []
+    accepted: list[ScoredIoC] = []
     rejected = 0
     for ioc in scored:
         if ioc.quality_score >= min_score:
@@ -213,11 +213,11 @@ def filter_false_positives(
 
 
 def score_iocs(
-    iocs: list[NormalizedIOC],
+    iocs: list[NormalizedIoC],
     threshold: float = DEFAULT_QUALITY_THRESHOLD,
-) -> list[ScoredIOC]:
+) -> list[ScoredIoC]:
     """Score a batch of IoCs, filtering out those below the threshold."""
-    scored: list[ScoredIOC] = []
+    scored: list[ScoredIoC] = []
     for ioc in iocs:
         s = score_ioc(ioc)
         if s.quality_score >= threshold:

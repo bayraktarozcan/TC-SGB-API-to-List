@@ -13,7 +13,7 @@ _Describe the change and what problem it solves._
 ## Type of Change
 
 - [ ] New output format
-- [ ] New IOC source integration
+- [ ] New IoC source integration
 - [ ] Pipeline enhancement
 - [ ] Bug fix
 - [ ] Documentation (README, CHANGELOG, Docs/)
@@ -57,7 +57,7 @@ _Değişikliği ve çözdüğü sorunu açıklayın._
 ## Değişiklik Türü
 
 - [ ] Yeni çıktı biçimi
-- [ ] Yeni IOC kaynağı entegrasyonu
+- [ ] Yeni IoC kaynağı entegrasyonu
 - [ ] Hat iyileştirmesi
 - [ ] Hata düzeltmesi
 - [ ] Dokümantasyon (README, CHANGELOG, Docs/)

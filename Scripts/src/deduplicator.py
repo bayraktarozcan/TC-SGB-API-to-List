@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import logging
 
-from .models import IOCType, ScoredIOC
+from .models import IoCType, ScoredIoC
 
 logger = logging.getLogger(__name__)
 
@@ -38,10 +38,10 @@ def _canonical_domain(value: str) -> str:
     return value.strip().lower().rstrip(".")
 
 
-def _make_dedup_key(value: str, ioc_type: IOCType) -> str:
+def _make_dedup_key(value: str, ioc_type: IoCType) -> str:
     """Create a canonical dedup key."""
     value = value.strip().lower().rstrip(".")
-    if ioc_type == IOCType.URL:
+    if ioc_type == IoCType.URL:
         # For URLs, try to extract the domain and add as an alternative key.
         domain = _extract_domain_from_url(value)
         if domain:
@@ -54,10 +54,10 @@ def _make_dedup_key(value: str, ioc_type: IOCType) -> str:
 # ---------------------------------------------------------------------------
 
 
-def _merge_metadata(primary: ScoredIOC, secondary: ScoredIOC) -> ScoredIOC:
+def _merge_metadata(primary: ScoredIoC, secondary: ScoredIoC) -> ScoredIoC:
     """Merge missing metadata from ``secondary`` into a copy of ``primary``.
 
-    Returns a NEW ScoredIOC — the inputs are never mutated.
+    Returns a NEW ScoredIoC — the inputs are never mutated.
     """
     return primary.model_copy(
         update={
@@ -84,7 +84,7 @@ class DeduplicationResult:
 
     def __init__(
         self,
-        kept: list[ScoredIOC],
+        kept: list[ScoredIoC],
         removed_count: int,
         merge_log: list[str],
     ) -> None:
@@ -94,7 +94,7 @@ class DeduplicationResult:
 
 
 def deduplicate(
-    scored_iocs: list[ScoredIOC],
+    scored_iocs: list[ScoredIoC],
     *,
     merge_metadata: bool = True,
 ) -> DeduplicationResult:
@@ -119,14 +119,14 @@ def deduplicate(
     DeduplicationResult with the deduplicated list and statistics.
     """
     # Index by primary key.
-    primary: dict[str, ScoredIOC] = {}
+    primary: dict[str, ScoredIoC] = {}
     # Secondary index: domain → primary key (for URL-to-domain cross-dedup).
     domain_index: dict[str, str] = {}
     merge_log: list[str] = []
 
     # Pre-sort so DOMAINs are processed first — ensures domain_index is
     # populated before any URL cross-type check, regardless of input order.
-    sorted_iocs = sorted(scored_iocs, key=lambda x: 0 if x.ioc_type == IOCType.DOMAIN else 1)
+    sorted_iocs = sorted(scored_iocs, key=lambda x: 0 if x.ioc_type == IoCType.DOMAIN else 1)
 
     for ioc in sorted_iocs:
         # Primary key.
@@ -151,11 +151,11 @@ def deduplicate(
             continue
 
         # Cross-type dedup for URLs: if a URL's domain matches an existing domain IoC.
-        if ioc.ioc_type == IOCType.URL:
+        if ioc.ioc_type == IoCType.URL:
             domain = _extract_domain_from_url(ioc.value)
             if domain and domain in domain_index:
                 existing_key = domain_index[domain]
-                domain_existing: ScoredIOC | None = primary.get(existing_key)
+                domain_existing: ScoredIoC | None = primary.get(existing_key)
                 if domain_existing and ioc.quality_score > domain_existing.quality_score:
                     merge_log.append(f"URL {ioc.value} replaced domain {domain} (higher score)")
                     del primary[existing_key]
@@ -169,7 +169,7 @@ def deduplicate(
                 continue
 
         primary[pkey] = ioc
-        if ioc.ioc_type == IOCType.DOMAIN:
+        if ioc.ioc_type == IoCType.DOMAIN:
             domain_index[_canonical_domain(ioc.value)] = pkey
 
     kept = list(primary.values())

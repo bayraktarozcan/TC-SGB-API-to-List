@@ -6,7 +6,7 @@ from __future__ import annotations
 import re
 from urllib.parse import urlparse
 
-from .models import IOCType, NormalizedIOC, ValidatedIOC
+from .models import IoCType, NormalizedIoC, ValidatedIoC
 
 
 def _normalize_domain(value: str) -> tuple[str, list[str]]:
@@ -94,21 +94,21 @@ def _normalize_ip(value: str) -> tuple[str, list[str]]:
     return value, notes
 
 
-def normalize_ioc(validated: ValidatedIOC) -> NormalizedIOC | None:
-    """Normalize a ValidatedIOC. Returns None only if normalization is impossible."""
+def normalize_ioc(validated: ValidatedIoC) -> NormalizedIoC | None:
+    """Normalize a ValidatedIoC. Returns None only if normalization is impossible."""
     value = validated.raw_url.strip()
     if not value:
         return None
 
     notes: list[str] = []
 
-    if validated.ioc_type == IOCType.DOMAIN:
+    if validated.ioc_type == IoCType.DOMAIN:
         value, dom_notes = _normalize_domain(value)
         notes.extend(dom_notes)
-    elif validated.ioc_type == IOCType.URL:
+    elif validated.ioc_type == IoCType.URL:
         value, url_notes = _normalize_url(value)
         notes.extend(url_notes)
-    elif validated.ioc_type in (IOCType.IP, IOCType.IP6, IOCType.IP6NET):
+    elif validated.ioc_type in (IoCType.IP, IoCType.IP6, IoCType.IP6NET):
         value, ip_notes = _normalize_ip(value)
         notes.extend(ip_notes)
 
@@ -117,7 +117,7 @@ def normalize_ioc(validated: ValidatedIOC) -> NormalizedIOC | None:
         notes.append("rejected empty/invalid after normalization")
         return None
 
-    return NormalizedIOC(
+    return NormalizedIoC(
         value=value,
         ioc_type=validated.ioc_type,
         desc=validated.desc,
@@ -130,9 +130,9 @@ def normalize_ioc(validated: ValidatedIOC) -> NormalizedIOC | None:
     )
 
 
-def normalize_batch(validated_list: list[ValidatedIOC]) -> list[NormalizedIOC]:
+def normalize_batch(validated_list: list[ValidatedIoC]) -> list[NormalizedIoC]:
     """Normalize a batch of validated IoCs, filtering out invalid ones."""
-    results: list[NormalizedIOC] = []
+    results: list[NormalizedIoC] = []
     for v in validated_list:
         normalized = normalize_ioc(v)
         if normalized is not None:

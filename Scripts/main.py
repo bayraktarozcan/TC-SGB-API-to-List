@@ -176,19 +176,19 @@ async def cmd_generate(args: argparse.Namespace) -> None:
     # Load raw records.
     raw_data = json.loads(input_path.read_text(encoding="utf-8"))
 
-    from Scripts.src.models import ConnectionType, DescriptionCategory, IOCType, ScoredIOC, Source
+    from Scripts.src.models import ConnectionType, DescriptionCategory, IoCType, ScoredIoC, Source
 
-    scored: list[ScoredIOC] = []
+    scored: list[ScoredIoC] = []
     for item in raw_data:
         try:
-            ioc_type = IOCType(item["type"])
+            ioc_type = IoCType(item["type"])
             desc = DescriptionCategory(item["desc"]) if item.get("desc") else None
             source = Source(item["source"]) if item.get("source") else None
             ct = ConnectionType(item["connectiontype"]) if item.get("connectiontype") else None
             date = datetime.fromisoformat(item["date"]) if item.get("date") else None
 
             scored.append(
-                ScoredIOC(
+                ScoredIoC(
                     value=item["value"],
                     ioc_type=ioc_type,
                     desc=desc,

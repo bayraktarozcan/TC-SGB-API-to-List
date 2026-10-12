@@ -14,11 +14,11 @@ from Scripts.src.models import (
     AddressRecord,
     ConnectionType,
     DescriptionCategory,
-    IOCType,
-    NormalizedIOC,
-    ScoredIOC,
+    IoCType,
+    NormalizedIoC,
+    ScoredIoC,
     Source,
-    ValidatedIOC,
+    ValidatedIoC,
 )
 
 # ---------------------------------------------------------------------------
@@ -185,11 +185,11 @@ def malicious_only_records() -> list[AddressRecord]:
 
 
 @pytest.fixture
-def sample_validated_iocs() -> list[ValidatedIOC]:
+def sample_validated_iocs() -> list[ValidatedIoC]:
     return [
-        ValidatedIOC(
+        ValidatedIoC(
             raw_url="evil-phish.com",
-            ioc_type=IOCType.DOMAIN,
+            ioc_type=IoCType.DOMAIN,
             desc=DescriptionCategory.PHISHING,
             source=Source.USOM,
             date=datetime(2024, 1, 15),
@@ -197,9 +197,9 @@ def sample_validated_iocs() -> list[ValidatedIOC]:
             connectiontype=ConnectionType.PHISHING,
             original_id=1,
         ),
-        ValidatedIOC(
+        ValidatedIoC(
             raw_url="192.168.1.100",
-            ioc_type=IOCType.IP,
+            ioc_type=IoCType.IP,
             desc=DescriptionCategory.CYBER_ATTACK,
             source=Source.USOM,
             date=datetime(2024, 3, 10),
@@ -207,9 +207,9 @@ def sample_validated_iocs() -> list[ValidatedIOC]:
             connectiontype=ConnectionType.OTHER,
             original_id=3,
         ),
-        ValidatedIOC(
+        ValidatedIoC(
             raw_url="spam.xyz",
-            ioc_type=IOCType.DOMAIN,
+            ioc_type=IoCType.DOMAIN,
             desc=DescriptionCategory.MALWARE_DIST_DOMAIN,
             source=Source.IHBAR,
             date=datetime(2024, 5, 15),
@@ -226,11 +226,11 @@ def sample_validated_iocs() -> list[ValidatedIOC]:
 
 
 @pytest.fixture
-def sample_normalized_iocs() -> list[NormalizedIOC]:
+def sample_normalized_iocs() -> list[NormalizedIoC]:
     return [
-        NormalizedIOC(
+        NormalizedIoC(
             value="evil-phish.com",
-            ioc_type=IOCType.DOMAIN,
+            ioc_type=IoCType.DOMAIN,
             desc=DescriptionCategory.PHISHING,
             source=Source.USOM,
             date=datetime(2024, 1, 15),
@@ -238,9 +238,9 @@ def sample_normalized_iocs() -> list[NormalizedIOC]:
             connectiontype=ConnectionType.PHISHING,
             original_id=1,
         ),
-        NormalizedIOC(
+        NormalizedIoC(
             value="192.168.1.100",
-            ioc_type=IOCType.IP,
+            ioc_type=IoCType.IP,
             desc=DescriptionCategory.CYBER_ATTACK,
             source=Source.USOM,
             date=datetime(2024, 3, 10),
@@ -248,9 +248,9 @@ def sample_normalized_iocs() -> list[NormalizedIOC]:
             connectiontype=ConnectionType.OTHER,
             original_id=3,
         ),
-        NormalizedIOC(
+        NormalizedIoC(
             value="malware-cnc.evil.net",
-            ioc_type=IOCType.DOMAIN,
+            ioc_type=IoCType.DOMAIN,
             desc=DescriptionCategory.MALWARE_CMD_CENTER,
             source=Source.SOME,
             date=datetime(2024, 2, 20),
@@ -262,12 +262,12 @@ def sample_normalized_iocs() -> list[NormalizedIOC]:
 
 
 @pytest.fixture
-def scoreable_iocs() -> list[NormalizedIOC]:
+def scoreable_iocs() -> list[NormalizedIoC]:
     """IoCs designed to exercise quality scoring: benign, private, normal, no-source."""
     return [
-        NormalizedIOC(
+        NormalizedIoC(
             value="google.com",
-            ioc_type=IOCType.DOMAIN,
+            ioc_type=IoCType.DOMAIN,
             desc=DescriptionCategory.PHISHING,
             source=Source.USOM,
             date=datetime(2024, 1, 1),
@@ -275,9 +275,9 @@ def scoreable_iocs() -> list[NormalizedIOC]:
             connectiontype=ConnectionType.PHISHING,
             original_id=200,
         ),
-        NormalizedIOC(
+        NormalizedIoC(
             value="127.0.0.1",
-            ioc_type=IOCType.IP,
+            ioc_type=IoCType.IP,
             desc=DescriptionCategory.CYBER_ATTACK,
             source=Source.USOM,
             date=datetime(2024, 1, 1),
@@ -285,9 +285,9 @@ def scoreable_iocs() -> list[NormalizedIOC]:
             connectiontype=ConnectionType.OTHER,
             original_id=201,
         ),
-        NormalizedIOC(
+        NormalizedIoC(
             value="totally-malicious-domain.xyz",
-            ioc_type=IOCType.DOMAIN,
+            ioc_type=IoCType.DOMAIN,
             desc=DescriptionCategory.MALWARE_CMD_CENTER,
             source=Source.SOME,
             date=datetime(2024, 1, 1),
@@ -295,9 +295,9 @@ def scoreable_iocs() -> list[NormalizedIOC]:
             connectiontype=ConnectionType.BOTNET_CNC,
             original_id=202,
         ),
-        NormalizedIOC(
+        NormalizedIoC(
             value="no-source-bad.ru",
-            ioc_type=IOCType.DOMAIN,
+            ioc_type=IoCType.DOMAIN,
             desc=None,
             source=None,
             date=None,
@@ -314,11 +314,11 @@ def scoreable_iocs() -> list[NormalizedIOC]:
 
 
 @pytest.fixture
-def sample_scored_iocs() -> list[ScoredIOC]:
+def sample_scored_iocs() -> list[ScoredIoC]:
     return [
-        ScoredIOC(
+        ScoredIoC(
             value="evil-phish.com",
-            ioc_type=IOCType.DOMAIN,
+            ioc_type=IoCType.DOMAIN,
             desc=DescriptionCategory.PHISHING,
             source=Source.USOM,
             date=datetime(2024, 1, 15),
@@ -329,9 +329,9 @@ def sample_scored_iocs() -> list[ScoredIOC]:
             false_positive_risk="low",
             flags=[],
         ),
-        ScoredIOC(
+        ScoredIoC(
             value="192.168.1.100",
-            ioc_type=IOCType.IP,
+            ioc_type=IoCType.IP,
             desc=DescriptionCategory.CYBER_ATTACK,
             source=Source.USOM,
             date=datetime(2024, 3, 10),
@@ -342,9 +342,9 @@ def sample_scored_iocs() -> list[ScoredIOC]:
             false_positive_risk="low",
             flags=["private_ip"],
         ),
-        ScoredIOC(
+        ScoredIoC(
             value="spam.xyz",
-            ioc_type=IOCType.DOMAIN,
+            ioc_type=IoCType.DOMAIN,
             desc=DescriptionCategory.MALWARE_DIST_DOMAIN,
             source=Source.IHBAR,
             date=datetime(2024, 5, 15),
@@ -355,9 +355,9 @@ def sample_scored_iocs() -> list[ScoredIOC]:
             false_positive_risk="low",
             flags=[],
         ),
-        ScoredIOC(
+        ScoredIoC(
             value="cnc.bad.ru",
-            ioc_type=IOCType.DOMAIN,
+            ioc_type=IoCType.DOMAIN,
             desc=DescriptionCategory.MALWARE_CMD_CENTER,
             source=Source.RSA,
             date=datetime(2024, 6, 1),

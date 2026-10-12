@@ -7,9 +7,9 @@ from datetime import datetime
 from Scripts.src.models import (
     ConnectionType,
     DescriptionCategory,
-    IOCType,
-    NormalizedIOC,
-    ScoredIOC,
+    IoCType,
+    NormalizedIoC,
+    ScoredIoC,
     Source,
 )
 from Scripts.src.quality import (
@@ -26,14 +26,14 @@ from Scripts.src.quality import (
 
 def _make_ioc(
     value: str,
-    ioc_type: IOCType = IOCType.DOMAIN,
+    ioc_type: IoCType = IoCType.DOMAIN,
     desc: DescriptionCategory | None = DescriptionCategory.PHISHING,
     source: Source | None = Source.USOM,
     criticality_level: int = 5,
     date: datetime | None = datetime(2024, 1, 1),
     connectiontype: ConnectionType | None = ConnectionType.PHISHING,
-) -> NormalizedIOC:
-    return NormalizedIOC(
+) -> NormalizedIoC:
+    return NormalizedIoC(
         value=value,
         ioc_type=ioc_type,
         desc=desc,
@@ -172,7 +172,7 @@ class TestHasSuspiciousPatterns:
 # ---------------------------------------------------------------------------
 
 
-class TestScoreIOC:
+class TestScoreIoC:
     def test_malicious_domain_high_score(self):
         ioc = _make_ioc("malware-cnc.evil.xyz")
         scored = score_ioc(ioc)
@@ -187,13 +187,13 @@ class TestScoreIOC:
         assert "benign_domain" in scored.flags
 
     def test_benign_ip_low_score(self):
-        ioc = _make_ioc("8.8.8.8", ioc_type=IOCType.IP)
+        ioc = _make_ioc("8.8.8.8", ioc_type=IoCType.IP)
         scored = score_ioc(ioc)
         assert scored.quality_score < 30
         assert "benign_ip" in scored.flags
 
     def test_private_ip_penalty(self):
-        ioc = _make_ioc("192.168.1.1", ioc_type=IOCType.IP)
+        ioc = _make_ioc("192.168.1.1", ioc_type=IoCType.IP)
         scored = score_ioc(ioc)
         assert scored.false_positive_risk in ("medium", "high")
         assert "private_ip" in scored.flags
@@ -230,7 +230,7 @@ class TestScoreIOC:
 
     def test_score_clamped_to_0(self):
         ioc = _make_ioc(
-            "google.com", ioc_type=IOCType.IP, source=None, desc=None, criticality_level=10
+            "google.com", ioc_type=IoCType.IP, source=None, desc=None, criticality_level=10
         )
         # Override to make it an IP
         ioc.value = "8.8.8.8"
@@ -244,7 +244,7 @@ class TestScoreIOC:
         assert scored.date == datetime(2024, 6, 1)
 
     def test_url_domain_extraction(self):
-        ioc = _make_ioc("https://google.com/path", ioc_type=IOCType.URL)
+        ioc = _make_ioc("https://google.com/path", ioc_type=IoCType.URL)
         scored = score_ioc(ioc)
         assert "benign_domain" in scored.flags
 
@@ -264,9 +264,9 @@ class TestScoreIOC:
             return ["flag1", "flag2", "flag3", "flag4", "flag5", "flag6", "flag7", "flag8"]
 
         monkeypatch.setattr("Scripts.src.quality._has_suspicious_patterns", _many_flags)
-        ioc = NormalizedIOC(
+        ioc = NormalizedIoC(
             value="123456-abcdef-ghijklmnop.evil-com-domain.xyz",
-            ioc_type=IOCType.DOMAIN,
+            ioc_type=IoCType.DOMAIN,
             desc=None,
             source=None,
             date=None,
@@ -287,8 +287,8 @@ class TestScoreIOC:
 class TestFilterFalsePositives:
     def test_all_pass(self):
         scored = [
-            ScoredIOC(value="a.com", ioc_type=IOCType.DOMAIN, quality_score=90),
-            ScoredIOC(value="b.com", ioc_type=IOCType.DOMAIN, quality_score=80),
+            ScoredIoC(value="a.com", ioc_type=IoCType.DOMAIN, quality_score=90),
+            ScoredIoC(value="b.com", ioc_type=IoCType.DOMAIN, quality_score=80),
         ]
         accepted, rejected = filter_false_positives(scored, min_score=20)
         assert len(accepted) == 2
@@ -296,8 +296,8 @@ class TestFilterFalsePositives:
 
     def test_some_filtered(self):
         scored = [
-            ScoredIOC(value="a.com", ioc_type=IOCType.DOMAIN, quality_score=90),
-            ScoredIOC(value="b.com", ioc_type=IOCType.DOMAIN, quality_score=10),
+            ScoredIoC(value="a.com", ioc_type=IoCType.DOMAIN, quality_score=90),
+            ScoredIoC(value="b.com", ioc_type=IoCType.DOMAIN, quality_score=10),
         ]
         accepted, rejected = filter_false_positives(scored, min_score=20)
         assert len(accepted) == 1
@@ -305,8 +305,8 @@ class TestFilterFalsePositives:
 
     def test_all_filtered(self):
         scored = [
-            ScoredIOC(value="a.com", ioc_type=IOCType.DOMAIN, quality_score=5),
-            ScoredIOC(value="b.com", ioc_type=IOCType.DOMAIN, quality_score=10),
+            ScoredIoC(value="a.com", ioc_type=IoCType.DOMAIN, quality_score=5),
+            ScoredIoC(value="b.com", ioc_type=IoCType.DOMAIN, quality_score=10),
         ]
         accepted, rejected = filter_false_positives(scored, min_score=20)
         assert len(accepted) == 0
@@ -318,13 +318,13 @@ class TestFilterFalsePositives:
         assert rejected == 0
 
     def test_exact_threshold(self):
-        scored = [ScoredIOC(value="a.com", ioc_type=IOCType.DOMAIN, quality_score=20)]
+        scored = [ScoredIoC(value="a.com", ioc_type=IoCType.DOMAIN, quality_score=20)]
         accepted, rejected = filter_false_positives(scored, min_score=20)
         assert len(accepted) == 1
         assert rejected == 0
 
     def test_just_below_threshold(self):
-        scored = [ScoredIOC(value="a.com", ioc_type=IOCType.DOMAIN, quality_score=19.9)]
+        scored = [ScoredIoC(value="a.com", ioc_type=IoCType.DOMAIN, quality_score=19.9)]
         accepted, rejected = filter_false_positives(scored, min_score=20)
         assert len(accepted) == 0
         assert rejected == 1
@@ -335,14 +335,14 @@ class TestFilterFalsePositives:
 # ---------------------------------------------------------------------------
 
 
-class TestScoreIOCs:
+class TestScoreIoCs:
     def test_filters_below_threshold(self):
         iocs = [
             _make_ioc("evil.com"),
             # google.com is benign (−80), but _make_ioc adds bonuses
             # (source+5, desc+5, date+3) → score 33 ≥ threshold.
             # Use a bare IoC with no bonuses so score = 100−80−10 = 10 < 20.
-            NormalizedIOC(value="google.com", ioc_type=IOCType.DOMAIN),
+            NormalizedIoC(value="google.com", ioc_type=IoCType.DOMAIN),
         ]
         result = score_iocs(iocs)
         result_values = [ioc.value for ioc in result]

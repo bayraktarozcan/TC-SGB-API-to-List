@@ -1,7 +1,7 @@
 """Repository convention guards from the AGENTS.md project layer.
 
 Each guard below pins one project-layer invariant (version parity, document
-reachability, ignore-file compliance). Every guard was seen to fail during
+reachability, ignore-file compliance, spelling). Every guard was seen to fail during
 development by planting the violation it exists to catch, then reverting.
 """
 
@@ -172,3 +172,50 @@ class TestRenameGuards:
         mapping = [((("olddi", "r/")), "Newdir/")]
         assert self._find(mapping, {"x": "see olddir/file"}) == ["x: olddir/"]
         assert self._find(mapping, {"x": "see Newdir/file"}) == []
+
+
+class TestIocSpelling:
+    """IoC is the single standard spelling; the all-caps form appears nowhere live.
+
+    Banned spellings are stored split so this file never names them
+    contiguously (else it would report itself). CHANGELOG.md is out of scope
+    via _tracked_text_files: it is the historical record. AGENTS.md is out of
+    scope the same way: the rule itself must quote the banned spelling to
+    forbid it.
+    """
+
+    BANNED: ClassVar[list[tuple[str, str]]] = [
+        ("IO", "C"),
+        ("IO", "Cs"),
+        ("IO", "CType"),
+        ("ValidatedIO", "C"),
+        ("NormalizedIO", "C"),
+        ("ScoredIO", "C"),
+    ]
+    PRESENT: ClassVar[list[str]] = ["IoCType", "ValidatedIoC", "NormalizedIoC", "ScoredIoC"]
+
+    @classmethod
+    def _find(cls, banned: list[tuple[str, str]], files: dict[str, str]) -> list[str]:
+        bad: list[str] = []
+        for rel, text in sorted(files.items()):
+            for head, tail in banned:
+                full = head + tail
+                pat = re.compile(r"(?<![A-Za-z0-9_])" + re.escape(full) + r"(?![A-Za-z0-9_])")
+                if pat.search(text):
+                    bad.append(f"{rel}: {full}")
+                    break
+        return bad
+
+    def test_no_banned_spellings(self):
+        files = _tracked_text_files()
+        assert files, "no tracked files found"
+        assert self._find(self.BANNED, files) == []
+
+    def test_new_spellings_present(self):
+        haystack = "\n".join(_tracked_text_files().values())
+        for new in self.PRESENT:
+            assert new in haystack, f"new spelling absent: {new}"
+
+    def test_checker_flags_banned_spelling(self):
+        assert self._find([(("b", "ad"))], {"x": "see bad word"}) == ["x: bad"]
+        assert self._find([(("b", "ad"))], {"x": "see good word"}) == []

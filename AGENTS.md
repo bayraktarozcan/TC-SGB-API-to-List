@@ -44,6 +44,9 @@ findings. Do not drop below it.
 - Prefer Path APIs over `os.path`; keep line length ≤ 100; follow existing
   module structure (models → client → validator → normalizer → quality → dedup).
 - Do not add comments unless asked.
+- IoC spelling: the single standard spelling is `IoC` (never `IOC`); class
+  names embed it as PascalCase (`IoCType`, `ValidatedIoC`, `NormalizedIoC`,
+  `ScoredIoC`); enforced by `Tests/test_repo_conventions.py::TestIocSpelling`.
 
 ## Repository facts
 
@@ -85,7 +88,7 @@ Four-part scheme `MAJOR.MINOR.FEATURE.FIX` with a `v` prefix on tags and
 CHANGELOG headings (evidence: `v0.2.0.0` → `v0.2.0.1` carried a fix batch,
 `v0.2.0.0` → `v0.3.0.0` a feature batch).
 
-- Current: `0.3.1.0`.
+- Current: `0.3.2.0`.
 - Stated in: `pyproject.toml` (`version`), `CHANGELOG.md` newest headings
   (EN and TR), `wiki/Repository-Structure.md` quotes (EN and TR).
 - Pinned by `tests/test_repo_conventions.py::TestVersionParity` (oracle:
@@ -139,7 +142,7 @@ Exemptions (each with its reason):
 
 ## Releases
 
-- Rolling `ioc-data` release (weekdays 06:00 UTC, `schedule.yml`) plus version
+- Rolling `ioc-data` release (daily 19:00 UTC, `schedule.yml`) plus version
   tags `v*`; hosts are GitHub and GitLab (`mirror-gitlab.yml` plus the
   `refresh-gitlab-release` action keep tag, title, notes, and assets in parity).
 - `filter-lists` branch refreshes on every fetch; release notes are bilingual.
@@ -729,4 +732,4 @@ Runtimes use the current LTS line (Node.js LTS, .NET LTS); build output goes thr
 - `.git/` is the **internal Git repository structure**, not a project config file.
 
 **Guiding rule:** "It looks special" does not mean "It is a standard special file." The meaning of any file is determined by the software that reads and interprets it.
-<!-- mirror-sync: sync-sha=fdbe6505d326b7a6c302ed12dde77fc1f7afc325 -->
+<!-- mirror-sync: sync-sha=822d929769311513f8d33788871e28659122afaf -->

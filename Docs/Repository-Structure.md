@@ -138,7 +138,7 @@ TC-SGB-API-to-List/
 |------|---------|
 | `__init__.py` | Package init |
 | `client.py` | `AsyncAPIClient` class — async HTTP client with pagination, retries, and rate limiting |
-| `models.py` | Enums (`IOCType`, `DescriptionCategory`, `Source`, `ConnectionType`), Pydantic models (`PaginatedResponse`, `AddressRecord`, `DescriptionRecord`, `ConnectionTypeRecord`, `SourceRecord`, `IncidentRecord`, `AnnouncementRecord`, `ValidatedIOC`, `NormalizedIOC`, `ScoredIOC`, `PipelineStats`) |
+| `models.py` | Enums (`IoCType`, `DescriptionCategory`, `Source`, `ConnectionType`), Pydantic models (`PaginatedResponse`, `AddressRecord`, `DescriptionRecord`, `ConnectionTypeRecord`, `SourceRecord`, `IncidentRecord`, `AnnouncementRecord`, `ValidatedIoC`, `NormalizedIoC`, `ScoredIoC`, `PipelineStats`) |
 | `validator.py` | Functions: `validate_ioc()`, `validate_records_batch()`, plus IP/domain validation helpers |
 | `normalizer.py` | Functions: `normalize_ioc()`, `normalize_batch()`, plus type-specific normalizers |
 | `deduplicator.py` | `DeduplicationResult` class, functions: `deduplicate()`, `get_dedup_stats()` |
@@ -185,7 +185,7 @@ Flat structure — no subdirectories. 15 files total, 487 tests, 99% coverage.
 ```python
 # pipeline.py imports
 from .client import AsyncAPIClient
-from .models import AddressRecord, NormalizedIOC, PipelineStats, ScoredIOC, ValidatedIOC
+from .models import AddressRecord, NormalizedIoC, PipelineStats, ScoredIoC, ValidatedIoC
 from .normalizer import normalize_ioc
 from .quality import score_ioc
 from .validator import validate_ioc
@@ -204,21 +204,21 @@ from typing import Generic, TypeVar
 # validator.py imports
 import ipaddress, re
 from urllib.parse import urlparse
-from .models import AddressRecord, IOCType, ValidatedIOC
+from .models import AddressRecord, IoCType, ValidatedIoC
 
 # normalizer.py imports
 import re
 from urllib.parse import urlparse
-from .models import IOCType, NormalizedIOC, ValidatedIOC
+from .models import IoCType, NormalizedIoC, ValidatedIoC
 
 # deduplicator.py imports
 import logging
-from .models import IOCType, ScoredIOC
+from .models import IoCType, ScoredIoC
 
 # quality.py imports
 import ipaddress, re
 from urllib.parse import urlparse
-from .models import IOCType, NormalizedIOC, ScoredIOC
+from .models import IoCType, NormalizedIoC, ScoredIoC
 
 # outputs.py imports
 import csv, io, json, logging, sqlite3
@@ -226,7 +226,7 @@ from collections.abc import Sequence
 from datetime import UTC, datetime
 from pathlib import Path
 import yaml
-from .models import IOCType, ScoredIOC
+from .models import IoCType, ScoredIoC
 ```
 
 ## Build Configuration
@@ -239,7 +239,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "tc-sgb-api-list"
-version = "0.3.1.0"
+version = "0.3.2.0"
 description = "Threat Intelligence Pipeline for TC SGB API — IoC fetcher, validator, and multi-format exporter"
 requires-python = ">=3.11"
 license = "MIT"
@@ -406,7 +406,7 @@ TC-SGB-API-to-List/
 |-------|------|
 | `__init__.py` | Paket başlatma |
 | `client.py` | `AsyncAPIClient` sınıfı — sayfalama, yeniden deneme ve hız sınırlama ile asenkron HTTP istemcisi |
-| `models.py` | Enum'lar (`IOCType`, `DescriptionCategory`, `Source`, `ConnectionType`), Pydantic modelleri (`PaginatedResponse`, `AddressRecord`, `DescriptionRecord`, `ConnectionTypeRecord`, `SourceRecord`, `IncidentRecord`, `AnnouncementRecord`, `ValidatedIOC`, `NormalizedIOC`, `ScoredIOC`, `PipelineStats`) |
+| `models.py` | Enum'lar (`IoCType`, `DescriptionCategory`, `Source`, `ConnectionType`), Pydantic modelleri (`PaginatedResponse`, `AddressRecord`, `DescriptionRecord`, `ConnectionTypeRecord`, `SourceRecord`, `IncidentRecord`, `AnnouncementRecord`, `ValidatedIoC`, `NormalizedIoC`, `ScoredIoC`, `PipelineStats`) |
 | `validator.py` | Fonksiyonlar: `validate_ioc()`, `validate_records_batch()`, IP/alan adı doğrulama yardımcıları |
 | `normalizer.py` | Fonksiyonlar: `normalize_ioc()`, `normalize_batch()`, türe özgü normalleştiriciler |
 | `deduplicator.py` | `DeduplicationResult` sınıfı, fonksiyonlar: `deduplicate()`, `get_dedup_stats()` |
@@ -453,7 +453,7 @@ Düz yapı — alt dizin yok. Toplam 15 dosya, 487 test, %99 kapsama.
 ```python
 # pipeline.py imports
 from .client import AsyncAPIClient
-from .models import AddressRecord, NormalizedIOC, PipelineStats, ScoredIOC, ValidatedIOC
+from .models import AddressRecord, NormalizedIoC, PipelineStats, ScoredIoC, ValidatedIoC
 from .normalizer import normalize_ioc
 from .quality import score_ioc
 from .validator import validate_ioc
@@ -472,21 +472,21 @@ from typing import Generic, TypeVar
 # validator.py imports
 import ipaddress, re
 from urllib.parse import urlparse
-from .models import AddressRecord, IOCType, ValidatedIOC
+from .models import AddressRecord, IoCType, ValidatedIoC
 
 # normalizer.py imports
 import re
 from urllib.parse import urlparse
-from .models import IOCType, NormalizedIOC, ValidatedIOC
+from .models import IoCType, NormalizedIoC, ValidatedIoC
 
 # deduplicator.py imports
 import logging
-from .models import IOCType, ScoredIOC
+from .models import IoCType, ScoredIoC
 
 # quality.py imports
 import ipaddress, re
 from urllib.parse import urlparse
-from .models import IOCType, NormalizedIOC, ScoredIOC
+from .models import IoCType, NormalizedIoC, ScoredIoC
 
 # outputs.py imports
 import csv, io, json, logging, sqlite3
@@ -494,7 +494,7 @@ from collections.abc import Sequence
 from datetime import UTC, datetime
 from pathlib import Path
 import yaml
-from .models import IOCType, ScoredIOC
+from .models import IoCType, ScoredIoC
 ```
 
 ## Derleme Yapılandırması
@@ -507,7 +507,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "tc-sgb-api-list"
-version = "0.3.1.0"
+version = "0.3.2.0"
 description = "Threat Intelligence Pipeline for TC SGB API — IoC fetcher, validator, and multi-format exporter"
 requires-python = ">=3.11"
 license = "MIT"

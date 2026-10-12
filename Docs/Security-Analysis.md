@@ -330,7 +330,7 @@ logger.info(f"Processing {len(records)} records from {url}")  # Prefer structure
 from pydantic import BaseModel, Field, field_validator
 
 
-class IOCRecord(BaseModel):
+class IoCRecord(BaseModel):
     @field_validator("value")
     @classmethod
     def validate_value(cls, v: str) -> str:
@@ -746,7 +746,7 @@ logger.info(f"Processing {len(records)} records from {url}")  # Yapılandırılm
 from pydantic import BaseModel, Field, field_validator
 
 
-class IOCRecord(BaseModel):
+class IoCRecord(BaseModel):
     @field_validator("value")
     @classmethod
     def validate_value(cls, v: str) -> str:

@@ -7,11 +7,16 @@
 All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
-## [Unreleased]
+## [v0.3.2.0] — 2026-10-12
 
 ### Added
 
 - **Environment-driven configuration** — the CLI honors `TC_SGB_LOG_LEVEL` and `TC_SGB_OUTPUT_DIR` (`--output` falls back to the environment variable, then to `Output`)
+- **IoC spelling guard** — `Tests/test_repo_conventions.py::TestIocSpelling` pins the single standard spelling across the tracked tree (banned forms stored split so the guard never names them; CHANGELOG history and the AGENTS.md rule quote stay out of scope)
+
+### Changed
+
+- **IoC is the single standard spelling** — `IOCType` → `IoCType`, `ValidatedIOC` → `ValidatedIoC`, `NormalizedIOC` → `NormalizedIoC`, `ScoredIOC` → `ScoredIoC` (plus test classes, doc snippets, JSON Schema descriptions, and issue/PR templates); `AGENTS.md` now records the rule so the spelling holds by convention and by test
 
 ### Changed
 
@@ -177,11 +182,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 Bu projedeki tüm dikkat çekici değişiklikler bu dosyada belgelenecektir.
 Biçim, [Keep a Changelog](https://keepachangelog.com/)'a dayanmaktadır.
 
-## [Yayınlanmamış]
+## [v0.3.2.0] — 2026-10-12
 
 ### Eklenen
 
 - **Ortam değişkeniyle yapılandırma** — CLI, `TC_SGB_LOG_LEVEL` ve `TC_SGB_OUTPUT_DIR` değişkenlerini dikkate alır (`--output` önce ortam değişkenine, sonra `Output` dizinine düşer)
+- **IoC yazım bekçisi** — `Tests/test_repo_conventions.py::TestIocSpelling` tek standart yazımı izlenen ağaç genelinde sabitler (yasak biçimler bekçinin kendini ihbar etmemesi için bölünmüş saklanır; CHANGELOG tarihi ve AGENTS.md kural alıntısı kapsam dışıdır)
+
+### Değiştirilen
+
+- **IoC tek standart yazımdır** — `IOCType` → `IoCType`, `ValidatedIOC` → `ValidatedIoC`, `NormalizedIOC` → `NormalizedIoC`, `ScoredIOC` → `ScoredIoC` (test sınıfları, doküman parçacıkları, JSON Schema açıklamaları ve issue/PR şablonları dahil); `AGENTS.md` artık kuralı kaydeder, böylece yazım hem gelenekle hem testle korunur
 
 ### Değiştirilen
 

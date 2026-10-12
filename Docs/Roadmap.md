@@ -298,11 +298,11 @@ Integration:
 class SourcePlugin:
     """Base class for data source plugins."""
 
-    def fetch(self) -> AsyncGenerator[IOCRecord, None]:
+    def fetch(self) -> AsyncGenerator[IoCRecord, None]:
         """Fetch IoCs from the source."""
         ...
 
-    def validate(self, record: IOCRecord) -> bool:
+    def validate(self, record: IoCRecord) -> bool:
         """Validate record from this source."""
         ...
 
@@ -754,11 +754,11 @@ Entegrasyon:
 class SourcePlugin:
     """Base class for data source plugins."""
 
-    def fetch(self) -> AsyncGenerator[IOCRecord, None]:
+    def fetch(self) -> AsyncGenerator[IoCRecord, None]:
         """Fetch IoCs from the source."""
         ...
 
-    def validate(self, record: IOCRecord) -> bool:
+    def validate(self, record: IoCRecord) -> bool:
         """Validate record from this source."""
         ...
 

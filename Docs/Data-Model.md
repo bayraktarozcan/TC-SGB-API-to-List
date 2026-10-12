@@ -11,12 +11,12 @@ This document defines all data models, schemas, field definitions, and enumerati
 
 ## Enums
 
-### IOCType
+### IoCType
 
 Indicator of Compromise type classification.
 
 ```python
-class IOCType(str, Enum):
+class IoCType(str, Enum):
     DOMAIN = "domain"
     URL = "url"
     IP = "ip"
@@ -160,14 +160,14 @@ Record from `/api/announcement/index`.
 
 ## Pipeline Models
 
-### ValidatedIOC
+### ValidatedIoC
 
 An IoC that has passed validation.
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `raw_url` | `str` | — | Original IoC value |
-| `ioc_type` | `IOCType` | — | Classified IoC type |
+| `ioc_type` | `IoCType` | — | Classified IoC type |
 | `desc` | `DescriptionCategory \| None` | `None` | Description category |
 | `source` | `Source \| None` | `None` | Originating source |
 | `date` | `datetime \| None` | `None` | Observation date |
@@ -176,14 +176,14 @@ An IoC that has passed validation.
 | `original_id` | `int` | `0` | Original API record ID |
 | `validation_errors` | `list[str]` | `[]` | Non-fatal validation notes |
 
-### NormalizedIOC
+### NormalizedIoC
 
 An IoC that has been normalised (lowercase, trimmed, IDN resolved, standard port extracted).
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `value` | `str` | — | Normalised IoC value |
-| `ioc_type` | `IOCType` | — | Classified IoC type |
+| `ioc_type` | `IoCType` | — | Classified IoC type |
 | `desc` | `DescriptionCategory \| None` | `None` | Description category |
 | `source` | `Source \| None` | `None` | Originating source |
 | `date` | `datetime \| None` | `None` | Observation date |
@@ -192,14 +192,14 @@ An IoC that has been normalised (lowercase, trimmed, IDN resolved, standard port
 | `original_id` | `int` | `0` | Original API record ID |
 | `normalization_notes` | `list[str]` | `[]` | Normalisation log |
 
-### ScoredIOC
+### ScoredIoC
 
 An IoC with a quality / confidence score.
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `value` | `str` | — | Normalised IoC value |
-| `ioc_type` | `IOCType` | — | Classified IoC type |
+| `ioc_type` | `IoCType` | — | Classified IoC type |
 | `desc` | `DescriptionCategory \| None` | `None` | Description category |
 | `source` | `Source \| None` | `None` | Originating source |
 | `date` | `datetime \| None` | `None` | Observation date |
@@ -264,7 +264,7 @@ Result of deduplicating a list of scored IoCs.
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `kept` | `list[ScoredIOC]` | Deduplicated IoC list |
+| `kept` | `list[ScoredIoC]` | Deduplicated IoC list |
 | `removed_count` | `int` | Number of duplicates removed |
 | `merge_log` | `list[str]` | Log of merge decisions |
 
@@ -274,11 +274,11 @@ The pipeline transforms data through these model stages:
 
 ```
 API Response (PaginatedResponse[AddressRecord])
-    → ValidatedIOC[]
-    → NormalizedIOC[]
-    → ScoredIOC[]
+    → ValidatedIoC[]
+    → NormalizedIoC[]
+    → ScoredIoC[]
     → DeduplicationResult
-    → ScoredIOC[] (final, written to output files)
+    → ScoredIoC[] (final, written to output files)
 ```
 
 ---
@@ -293,12 +293,12 @@ Bu belge, TC-SGB-API-to-List sisteminde kullanılan tüm veri modellerini, şema
 
 ## Numaralandırmalar
 
-### IOCType
+### IoCType
 
 Tehdit göstergesi tipi sınıflandırması.
 
 ```python
-class IOCType(str, Enum):
+class IoCType(str, Enum):
     DOMAIN = "domain"
     URL = "url"
     IP = "ip"
@@ -442,14 +442,14 @@ class PaginatedResponse(BaseModel, Generic[T]):
 
 ## Hattın Veri Modelleri
 
-### ValidatedIOC
+### ValidatedIoC
 
 Doğrulamayı geçmiş bir IoC.
 
 | Alan | Tip | Varsayılan | Açıklama |
 |------|-----|-----------|----------|
 | `raw_url` | `str` | — | Orijinal IoC değeri |
-| `ioc_type` | `IOCType` | — | Sınıflandırılmış IoC tipi |
+| `ioc_type` | `IoCType` | — | Sınıflandırılmış IoC tipi |
 | `desc` | `DescriptionCategory \| None` | `None` | Açıklama kategorisi |
 | `source` | `Source \| None` | `None` | Geldiği kaynak |
 | `date` | `datetime \| None` | `None` | Gözlem tarihi |
@@ -458,14 +458,14 @@ Doğrulamayı geçmiş bir IoC.
 | `original_id` | `int` | `0` | Orijinal API kayıt ID'si |
 | `validation_errors` | `list[str]` | `[]` | Ölümcül olmayan doğrulama notları |
 
-### NormalizedIOC
+### NormalizedIoC
 
 Küçük harfe dönüştürülmüş, kırpılmış, IDN çözümlenmiş, standart port çıkarılmış bir IoC.
 
 | Alan | Tip | Varsayılan | Açıklama |
 |------|-----|-----------|----------|
 | `value` | `str` | — | Normalize edilmiş IoC değeri |
-| `ioc_type` | `IOCType` | — | Sınıflandırılmış IoC tipi |
+| `ioc_type` | `IoCType` | — | Sınıflandırılmış IoC tipi |
 | `desc` | `DescriptionCategory \| None` | `None` | Açıklama kategorisi |
 | `source` | `Source \| None` | `None` | Geldiği kaynak |
 | `date` | `datetime \| None` | `None` | Gözlem tarihi |
@@ -474,14 +474,14 @@ Küçük harfe dönüştürülmüş, kırpılmış, IDN çözümlenmiş, standar
 | `original_id` | `int` | `0` | Orijinal API kayıt ID'si |
 | `normalization_notes` | `list[str]` | `[]` | Normalizasyon günlüğü |
 
-### ScoredIOC
+### ScoredIoC
 
 Kalite / güven puanı eklenmiş bir IoC.
 
 | Alan | Tip | Varsayılan | Açıklama |
 |------|-----|-----------|----------|
 | `value` | `str` | — | Normalize edilmiş IoC değeri |
-| `ioc_type` | `IOCType` | — | Sınıflandırılmış IoC tipi |
+| `ioc_type` | `IoCType` | — | Sınıflandırılmış IoC tipi |
 | `desc` | `DescriptionCategory \| None` | `None` | Açıklama kategorisi |
 | `source` | `Source \| None` | `None` | Geldiği kaynak |
 | `date` | `datetime \| None` | `None` | Gözlem tarihi |
@@ -546,7 +546,7 @@ Skorlanmış IoC listesinin tekilleştirilmesinin sonucu.
 
 | Alan | Tip | Açıklama |
 |------|-----|----------|
-| `kept` | `list[ScoredIOC]` | Tekilleştirilmiş IoC listesi |
+| `kept` | `list[ScoredIoC]` | Tekilleştirilmiş IoC listesi |
 | `removed_count` | `int` | Kaldırılan mükerrer kayıt sayısı |
 | `merge_log` | `list[str]` | Birleştirme karar günlüğü |
 
@@ -556,9 +556,9 @@ Hatt veriyi şu model aşamalarından geçirerek dönüştürür:
 
 ```
 API Yanıtı (PaginatedResponse[AddressRecord])
-    → ValidatedIOC[]
-    → NormalizedIOC[]
-    → ScoredIOC[]
+    → ValidatedIoC[]
+    → NormalizedIoC[]
+    → ScoredIoC[]
     → DeduplicationResult
-    → ScoredIOC[] (nihai, çıktı dosyalarına yazılır)
+    → ScoredIoC[] (nihai, çıktı dosyalarına yazılır)
 ```

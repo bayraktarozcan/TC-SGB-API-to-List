@@ -12,19 +12,19 @@ from Scripts.src.deduplicator import (
     _merge_metadata,
     deduplicate,
 )
-from Scripts.src.models import DescriptionCategory, IOCType, ScoredIOC, Source
+from Scripts.src.models import DescriptionCategory, IoCType, ScoredIoC, Source
 
 
 def _make_scored_ioc(
     value: str,
-    ioc_type: IOCType = IOCType.DOMAIN,
+    ioc_type: IoCType = IoCType.DOMAIN,
     criticality_level: int = 5,
     original_id: int = 0,
     quality_score: float = 50.0,
     desc: DescriptionCategory | None = None,
     source: Source | None = None,
-) -> ScoredIOC:
-    return ScoredIOC(
+) -> ScoredIoC:
+    return ScoredIoC(
         value=value,
         ioc_type=ioc_type,
         criticality_level=criticality_level,
@@ -69,8 +69,8 @@ class TestDeduplicate:
 
     def test_different_types_same_value_not_deduped(self):
         iocs = [
-            _make_scored_ioc("10.0.0.1", IOCType.IP),
-            _make_scored_ioc("10.0.0.1", IOCType.IP6),
+            _make_scored_ioc("10.0.0.1", IoCType.IP),
+            _make_scored_ioc("10.0.0.1", IoCType.IP6),
         ]
         result = deduplicate(iocs)
         assert len(result.kept) == 2
@@ -78,37 +78,37 @@ class TestDeduplicate:
 
     def test_url_domain_cross_dedup(self):
         iocs = [
-            _make_scored_ioc("evil.com", IOCType.DOMAIN, quality_score=50.0),
-            _make_scored_ioc("https://evil.com/path", IOCType.URL, quality_score=90.0),
+            _make_scored_ioc("evil.com", IoCType.DOMAIN, quality_score=50.0),
+            _make_scored_ioc("https://evil.com/path", IoCType.URL, quality_score=90.0),
         ]
         result = deduplicate(iocs)
         # URL has higher score, so it replaces the domain
         assert len(result.kept) == 1
-        assert result.kept[0].ioc_type == IOCType.URL
+        assert result.kept[0].ioc_type == IoCType.URL
         assert result.kept[0].quality_score == 90.0
 
     def test_url_domain_dedup_keeps_domain_if_higher_score(self):
         iocs = [
-            _make_scored_ioc("evil.com", IOCType.DOMAIN, quality_score=90.0),
-            _make_scored_ioc("https://evil.com/path", IOCType.URL, quality_score=50.0),
+            _make_scored_ioc("evil.com", IoCType.DOMAIN, quality_score=90.0),
+            _make_scored_ioc("https://evil.com/path", IoCType.URL, quality_score=50.0),
         ]
         result = deduplicate(iocs)
         assert len(result.kept) == 1
-        assert result.kept[0].ioc_type == IOCType.DOMAIN
+        assert result.kept[0].ioc_type == IoCType.DOMAIN
 
     def test_url_replaces_domain_merges_metadata(self):
         domain = _make_scored_ioc(
             "evil.com",
-            IOCType.DOMAIN,
+            IoCType.DOMAIN,
             quality_score=50.0,
             desc=DescriptionCategory.PHISHING,
             source=Source.USOM,
         )
-        url = _make_scored_ioc("https://evil.com/path", IOCType.URL, quality_score=90.0)
+        url = _make_scored_ioc("https://evil.com/path", IoCType.URL, quality_score=90.0)
         result = deduplicate([domain, url])
         assert len(result.kept) == 1
         kept = result.kept[0]
-        assert kept.ioc_type == IOCType.URL
+        assert kept.ioc_type == IoCType.URL
         assert kept.desc == DescriptionCategory.PHISHING
         assert kept.source == Source.USOM
 
@@ -116,13 +116,13 @@ class TestDeduplicate:
         url_desc = DescriptionCategory.MALWARE_DIST_URL
         url = _make_scored_ioc(
             "https://evil.com/path",
-            IOCType.URL,
+            IoCType.URL,
             quality_score=90.0,
             desc=url_desc,
         )
         domain = _make_scored_ioc(
             "evil.com",
-            IOCType.DOMAIN,
+            IoCType.DOMAIN,
             quality_score=50.0,
             desc=DescriptionCategory.MALWARE_DIST_DOMAIN,
             source=Source.USOM,
@@ -134,11 +134,11 @@ class TestDeduplicate:
     def test_url_replaces_domain_without_merge(self):
         domain = _make_scored_ioc(
             "evil.com",
-            IOCType.DOMAIN,
+            IoCType.DOMAIN,
             quality_score=50.0,
             desc=DescriptionCategory.PHISHING,
         )
-        url = _make_scored_ioc("https://evil.com/path", IOCType.URL, quality_score=90.0)
+        url = _make_scored_ioc("https://evil.com/path", IoCType.URL, quality_score=90.0)
         result = deduplicate([domain, url], merge_metadata=False)
         assert len(result.kept) == 1
         assert result.kept[0].desc is None
@@ -204,8 +204,8 @@ class TestDeduplicate:
 
     def test_preserves_types_independent(self):
         iocs = [
-            _make_scored_ioc("evil.com", IOCType.DOMAIN, quality_score=50.0),
-            _make_scored_ioc("evil.com", IOCType.URL, quality_score=50.0),
+            _make_scored_ioc("evil.com", IoCType.DOMAIN, quality_score=50.0),
+            _make_scored_ioc("evil.com", IoCType.URL, quality_score=50.0),
         ]
         result = deduplicate(iocs)
         assert len(result.kept) == 2
@@ -213,12 +213,12 @@ class TestDeduplicate:
     def test_domain_index_canonicalizes(self):
         """P2-7: parenthesized-domain cross-type index uses canonical domain."""
         iocs = [
-            _make_scored_ioc("EVIL.COM.", IOCType.DOMAIN, quality_score=50.0),
-            _make_scored_ioc("https://evil.com/path", IOCType.URL, quality_score=90.0),
+            _make_scored_ioc("EVIL.COM.", IoCType.DOMAIN, quality_score=50.0),
+            _make_scored_ioc("https://evil.com/path", IoCType.URL, quality_score=90.0),
         ]
         result = deduplicate(iocs)
         assert len(result.kept) == 1
-        assert result.kept[0].ioc_type == IOCType.URL
+        assert result.kept[0].ioc_type == IoCType.URL
 
     def test_deterministic_results(self):
         iocs = [_make_scored_ioc("x.com", quality_score=float(i)) for i in range(10)]
@@ -265,23 +265,23 @@ class TestExtractDomainFromUrl:
 
 class TestMakeDedupKey:
     def test_domain_key(self):
-        key = _make_dedup_key("evil.com", IOCType.DOMAIN)
+        key = _make_dedup_key("evil.com", IoCType.DOMAIN)
         assert key == "domain|evil.com"
 
     def test_ip_key(self):
-        assert _make_dedup_key("10.0.0.1", IOCType.IP) == "ip|10.0.0.1"
+        assert _make_dedup_key("10.0.0.1", IoCType.IP) == "ip|10.0.0.1"
 
     def test_url_key_with_domain(self):
-        key = _make_dedup_key("https://evil.com/path", IOCType.URL)
+        key = _make_dedup_key("https://evil.com/path", IoCType.URL)
         assert "url|" in key
         assert "domain|evil.com" in key
 
     def test_url_key_without_valid_domain(self):
-        key = _make_dedup_key("https://", IOCType.URL)
+        key = _make_dedup_key("https://", IoCType.URL)
         assert key == "url|https://"
 
     def test_strips_whitespace_and_trailing_dot(self):
-        key = _make_dedup_key("  EVIL.COM.  ", IOCType.DOMAIN)
+        key = _make_dedup_key("  EVIL.COM.  ", IoCType.DOMAIN)
         assert key == "domain|evil.com"
 
 

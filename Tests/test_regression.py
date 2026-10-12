@@ -11,8 +11,8 @@ import pytest
 from Scripts.src.models import (
     ConnectionType,
     DescriptionCategory,
-    IOCType,
-    ScoredIOC,
+    IoCType,
+    ScoredIoC,
     Source,
 )
 from Scripts.src.outputs import (
@@ -35,12 +35,12 @@ from Scripts.src.outputs import (
 
 
 @pytest.fixture
-def stable_iocs() -> list[ScoredIOC]:
+def stable_iocs() -> list[ScoredIoC]:
     """Fixed IoC set for deterministic regression tests."""
     return [
-        ScoredIOC(
+        ScoredIoC(
             value="evil-phish.com",
-            ioc_type=IOCType.DOMAIN,
+            ioc_type=IoCType.DOMAIN,
             desc=DescriptionCategory.PHISHING,
             source=Source.USOM,
             criticality_level=3,
@@ -49,9 +49,9 @@ def stable_iocs() -> list[ScoredIOC]:
             false_positive_risk="low",
             flags=[],
         ),
-        ScoredIOC(
+        ScoredIoC(
             value="192.0.2.1",
-            ioc_type=IOCType.IP,
+            ioc_type=IoCType.IP,
             desc=DescriptionCategory.CYBER_ATTACK,
             source=Source.RSA,
             criticality_level=2,
@@ -60,9 +60,9 @@ def stable_iocs() -> list[ScoredIOC]:
             false_positive_risk="low",
             flags=["private_ip"],
         ),
-        ScoredIOC(
+        ScoredIoC(
             value="spam.xyz",
-            ioc_type=IOCType.DOMAIN,
+            ioc_type=IoCType.DOMAIN,
             desc=DescriptionCategory.MALWARE_DIST_DOMAIN,
             source=Source.IHBAR,
             criticality_level=5,

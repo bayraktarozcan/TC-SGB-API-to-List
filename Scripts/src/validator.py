@@ -12,9 +12,9 @@ from .models import (
     AddressRecord,
     ConnectionType,
     DescriptionCategory,
-    IOCType,
+    IoCType,
     Source,
-    ValidatedIOC,
+    ValidatedIoC,
 )
 
 # ---------------------------------------------------------------------------
@@ -149,30 +149,30 @@ def _is_valid_domain(domain: str) -> list[str]:
     return errors
 
 
-def _infer_ioc_type(value: str) -> IOCType | None:
+def _infer_ioc_type(value: str) -> IoCType | None:
     """Infer IoC type from the value when API type field is not available."""
     value = value.strip()
     if not value:
         return None
     if _is_valid_ip(value):
         addr = ipaddress.ip_address(value)
-        return IOCType.IP6 if addr.version == 6 else IOCType.IP
+        return IoCType.IP6 if addr.version == 6 else IoCType.IP
     if "/" in value:
         if _is_valid_ip_network(value):
             network = ipaddress.ip_network(value, strict=False)
-            return IOCType.IP6NET if network.version == 6 else IOCType.IP
+            return IoCType.IP6NET if network.version == 6 else IoCType.IP
     # Only treat as URL if it already has an explicit scheme
     if "://" in value:
         parsed = urlparse(value)
         if parsed.scheme in ("http", "https") and parsed.hostname:
-            return IOCType.URL
+            return IoCType.URL
     if "." in value and " " not in value:
-        return IOCType.DOMAIN
+        return IoCType.DOMAIN
     return None
 
 
-def validate_ioc(record: AddressRecord) -> ValidatedIOC | None:
-    """Validate a single AddressRecord and return a ValidatedIOC or None if invalid."""
+def validate_ioc(record: AddressRecord) -> ValidatedIoC | None:
+    """Validate a single AddressRecord and return a ValidatedIoC or None if invalid."""
     errors: list[str] = []
     value = record.url.strip()
 
@@ -181,17 +181,17 @@ def validate_ioc(record: AddressRecord) -> ValidatedIOC | None:
 
     # Use API's type field first, fall back to inference
     api_type = record.type.strip().lower() if record.type else ""
-    ioc_type: IOCType | None = None
+    ioc_type: IoCType | None = None
     if api_type:
         try:
-            ioc_type = IOCType(api_type)
+            ioc_type = IoCType(api_type)
         except ValueError:
             ioc_type = _infer_ioc_type(value)
     else:
         ioc_type = _infer_ioc_type(value)
     if ioc_type is None:
         # Can't infer type — default to DOMAIN so validation catches it.
-        ioc_type = IOCType.DOMAIN
+        ioc_type = IoCType.DOMAIN
 
     # Map string fields to enums
     desc_cat: DescriptionCategory | None = None
@@ -215,10 +215,10 @@ def validate_ioc(record: AddressRecord) -> ValidatedIOC | None:
         except ValueError:
             pass
 
-    if ioc_type in (IOCType.DOMAIN, IOCType.URL):
+    if ioc_type in (IoCType.DOMAIN, IoCType.URL):
         # Extract hostname for domain checks
         hostname = value
-        if ioc_type == IOCType.URL:
+        if ioc_type == IoCType.URL:
             parsed = urlparse(value if "://" in value else f"https://{value}")
             hostname = parsed.hostname or value
 
@@ -232,7 +232,7 @@ def validate_ioc(record: AddressRecord) -> ValidatedIOC | None:
         if _is_reserved_domain(hostname):
             errors.append(f"reserved/well-known domain: {hostname}")
 
-    if ioc_type in (IOCType.IP, IOCType.IP6, IOCType.IP6NET):
+    if ioc_type in (IoCType.IP, IoCType.IP6, IoCType.IP6NET):
         clean = value.split("/")[0] if "/" in value else value
         if not _is_valid_ip(clean):
             # Might be an IP in URL form
@@ -253,7 +253,7 @@ def validate_ioc(record: AddressRecord) -> ValidatedIOC | None:
             pass
 
     if errors:
-        return ValidatedIOC(
+        return ValidatedIoC(
             raw_url=value,
             ioc_type=ioc_type,
             desc=desc_cat,
@@ -265,7 +265,7 @@ def validate_ioc(record: AddressRecord) -> ValidatedIOC | None:
             validation_errors=errors,
         )
 
-    return ValidatedIOC(
+    return ValidatedIoC(
         raw_url=value,
         ioc_type=ioc_type,
         desc=desc_cat,
@@ -279,12 +279,12 @@ def validate_ioc(record: AddressRecord) -> ValidatedIOC | None:
 
 def validate_records_batch(
     records: list[AddressRecord],
-) -> tuple[list[ValidatedIOC], list[tuple[AddressRecord, list[str]]]]:
+) -> tuple[list[ValidatedIoC], list[tuple[AddressRecord, list[str]]]]:
     """Validate a batch of API records.
 
     Returns (valid, rejected) where rejected is a list of (record, errors).
     """
-    valid: list[ValidatedIOC] = []
+    valid: list[ValidatedIoC] = []
     rejected: list[tuple[AddressRecord, list[str]]] = []
 
     for rec in records:

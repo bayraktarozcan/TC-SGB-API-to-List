@@ -10,8 +10,8 @@ import pytest
 from Scripts.src.models import (
     ConnectionType,
     DescriptionCategory,
-    IOCType,
-    ScoredIOC,
+    IoCType,
+    ScoredIoC,
     Source,
 )
 from Scripts.src.outputs import (
@@ -25,11 +25,11 @@ BASE = "https://github.com/owner/repo/releases/download/ioc-data"
 
 
 @pytest.fixture
-def scored_iocs() -> list[ScoredIOC]:
+def scored_iocs() -> list[ScoredIoC]:
     return [
-        ScoredIOC(
+        ScoredIoC(
             value="evil-phish.com",
-            ioc_type=IOCType.DOMAIN,
+            ioc_type=IoCType.DOMAIN,
             desc=DescriptionCategory.PHISHING,
             source=Source.USOM,
             criticality_level=3,
@@ -37,9 +37,9 @@ def scored_iocs() -> list[ScoredIOC]:
             quality_score=93.0,
             false_positive_risk="low",
         ),
-        ScoredIOC(
+        ScoredIoC(
             value="192.0.2.1",
-            ioc_type=IOCType.IP,
+            ioc_type=IoCType.IP,
             desc=DescriptionCategory.CYBER_ATTACK,
             source=Source.RSA,
             criticality_level=2,
@@ -51,7 +51,7 @@ def scored_iocs() -> list[ScoredIOC]:
 
 
 @pytest.fixture
-def output_dir(temp_dir: Path, scored_iocs: list[ScoredIOC]) -> Path:
+def output_dir(temp_dir: Path, scored_iocs: list[ScoredIoC]) -> Path:
     out = temp_dir / "out"
     generate_all(scored_iocs, out)
     out.joinpath("raw_records.json").write_text("[]\n", encoding="utf-8")
