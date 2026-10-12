@@ -44,7 +44,7 @@ EXTERNAL_FEEDS: tuple[ExternalFeed, ...] = (
         url="https://blacklist.gov.az/download/threatfeed",
         format="hosts",
         output_file="03-azerbaycan-blacklist_adguard.txt",
-        title="Azerbaycan - Blacklist.gov.az Threat Feed (AdGuard)",
+        title="Azerbaycan | Blacklist.gov.az Threat Feed (AdGuard)",
         homepage="https://blacklist.gov.az/",
     ),
     ExternalFeed(
@@ -52,7 +52,7 @@ EXTERNAL_FEEDS: tuple[ExternalFeed, ...] = (
         url="https://hole.cert.pl/domains/v2/domains.txt",
         format="lines",
         output_file="02-polonya-certpl_adguard.txt",
-        title="Polonya - CERT.PL Hole Domains (AdGuard)",
+        title="Polonya | CERT.PL Hole Domains (AdGuard)",
         homepage="https://hole.cert.pl/",
     ),
     ExternalFeed(
@@ -60,7 +60,7 @@ EXTERNAL_FEEDS: tuple[ExternalFeed, ...] = (
         url="https://www.cert.si/misp/rpz/all.txt",
         format="csv",
         output_file="05-slovenya-certsi_adguard.txt",
-        title="Slovenya - CERT.SI MISP RPZ Domains (AdGuard)",
+        title="Slovenya | CERT.SI MISP RPZ Domains (AdGuard)",
         homepage="https://www.cert.si/",
     ),
 )

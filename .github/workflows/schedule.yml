@@ -176,13 +176,13 @@ jobs:
 
           Brave'de abone ol: `brave://adblock` → Add filter list via URL:
 
-          - Türkiye - TC-SGB:
+          - Türkiye | TC-SGB:
               https://raw.githubusercontent.com/${{ github.repository }}/filter-lists/01-turkiye-sgb_adguard.txt
-          - Polonya - CERT.PL:
+          - Polonya | CERT.PL:
               https://raw.githubusercontent.com/${{ github.repository }}/filter-lists/02-polonya-certpl_adguard.txt
-          - Azerbaycan - Blacklist.gov.az:
+          - Azerbaycan | Blacklist.gov.az:
               https://raw.githubusercontent.com/${{ github.repository }}/filter-lists/03-azerbaycan-blacklist_adguard.txt
-          - Slovenya - CERT.SI:
+          - Slovenya | CERT.SI:
               https://raw.githubusercontent.com/${{ github.repository }}/filter-lists/05-slovenya-certsi_adguard.txt
           EOF
           git -C "${WORK}" add -A

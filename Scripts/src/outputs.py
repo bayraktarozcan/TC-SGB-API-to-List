@@ -195,7 +195,7 @@ def generate_adguard(
     lines = [f"||{host}^" for host in _adguard_rule_hosts(iocs)]
     ts = _resolve_timestamp(iocs, generated_at).isoformat()
     header = (
-        "! Title: Türkiye - TC-SGB Threat Intelligence Blocklist (AdGuard)\n"
+        "! Title: Türkiye | TC-SGB Threat Intelligence (AdGuard)\n"
         "! Expires: 2 days\n"
         f"! Last updated: {ts}\n"
         "! Homepage: https://siberguvenlik.gov.tr\n"
