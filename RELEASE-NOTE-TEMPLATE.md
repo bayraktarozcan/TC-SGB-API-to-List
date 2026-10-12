@@ -64,7 +64,7 @@ pip install -e .
 
 ````bash
 tc-sgb fetch
-tc-sgb generate -i output/raw_records.json
+tc-sgb generate -i Output/raw_records.json
 tc-sgb health
 ````
 
@@ -127,7 +127,7 @@ pip install -e .
 
 ````bash
 tc-sgb fetch
-tc-sgb generate -i output/raw_records.json
+tc-sgb generate -i Output/raw_records.json
 tc-sgb health
 ````
 

@@ -16,7 +16,7 @@ _Describe the change and what problem it solves._
 - [ ] New IOC source integration
 - [ ] Pipeline enhancement
 - [ ] Bug fix
-- [ ] Documentation (README, CHANGELOG, wiki/)
+- [ ] Documentation (README, CHANGELOG, Docs/)
 - [ ] Translation / i18n
 - [ ] CI/CD or automation
 - [ ] Security
@@ -26,9 +26,9 @@ _Describe the change and what problem it solves._
 
 ## Checklist
 
-- [ ] Tests pass (`pytest tests/ -v`)
-- [ ] Ruff linter passes (`ruff check scripts/ tests/`)
-- [ ] mypy type checker passes (`mypy scripts/`)
+- [ ] Tests pass (`pytest Tests/ -v`)
+- [ ] Ruff linter passes (`ruff check Scripts/ Tests/`)
+- [ ] mypy type checker passes (`mypy Scripts/`)
 - [ ] No hardcoded secrets or credentials
 - [ ] CHANGELOG.md updated (if applicable)
 - [ ] README.md updated (if applicable)
@@ -40,7 +40,7 @@ _Describe the change and what problem it solves._
 _Steps to verify:_
 
 ```bash
-pytest tests/ -v
+pytest Tests/ -v
 tc-sgb fetch --max-records 100
 ```
 
@@ -60,7 +60,7 @@ _Değişikliği ve çözdüğü sorunu açıklayın._
 - [ ] Yeni IOC kaynağı entegrasyonu
 - [ ] Hat iyileştirmesi
 - [ ] Hata düzeltmesi
-- [ ] Dokümantasyon (README, CHANGELOG, wiki/)
+- [ ] Dokümantasyon (README, CHANGELOG, Docs/)
 - [ ] Çeviri / i18n
 - [ ] CI/CD veya otomasyon
 - [ ] Güvenlik
@@ -70,9 +70,9 @@ _Değişikliği ve çözdüğü sorunu açıklayın._
 
 ## Kontrol Listesi
 
-- [ ] Testler geçiyor (`pytest tests/ -v`)
-- [ ] Ruff linter geçiyor (`ruff check scripts/ tests/`)
-- [ ] mypy tip kontrolü geçiyor (`mypy scripts/`)
+- [ ] Testler geçiyor (`pytest Tests/ -v`)
+- [ ] Ruff linter geçiyor (`ruff check Scripts/ Tests/`)
+- [ ] mypy tip kontrolü geçiyor (`mypy Scripts/`)
 - [ ] Sabit kodlanmış gizli bilgi veya kimlik bilgisi yok
 - [ ] CHANGELOG.md güncellendi (uygunsa)
 - [ ] README.md güncellendi (uygunsa)
@@ -84,6 +84,6 @@ _Değişikliği ve çözdüğü sorunu açıklayın._
 _Doğrulama adımları:_
 
 ```bash
-pytest tests/ -v
+pytest Tests/ -v
 tc-sgb fetch --max-records 100
 ```

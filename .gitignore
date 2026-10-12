@@ -103,16 +103,16 @@ logs/
 *.log
 
 # Data output
-output/
-test-output/
+Output/
+Test-output/
 
 # Scratch space (named once in the AGENTS.md project layer; cleared at task end)
 /scratch/
 
 # Runtime data cache
-data/*.json
-data/*.csv
-!data/.gitkeep
+Data/*.json
+Data/*.csv
+!Data/.gitkeep
 
 # Database files (project generates these)
 *.db
@@ -133,7 +133,7 @@ data/*.csv
 .ipynb_checkpoints/
 
 # Benchmarks
-benchmark/.benchmarks/
+Benchmark/.benchmarks/
 
 # tox
 .tox/
@@ -163,9 +163,6 @@ cache/
 
 # Rope
 .ropeproject/
-
-# mkdocs
-site/
 
 # Editor backups
 *.bak

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<meta name="description" content="TC-SGB-API-to-List — IoC threat intelligence pipeline for the T.C. Siber Güvenlik Başkanlığı API. 16 output formats, plain-text Brave/AdGuard list, daily updates.">
+<title>TC-SGB-API-to-List — IoC Threat Intelligence Pipeline</title>
+<style>
+:root{color-scheme:dark}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#000000;color:#e8e6e3;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:16px;line-height:1.6}
+main{max-width:56rem;margin:0 auto;padding:2rem 1.25rem 4rem}
+header{text-align:center;padding:2.5rem 0;border-bottom:1px solid #27272a}
+h1{font-size:2rem;letter-spacing:-.02em}
+h1 .red{color:#ef4444}h1 .blue{color:#3b82f6}
+.tagline{color:#a1a1aa;margin-top:.5rem}
+nav.lang{margin-top:1rem}
+nav.lang button{background:#111113;color:#e8e6e3;border:1px solid #3f3f46;border-radius:.5rem;padding:.35rem .9rem;font-size:.9rem;cursor:pointer}
+nav.lang button[aria-pressed="true"]{border-color:#ef4444;color:#fff}
+section{margin-top:2.5rem}
+h2{font-size:1.25rem;margin-bottom:1rem;color:#fff}
+ul.links{list-style:none;display:flex;flex-direction:column;gap:.6rem}
+ul.links a{display:flex;justify-content:space-between;gap:1rem;border:1px solid #27272a;border-radius:.65rem;padding:.7rem 1rem;color:#e8e6e3;text-decoration:none;background:#0a0a0b}
+ul.links a:hover{border-color:#ef4444}
+ul.links small{color:#71717a;white-space:nowrap}
+.facts{display:flex;flex-wrap:wrap;gap:.6rem;list-style:none}
+.facts li{border:1px solid #27272a;border-radius:.65rem;padding:.6rem 1rem;background:#0a0a0b}
+.facts b{color:#fff}
+footer{margin-top:3rem;padding-top:1.5rem;border-top:1px solid #27272a;color:#71717a;font-size:.85rem;text-align:center}
+footer a{color:#a1a1aa}
+.docs{display:flex;flex-wrap:wrap;gap:.5rem;list-style:none}
+.docs a{border:1px solid #27272a;border-radius:.5rem;padding:.4rem .8rem;color:#e8e6e3;text-decoration:none;font-size:.9rem;background:#0a0a0b}
+.docs a:hover{border-color:#3b82f6}
+[hidden]{display:none!important}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.85em}
+</style>
+</head>
+<body>
+<main>
+<header>
+<h1><span class="red">TC-SGB</span>-<span class="blue">API-to-List</span></h1>
+<p class="tagline"><span class="en">IoC threat-intelligence pipeline for the T.C. Siber Güvenlik Başkanlığı API.</span><span class="tr" hidden>Tehdit istihbaratı hattı: T.C. Siber Güvenlik Başkanlığı API'sinden IoC verisi.</span></p>
+<nav class="lang" aria-label="Language / Dil">
+<button type="button" id="btn-en" aria-pressed="true">English</button>
+<button type="button" id="btn-tr" aria-pressed="false">Türkçe</button>
+</nav>
+</header>
+
+<section aria-labelledby="h-facts">
+<h2 id="h-facts"><span class="en">Facts</span><span class="tr" hidden>Gerçekler</span></h2>
+<ul class="facts">
+<li><b>16</b> <span class="en">output formats</span><span class="tr" hidden>çıktı biçimi</span></li>
+<li><b>500+</b> <span class="en">tests</span><span class="tr" hidden>test</span></li>
+<li><b>99%</b> <span class="en">coverage</span><span class="tr" hidden>kapsama</span></li>
+<li><b>Python 3.11+</b></li>
+<li><b>MIT</b> <span class="en">license</span><span class="tr" hidden>lisans</span></li>
+<li><span class="en">Daily updates (06:00 UTC)</span><span class="tr" hidden>Günlük güncellemeler (06:00 UTC)</span></li>
+</ul>
+</section>
+
+<section aria-labelledby="h-dl">
+<h2 id="h-dl"><span class="en">Download pre-built data</span><span class="tr" hidden>Hazır verileri indirin</span></h2>
+<p><span class="en">For Brave, subscribe to the plain-text list in</span><span class="tr" hidden>Brave için düz metin listeye abone olun:</span> <code>brave://adblock</code> → <span class="en">Add filter list via URL</span><span class="tr" hidden>URL ile filtre listesi ekle</span>.</p>
+<ul class="links">
+<li><a href="https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/threat_intel_adguard.txt"><span>Brave / AdGuard <span class="en">filter list (subscribe URL)</span><span class="tr" hidden>filtre listesi (abonelik URL'si)</span></span><small>~12 MB · txt</small></a></li>
+<li><a href="https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/download/ioc-data/raw_records.json"><span>Raw records</span><small>~129 MB · json</small></a></li>
+<li><a href="https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/download/ioc-data/threat_intel_json.json"><span>Structured JSON</span><small>~130 MB · json</small></a></li>
+<li><a href="https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/download/ioc-data/threat_intel_sqlite.db"><span>SQLite database</span><small>~96 MB · db</small></a></li>
+<li><a href="https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/download/ioc-data/threat_intel_suricata.json"><span>Suricata JSON</span><small>~203 MB · json</small></a></li>
+<li><a href="https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/download/ioc-data/threat_intel_yaml.yaml"><span>Structured YAML</span><small>~97 MB · yaml</small></a></li>
+<li><a href="https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/tag/ioc-data"><span><span class="en">All releases</span><span class="tr" hidden>Tüm sürümler</span></span><small>rolling</small></a></li>
+</ul>
+</section>
+
+<section aria-labelledby="h-docs">
+<h2 id="h-docs"><span class="en">Documents</span><span class="tr" hidden>Belgeler</span></h2>
+<ul class="docs">
+<li><a href="https://github.com/bayraktarozcan/TC-SGB-API-to-List">GitHub</a></li>
+<li><a href="https://github.com/bayraktarozcan/TC-SGB-API-to-List/blob/main/README.md">README</a></li>
+<li><a href="https://github.com/bayraktarozcan/TC-SGB-API-to-List/blob/main/CHANGELOG.md">CHANGELOG</a></li>
+<li><a href="https://github.com/bayraktarozcan/TC-SGB-API-to-List/blob/main/CONTRIBUTING.md">CONTRIBUTING</a></li>
+<li><a href="https://github.com/bayraktarozcan/TC-SGB-API-to-List/blob/main/AGENTS.md">AGENTS</a></li>
+<li><a href="https://github.com/bayraktarozcan/TC-SGB-API-to-List/blob/main/SECURITY.md">SECURITY</a></li>
+<li><a href="https://github.com/bayraktarozcan/TC-SGB-API-to-List/blob/main/SUPPORT.md">SUPPORT</a></li>
+<li><a href="https://github.com/bayraktarozcan/TC-SGB-API-to-List/blob/main/PRIVACY.md">PRIVACY</a></li>
+<li><a href="https://github.com/bayraktarozcan/TC-SGB-API-to-List/blob/main/CODE_OF_CONDUCT.md">CODE_OF_CONDUCT</a></li>
+</ul>
+</section>
+
+<footer>
+<p><span class="en">Released under the MIT License. For authorized security research and threat intelligence purposes only.</span><span class="tr" hidden>MIT Lisansı ile yayınlanır. Yalnızca yetkili güvenlik araştırması ve tehdit istihbaratı amaçlıdır.</span></p>
+<p>Copyright © 2026 <a href="https://github.com/bayraktarozcan">bayraktarozcan</a>. <span class="en">All rights reserved.</span><span class="tr" hidden>Tüm hakları saklıdır.</span></p>
+</footer>
+</main>
+<script>
+(function(){
+var KEY="tcSgbLang";
+function setLang(l){
+document.documentElement.lang=l;
+var en=l==="en";
+var es=document.querySelectorAll("span.en"),ts=document.querySelectorAll("span.tr"),i;
+for(i=0;i<es.length;i++){es[i].hidden=!en;}
+for(i=0;i<ts.length;i++){ts[i].hidden=en;}
+document.getElementById("btn-en").setAttribute("aria-pressed",en?"true":"false");
+document.getElementById("btn-tr").setAttribute("aria-pressed",en?"false":"true");
+try{localStorage.setItem(KEY,l);}catch(e){}
+}
+var saved=null;
+try{saved=localStorage.getItem(KEY);}catch(e){}
+setLang(saved==="tr"?"tr":"en");
+document.getElementById("btn-en").addEventListener("click",function(){setLang("en");});
+document.getElementById("btn-tr").addEventListener("click",function(){setLang("tr");});
+})();
+</script>
+</body>
+</html>

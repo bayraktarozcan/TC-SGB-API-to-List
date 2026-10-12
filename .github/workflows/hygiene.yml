@@ -52,4 +52,4 @@ jobs:
         with:
           fetch-depth: 0
       - name: Scan full repository history
-        run: python scripts/src/mojibake.py --scope history
+        run: python Scripts/src/mojibake.py --scope history

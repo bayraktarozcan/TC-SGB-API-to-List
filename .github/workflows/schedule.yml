@@ -2,7 +2,7 @@ name: Scheduled Fetch
 
 on:
   schedule:
-    - cron: "0 6 * * 1-5"
+    - cron: "0 6 * * *"
   workflow_dispatch:
 
 concurrency:
@@ -43,27 +43,27 @@ jobs:
         run: |
           set -euo pipefail
           TAG="ioc-data"
-          mkdir -p output
+          mkdir -p Output
           if gh release view "${TAG}" >/dev/null 2>&1 && \
              gh release download "${TAG}" \
                --pattern raw_records.json \
-               --dir output \
+               --dir Output \
                --clobber >/dev/null 2>&1; then
-            echo "Restored previous raw_records.json ($(wc -c < output/raw_records.json) bytes); changelog will compute a diff."
+            echo "Restored previous raw_records.json ($(wc -c < Output/raw_records.json) bytes); changelog will compute a diff."
           else
             echo "No previous snapshot available (first run); changelog will be a first-run log."
           fi
 
       - name: Run fetch
-        run: python scripts/main.py fetch
+        run: python Scripts/main.py fetch
         env:
           TC_SGB_API_BASE_URL: ${{ vars.TC_SGB_API_BASE_URL || 'https://siberguvenlik.gov.tr' }}
 
       - name: Validate outputs
-        run: python scripts/main.py validate
+        run: python Scripts/main.py validate
 
       - name: Run tests
-        run: pytest tests/ -v --tb=short
+        run: pytest Tests/ -v --tb=short
 
       - name: Publish all output assets to rolling release
         if: success()
@@ -76,14 +76,14 @@ jobs:
           if ! gh release view "${TAG}" >/dev/null 2>&1; then
             gh release create "${TAG}" \
               --title "IoC Data (all formats)" \
-              --notes "Rolling release: all IoC outputs (16 formats + raw_records.json + fetch logs) refreshed on weekdays (Mon–Fri 06:00 UTC). Stable assets at https://github.com/${{ github.repository }}/releases/download/${TAG}/ — a browsable per-format catalog with raw links ships in the repo under output/blocklists/." \
+              --notes "Rolling release: all IoC outputs (16 formats + raw_records.json + fetch logs) refreshed daily (06:00 UTC). Stable assets at https://github.com/${{ github.repository }}/releases/download/${TAG}/ — a browsable per-format catalog with raw links ships in the repo under Output/Blocklists/." \
               --target main
           fi
           shopt -s nullglob
           gh release upload "${TAG}" --clobber -- \
-            output/threat_intel_* \
-            output/raw_records.json \
-            output/logs/*.md
+            Output/threat_intel_* \
+            Output/raw_records.json \
+            Output/Logs/*.md
           echo "All output assets published to ${TAG}"
 
       - name: Publish Brave-compatible filter list branch
@@ -93,7 +93,7 @@ jobs:
           GH_TOKEN: ${{ secrets.AUTO_MERGE_TOKEN }}
         run: |
           set -euo pipefail
-          SRC="output/threat_intel_adguard.txt"
+          SRC="Output/threat_intel_adguard.txt"
           if [ ! -f "${SRC}" ]; then
             echo "AdGuard output not found; skipping filter-list publish."
             echo "::warning::filter-lists branch not updated: AdGuard output missing."
@@ -152,8 +152,8 @@ jobs:
           git -C "${WORK}" push --force origin "${BRANCH}"
           echo "Published filter list to branch ${BRANCH}"
 
-      - name: Write output catalog (manifest + blocklists)
-        run: python scripts/main.py index
+      - name: Write Output catalog (manifest + Blocklists)
+        run: python Scripts/main.py index
 
       - name: Commit, create PR, and auto-merge if changed
         env:
@@ -162,7 +162,7 @@ jobs:
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add -f output/manifest.json output/blocklists
+          git add -f Output/manifest.json Output/Blocklists
           if git diff --cached --quiet; then
             echo "No changes to commit"
             exit 0

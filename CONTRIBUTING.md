@@ -26,7 +26,7 @@ pip install -r requirements.txt
 ## Code Style
 
 - **Formatter/Linter**: Ruff (`ruff format`, `ruff check`)
-- **Type Checker**: mypy (`mypy scripts/`)
+- **Type Checker**: mypy (`mypy Scripts/`)
 - **Line Length**: 100 characters max
 - **Quotes**: Double quotes
 - **Indentation**: 4 spaces (Python), 2 spaces (YAML/JSON)
@@ -36,15 +36,15 @@ pip install -r requirements.txt
 
 ```bash
 # Run all tests
-pytest tests/ -v
+pytest Tests/ -v
 
 # Run with coverage
 # (coverage: measures which lines of code the tests execute — the more lines
 # are executed, the better tested the code is)
-pytest tests/ --cov=scripts --cov-report=term-missing
+pytest Tests/ --cov=Scripts --cov-report=term-missing
 
 # Run specific test
-pytest tests/test_validator.py -v
+pytest Tests/test_validator.py -v
 ```
 
 ## Commit Convention
@@ -92,17 +92,17 @@ test(client): add retry logic unit tests
 3. **Make changes** and commit
 4. **Run quality checks**
    ```bash
-   ruff check scripts/ tests/
-   mypy scripts/
-   pytest tests/ -v
+   ruff check Scripts/ Tests/
+   mypy Scripts/
+   pytest Tests/ -v
    ```
 5. **Push** and open a PR
 
 ### PR Checklist
 
-- [ ] Tests pass (`pytest tests/ -v`)
-- [ ] Linter passes (`ruff check scripts/ tests/`)
-- [ ] Type checker passes (`mypy scripts/`)
+- [ ] Tests pass (`pytest Tests/ -v`)
+- [ ] Linter passes (`ruff check Scripts/ Tests/`)
+- [ ] Type checker passes (`mypy Scripts/`)
 - [ ] No hardcoded secrets or credentials
 - [ ] Documentation updated (if applicable)
 - [ ] CHANGELOG.md updated (if applicable)
@@ -157,7 +157,7 @@ pip install -r requirements.txt
 ## Kod Stili
 
 - **Biçimlendirici/Linter**: Ruff (`ruff format`, `ruff check`)
-- **Tip Kontrolcü**: mypy (`mypy scripts/`)
+- **Tip Kontrolcü**: mypy (`mypy Scripts/`)
 - **Satır Uzunluğu**: Maksimum 100 karakter
 - **Tırnak İşaretleri**: Çift tırnak
 - **Girinti**: 4 boşluk (Python), 2 boşluk (YAML/JSON)
@@ -167,13 +167,13 @@ pip install -r requirements.txt
 
 ```bash
 # Tüm testleri çalıştır
-pytest tests/ -v
+pytest Tests/ -v
 
 # Kapsama ile çalıştır
-pytest tests/ --cov=scripts --cov-report=term-missing
+pytest Tests/ --cov=Scripts --cov-report=term-missing
 
 # Belirli testi çalıştır
-pytest tests/test_validator.py -v
+pytest Tests/test_validator.py -v
 ```
 
 ## Commit Sözleşmesi
@@ -221,17 +221,17 @@ test(client): yeniden deneme mantığı birim testleri ekle
 3. **Değişiklikler yapın** ve commit edin
 4. **Kalite kontrollerini çalıştırın**
    ```bash
-   ruff check scripts/ tests/
-   mypy scripts/
-   pytest tests/ -v
+   ruff check Scripts/ Tests/
+   mypy Scripts/
+   pytest Tests/ -v
    ```
 5. **Push edin** ve PR açın
 
 ### PR Kontrol Listesi
 
-- [ ] Testler çalışıyor mu (`pytest tests/ -v`)
-- [ ] Linter geçiyor mu (`ruff check scripts/ tests/`)
-- [ ] Tip kontrolcü geçiyor mu (`mypy scripts/`)
+- [ ] Testler çalışıyor mu (`pytest Tests/ -v`)
+- [ ] Linter geçiyor mu (`ruff check Scripts/ Tests/`)
+- [ ] Tip kontrolcü geçiyor mu (`mypy Scripts/`)
 - [ ] Sabit kodlanmış gizli anahtar veya kimlik bilgisi yok
 - [ ] Dokümantasyon güncellendi (gerekirse)
 - [ ] CHANGELOG.md güncellendi (gerekirse)

@@ -3,8 +3,8 @@
 
 # CI/CD and security config require owner review
 .github/ @bayraktarozcan
-scripts/ @bayraktarozcan
+Scripts/ @bayraktarozcan
 
 # Tests and repo governance/security docs also require owner review
-tests/ @bayraktarozcan
+Tests/ @bayraktarozcan
 /*.md @bayraktarozcan

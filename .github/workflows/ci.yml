@@ -35,16 +35,16 @@ jobs:
           pip install -e ".[dev]"
 
       - name: Ruff lint
-        run: ruff check scripts/ tests/
+        run: ruff check Scripts/ Tests/
 
       - name: Ruff format check
-        run: ruff format --check scripts/ tests/
+        run: ruff format --check Scripts/ Tests/
 
       - name: Mypy
-        run: mypy scripts/
+        run: mypy Scripts/
 
       - name: Mojibake scan (HEAD)
-        run: python scripts/src/mojibake.py --scope head
+        run: python Scripts/src/mojibake.py --scope head
 
   test:
     name: Test (unit)
@@ -67,7 +67,7 @@ jobs:
           pip install -e ".[dev]"
 
       - name: Run unit tests
-        run: pytest -m "not slow" --cov=scripts --cov-report=xml --cov-report=term-missing -v
+        run: pytest -m "not slow" --cov=Scripts --cov-report=xml --cov-report=term-missing -v
 
       - name: Upload coverage
         if: always()
@@ -123,11 +123,11 @@ jobs:
         run: pip-audit --ignore-vuln PYSEC-2026-1845 --ignore-vuln PYSEC-2026-3447
 
       - name: Bandit security scan
-        run: bandit -r scripts/ -f json -o bandit-report.json
+        run: bandit -r Scripts/ -f json -o bandit-report.json
 
       - name: Bandit summary
         if: always()
-        run: bandit -r scripts/
+        run: bandit -r Scripts/
 
       - name: Upload bandit report
         if: always()

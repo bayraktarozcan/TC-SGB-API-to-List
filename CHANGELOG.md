@@ -11,9 +11,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ### Added
 
-- **Environment-driven configuration** — the CLI honors `TC_SGB_LOG_LEVEL` and `TC_SGB_OUTPUT_DIR` (`--output` falls back to the environment variable, then to `output`)
+- **Environment-driven configuration** — the CLI honors `TC_SGB_LOG_LEVEL` and `TC_SGB_OUTPUT_DIR` (`--output` falls back to the environment variable, then to `Output`)
 
 ### Changed
+
+- **Daily schedule** — the scheduled fetch pipeline now runs every day at 06:00 UTC (`cron: "0 6 * * *"`).
 
 - **GitLab CI re-enabled with badges** — after completing the account-level identity verification, project-level CI/CD is on again, so `.gitlab-ci.yml` pipelines run on GitLab shared runners; the GitLab-native pipeline and coverage badges were restored in the project and in the README
 - **Weekday schedule** — the scheduled fetch pipeline now runs weekdays at 06:00 UTC (`cron: "0 6 * * 1-5"`) instead of Friday 22:00 UTC; the repo diet removed the LFS/storage pressure that motivated the weekly cadence, so IoC feeds refresh ~5× more often
@@ -179,9 +181,11 @@ Biçim, [Keep a Changelog](https://keepachangelog.com/)'a dayanmaktadır.
 
 ### Eklenen
 
-- **Ortam değişkeniyle yapılandırma** — CLI, `TC_SGB_LOG_LEVEL` ve `TC_SGB_OUTPUT_DIR` değişkenlerini dikkate alır (`--output` önce ortam değişkenine, sonra `output` dizinine düşer)
+- **Ortam değişkeniyle yapılandırma** — CLI, `TC_SGB_LOG_LEVEL` ve `TC_SGB_OUTPUT_DIR` değişkenlerini dikkate alır (`--output` önce ortam değişkenine, sonra `Output` dizinine düşer)
 
 ### Değiştirilen
+
+- **Günlük zamanlama** — zamanlanmış çekim hattı artık her gün 06:00 UTC'de çalışır (`cron: "0 6 * * *"`).
 
 - **GitLab CI rozetlerle yeniden etkin** — hesap düzeyindeki kimlik doğrulama tamamlandıktan sonra proje düzeyi CI/CD yeniden açıldı, böylece `.gitlab-ci.yml` hatları GitLab paylaşımlı koşucularında çalışır; GitLab yerel hat ve kapsama rozetleri projede ve README'de geri getirildi
 - **Hafta içi zamanlama** — zamanlanmış çekim hattı, Cuma 22:00 UTC yerine artık hafta içi 06:00 UTC'de çalışır (`cron: "0 6 * * 1-5"`); repo diyeti haftalık düzeni gerektiren LFS/depolama baskısını kaldırdığı için IoC akışları ~5 kat daha sık tazelenir

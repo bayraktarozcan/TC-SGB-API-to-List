@@ -1,0 +1,532 @@
+#!/usr/bin/env python3
+"""CLI entry point for the TC-SGB threat-intelligence pipeline.
+
+Usage:
+    python Scripts/main.py fetch [--max-records N] [--output DIR]
+    python Scripts/main.py generate [--input FILE] [--formats FMT,...] [--output DIR]
+    python Scripts/main.py index [--output DIR] [--tag NAME] [--base-url URL]
+    python Scripts/main.py stats [--max-records N]
+    python Scripts/main.py validate [--input FILE] [--max-records N]
+    python Scripts/main.py health
+"""
+
+from __future__ import annotations
+
+import argparse
+import asyncio
+import json
+import logging
+import math
+import os
+import sys
+import time
+from datetime import datetime
+from pathlib import Path
+from typing import Any
+
+from dotenv import load_dotenv
+from pydantic import ValidationError
+
+# Ensure the Scripts package is importable.
+_SCRIPTS_DIR = Path(__file__).resolve().parent
+if str(_SCRIPTS_DIR.parent) not in sys.path:
+    sys.path.insert(0, str(_SCRIPTS_DIR.parent))
+
+from Scripts.src.changelog import generate_changelog
+from Scripts.src.client import AsyncAPIClient
+from Scripts.src.models import AddressRecord
+from Scripts.src.outputs import generate_all, write_catalog
+from Scripts.src.pipeline import Pipeline
+
+# ---------------------------------------------------------------------------
+# Logging setup
+# ---------------------------------------------------------------------------
+
+
+def _setup_logging(verbose: bool = False) -> None:
+    load_dotenv()
+    env_level = os.getenv("TC_SGB_LOG_LEVEL", "INFO").upper()
+    level = logging.DEBUG if verbose else getattr(logging, env_level, logging.INFO)
+    logging.basicConfig(
+        level=level,
+        format="%(asctime)s [%(levelname)-7s] %(name)s: %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+    )
+    # Quiet down noisy libraries.
+    logging.getLogger("httpx").setLevel(logging.WARNING)
+    logging.getLogger("httpcore").setLevel(logging.WARNING)
+
+
+# ---------------------------------------------------------------------------
+# Small helpers
+# ---------------------------------------------------------------------------
+
+
+def _parse_formats(value: str | None) -> list[str] | None:
+    """Split a comma-separated ``--formats`` value into a clean list (or None)."""
+    if not value:
+        return None
+    formats = [fmt.strip() for fmt in value.split(",") if fmt.strip()]
+    return formats or None
+
+
+def _resolve_output_dir(args: argparse.Namespace) -> Path:
+    """Resolve the output directory: ``--output``, else ``$TC_SGB_OUTPUT_DIR``, else ``Output``."""
+    if args.output is not None:
+        return Path(args.output)
+    return Path(os.getenv("TC_SGB_OUTPUT_DIR", "Output"))
+
+
+def _coerce_address_record(raw: dict[str, Any]) -> AddressRecord | None:
+    """Adapt a raw JSON record to an AddressRecord.
+
+    Accepts both the API shape (``url`` key) and the snapshot shape written by
+    ``cmd_fetch`` (``value`` key).  Returns None when neither is usable.
+    """
+    if "url" in raw:
+        try:
+            return AddressRecord.model_validate(raw)
+        except ValidationError:
+            return None
+    if "value" in raw:
+        return AddressRecord(
+            id=raw.get("id", 0),
+            url=raw.get("value") or "",
+            type=raw.get("type") or "",
+            desc=raw.get("desc") or "",
+            source=raw.get("source") or "",
+            date=raw.get("date") or "",
+            criticality_level=raw.get("criticality_level", 10),
+            connectiontype=raw.get("connectiontype") or "",
+        )
+    return None
+
+
+# ---------------------------------------------------------------------------
+# Sub-commands
+# ---------------------------------------------------------------------------
+
+
+async def cmd_fetch(args: argparse.Namespace) -> None:
+    """Fetch all IoCs from the SGB API and save raw data."""
+    output_dir = _resolve_output_dir(args)
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    client = AsyncAPIClient(
+        rate_limit=args.rps,
+        timeout=args.timeout,
+        max_retries=args.retries,
+    )
+
+    try:
+        pipeline = Pipeline(
+            client=client,
+            per_page=args.per_page,
+            max_pages=math.ceil(args.max_records / args.per_page) if args.max_records else 0,
+        )
+
+        scored, stats = await pipeline.run()
+
+        # Save raw records for offline use
+        raw_path = output_dir / "raw_records.json"
+        raw_data = [
+            {
+                "id": s.original_id,
+                "value": s.value,
+                "type": s.ioc_type.value if hasattr(s.ioc_type, "value") else str(s.ioc_type),
+                "desc": s.desc.value if s.desc else None,
+                "source": s.source.value if s.source else None,
+                "date": s.date.isoformat() if s.date else None,
+                "criticality_level": s.criticality_level,
+                "connectiontype": s.connectiontype.value if s.connectiontype else None,
+                "quality_score": s.quality_score,
+                "false_positive_risk": s.false_positive_risk,
+            }
+            for s in scored
+        ]
+
+        # Generate changelog BEFORE writing new snapshot (reads previous snapshot)
+        log_path = generate_changelog(output_dir=output_dir, current_records=raw_data)
+        if log_path:
+            print(f"Changelog written to {log_path}")
+
+        raw_path.write_text(json.dumps(raw_data, indent=2, ensure_ascii=False), encoding="utf-8")
+        print(f"\nSaved {len(raw_data)} records to {raw_path}")
+
+        # Generate output files
+        formats = _parse_formats(args.formats) if hasattr(args, "formats") else None
+        results = generate_all(scored, str(output_dir), formats=formats)
+
+        print("\n" + stats.summary())
+        if results:
+            print("\nOutput files:")
+            for fmt, path in results.items():
+                print(f"  {fmt:15s} -> {path}")
+    finally:
+        await client.close()
+
+
+async def cmd_generate(args: argparse.Namespace) -> None:
+    """Generate output files from previously fetched raw data."""
+    input_path = Path(args.input)
+    if not input_path.exists():
+        print(f"Error: Input file not found: {input_path}", file=sys.stderr)
+        sys.exit(1)
+
+    # Load raw records.
+    raw_data = json.loads(input_path.read_text(encoding="utf-8"))
+
+    from Scripts.src.models import ConnectionType, DescriptionCategory, IOCType, ScoredIOC, Source
+
+    scored: list[ScoredIOC] = []
+    for item in raw_data:
+        try:
+            ioc_type = IOCType(item["type"])
+            desc = DescriptionCategory(item["desc"]) if item.get("desc") else None
+            source = Source(item["source"]) if item.get("source") else None
+            ct = ConnectionType(item["connectiontype"]) if item.get("connectiontype") else None
+            date = datetime.fromisoformat(item["date"]) if item.get("date") else None
+
+            scored.append(
+                ScoredIOC(
+                    value=item["value"],
+                    ioc_type=ioc_type,
+                    desc=desc,
+                    source=source,
+                    date=date,
+                    criticality_level=item.get("criticality_level", 10),
+                    connectiontype=ct,
+                    original_id=item.get("id", 0),
+                    quality_score=item.get("quality_score", 0.0),
+                    false_positive_risk=item.get("false_positive_risk", "low"),
+                )
+            )
+        except Exception as e:
+            print(f"Warning: Skipping record: {e}", file=sys.stderr)
+            continue
+
+    print(f"Loaded {len(scored)} records from {input_path}")
+
+    output_dir = _resolve_output_dir(args)
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    formats = _parse_formats(args.formats) if hasattr(args, "formats") else None
+    results = generate_all(scored, str(output_dir), formats=formats)
+
+    print("\nGenerated files:")
+    for fmt, path in results.items():
+        print(f"  {fmt:15s} -> {path}")
+
+
+async def cmd_index(args: argparse.Namespace) -> None:
+    """Write the artifact manifest plus a browsable Blocklists catalog."""
+    output_dir = _resolve_output_dir(args)
+    manifest = write_catalog(
+        output_dir,
+        release_tag=args.tag,
+        release_base_url=args.base_url,
+    )
+    count = len(manifest["formats"])
+    print(f"Wrote manifest + {count} blocklist entries to {output_dir}")
+
+
+async def cmd_stats(args: argparse.Namespace) -> None:
+    """Fetch and display statistics without generating outputs."""
+    client = AsyncAPIClient(
+        rate_limit=args.rps,
+        timeout=args.timeout,
+        max_retries=args.retries,
+    )
+
+    try:
+        # Fetch metadata
+        meta = await client.fetch_metadata()
+
+        print("\n=== API Metadata ===")
+        print(f"\nDescription categories ({len(meta['descriptions'])}):")
+        for rid, rec in meta["descriptions"].items():
+            print(f"  {rid:3s}: {rec.en_title} ({rec.tr_title})")
+
+        print(f"\nConnection types ({len(meta['connection_types'])}):")
+        for rid, rec in meta["connection_types"].items():
+            print(f"  {rid:2s}: {rec.en_title} ({rec.tr_title})")
+
+        print(f"\nSources ({len(meta['sources'])}):")
+        for rid, rec in meta["sources"].items():
+            print(f"  {rid:2s}: {rec.en_title} ({rec.tr_title})")
+
+        # Fetch address count
+        counts = await client.fetch_address_count()
+        print(f"\nTotal IoCs: {counts['total']:,}")
+        print(f"API pages (9999/page): {counts['pages']:,}")
+    finally:
+        await client.close()
+
+
+async def cmd_validate(args: argparse.Namespace) -> None:
+    """Validate IoCs from raw data or fetch and validate only."""
+    client = AsyncAPIClient(
+        rate_limit=args.rps,
+        timeout=args.timeout,
+        max_retries=args.retries,
+    )
+
+    try:
+        if args.input:
+            input_path = Path(args.input)
+            if not input_path.exists():
+                print(f"Error: Input file not found: {input_path}", file=sys.stderr)
+                sys.exit(1)
+            raw_data = json.loads(input_path.read_text(encoding="utf-8"))
+            if not isinstance(raw_data, list):
+                print(
+                    f"Error: Expected a JSON list of records, got {type(raw_data).__name__}.",
+                    file=sys.stderr,
+                )
+                sys.exit(1)
+            records: list[AddressRecord] = []
+            for raw in raw_data:
+                if not isinstance(raw, dict):
+                    print(
+                        "Warning: Skipping record "
+                        f"(expected object, got {type(raw).__name__}): {raw}",
+                        file=sys.stderr,
+                    )
+                    continue
+                record = _coerce_address_record(raw)
+                if record is None:
+                    print(f"Warning: Skipping record (unusable): {raw}", file=sys.stderr)
+                    continue
+                records.append(record)
+        else:
+            print("Fetching from API...")
+            max_pages = (
+                math.ceil(args.max_records / args.per_page)
+                if args.max_records and args.max_records > 0
+                else 0
+            )
+            records = await client.fetch_addresses(
+                per_page=args.per_page,
+                max_pages=max_pages,
+            )
+
+        print(f"Validating {len(records)} records...")
+
+        from Scripts.src.validator import validate_ioc
+
+        valid_count = 0
+        rejected: list[tuple[AddressRecord, list[str]]] = []
+        type_counts: dict[str, int] = {}
+
+        for record in records:
+            result = validate_ioc(record)
+            if result is None:
+                rejected.append((record, ["empty or unparseable IoC value"]))
+            elif result.validation_errors:
+                rejected.append((record, result.validation_errors))
+            else:
+                valid_count += 1
+                t = result.ioc_type.value
+                type_counts[t] = type_counts.get(t, 0) + 1
+
+        print(f"\nResults: {valid_count} valid, {len(rejected)} rejected")
+
+        if rejected:
+            print("\nRejected records (first 20):")
+            for rec, errors in rejected[:20]:
+                print(f"  ID={rec.id} URL={rec.url[:60]}")
+                for err in errors:
+                    print(f"    -> {err}")
+
+        # Show type distribution of valid records
+        print("\nType distribution (valid):")
+        for t, c in sorted(type_counts.items()):
+            print(f"  {t:10s}: {c}")
+    finally:
+        await client.close()
+
+
+async def cmd_health(args: argparse.Namespace) -> None:
+    """Check API health and connectivity."""
+    client = AsyncAPIClient(
+        rate_limit=args.rps,
+        timeout=args.timeout,
+        max_retries=args.retries,
+    )
+
+    try:
+        print("Checking API health...")
+        is_healthy = await client.health_check()
+
+        if is_healthy:
+            print("[OK] API is healthy and reachable")
+            print(f"  Base URL: {client.base_url}")
+            print(f"  Stats: {client.stats}")
+        else:
+            print("[FAIL] API is not reachable")
+            sys.exit(1)
+    finally:
+        await client.close()
+
+
+# ---------------------------------------------------------------------------
+# Argument parser
+# ---------------------------------------------------------------------------
+
+
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(
+        prog="tc-sgb",
+        description=(
+            "TC-SGB Threat Intelligence Pipeline — "
+            "Fetch, validate, and export IoCs from the "
+            "T.C. Siber Güvenlik Başkanlığı (Cyber Security Presidency) API."  # noqa: RUF001
+        ),
+    )
+    parser.add_argument("-v", "--verbose", action="store_true", help="Enable debug logging.")
+    subparsers = parser.add_subparsers(dest="command", help="Available commands.")
+
+    # --- Shared arguments ---
+    def add_common_args(p: argparse.ArgumentParser) -> None:
+        p.add_argument(
+            "--output",
+            "-o",
+            default=None,
+            help="Output directory (default: $TC_SGB_OUTPUT_DIR or 'Output').",
+        )
+        p.add_argument(
+            "--per-page",
+            type=int,
+            default=9999,
+            help="Records per API page (max 9999).",
+        )
+        p.add_argument(
+            "--rps",
+            type=float,
+            default=5.0,
+            help="Requests per second to the API.",
+        )
+        p.add_argument(
+            "--timeout",
+            type=float,
+            default=60.0,
+            help="HTTP request timeout in seconds.",
+        )
+        p.add_argument(
+            "--retries",
+            type=int,
+            default=5,
+            help="Max retries per request.",
+        )
+        p.add_argument(
+            "--max-records",
+            type=int,
+            default=None,
+            help="Limit number of records to fetch.",
+        )
+
+    # fetch
+    p_fetch = subparsers.add_parser("fetch", help="Fetch IoCs and generate all output formats.")
+    add_common_args(p_fetch)
+    p_fetch.add_argument(
+        "--formats",
+        default=None,
+        help="Comma-separated format names (default: all).",
+    )
+
+    # generate
+    p_gen = subparsers.add_parser(
+        "generate", help="Generate outputs from previously saved raw data."
+    )
+    p_gen.add_argument(
+        "--input",
+        "-i",
+        required=True,
+        help="Path to raw JSON file from fetch.",
+    )
+    p_gen.add_argument(
+        "--output",
+        "-o",
+        default=None,
+        help="Output directory (default: $TC_SGB_OUTPUT_DIR or 'Output').",
+    )
+    p_gen.add_argument(
+        "--formats",
+        default=None,
+        help="Comma-separated format names (default: all).",
+    )
+
+    # stats
+    p_stats = subparsers.add_parser("stats", help="Fetch and display API metadata and statistics.")
+    add_common_args(p_stats)
+
+    # index
+    p_index = subparsers.add_parser(
+        "index",
+        help="Write manifest.json and the browsable Blocklists catalog.",
+    )
+    p_index.add_argument(
+        "--output",
+        "-o",
+        default=None,
+        help="Output directory (default: $TC_SGB_OUTPUT_DIR or 'Output').",
+    )
+    p_index.add_argument("--tag", default="ioc-data", help="Rolling release tag name.")
+    p_index.add_argument(
+        "--base-url",
+        default=None,
+        help="Release download base URL (default: $TC_SGB_RELEASE_BASE_URL or GitHub release).",
+    )
+
+    # validate
+    p_val = subparsers.add_parser("validate", help="Validate IoCs from file or API.")
+    p_val.add_argument(
+        "--input",
+        "-i",
+        default=None,
+        help="Path to raw JSON file (omit to fetch from API).",
+    )
+    add_common_args(p_val)
+
+    # health
+    p_health = subparsers.add_parser("health", help="Check API health and connectivity.")
+    p_health.add_argument("--rps", type=float, default=5.0, help="Requests per second.")
+    p_health.add_argument("--timeout", type=float, default=60.0, help="HTTP timeout.")
+    p_health.add_argument("--retries", type=int, default=5, help="Max retries.")
+
+    return parser
+
+
+# ---------------------------------------------------------------------------
+# Main
+# ---------------------------------------------------------------------------
+
+
+def main() -> None:
+    parser = build_parser()
+    args = parser.parse_args()
+    _setup_logging(args.verbose)
+
+    if args.command is None:
+        parser.print_help()
+        sys.exit(0)
+
+    start = time.monotonic()
+    cmd_map = {
+        "fetch": cmd_fetch,
+        "generate": cmd_generate,
+        "index": cmd_index,
+        "stats": cmd_stats,
+        "validate": cmd_validate,
+        "health": cmd_health,
+    }
+
+    coro = cmd_map[args.command](args)
+    asyncio.run(coro)
+
+    elapsed = time.monotonic() - start
+    print(f"\nCompleted in {elapsed:.1f}s")
+
+
+if __name__ == "__main__":
+    main()

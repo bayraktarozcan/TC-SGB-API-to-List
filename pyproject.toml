@@ -43,15 +43,15 @@ dev = [
 ]
 
 [project.scripts]
-tc-sgb = "scripts.main:main"
+tc-sgb = "Scripts.main:main"
 
 [tool.setuptools.packages.find]
-include = ["scripts*"]
+include = ["Scripts*"]
 
 [tool.ruff]
 target-version = "py311"
 line-length = 100
-src = ["scripts", "tests", "."]
+src = ["Scripts", "Tests", "."]
 
 [tool.ruff.lint]
 select = [
@@ -91,8 +91,12 @@ ignore = [
 ]
 
 [tool.ruff.lint.per-file-ignores]
-"tests/**" = ["S101", "ARG", "T20", "S311", "F841", "E501", "E741", "RUF059", "RUF001", "S404", "S603"]
-"scripts/main.py" = ["E402"]
+"Tests/**" = ["S101", "ARG", "T20", "S311", "F841", "E501", "E741", "RUF059", "RUF001", "S404", "S603"]
+"Scripts/main.py" = ["E402"]
+# PascalCase package roots mandated by the project Naming section.
+"Scripts/__init__.py" = ["N999"]
+"Scripts/src/__init__.py" = ["N999"]
+"Tests/__init__.py" = ["N999"]
 
 [tool.ruff.format]
 quote-style = "double"
@@ -116,7 +120,7 @@ show_error_codes = true
 pretty = true
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
+testpaths = ["Tests"]
 python_files = ["test_*.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
