@@ -64,6 +64,9 @@ tc-sgb generate -i Output/raw_records.json
 
 # Fetch and display health status
 tc-sgb health
+
+# Fetch third-party threat feeds (CERT.PL, CERT.SI, blacklist.gov.az)
+tc-sgb fetch-external
 ```
 
 ### Data Download
@@ -84,6 +87,12 @@ Latest pre-generated IoC outputs are published automatically (daily, 19:00 UTC) 
 > Brave rejects as custom filter lists. Subscribe to the
 > [plain-text mirror](https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/threat_intel_adguard.txt)
 > instead (`brave://adblock` → Add filter list via URL); it is refreshed daily.
+> Three more curated lists (Blacklist.gov.az, CERT.PL, CERT.SI) are published on
+> the same branch and refreshed by the same workflow:
+>
+> - [threatfeed-az_adguard.txt](https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/threatfeed-az_adguard.txt)
+> - [certpl_adguard.txt](https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/certpl_adguard.txt)
+> - [certsi_adguard.txt](https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/certsi_adguard.txt)
 
 ## Project Structure
 
@@ -94,6 +103,7 @@ TC-SGB-API-to-List/
 │   └── src/
 │       ├── models.py            # Pydantic data models
 │       ├── client.py            # Async API client
+│       ├── external_feeds.py    # Third-party threat-feed mirrors
 │       ├── validator.py         # IoC validation
 │       ├── normalizer.py        # IoC normalization
 │       ├── deduplicator.py      # Deduplication
@@ -263,6 +273,9 @@ tc-sgb generate -i Output/raw_records.json
 
 # Sağlık durumunu görüntüle
 tc-sgb health
+
+# Üçüncü taraf tehdit akışlarını çek (CERT.PL, CERT.SI, blacklist.gov.az)
+tc-sgb fetch-external
 ```
 
 ### Veri İndirme
@@ -283,6 +296,12 @@ En güncel önceden üretilmiş IoC çıktıları (her gün, 19:00 UTC) yuvarlan
 > Brave bunları özel filtre listesi olarak kabul etmez. Bunun yerine her gün güncellenen
 > [düz metin aynayı](https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/threat_intel_adguard.txt)
 > kullanın (`brave://adblock` → Add filter list via URL).
+> Aynı dalda, aynı iş akışıyla güncellenen üç seçkin liste daha yayınlanır
+> (Blacklist.gov.az, CERT.PL, CERT.SI):
+>
+> - [threatfeed-az_adguard.txt](https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/threatfeed-az_adguard.txt)
+> - [certpl_adguard.txt](https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/certpl_adguard.txt)
+> - [certsi_adguard.txt](https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/certsi_adguard.txt)
 
 ## Proje Yapısı
 
@@ -293,6 +312,7 @@ TC-SGB-API-to-List/
 │   └── src/
 │       ├── models.py            # Pydantic veri modelleri
 │       ├── client.py             # Asenkron API istemcisi
+│       ├── external_feeds.py    # Üçüncü taraf tehdit akışı aynaları
 │       ├── validator.py         # IoC doğrulama
 │       ├── normalizer.py        # IoC normalleştirme
 │       ├── deduplicator.py      # Tekilleştirme

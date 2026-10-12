@@ -8,6 +8,7 @@ Usage:
     python Scripts/main.py stats [--max-records N]
     python Scripts/main.py validate [--input FILE] [--max-records N]
     python Scripts/main.py health
+    python Scripts/main.py fetch-external [--output DIR]
 """
 
 from __future__ import annotations
@@ -34,6 +35,7 @@ if str(_SCRIPTS_DIR.parent) not in sys.path:
 
 from Scripts.src.changelog import generate_changelog
 from Scripts.src.client import AsyncAPIClient
+from Scripts.src.external_feeds import EXTERNAL_FEEDS, fetch_all_feeds
 from Scripts.src.models import AddressRecord
 from Scripts.src.outputs import generate_all, write_catalog
 from Scripts.src.pipeline import Pipeline
@@ -369,6 +371,26 @@ async def cmd_health(args: argparse.Namespace) -> None:
         await client.close()
 
 
+async def cmd_fetch_external(args: argparse.Namespace) -> None:
+    """Fetch third-party threat feeds and render one AdGuard list per source."""
+    output_dir = _resolve_output_dir(args) / "External"
+    results = await fetch_all_feeds(output_dir=output_dir)
+
+    print("\nExternal feeds:")
+    produced = 0
+    for feed in EXTERNAL_FEEDS:
+        outcome = results.get(feed.key, {})
+        status = outcome.get("status", "failed")
+        if status in ("written", "skipped"):
+            produced += 1
+            print(f"  [{status.upper():7s}] {feed.key:13s} {outcome.get('rules', 0)} rules")
+        else:
+            print(f"  [{status.upper():7s}] {feed.key:13s} {outcome.get('error', 'unknown error')}")
+    if produced == 0:
+        print("Error: no external feed produced content", file=sys.stderr)
+        sys.exit(1)
+
+
 # ---------------------------------------------------------------------------
 # Argument parser
 # ---------------------------------------------------------------------------
@@ -494,6 +516,18 @@ def build_parser() -> argparse.ArgumentParser:
     p_health.add_argument("--timeout", type=float, default=60.0, help="HTTP timeout.")
     p_health.add_argument("--retries", type=int, default=5, help="Max retries.")
 
+    # fetch-external
+    p_ext = subparsers.add_parser(
+        "fetch-external",
+        help="Fetch third-party threat feeds and render AdGuard lists.",
+    )
+    p_ext.add_argument(
+        "--output",
+        "-o",
+        default=None,
+        help="Output directory (default: $TC_SGB_OUTPUT_DIR or 'Output').",
+    )
+
     return parser
 
 
@@ -519,6 +553,7 @@ def main() -> None:
         "stats": cmd_stats,
         "validate": cmd_validate,
         "health": cmd_health,
+        "fetch-external": cmd_fetch_external,
     }
 
     coro = cmd_map[args.command](args)

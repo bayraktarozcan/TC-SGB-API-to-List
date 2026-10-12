@@ -101,7 +101,7 @@ same checks (see `.github/workflows/ci.yml`, `.gitlab-ci.yml`).
 
 - Setup: `pip install -e ".[dev]"` then `pip install -r requirements.txt`
   (Python `>=3.11`; 3.15 dev-verified).
-- CLI verbs: `tc-sgb fetch | generate | index | stats | validate | health`.
+- CLI verbs: `tc-sgb fetch | generate | index | stats | validate | health | fetch-external`.
 - Local gate = the Quality gate block (ruff, ruff format, mypy, bandit, pytest).
 
 ## Naming
@@ -732,4 +732,4 @@ Runtimes use the current LTS line (Node.js LTS, .NET LTS); build output goes thr
 - `.git/` is the **internal Git repository structure**, not a project config file.
 
 **Guiding rule:** "It looks special" does not mean "It is a standard special file." The meaning of any file is determined by the software that reads and interprets it.
-<!-- mirror-sync: sync-sha=822d929769311513f8d33788871e28659122afaf -->
+<!-- mirror-sync: sync-sha=d73b0a1fe2b73edc621a2d52bfe9a5cf98a78dab -->

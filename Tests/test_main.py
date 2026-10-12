@@ -16,6 +16,7 @@ from Scripts.main import (
     _resolve_output_dir,
     build_parser,
     cmd_fetch,
+    cmd_fetch_external,
     cmd_generate,
     cmd_health,
     cmd_index,
@@ -496,6 +497,50 @@ class TestCmdHealth:
         ):
             await cmd_health(_make_args())
         assert exc.value.code == 1
+
+
+# ---------------------------------------------------------------------------
+# cmd_fetch_external
+# ---------------------------------------------------------------------------
+
+
+class TestCmdFetchExternal:
+    async def test_fetch_external_reports_statuses(self, capsys):
+        results = {
+            "blacklist-az": {"status": "written", "rules": 10},
+            "cert-pl": {"status": "skipped", "rules": 20},
+            "cert-si": {"status": "failed", "error": "boom"},
+        }
+        with patch("Scripts.main.fetch_all_feeds", new_callable=AsyncMock, return_value=results):
+            await cmd_fetch_external(_make_args(output=None))
+
+        out = capsys.readouterr().out
+        assert "blacklist-az" in out
+        assert "cert-si" in out
+
+    async def test_fetch_external_all_failed_exits(self):
+        results = {"blacklist-az": {"status": "failed", "error": "boom"}}
+        with (
+            patch("Scripts.main.fetch_all_feeds", new_callable=AsyncMock, return_value=results),
+            pytest.raises(SystemExit) as exc,
+        ):
+            await cmd_fetch_external(_make_args(output=None))
+        assert exc.value.code == 1
+
+    def test_fetch_external_command_dispatch(self, temp_dir: Path, capsys):
+        with (
+            patch.object(
+                sys, "argv", ["tc-sgb", "fetch-external", "--output", str(temp_dir / "ext")]
+            ),
+            patch(
+                "Scripts.main.fetch_all_feeds",
+                new_callable=AsyncMock,
+                return_value={"blacklist-az": {"status": "written", "rules": 1}},
+            ),
+        ):
+            main()
+
+        assert "Completed in" in capsys.readouterr().out
 
 
 # ---------------------------------------------------------------------------

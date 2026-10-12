@@ -59,6 +59,12 @@ jobs:
         env:
           TC_SGB_API_BASE_URL: ${{ vars.TC_SGB_API_BASE_URL || 'https://siberguvenlik.gov.tr' }}
 
+      - name: Fetch external threat feeds
+        continue-on-error: true
+        run: python Scripts/main.py fetch-external
+        env:
+          TC_SGB_API_BASE_URL: ${{ vars.TC_SGB_API_BASE_URL || 'https://siberguvenlik.gov.tr' }}
+
       - name: Validate outputs
         run: python Scripts/main.py validate
 
@@ -127,30 +133,79 @@ jobs:
           git -C "${WORK}" config core.autocrlf false
           git -C "${WORK}" config user.name "github-actions[bot]"
           git -C "${WORK}" config user.email "github-actions[bot]@users.noreply.github.com"
+          git -C "${WORK}" remote add origin "https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git"
+          # Seed with the last good snapshot so a feed that fails today keeps
+          # serving yesterday's file instead of 404ing for subscribers.
+          if git -C "${WORK}" fetch -q origin "${BRANCH}" 2>/dev/null; then
+            git -C "${WORK}" checkout -q FETCH_HEAD -- . 2>/dev/null || true
+          fi
+          check_size() {
+            local file="$1"
+            local bytes
+            bytes="$(wc -c < "${file}" | tr -d ' ')"
+            if [ "${bytes}" -ge 94371840 ]; then
+              echo "$(basename "${file}") ${bytes} bytes >= 90 MiB; keeping previous snapshot."
+              echo "::warning::filter-lists: $(basename "${file}") >= 90 MiB, not updated."
+              return 1
+            fi
+            if [ "${bytes}" -ge 52428800 ]; then
+              echo "WARNING: $(basename "${file}") ${bytes} bytes >= 50 MiB; monitor list growth."
+            fi
+            echo "${bytes}"
+            return 0
+          }
           cp "${SRC}" "${WORK}/threat_intel_adguard.txt"
+          shopt -s nullglob
+          for EXT in Output/External/*_adguard.txt; do
+            if check_size "${EXT}" >/dev/null; then
+              cp "${EXT}" "${WORK}/"
+            fi
+          done
+          shopt -u nullglob
           cat > "${WORK}/README.md" <<'EOF'
           # TC-SGB `filter-lists` branch
 
-          Rolling single-commit mirror of `threat_intel_adguard.txt` for Brave / AdGuard
-          custom filter-list subscriptions. Refreshed daily by the `Scheduled Fetch`
-          workflow; history is not kept (force-pushed) so daily snapshots never bloat the repo.
+          Rolling single-commit mirror of Brave / AdGuard custom filter lists.
+          Refreshed daily by the `Scheduled Fetch` workflow; history is not kept
+          (force-pushed) so daily snapshots never bloat the repo. A feed that
+          fails on a given day keeps serving its last good snapshot.
 
           Brave'de abone ol: `brave://adblock` → Add filter list via URL:
 
+          - TC-SGB:
               https://raw.githubusercontent.com/${{ github.repository }}/filter-lists/threat_intel_adguard.txt
+          - Blacklist.gov.az:
+              https://raw.githubusercontent.com/${{ github.repository }}/filter-lists/threatfeed-az_adguard.txt
+          - CERT.PL:
+              https://raw.githubusercontent.com/${{ github.repository }}/filter-lists/certpl_adguard.txt
+          - CERT.SI:
+              https://raw.githubusercontent.com/${{ github.repository }}/filter-lists/certsi_adguard.txt
           EOF
-          git -C "${WORK}" add threat_intel_adguard.txt README.md
+          git -C "${WORK}" add -A
           # Prove full content is staged: a Git LFS pointer would stage ~130 bytes
           # instead of the source size. The branch tree carries no .gitattributes,
           # so LFS substitution is impossible by construction; this asserts it.
-          if [ "$(git -C "${WORK}" cat-file -s :threat_intel_adguard.txt)" -ne "${SIZE}" ]; then
-            echo "Staged blob size mismatch; refusing to push."
-            exit 1
+          for STAGED in threat_intel_adguard.txt threatfeed-az_adguard.txt certpl_adguard.txt certsi_adguard.txt; do
+            if [ -f "${WORK}/${STAGED}" ]; then
+              STAGED_SIZE="$(git -C "${WORK}" cat-file -s ":${STAGED}")"
+              if [ "${STAGED}" = "threat_intel_adguard.txt" ]; then
+                if [ "${STAGED_SIZE}" -ne "${SIZE}" ]; then
+                  echo "Staged blob size mismatch for ${STAGED}; refusing to push."
+                  exit 1
+                fi
+              elif [ "${STAGED_SIZE}" -lt 100 ]; then
+                echo "Staged blob suspiciously small for ${STAGED}; refusing to push."
+                exit 1
+              fi
+            fi
+          done
+          if git -C "${WORK}" diff --cached --quiet; then
+            echo "Filter lists unchanged; branch already current."
+            exit 0
           fi
-          git -C "${WORK}" commit -q -m "chore: update Brave/AdGuard filter list $(date -u +%Y%m%d-%H%M%S)"
-          git -C "${WORK}" remote add origin "https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git"
+          git -C "${WORK}" commit -q -m "chore: update Brave/AdGuard filter lists $(date -u +%Y%m%d-%H%M%S)"
           git -C "${WORK}" push --force origin "${BRANCH}"
-          echo "Published filter list to branch ${BRANCH}"
+          echo "Published filter lists to branch ${BRANCH}"
 
       - name: Write Output catalog (manifest + Blocklists)
         run: python Scripts/main.py index
