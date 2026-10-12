@@ -85,14 +85,15 @@ Latest pre-generated IoC outputs are published automatically (daily, 19:00 UTC) 
 >
 > **Brave / AdGuard users:** release-asset links are served as file downloads, which
 > Brave rejects as custom filter lists. Subscribe to the
-> [plain-text mirror](https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/threat_intel_adguard.txt)
+> [plain-text mirror](https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/01-turkiye-sgb_adguard.txt)
 > instead (`brave://adblock` → Add filter list via URL); it is refreshed daily.
-> Three more curated lists (Blacklist.gov.az, CERT.PL, CERT.SI) are published on
-> the same branch and refreshed by the same workflow:
+> Three more curated lists (Poland, Azerbaijan, Slovenia) are published on
+> the same branch and refreshed by the same workflow; files are numbered so
+> Brave shows them in country order (`04` is reserved for Lithuania):
 >
-> - [threatfeed-az_adguard.txt](https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/threatfeed-az_adguard.txt)
-> - [certpl_adguard.txt](https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/certpl_adguard.txt)
-> - [certsi_adguard.txt](https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/certsi_adguard.txt)
+> - [02-polonya-certpl_adguard.txt](https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/02-polonya-certpl_adguard.txt)
+> - [03-azerbaycan-blacklist_adguard.txt](https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/03-azerbaycan-blacklist_adguard.txt)
+> - [05-slovenya-certsi_adguard.txt](https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/05-slovenya-certsi_adguard.txt)
 
 ## Project Structure
 
@@ -294,14 +295,15 @@ En güncel önceden üretilmiş IoC çıktıları (her gün, 19:00 UTC) yuvarlan
 >
 > **Brave / AdGuard kullanıcıları:** release bağlantıları dosya indirme olarak sunulur ve
 > Brave bunları özel filtre listesi olarak kabul etmez. Bunun yerine her gün güncellenen
-> [düz metin aynayı](https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/threat_intel_adguard.txt)
+> [düz metin aynayı](https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/01-turkiye-sgb_adguard.txt)
 > kullanın (`brave://adblock` → Add filter list via URL).
 > Aynı dalda, aynı iş akışıyla güncellenen üç seçkin liste daha yayınlanır
-> (Blacklist.gov.az, CERT.PL, CERT.SI):
+> (Polonya, Azerbaycan, Slovenya); dosyalar numaralıdır, böylece Brave onları
+> ülke sırasıyla gösterir (`04` Litvanya için ayrılmıştır):
 >
-> - [threatfeed-az_adguard.txt](https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/threatfeed-az_adguard.txt)
-> - [certpl_adguard.txt](https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/certpl_adguard.txt)
-> - [certsi_adguard.txt](https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/certsi_adguard.txt)
+> - [02-polonya-certpl_adguard.txt](https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/02-polonya-certpl_adguard.txt)
+> - [03-azerbaycan-blacklist_adguard.txt](https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/03-azerbaycan-blacklist_adguard.txt)
+> - [05-slovenya-certsi_adguard.txt](https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/05-slovenya-certsi_adguard.txt)
 
 ## Proje Yapısı
 

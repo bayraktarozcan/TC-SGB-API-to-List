@@ -63,9 +63,15 @@ Each GitHub release includes:
 Release-asset links are served as file downloads, which Brave rejects as custom
 filter lists. The AdGuard output is therefore also mirrored as plain text on the
 rolling single-commit `filter-lists` branch (no history kept, never needs Git LFS),
-refreshed daily by the Scheduled Fetch workflow:
+refreshed daily by the Scheduled Fetch workflow. Three third-party feeds
+(Poland, Azerbaijan, Slovenia) ship on the same branch as separate lists; files
+are numbered so Brave (which sorts subscriptions by URL) shows them in country
+order (`04` is reserved for Lithuania):
 
-- Subscription URL: <https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/threat_intel_adguard.txt>
+- Türkiye: <https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/01-turkiye-sgb_adguard.txt>
+- Polonya: <https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/02-polonya-certpl_adguard.txt>
+- Azerbaycan: <https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/03-azerbaycan-blacklist_adguard.txt>
+- Slovenya: <https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/05-slovenya-certsi_adguard.txt>
 - Subscribe in Brave via `brave://adblock` → Add filter list via URL.
 
 ### Release Process
@@ -470,9 +476,14 @@ Her GitHub sürümü şunları içerir:
 Release bağlantıları dosya indirme olarak sunulur ve Brave bunları özel filtre listesi
 olarak kabul etmez. Bu yüzden AdGuard çıktısı, yuvarlanan tek-commit'lik `filter-lists`
 dalında düz metin olarak da aynalanır (tarih tutulmaz, Git LFS gerekmez); Scheduled Fetch
-workflow'u ile her gün güncellenir:
+workflow'u ile her gün güncellenir. Üç üçüncü taraf akış (Polonya, Azerbaycan, Slovenya)
+aynı dalda ayrı listeler olarak yayınlanır; dosyalar numaralıdır, böylece Brave (abonelikleri
+URL'ye göre sıralar) onları ülke sırasıyla gösterir (`04` Litvanya için ayrılmıştır):
 
-- Abonelik URL'si: <https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/threat_intel_adguard.txt>
+- Türkiye: <https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/01-turkiye-sgb_adguard.txt>
+- Polonya: <https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/02-polonya-certpl_adguard.txt>
+- Azerbaycan: <https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/03-azerbaycan-blacklist_adguard.txt>
+- Slovenya: <https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/05-slovenya-certsi_adguard.txt>
 - Brave'de `brave://adblock` → Add filter list via URL ile abone olun.
 
 ### Yayın Süreci
