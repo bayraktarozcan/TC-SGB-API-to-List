@@ -323,7 +323,7 @@ def generate_checksums(output_dir: Path) -> Path:
 name: Weekly Pipeline
 on:
   schedule:
-    - cron: "0 6 * * 1-5"  # Weekdays at 06:00 UTC
+    - cron: "0 19 * * *"  # Daily at 19:00 UTC
 
 jobs:
   fetch-and-process:
@@ -730,7 +730,7 @@ def generate_checksums(output_dir: Path) -> Path:
 name: Weekly Pipeline
 on:
   schedule:
-    - cron: "0 6 * * 1-5"  # Weekdays at 06:00 UTC
+    - cron: "0 19 * * *"  # Daily at 19:00 UTC
 
 jobs:
   fetch-and-process:

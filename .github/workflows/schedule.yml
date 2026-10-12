@@ -2,7 +2,7 @@ name: Scheduled Fetch
 
 on:
   schedule:
-    - cron: "0 6 * * *"
+    - cron: "0 19 * * *"
   workflow_dispatch:
 
 concurrency:
@@ -76,7 +76,7 @@ jobs:
           if ! gh release view "${TAG}" >/dev/null 2>&1; then
             gh release create "${TAG}" \
               --title "IoC Data (all formats)" \
-              --notes "Rolling release: all IoC outputs (16 formats + raw_records.json + fetch logs) refreshed daily (06:00 UTC). Stable assets at https://github.com/${{ github.repository }}/releases/download/${TAG}/ — a browsable per-format catalog with raw links ships in the repo under Output/Blocklists/." \
+              --notes "Rolling release: all IoC outputs (16 formats + raw_records.json + fetch logs) refreshed daily (19:00 UTC). Stable assets at https://github.com/${{ github.repository }}/releases/download/${TAG}/ — a browsable per-format catalog with raw links ships in the repo under Output/Blocklists/." \
               --target main
           fi
           shopt -s nullglob
@@ -132,7 +132,7 @@ jobs:
           # TC-SGB `filter-lists` branch
 
           Rolling single-commit mirror of `threat_intel_adguard.txt` for Brave / AdGuard
-          custom filter-list subscriptions. Refreshed on weekdays by the `Scheduled Fetch`
+          custom filter-list subscriptions. Refreshed daily by the `Scheduled Fetch`
           workflow; history is not kept (force-pushed) so daily snapshots never bloat the repo.
 
           Brave'de abone ol: `brave://adblock` → Add filter list via URL:

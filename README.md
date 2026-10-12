@@ -35,7 +35,7 @@ TC-SGB-API-to-List fetches IoC (Indicator of Compromise) data from the TC SGB pu
   - Firewall: nftables, ipset
   - IDS/IPS: Suricata, CrowdSec
   - Data: CSV, JSON, YAML, SQLite
-- **Scheduled Pipeline** — GitHub Actions cron for automated updates every day (06:00 UTC)
+- **Scheduled Pipeline** — GitHub Actions cron for automated updates every day (19:00 UTC)
 - **Bilingual Documentation** — Full English and Turkish documentation
 
 ## Quick Start
@@ -68,7 +68,7 @@ tc-sgb health
 
 ### Data Download
 
-Latest pre-generated IoC outputs are published automatically (daily, 06:00 UTC) to the rolling GitHub Release `ioc-data`. The five large-format files are distributed through stable download URLs (small formats remain tracked in the `Output/` directory):
+Latest pre-generated IoC outputs are published automatically (daily, 19:00 UTC) to the rolling GitHub Release `ioc-data`. The five large-format files are distributed through stable download URLs (small formats remain tracked in the `Output/` directory):
 
 | Format | File | Size (approx.) |
 |--------|------|----------------|
@@ -234,7 +234,7 @@ TC-SGB-API-to-List, TC SGB kamu API'sinden (`https://siberguvenlik.gov.tr/api/`)
   - Güvenlik Duvarı: nftables, ipset
   - IDS/IPS: Suricata, CrowdSec
   - Veri: CSV, JSON, YAML, SQLite
-- **Zamanlanmış Hat** — Her gün (06:00 UTC) otomatik güncellemeler için GitHub Actions cron zamanlayıcısı
+- **Zamanlanmış Hat** — Her gün (19:00 UTC) otomatik güncellemeler için GitHub Actions cron zamanlayıcısı
 - **Çift Dilli Dokümantasyon** — Tam İngilizce ve Türkçe dokümantasyon
 
 ## Hızlı Başlangıç
@@ -267,7 +267,7 @@ tc-sgb health
 
 ### Veri İndirme
 
-En güncel önceden üretilmiş IoC çıktıları (her gün, 06:00 UTC) yuvarlanan GitHub Release'i `ioc-data`'da otomatik olarak yayınlanır. Beş büyük biçim dosyası kararlı indirme bağlantıları üzerinden dağıtılır (küçük biçimler `Output/` dizininde izlenmeye devam eder):
+En güncel önceden üretilmiş IoC çıktıları (her gün, 19:00 UTC) yuvarlanan GitHub Release'i `ioc-data`'da otomatik olarak yayınlanır. Beş büyük biçim dosyası kararlı indirme bağlantıları üzerinden dağıtılır (küçük biçimler `Output/` dizininde izlenmeye devam eder):
 
 | Biçim | Dosya | Yaklaşık Boyut |
 |-------|-------|----------------|

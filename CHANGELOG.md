@@ -15,7 +15,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ### Changed
 
-- **Daily schedule** — the scheduled fetch pipeline now runs every day at 06:00 UTC (`cron: "0 6 * * *"`).
+- **Daily schedule** — the scheduled fetch pipeline now runs every day at 19:00 UTC (`cron: "0 19 * * *"`).
 
 - **GitLab CI re-enabled with badges** — after completing the account-level identity verification, project-level CI/CD is on again, so `.gitlab-ci.yml` pipelines run on GitLab shared runners; the GitLab-native pipeline and coverage badges were restored in the project and in the README
 - **Weekday schedule** — the scheduled fetch pipeline now runs weekdays at 06:00 UTC (`cron: "0 6 * * 1-5"`) instead of Friday 22:00 UTC; the repo diet removed the LFS/storage pressure that motivated the weekly cadence, so IoC feeds refresh ~5× more often
@@ -185,7 +185,7 @@ Biçim, [Keep a Changelog](https://keepachangelog.com/)'a dayanmaktadır.
 
 ### Değiştirilen
 
-- **Günlük zamanlama** — zamanlanmış çekim hattı artık her gün 06:00 UTC'de çalışır (`cron: "0 6 * * *"`).
+- **Günlük zamanlama** — zamanlanmış çekim hattı artık her gün 19:00 UTC'de çalışır (`cron: "0 19 * * *"`).
 
 - **GitLab CI rozetlerle yeniden etkin** — hesap düzeyindeki kimlik doğrulama tamamlandıktan sonra proje düzeyi CI/CD yeniden açıldı, böylece `.gitlab-ci.yml` hatları GitLab paylaşımlı koşucularında çalışır; GitLab yerel hat ve kapsama rozetleri projede ve README'de geri getirildi
 - **Hafta içi zamanlama** — zamanlanmış çekim hattı, Cuma 22:00 UTC yerine artık hafta içi 06:00 UTC'de çalışır (`cron: "0 6 * * 1-5"`); repo diyeti haftalık düzeni gerektiren LFS/depolama baskısını kaldırdığı için IoC akışları ~5 kat daha sık tazelenir
