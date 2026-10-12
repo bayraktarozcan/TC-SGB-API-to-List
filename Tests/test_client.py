@@ -236,8 +236,8 @@ async def test_fetch_addresses_pagination():
     async def mock_get(*args: Any, **kwargs: Any) -> httpx.Response:
         nonlocal call_count
         params = kwargs.get("params", {})
-        page = params.get("page", 0)
-        if page == 0:
+        page = params.get("page", 1)
+        if page == 1:
             return _make_json_response(200, page0)
         return _make_json_response(200, page1)
 
@@ -505,6 +505,81 @@ async def test_fetch_empty_page_breaks():
     with patch("httpx.AsyncClient.get", side_effect=mock_get):
         records = await client.fetch_addresses(per_page=100)
         assert records == []
+
+
+def _lying_page(page: int, record_id: int, total_count: int, page_count: int) -> dict[str, Any]:
+    return {
+        "totalCount": total_count,
+        "count": 1,
+        "page": page,
+        "pageCount": page_count,
+        "models": [
+            {
+                "id": record_id,
+                "url": f"evil-{record_id}.com",
+                "type": "domain",
+                "desc": "PH",
+                "source": "US",
+                "date": "2024-01-01",
+                "criticality_level": 3,
+                "connectiontype": "PH",
+            },
+        ],
+    }
+
+
+@pytest.mark.asyncio
+async def test_fetch_ignores_lying_page_count():
+    """The server may understate pageCount while clamping out-of-range pages
+    to the final partial page. Fetching must continue past the announced
+    pageCount until a page contributes no unseen record."""
+    tail = _lying_page(3, 3, total_count=2, page_count=2)
+    pages = {
+        1: _lying_page(1, 1, total_count=2, page_count=2),
+        2: _lying_page(2, 2, total_count=2, page_count=2),
+        3: tail,
+    }
+    call_count = 0
+
+    async def mock_get(*args: Any, **kwargs: Any) -> httpx.Response:
+        nonlocal call_count
+        call_count += 1
+        params = kwargs.get("params", {})
+        page = params.get("page", 1)
+        # Out-of-range pages repeat the final partial page (server clamps).
+        return _make_json_response(200, pages.get(page, tail))
+
+    client = AsyncAPIClient()
+    with patch("httpx.AsyncClient.get", side_effect=mock_get):
+        records = await client.fetch_addresses(per_page=1)
+        assert [r.id for r in records] == [1, 2, 3]
+        # Pages 1, 2, 3 carry new records; page 4 repeats page 3 and stops.
+        assert call_count == 4
+
+
+@pytest.mark.asyncio
+async def test_fetch_starts_at_page_one():
+    """The server aliases page 0 to page 1, so fetching must start at page 1
+    to avoid downloading the first chunk twice."""
+    requested: list[int] = []
+    first = _lying_page(1, 1, total_count=2, page_count=2)
+    second = _lying_page(2, 2, total_count=2, page_count=2)
+
+    async def mock_get(*args: Any, **kwargs: Any) -> httpx.Response:
+        params = kwargs.get("params", {})
+        page = params.get("page", 1)
+        requested.append(page)
+        if page == 0:
+            return _make_json_response(200, first)
+        if page == 1:
+            return _make_json_response(200, first)
+        return _make_json_response(200, second)
+
+    client = AsyncAPIClient()
+    with patch("httpx.AsyncClient.get", side_effect=mock_get):
+        records = await client.fetch_addresses(per_page=1, max_pages=2)
+        assert [r.id for r in records] == [1, 2]
+        assert requested[0] == 1
 
 
 @pytest.mark.asyncio

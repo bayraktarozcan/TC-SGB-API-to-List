@@ -185,6 +185,14 @@ class AsyncAPIClient:
     ) -> list[Any]:
         """Fetch all pages from a paginated endpoint.
 
+        The server's `pageCount`/`totalCount` metadata is not trusted: it has
+        been observed to understate the real page count while out-of-range
+        pages repeat the final partial page instead of coming back empty.
+        Fetching therefore continues until a page arrives empty or contributes
+        no unseen record. Pages are 1-indexed: requesting page 0 returns the
+        same chunk as page 1, so fetching starts at page 1 (verified live:
+        pages 1..N sum to exactly `totalCount`).
+
         Args:
             endpoint: API endpoint path (e.g., "/api/address/index")
             model_class: Pydantic model class for each record
@@ -195,7 +203,9 @@ class AsyncAPIClient:
             List of all records across all pages
         """
         all_records = []
-        page = 0
+        seen_keys: set[Any] = set()
+        page = 1
+        pages_fetched = 0
 
         while True:
             params = {
@@ -209,36 +219,47 @@ class AsyncAPIClient:
             # Real API returns: {totalCount, count, models, page, pageCount}
             models_list = data.get("models", [])
             total_count = data.get("totalCount", 0)
-            page_count = data.get("pageCount", 1)
 
-            # Convert to Pydantic models
+            # An empty page means there is nothing more to fetch.
+            if len(models_list) == 0:
+                break
+
+            # Convert to Pydantic models, skipping repeats: the server
+            # clamps out-of-range pages to the final partial page, so a
+            # page that contributes no unseen record marks the real end.
+            new_records = 0
             for item in models_list:
                 try:
                     record = model_class.model_validate(item)
-                    all_records.append(record)
                 except Exception as e:
                     logger.warning("Failed to parse record: %s", e)
                     continue
+                key = getattr(record, "id", None)
+                if key is None:
+                    key = record.model_dump_json()
+                if key in seen_keys:
+                    continue
+                seen_keys.add(key)
+                all_records.append(record)
+                new_records += 1
 
             logger.info(
-                "Page %d: fetched %d records (total so far: %d/%d)",
+                "Page %d: fetched %d records (%d new, total so far: %d/%d)",
                 page,
                 len(models_list),
+                new_records,
                 len(all_records),
                 total_count,
             )
 
-            # Check if we've fetched all pages
             page += 1
-            if page >= page_count:
+            pages_fetched += 1
+            if new_records == 0:
+                logger.info("Page %d repeated already-seen records; stopping", page - 1)
                 break
 
-            if max_pages > 0 and page >= max_pages:
+            if max_pages > 0 and pages_fetched >= max_pages:
                 logger.info("Reached max_pages limit (%s)", max_pages)
-                break
-
-            # If count is 0, we're done
-            if len(models_list) == 0:
                 break
 
         return all_records
