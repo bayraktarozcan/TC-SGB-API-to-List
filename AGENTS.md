@@ -1,5 +1,7 @@
 # AGENTS.md
 
+> AGENTS.md does not change without the person's approval, unless they state otherwise.
+
 Guidance for AI coding agents working in this repository.
 
 > Scope note: the universal rules below are inlined (not pointed to) from D:\Repos\AGENTS.md because this runtime injects only this file, per the person's explicit instruction.
@@ -20,11 +22,11 @@ normalizes, scores, and deduplicates them, then exports to 16 formats.
 Use the project virtualenv at `.venv`:
 
 ```powershell
-& .venv\Scripts\python.exe -m ruff check scripts/ tests/
-& .venv\Scripts\python.exe -m ruff format --check scripts/ tests/
-& .venv\Scripts\python.exe -m mypy scripts/
-& .venv\Scripts\python.exe -m bandit -r scripts/
-& .venv\Scripts\python.exe -m pytest --cov=scripts --cov-report=term-missing -q
+& .venv\Scripts\python.exe -m ruff check Scripts/ Tests/
+& .venv\Scripts\python.exe -m ruff format --check Scripts/ Tests/
+& .venv\Scripts\python.exe -m mypy Scripts/
+& .venv\Scripts\python.exe -m bandit -r Scripts/
+& .venv\Scripts\python.exe -m pytest --cov=Scripts --cov-report=term-missing -q
 ```
 
 Baseline at last check: 480+ tests passing, ~99% coverage, zero ruff/mypy/bandit
@@ -62,16 +64,17 @@ Single-purpose directories; generated artifacts never live beside sources.
 
 | Path | Purpose |
 |------|---------|
-| `scripts/` | CLI entry point (`main.py`) plus the pipeline package (`src/`) |
-| `scripts/src/` | Pipeline stages: models → client → validator → normalizer → quality → dedup → outputs |
-| `tests/` | Pytest suite: unit, regression, fuzz (`test_fuzz.py`), performance (`test_performance.py`, `slow`), repo guards (`test_repo_conventions.py`) |
-| `wiki/` | Tracked bilingual documentation; serves the Docs role under its historical name (deep-linked everywhere, see Bypasses) |
-| `docs/` | GitHub Pages landing page (`index.html`, vanilla, no external libraries) |
-| `schema/` | JSON Schema plus OpenAPI description of the source API |
-| `data/` | Runtime data cache (payloads are gitignored; reserved) |
-| `examples/` | Reserved for usage examples (currently a placeholder) |
-| `benchmark/` | Performance benchmarks (results are gitignored) |
-| `output/` | Generated IoC artifacts; only `manifest.json` plus `blocklists/` are tracked, the rest is release-only |
+| `Scripts/` | CLI entry point (`main.py`) plus the pipeline package (`src/`) |
+| `Scripts/src/` | Pipeline stages: models → client → validator → normalizer → quality → dedup → outputs |
+| `Tests/` | Pytest suite: unit, regression, fuzz (`test_fuzz.py`), performance (`test_performance.py`, `slow`), repo guards (`test_repo_conventions.py`) |
+| `Docs/` | Tracked bilingual documentation, including troubleshooting and `Planning/` work plans |
+| `Site/` | GitHub Pages landing page (`index.html`, vanilla, no external libraries) |
+| `Schema/` | JSON Schema plus OpenAPI description of the source API |
+| `Data/` | Runtime data cache (payloads are gitignored; reserved) |
+| `Examples/` | Reserved for usage examples (currently a placeholder) |
+| `Benchmark/` | Performance benchmarks (results are gitignored) |
+| `Output/` | Generated IoC artifacts; only `manifest.json` plus `Blocklists/` are tracked, the rest is release-only |
+| `Docs/Planning/` | Assistant work plans and task tracking |
 | `.github/` | Actions workflows, Dependabot config, issue/PR templates, custom actions |
 | `.gitlab-ci.yml` | GitLab pipeline mirroring the GitHub checks |
 | `filter-lists` branch | Rolling single-commit Brave/AdGuard mirror (lives off `main`) |
@@ -108,10 +111,8 @@ Exemptions (each with its reason):
 
 | Name | Reason |
 |------|--------|
-| Lowercase directories (`scripts/`, `tests/`, `wiki/`, `docs/`, `data/`, `output/`, `benchmark/`, `examples/`, `schema/`) | Python ecosystem idiom; renaming churns every path, tool config, and CI reference |
-| `wiki/` instead of `Docs/` | Historical name, deep-linked everywhere; serves the Docs role (see Bypasses) |
 | `.github/`, `.idea/`, `.venv/`, caches (`.hypothesis/`, `.pytest_cache/`, `.ruff_cache/`, `.mypy_cache/`) | Platform- or tool-owned/generated paths |
-| `docs/index.html` | Pages data contract (site root lookup) |
+| `Site/index.html` | Pages data contract (site root lookup) |
 | `filter-lists` branch | Rolling data mirror (single commit, force-pushed) |
 | `scheduled-fetch-*` branches | Automation working branches, deleted after merge |
 | `dependabot/*` branches | Tool-generated names |
@@ -159,8 +160,6 @@ Gates that do not hold by design, and what runs afterward instead:
 - No transitive lockfile: direct runtime/build deps are pinned exact, but a
   frozen file without regeneration automation would rot silently, so ranges
   plus Dependabot stand in until lock tooling is adopted.
-- `wiki/` serves the Docs role instead of a `Docs/` folder; renaming would
-  break deep links across README, docs, workflows, and history.
 
 ## Local mirror (AGENTS-TR.md)
 
@@ -730,4 +729,4 @@ Runtimes use the current LTS line (Node.js LTS, .NET LTS); build output goes thr
 - `.git/` is the **internal Git repository structure**, not a project config file.
 
 **Guiding rule:** "It looks special" does not mean "It is a standard special file." The meaning of any file is determined by the software that reads and interprets it.
-<!-- mirror-sync: sync-sha=b4c0929ed14771ed3269d7ceb68cf2f889f4db59 -->
+<!-- mirror-sync: sync-sha=fdbe6505d326b7a6c302ed12dde77fc1f7afc325 -->
