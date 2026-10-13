@@ -1,3 +1,4 @@
+<!-- guard-exempt: historical-record -->
 [English](#-english) | [Türkçe](#-türkçe)
 
 <a id="-english"></a>

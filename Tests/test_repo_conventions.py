@@ -21,6 +21,18 @@ def _read(name: str) -> str:
     return (REPO_ROOT / name).read_text(encoding="utf-8")
 
 
+EXEMPT_FILES: dict[str, str] = {
+    "CHANGELOG.md": "<!-- guard-exempt: historical-record -->",
+    "AGENTS.md": "<!-- guard-exempt: rule-quotation -->",
+}
+"""Files exempt from spelling/rename guards, each with its scoped marker.
+
+CHANGELOG.md is the historical record; AGENTS.md must quote the banned
+spelling to forbid it. _tracked_text_files skips exactly these files, and
+TestExemptMarkers proves each declared marker is still present.
+"""
+
+
 class TestVersionParity:
     """pyproject.toml is the version oracle; all stated versions must match it."""
 
@@ -104,7 +116,7 @@ def _tracked_text_files() -> dict[str, str]:
     out = subprocess.run([git, "ls-files", "-z"], cwd=REPO_ROOT, capture_output=True, check=True)
     files: dict[str, str] = {}
     for rel in out.stdout.decode("utf-8").split("\0"):
-        if not rel or rel in ("CHANGELOG.md", "AGENTS.md"):
+        if not rel or rel in EXEMPT_FILES:
             continue
         try:
             raw = (REPO_ROOT / rel).read_bytes()
@@ -123,9 +135,8 @@ class TestRenameGuards:
     """No live file references a retired spelling; new spellings are present.
 
     Old spellings are stored split so this file never names them contiguously
-    (else it would report itself). CHANGELOG.md is out of scope: it is the
-    historical record and describes the tree as it stood. AGENTS.md is out of
-    scope: it is frozen pending the owner's approval (see the pending list).
+    (else it would report itself). Exempt files are declared once in
+    EXEMPT_FILES with a scoped in-file marker (see TestExemptMarkers).
     """
 
     RENAMED: ClassVar[list[tuple[tuple[str, str], str]]] = [
@@ -143,7 +154,6 @@ class TestRenameGuards:
         (("_Sidebar", ".md"), "Sidebar.md"),
         (("_Footer", ".md"), "Footer.md"),
     ]
-    FROZEN = ("AGENTS.md", "CHANGELOG.md")
 
     @classmethod
     def _find(cls, mapping: list[tuple[tuple[str, str], str]], files: dict[str, str]) -> list[str]:
@@ -178,10 +188,8 @@ class TestIocSpelling:
     """IoC is the single standard spelling; the all-caps form appears nowhere live.
 
     Banned spellings are stored split so this file never names them
-    contiguously (else it would report itself). CHANGELOG.md is out of scope
-    via _tracked_text_files: it is the historical record. AGENTS.md is out of
-    scope the same way: the rule itself must quote the banned spelling to
-    forbid it.
+    contiguously (else it would report itself). Exempt files are declared
+    once in EXEMPT_FILES with a scoped in-file marker (see TestExemptMarkers).
     """
 
     BANNED: ClassVar[list[tuple[str, str]]] = [
@@ -219,3 +227,22 @@ class TestIocSpelling:
     def test_checker_flags_banned_spelling(self):
         assert self._find([(("b", "ad"))], {"x": "see bad word"}) == ["x: bad"]
         assert self._find([(("b", "ad"))], {"x": "see good word"}) == []
+
+
+class TestExemptMarkers:
+    """Every guard exemption is a scoped in-file marker, and each one is present.
+
+    A whole-file exclusion with no declaration would rot silently: the file
+    could stop being historical (or stop quoting the rule) while the exclusion
+    lives on. This test fails by name the moment a marker goes missing.
+    """
+
+    def test_markers_present(self):
+        assert EXEMPT_FILES, "no exemptions declared"
+        for rel, marker in EXEMPT_FILES.items():
+            path = REPO_ROOT / rel
+            assert path.is_file(), f"exempt file missing: {rel}"
+            assert marker in path.read_text(encoding="utf-8"), f"exempt marker missing: {rel}"
+
+    def test_exempt_files_skipped(self):
+        assert all(rel not in _tracked_text_files() for rel in EXEMPT_FILES)
