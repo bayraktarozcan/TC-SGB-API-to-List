@@ -207,6 +207,13 @@ session per the universal mirror rules below (refresh the mirror, re-run the
 mirror verifier, write the reported value into the `sync-sha` marker of both
 files; never edit one marker to match the other).
 
+Standing exception: this section names `AGENTS-TR.md`, although the universal
+hidden-layer protection says a private layer is never named or quoted. Reason:
+the mirror workflow (refresh plus verifier plus `sync-sha` markers) is only
+auditable when the mirror file is identified by name; the file itself stays
+gitignored, uncommitted, and unstaged. Recorded here once so the deviation is
+explicit instead of silent.
+
 ---
 
 # Agent Guide
@@ -820,4 +827,4 @@ Runtimes use the current LTS line (Node.js LTS, .NET LTS); build output goes thr
 - `.git/` is the **internal Git repository structure**, not a project config file.
 
 **Guiding rule:** "It looks special" does not mean "It is a standard special file." The meaning of any file is determined by the software that reads and interprets it.
-<!-- mirror-sync: sync-sha=1d47b06f5dca1ace876f51337fd8c1cc7dc7ac28 -->
+<!-- mirror-sync: sync-sha=191fe06d80340a53c65642867e4473d160754cf4 -->
