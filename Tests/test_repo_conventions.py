@@ -275,3 +275,37 @@ class TestLineLength:
     def test_checker_flags_long_line(self):
         assert self._find({"x.py": "ok\n" + "y" * 101 + "\n"}) == ["x.py:2"]
         assert self._find({"x.py": "ok\n"}) == []
+
+
+class TestCaseCollision:
+    """No two tracked paths may collide case-insensitively.
+
+    `Output/Blocklists/` and `Output/blocklists/` coexisted once: on a
+    case-insensitive checkout they share one directory, so one tree always
+    reports phantom modifications and local rebase/merge stops working.
+    """
+
+    @classmethod
+    def _find(cls, paths: list[str]) -> list[str]:
+        seen: dict[str, str] = {}
+        bad: list[str] = []
+        for rel in sorted(paths):
+            key = rel.casefold()
+            if key in seen:
+                bad.append(f"{seen[key]} collides with {rel}")
+            else:
+                seen[key] = rel
+        return bad
+
+    def test_no_case_collisions(self):
+        git = shutil.which("git")
+        assert git is not None, "git is required for repo-convention guards"
+        out = subprocess.run(
+            [git, "ls-files", "-z"], cwd=REPO_ROOT, capture_output=True, check=True
+        )
+        paths = [rel for rel in out.stdout.decode("utf-8").split("\0") if rel]
+        assert self._find(paths) == []
+
+    def test_checker_flags_collision(self):
+        assert self._find(["Output/Blocklists/a.json", "Output/blocklists/a.json"]) != []
+        assert self._find(["a/b.py"]) == []
