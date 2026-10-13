@@ -446,6 +446,7 @@ def generate_suricata(
     """Generate Suricata EVE-format JSON lines for IoCs."""
     fallback_ts = _resolve_timestamp(iocs, generated_at)
     lines: list[str] = []
+    ip_placeholder = "0.0.0.0"  # nosec B104 — EVE placeholder, not a bind address
     for ioc in iocs:
         entry: dict[str, Any] = {
             "timestamp": (ioc.date or fallback_ts).strftime("%Y-%m-%dT%H:%M:%S+00:00"),
@@ -453,7 +454,7 @@ def generate_suricata(
             "event_type": "alert",
             "src_ip": "0.0.0.0",  # nosec B104 — placeholder IP for Suricata EVE JSON output
             "src_port": 0,
-            "dest_ip": ioc.value if ioc.ioc_type in (IoCType.IP, IoCType.IP6) else "0.0.0.0",  # nosec B104
+            "dest_ip": ioc.value if ioc.ioc_type in (IoCType.IP, IoCType.IP6) else ip_placeholder,
             "dest_port": 0,
             "proto": "ip",
             "alert": {

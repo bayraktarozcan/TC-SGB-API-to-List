@@ -246,3 +246,32 @@ class TestExemptMarkers:
 
     def test_exempt_files_skipped(self):
         assert all(rel not in _tracked_text_files() for rel in EXEMPT_FILES)
+
+
+class TestLineLength:
+    """Every tracked Python file stays within 100 columns.
+
+    Ruff's E501 forgives pragma-trailing lines, so this guard holds the
+    project convention where the formatter cannot.
+    """
+
+    LIMIT = 100
+
+    @classmethod
+    def _find(cls, files: dict[str, str]) -> list[str]:
+        bad: list[str] = []
+        for rel, text in sorted(files.items()):
+            if not rel.endswith(".py"):
+                continue
+            for lineno, line in enumerate(text.splitlines(), 1):
+                if len(line) > cls.LIMIT:
+                    bad.append(f"{rel}:{lineno}")
+                    break
+        return bad
+
+    def test_no_long_lines(self):
+        assert self._find(_tracked_text_files()) == []
+
+    def test_checker_flags_long_line(self):
+        assert self._find({"x.py": "ok\n" + "y" * 101 + "\n"}) == ["x.py:2"]
+        assert self._find({"x.py": "ok\n"}) == []
