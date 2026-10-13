@@ -1,0 +1,71 @@
+# TC-SGB-API-to-List — Wiki Sync
+# Mirrors Docs/*.md into the GitHub wiki repo. Docs/ owns, the wiki follows
+# (derived documentation output, never maintained by hand). Docs/Planning/
+# holds internal work plans and is never published. Additive only: wiki pages
+# without a Docs owner are reported, never deleted.
+# Token choice: GITHUB_TOKEN cannot push to wikis, so the purpose-scoped
+# WIKI_SYNC_TOKEN PAT is used (AUTO_MERGE_TOKEN is for PR ops,
+# GITLAB_PUSH_TOKEN is for GitLab).
+
+name: "Wiki Sync"
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "Docs/**"
+  workflow_dispatch:
+
+concurrency:
+  group: wiki-sync
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  sync:
+    name: Sync Docs to Wiki
+    runs-on: ubuntu-latest
+    env:
+      WIKI_SYNC_TOKEN: ${{ secrets.WIKI_SYNC_TOKEN }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 1
+
+      - name: Mirror Docs to wiki repo
+        run: |
+          set -euo pipefail
+          WORK="$(mktemp -d)"
+          git clone --quiet "https://x-access-token:${WIKI_SYNC_TOKEN}@github.com/${{ github.repository }}.wiki.git" "${WORK}"
+          git -C "${WORK}" config user.name "github-actions[bot]"
+          git -C "${WORK}" config user.email "github-actions[bot]@users.noreply.github.com"
+          cp Docs/Home.md "${WORK}/Home.md"
+          cp Docs/Sidebar.md "${WORK}/_Sidebar.md"
+          cp Docs/Footer.md "${WORK}/_Footer.md"
+          for SRC in Docs/*.md; do
+            base="$(basename "${SRC}" .md)"
+            case "${base}" in
+              Home|Sidebar|Footer) continue ;;
+            esac
+            cp "${SRC}" "${WORK}/${base}.md"
+          done
+          # Report wiki pages with no Docs owner; never delete them here.
+          for WIKI_PAGE in "${WORK}"/*.md; do
+            name="$(basename "${WIKI_PAGE}" .md)"
+            case "${name}" in
+              Home|_Sidebar|_Footer) continue ;;
+            esac
+            if [ ! -f "Docs/${name}.md" ]; then
+              echo "::warning::wiki page without Docs owner kept as-is: ${name}.md"
+            fi
+          done
+          git -C "${WORK}" add -A
+          if git -C "${WORK}" diff --cached --quiet; then
+            echo "Wiki already current; nothing to push."
+            exit 0
+          fi
+          git -C "${WORK}" commit -q -m "chore: sync wiki from Docs/ (${GITHUB_SHA})"
+          git -C "${WORK}" push origin HEAD:master
+          echo "Wiki synced from Docs/."
