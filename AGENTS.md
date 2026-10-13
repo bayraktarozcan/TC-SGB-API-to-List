@@ -172,8 +172,11 @@ Exemptions (each with its reason):
 ## Releases
 
 - Rolling `ioc-data` release (daily 19:00 UTC, `schedule.yml`) plus version
-  tags `v*`; hosts are GitHub and GitLab (`mirror-gitlab.yml` plus the
-  `refresh-gitlab-release` action keep tag, title, notes, and assets in parity).
+  tags `v*`; hosts are GitHub and GitLab. Git pushes sync every ref (tags
+  included) to both hosts; release *objects* sync only for the rolling
+  `ioc-data` release (`mirror-gitlab.yml` plus the `refresh-gitlab-release`
+  action rewrite its tag, title, notes, and assets); version releases are
+  published on GitHub only.
 - `filter-lists` branch refreshes on every fetch; release notes are bilingual.
 
 ## Bypasses
@@ -817,4 +820,4 @@ Runtimes use the current LTS line (Node.js LTS, .NET LTS); build output goes thr
 - `.git/` is the **internal Git repository structure**, not a project config file.
 
 **Guiding rule:** "It looks special" does not mean "It is a standard special file." The meaning of any file is determined by the software that reads and interprets it.
-<!-- mirror-sync: sync-sha=1222620cb4c74b9b133917dfd4dc3cc7ae30b96e -->
+<!-- mirror-sync: sync-sha=1d47b06f5dca1ace876f51337fd8c1cc7dc7ac28 -->
