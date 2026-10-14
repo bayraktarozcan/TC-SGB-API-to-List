@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import ipaddress
 import re
+from contextlib import suppress
 from datetime import datetime
 from urllib.parse import urlparse
 
@@ -196,24 +197,18 @@ def validate_ioc(record: AddressRecord) -> ValidatedIoC | None:
     # Map string fields to enums
     desc_cat: DescriptionCategory | None = None
     if record.desc:
-        try:
+        with suppress(ValueError):
             desc_cat = DescriptionCategory(record.desc)
-        except ValueError:
-            pass
 
     source_enum: Source | None = None
     if record.source:
-        try:
+        with suppress(ValueError):
             source_enum = Source(record.source)
-        except ValueError:
-            pass
 
     conn_type: ConnectionType | None = None
     if record.connectiontype:
-        try:
+        with suppress(ValueError):
             conn_type = ConnectionType(record.connectiontype)
-        except ValueError:
-            pass
 
     if ioc_type in (IoCType.DOMAIN, IoCType.URL):
         # Extract hostname for domain checks
@@ -245,12 +240,10 @@ def validate_ioc(record: AddressRecord) -> ValidatedIoC | None:
     # Parse date string to datetime
     parsed_date = None
     if record.date:
-        try:
+        with suppress(ValueError, AttributeError):
             # Handle ISO format dates like "2024-01-15T10:30:00"
             date_str = record.date.replace("Z", "+00:00")
             parsed_date = datetime.fromisoformat(date_str)
-        except (ValueError, AttributeError):
-            pass
 
     if errors:
         return ValidatedIoC(
