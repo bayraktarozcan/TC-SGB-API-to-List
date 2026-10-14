@@ -65,6 +65,9 @@ jobs:
         env:
           TC_SGB_API_BASE_URL: ${{ vars.TC_SGB_API_BASE_URL || 'https://siberguvenlik.gov.tr' }}
 
+      - name: Gate external lists on the safety policy
+        run: python Scripts/main.py validate-external
+
       - name: Validate outputs
         run: python Scripts/main.py validate
 
@@ -156,9 +159,27 @@ jobs:
           }
           cp "${SRC}" "${WORK}/01-turkiye-sgb_adguard.txt"
           shopt -s nullglob
-          for EXT in Output/External/*_adguard.txt; do
-            if check_size "${EXT}" >/dev/null; then
-              cp "${EXT}" "${WORK}/"
+          # Only files passing the safety gate are published; a failing feed
+          # keeps serving its last good snapshot instead of shipping bad rules.
+          for KEY in blacklist-az cert-pl cert-si; do
+            if python Scripts/main.py validate-external --feed "${KEY}" >/dev/null; then
+              copied=0
+              for EXT in Output/External/*_adguard.txt; do
+                base="$(basename "${EXT}")"
+                case "${KEY}:${base}" in
+                  blacklist-az:03-*|cert-pl:02-*|cert-si:05-*)
+                    if check_size "${EXT}" >/dev/null; then
+                      cp "${EXT}" "${WORK}/"
+                      copied=1
+                    fi
+                    ;;
+                esac
+              done
+              if [ "${copied}" -eq 0 ]; then
+                echo "::warning::filter-lists: ${KEY} passed the gate but no file matched; mapping stale."
+              fi
+            else
+              echo "::warning::filter-lists: ${KEY} failed the safety gate; keeping previous snapshot."
             fi
           done
           shopt -u nullglob
