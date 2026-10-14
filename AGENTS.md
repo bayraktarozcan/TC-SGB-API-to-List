@@ -307,6 +307,7 @@ Brevity governs replies; thoroughness governs work. The two never trade places.
 - Verify before asserting. Paths, commands, flags, APIs, versions, and URLs are read, run, or looked up, never recalled and presented as fact. "Unknown" and "not verified" are valid answers; invention is not.
 - Never fabricate URLs; only cite real sources.
 - Earlier conclusions are corrected openly when new evidence contradicts them. An answer that has been given is not reopened without a reason, and a reason is any new data.
+- Report verdict first, then evidence. Each fact is tagged by origin (measured locally, read from a named source, inferred), and any assumption that proved wrong is listed. A "do nothing" verdict is a recommendation for the person to decide, not an outcome.
 
 ---
 
@@ -460,6 +461,10 @@ State the runtime owns (generated ignore files, installed plugins) is ignored by
 - **Exceptions need the person's approval.** When best practice calls for project scope (library dependencies that belong in a virtual environment or a `node_modules` tree, version conflicts between projects, reproducibility or isolation needs), the agent asks before installing that way, naming the dependency, the reason, and the scope. Nothing is installed project-scope while the question is open. An approval is per project and per category; once given, it is recorded under "Dependencies" in the project layer, with its reason, so it is not asked again.
 - **Every global install is reported, not approved.** The report names the package, exact version, scope, source, and the command that removes it, so the host change stays reversible.
 - **Installation hygiene.** Official source only, exact version, checksum or signature verified where one exists, and never a remote script piped into a shell (see "Security & privacy").
+- **Probe before changing.** Learn what an install would do with a read-only probe first (`pip install --dry-run`, `-WhatIf`, `--simulate`), and record the installed set (a freeze or package list) before upgrading a global environment, so the change stays reversible.
+- **Name the interpreter.** With more than one runtime present, never call a bare tool or the bare interpreter. Call the tool through the runtime that owns it and name the version (`py -3.12 -m pip`, `python3.12 -m pip`); a bare `pip` installs into whichever runtime answers first.
+- **A missing prebuilt binary is a signal, not a task.** If a dependency has no prebuilt package for a runtime and would need a compiler, a build toolchain, or elevation, do not install a toolchain to force it. Separate the causes first (a declared version constraint, a missing prebuilt binary, a missing source dependency), then choose a runtime or version that has prebuilt packages, or stop and ask; a build toolchain is a machine-wide installation ("Ask first").
+- **Stay inside the support window.** Choose runtime and dependency versions that still receive fixes in a form the host can use (installers or prebuilt packages), reading the publisher's current schedule at the time, never from memory. A version that has left that window is a retained exception: the project layer records its reason, an exposure assessment, an exit trigger, and a review cadence; the person decides whether to accept the exposure, the agent never accepts it on their behalf; new work goes to a supported version.
 - **Elevation.** Governed by "Elevation".
 - **Approved project-scope installs are generated output.** They sit in the project tree under an unanchored ignore pattern such as `node_modules/`, carry no layer marker, are not hidden layers, and are recreated from the manifest. Committed documentation names the manifest and the setup command, not the installed directory (functional code paths excepted, per the untracked-file reference ban).
 - **The shell is not a project dependency.** The shell rule under "Environment" stands: never install one on your own.
@@ -700,7 +705,7 @@ The project layer is where project facts live. It declares at least the items be
 ## Commands          - setup, build, test, lint, the single local gate command
 ## Naming            - per-directory convention table, named exemptions with reasons
 ## Transport         - per-remote transport and credential source, any pinned override with its reason
-## Dependencies      - host dependency manifest, versions and sources, the single setup command, approved project-scope exceptions with reasons
+## Dependencies      - host dependency manifest, versions and sources, the single setup command, approved project-scope exceptions with reasons, retained exceptions (reason, exposure assessment, exit trigger, review cadence)
 ## Hidden layers     - scratch directory name (named here once), cadence for clearing it
 ## Toolchain         - overrides of the defaults in the appendix, compatibility floor
 ## Releases          - procedure, hosts, parity checks
@@ -839,4 +844,4 @@ Runtimes use the current LTS line (Node.js LTS, .NET LTS); build output goes thr
 - `.git/` is the **internal Git repository structure**, not a project config file.
 
 **Guiding rule:** "It looks special" does not mean "It is a standard special file." The meaning of any file is determined by the software that reads and interprets it.
-<!-- mirror-sync: sync-sha=7f1a78afd418cb03ed90cf796f10ad62a527809e -->
+<!-- mirror-sync: sync-sha=3b4a426572b4f2a42a64af6ec779a6b1279cd59e -->
