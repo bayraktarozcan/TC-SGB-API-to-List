@@ -9,6 +9,7 @@ Usage:
     python Scripts/main.py validate [--input FILE] [--max-records N]
     python Scripts/main.py health
     python Scripts/main.py fetch-external [--output DIR]
+    python Scripts/main.py validate-external [--output DIR] [--feed KEY]
 """
 
 from __future__ import annotations
@@ -35,7 +36,7 @@ if str(_SCRIPTS_DIR.parent) not in sys.path:
 
 from Scripts.src.changelog import generate_changelog
 from Scripts.src.client import AsyncAPIClient
-from Scripts.src.external_feeds import EXTERNAL_FEEDS, fetch_all_feeds
+from Scripts.src.external_feeds import EXTERNAL_FEEDS, audit_external_lists, fetch_all_feeds
 from Scripts.src.models import AddressRecord
 from Scripts.src.outputs import generate_all, write_catalog
 from Scripts.src.pipeline import Pipeline
@@ -383,11 +384,37 @@ async def cmd_fetch_external(args: argparse.Namespace) -> None:
         status = outcome.get("status", "failed")
         if status in ("written", "skipped"):
             produced += 1
-            print(f"  [{status.upper():7s}] {feed.key:13s} {outcome.get('rules', 0)} rules")
+            print(
+                f"  [{status.upper():7s}] {feed.key:13s} {outcome.get('rules', 0)} rules, "
+                f"{outcome.get('rejected', 0)} held, {outcome.get('review', 0)} for review"
+            )
         else:
             print(f"  [{status.upper():7s}] {feed.key:13s} {outcome.get('error', 'unknown error')}")
     if produced == 0:
         print("Error: no external feed produced content", file=sys.stderr)
+        sys.exit(1)
+
+
+async def cmd_validate_external(args: argparse.Namespace) -> None:
+    """Verify published external lists against the safety policy without fetching."""
+    output_dir = _resolve_output_dir(args) / "External"
+    feed_key = getattr(args, "feed", None)
+    verdicts = audit_external_lists(output_dir, feed_key)
+    if feed_key is not None and feed_key not in {feed.key for feed in EXTERNAL_FEEDS}:
+        print(f"Error: unknown feed: {feed_key}", file=sys.stderr)
+        sys.exit(1)
+
+    print("\nExternal publish gate:")
+    failed = 0
+    for key, verdict in verdicts.items():
+        if verdict.get("ok"):
+            print(f"  [PASS] {key:13s} {verdict.get('rules', 0)} rules")
+        else:
+            failed += 1
+            detail = verdict.get("error") or ", ".join(verdict.get("violations", []))
+            print(f"  [FAIL] {key:13s} {detail}")
+    if failed:
+        print("Error: external publish gate failed", file=sys.stderr)
         sys.exit(1)
 
 
@@ -528,6 +555,23 @@ def build_parser() -> argparse.ArgumentParser:
         help="Output directory (default: $TC_SGB_OUTPUT_DIR or 'Output').",
     )
 
+    # validate-external
+    p_vext = subparsers.add_parser(
+        "validate-external",
+        help="Verify published external lists against the safety policy.",
+    )
+    p_vext.add_argument(
+        "--output",
+        "-o",
+        default=None,
+        help="Output directory (default: $TC_SGB_OUTPUT_DIR or 'Output').",
+    )
+    p_vext.add_argument(
+        "--feed",
+        default=None,
+        help="Only validate one feed key (default: all).",
+    )
+
     return parser
 
 
@@ -554,6 +598,7 @@ def main() -> None:
         "validate": cmd_validate,
         "health": cmd_health,
         "fetch-external": cmd_fetch_external,
+        "validate-external": cmd_validate_external,
     }
 
     coro = cmd_map[args.command](args)

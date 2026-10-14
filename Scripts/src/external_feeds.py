@@ -13,7 +13,9 @@ from __future__ import annotations
 import asyncio
 import csv
 import io
+import json
 import logging
+import re
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
@@ -22,6 +24,7 @@ from typing import Any
 import httpx
 
 from .outputs import _bare_ip, _normalize_rule_host
+from .safety import Decision, SafetyRecord, decide_host
 
 logger = logging.getLogger(__name__)
 
@@ -189,10 +192,37 @@ PARSERS = {
 }
 
 
+def extract_source_timestamp(text: str) -> str | None:
+    """Return the feed's own update stamp when it declares one."""
+    match = re.search(r"(?im)^[#;]?\s*latest update at:\s*(.+?)\s*$", text)
+    if match:
+        return match.group(1)
+    return None
+
+
+def apply_policy(
+    hosts: list[str], *, source: str
+) -> tuple[list[str], list[SafetyRecord], list[SafetyRecord]]:
+    """Split parsed hosts into accepted, rejected, and review records."""
+    accepted: list[str] = []
+    rejected: list[SafetyRecord] = []
+    review: list[SafetyRecord] = []
+    for host in hosts:
+        record = decide_host(host, source=source)
+        if record.decision == Decision.ACCEPT:
+            accepted.append(host)
+        elif record.decision == Decision.REJECT:
+            rejected.append(record)
+        else:
+            review.append(record)
+    return accepted, rejected, review
+
+
 def generate_external_adguard(
     feed: ExternalFeed,
     hosts: list[str],
     generated_at: datetime | None = None,
+    source_updated: str | None = None,
 ) -> str:
     """Render one external feed as an AdGuard ``||domain^`` list."""
     ts = (generated_at or datetime.now(UTC)).isoformat()
@@ -203,6 +233,8 @@ def generate_external_adguard(
         f"! Homepage: {feed.homepage}\n"
         f"! Source: {feed.url}\n"
     )
+    if source_updated:
+        header += f"! Source updated: {source_updated}\n"
     lines = [f"||{host}^" for host in hosts]
     return header + "\n".join(lines) + ("\n" if lines else "")
 
@@ -218,6 +250,44 @@ def _read_existing_hosts(path: Path) -> list[str] | None:
     return hosts
 
 
+def _write_audit(
+    out_dir: Path,
+    feed: ExternalFeed,
+    accepted: list[str],
+    rejected: list[SafetyRecord],
+    review: list[SafetyRecord],
+    generated_at: datetime | None,
+    source_updated: str | None,
+) -> str:
+    """Write the per-feed audit file; returns its path."""
+    audit = {
+        "feed": feed.key,
+        "generated_at": (generated_at or datetime.now(UTC)).isoformat(),
+        "source_updated": source_updated,
+        "accepted": len(accepted),
+        "rejected": len(rejected),
+        "review": len(review),
+        "decisions": [
+            {
+                "indicator": record.indicator,
+                "decision": record.decision.value,
+                "reason": record.reason,
+            }
+            for record in (*rejected, *review)
+        ],
+    }
+    path = out_dir / f"{feed.key}_audit.json"
+    path.write_text(json.dumps(audit, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    return str(path)
+
+
+def _write_snapshot(out_dir: Path, feed: ExternalFeed, text: str) -> str:
+    """Keep the raw fetched source for reproducibility."""
+    path = out_dir / f"{feed.key}_source.txt"
+    path.write_text(text, encoding="utf-8")
+    return str(path)
+
+
 async def fetch_all_feeds(
     feeds: tuple[ExternalFeed, ...] = EXTERNAL_FEEDS,
     output_dir: str | Path = "Output/External",
@@ -225,9 +295,11 @@ async def fetch_all_feeds(
 ) -> dict[str, dict[str, Any]]:
     """Fetch every feed independently; one failure never blocks the others.
 
-    Files are written only when their bytes change. Returns a per-feed
-    status mapping with ``status`` (written/skipped/failed/empty),
-    ``rules``, and ``path``/``error`` details.
+    Parsed hosts pass the publication safety policy before rendering; held
+    records land in a per-feed audit file instead of the blocklist. Files
+    are written only when their rules change. Returns a per-feed status
+    mapping with ``status`` (written/skipped/failed/empty), ``rules``,
+    ``rejected``/``review`` counts, and ``path``/``error`` details.
     """
     out_dir = Path(output_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -245,11 +317,69 @@ async def fetch_all_feeds(
             logger.warning("Feed %s parsed to zero hosts; keeping previous file", feed.key)
             results[feed.key] = {"status": "empty", "rules": 0}
             continue
-        content = generate_external_adguard(feed, hosts, generated_at)
+        accepted, rejected, review = apply_policy(hosts, source=feed.key)
+        if rejected:
+            logger.warning("Feed %s held %d indicators by safety policy", feed.key, len(rejected))
+        if review:
+            logger.warning("Feed %s held %d indicators for review", feed.key, len(review))
+        source_updated = extract_source_timestamp(text)
+        content = generate_external_adguard(feed, accepted, generated_at, source_updated)
         path = out_dir / feed.output_file
-        if _read_existing_hosts(path) == hosts:
-            results[feed.key] = {"status": "skipped", "rules": len(hosts), "path": str(path)}
+        audit_path = _write_audit(
+            out_dir, feed, accepted, rejected, review, generated_at, source_updated
+        )
+        snapshot_path = _write_snapshot(out_dir, feed, text)
+        outcome: dict[str, Any] = {
+            "rules": len(accepted),
+            "rejected": len(rejected),
+            "review": len(review),
+            "audit_path": audit_path,
+            "snapshot_path": snapshot_path,
+            "path": str(path),
+        }
+        if _read_existing_hosts(path) == accepted:
+            results[feed.key] = {"status": "skipped", **outcome}
             continue
         path.write_text(content, encoding="utf-8")
-        results[feed.key] = {"status": "written", "rules": len(hosts), "path": str(path)}
+        results[feed.key] = {"status": "written", **outcome}
     return results
+
+
+def audit_external_lists(
+    output_dir: str | Path = "Output/External",
+    feed_key: str | None = None,
+    feeds: tuple[ExternalFeed, ...] | None = None,
+) -> dict[str, dict[str, Any]]:
+    """Verify published lists against the safety policy without fetching.
+
+    Returns per-feed verdicts with ``ok``, ``rules``, ``violations``, and
+    ``path``. Used by the ``validate-external`` command locally and in CI.
+    """
+    out_dir = Path(output_dir)
+    known = EXTERNAL_FEEDS if feeds is None else feeds
+    selected = [feed for feed in known if feed_key is None or feed.key == feed_key]
+    verdicts: dict[str, dict[str, Any]] = {}
+    if feed_key is not None and not selected:
+        return {feed_key: {"ok": False, "rules": 0, "violations": [], "error": "unknown feed"}}
+    for feed in selected:
+        path = out_dir / feed.output_file
+        hosts = _read_existing_hosts(path)
+        if hosts is None:
+            verdicts[feed.key] = {
+                "ok": False,
+                "rules": 0,
+                "violations": [],
+                "path": str(path),
+                "error": "file missing",
+            }
+            continue
+        violations = [
+            host for host in hosts if decide_host(host, source=feed.key).decision != Decision.ACCEPT
+        ]
+        verdicts[feed.key] = {
+            "ok": not violations,
+            "rules": len(hosts),
+            "violations": violations,
+            "path": str(path),
+        }
+    return verdicts

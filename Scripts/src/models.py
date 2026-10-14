@@ -208,6 +208,7 @@ class PipelineStats(BaseModel):
     by_criticality: dict[int, int] = Field(default_factory=dict)
     validation_rejected: int = 0
     quality_rejected: int = 0
+    safety_rejected: int = 0
     duplicates_removed: int = 0
     fetch_duration_seconds: float = 0.0
     pipeline_duration_seconds: float = 0.0
@@ -220,6 +221,7 @@ class PipelineStats(BaseModel):
             f"  After validation: {self.after_validation} ({self.validation_rejected} rejected)",
             f"  After normaliz.:  {self.after_normalization}",
             f"  After quality:    {self.after_quality} ({self.quality_rejected} rejected)",
+            f"  Safety-held:      {self.safety_rejected}",
             f"  After dedup:      {self.after_dedup} ({self.duplicates_removed} removed)",
             f"  By type:          {self.by_type}",
             f"  By source:        {self.by_source}",

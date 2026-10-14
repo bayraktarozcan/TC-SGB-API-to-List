@@ -22,6 +22,7 @@ from Scripts.main import (
     cmd_index,
     cmd_stats,
     cmd_validate,
+    cmd_validate_external,
     main,
 )
 from Scripts.src.models import (
@@ -536,6 +537,64 @@ class TestCmdFetchExternal:
                 "Scripts.main.fetch_all_feeds",
                 new_callable=AsyncMock,
                 return_value={"blacklist-az": {"status": "written", "rules": 1}},
+            ),
+        ):
+            main()
+
+        assert "Completed in" in capsys.readouterr().out
+
+
+# ---------------------------------------------------------------------------
+# cmd_validate_external
+# ---------------------------------------------------------------------------
+
+
+class TestCmdValidateExternal:
+    async def test_validate_external_pass(self, capsys):
+        verdicts = {"blacklist-az": {"ok": True, "rules": 10, "violations": []}}
+        with patch("Scripts.main.audit_external_lists", return_value=verdicts) as mock_audit:
+            await cmd_validate_external(_make_args(output=None))
+
+        out = capsys.readouterr().out
+        assert "blacklist-az" in out
+        assert "PASS" in out
+        assert mock_audit.call_args[0][0].name == "External"
+
+    async def test_validate_external_fail_exits(self, capsys):
+        verdicts = {
+            "blacklist-az": {
+                "ok": False,
+                "rules": 2,
+                "violations": ["google.com"],
+                "path": "x",
+            }
+        }
+        with (
+            patch("Scripts.main.audit_external_lists", return_value=verdicts),
+            pytest.raises(SystemExit) as exc,
+        ):
+            await cmd_validate_external(_make_args(output=None))
+        assert exc.value.code == 1
+        assert "google.com" in capsys.readouterr().out
+
+    async def test_validate_external_unknown_feed_exits(self):
+        with (
+            patch("Scripts.main.audit_external_lists", return_value={}),
+            pytest.raises(SystemExit) as exc,
+        ):
+            await cmd_validate_external(_make_args(output=None, feed="nope"))
+        assert exc.value.code == 1
+
+    def test_validate_external_command_dispatch(self, temp_dir: Path, capsys):
+        with (
+            patch.object(
+                sys,
+                "argv",
+                ["tc-sgb", "validate-external", "--output", str(temp_dir / "ext")],
+            ),
+            patch(
+                "Scripts.main.audit_external_lists",
+                return_value={"blacklist-az": {"ok": True, "rules": 1, "violations": []}},
             ),
         ):
             main()

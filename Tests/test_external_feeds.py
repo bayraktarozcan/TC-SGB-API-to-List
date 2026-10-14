@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 from datetime import UTC, datetime
 from pathlib import Path
 from unittest.mock import AsyncMock, patch
@@ -13,6 +14,9 @@ from Scripts.src.external_feeds import (
     EXTERNAL_FEEDS,
     ExternalFeed,
     ExternalFeedError,
+    apply_policy,
+    audit_external_lists,
+    extract_source_timestamp,
     fetch_all_feeds,
     fetch_feed_text,
     generate_external_adguard,
@@ -129,3 +133,106 @@ async def test_fetch_feed_text_retries_then_raises() -> None:
         with pytest.raises(ExternalFeedError):
             await fetch_feed_text(feed)
         assert mock_get.await_count == 3
+
+
+def test_extract_source_timestamp():
+    text = "# hosts file\n# Latest update at: 2026-09-29 02:10:00\n\nevil.com\n"
+    assert extract_source_timestamp(text) == "2026-09-29 02:10:00"
+    assert extract_source_timestamp("evil.com\nbad.net\n") is None
+
+
+def test_generate_external_adguard_with_source_updated():
+    content = generate_external_adguard(FEED, ["evil.com"], FIXED_AT, "2026-09-29 02:10:00")
+    assert "! Source updated: 2026-09-29 02:10:00\n" in content
+    assert "! Last updated: 2026-10-12T00:00:00+00:00\n" in content
+
+
+def test_apply_policy_splits_verdicts():
+    accepted, rejected, review = apply_policy(
+        ["evil.com", "google.com", "docs.google.com"], source="test"
+    )
+    assert accepted == ["evil.com"]
+    assert [r.indicator for r in rejected] == ["google.com"]
+    assert [r.indicator for r in review] == ["docs.google.com"]
+    assert all(r.source == "test" for r in (*rejected, *review))
+
+
+@pytest.mark.asyncio
+async def test_fetch_all_feeds_applies_policy_and_writes_audit(tmp_path: Path):
+    async def fake_fetch(feed: ExternalFeed) -> str:
+        return (
+            "# Latest update at: 2026-09-29 02:10:00\n"
+            "evil.com\n"
+            "google.com\n"
+            "www.google.com\n"
+            "docs.google.com\n"
+        )
+
+    with patch("Scripts.src.external_feeds.fetch_feed_text", side_effect=fake_fetch):
+        results = await fetch_all_feeds((FEED,), output_dir=tmp_path, generated_at=FIXED_AT)
+
+    outcome = results["test"]
+    assert outcome["status"] == "written"
+    assert outcome["rules"] == 1
+    assert outcome["rejected"] == 2
+    assert outcome["review"] == 1
+    content = (tmp_path / FEED.output_file).read_text(encoding="utf-8")
+    assert "||evil.com^\n" in content
+    assert "||google.com^" not in content
+    assert "! Source updated: 2026-09-29 02:10:00\n" in content
+
+    audit = json.loads((tmp_path / "test_audit.json").read_text(encoding="utf-8"))
+    assert audit["feed"] == "test"
+    assert (audit["accepted"], audit["rejected"], audit["review"]) == (1, 2, 1)
+    assert {d["indicator"] for d in audit["decisions"]} == {
+        "google.com",
+        "www.google.com",
+        "docs.google.com",
+    }
+    assert (tmp_path / "test_source.txt").read_text(encoding="utf-8").startswith("# Latest")
+
+
+@pytest.mark.asyncio
+async def test_fetch_all_feeds_all_rejected_still_writes_empty_list(tmp_path: Path):
+    async def fake_fetch(feed: ExternalFeed) -> str:
+        return "google.com\n"
+
+    with patch("Scripts.src.external_feeds.fetch_feed_text", side_effect=fake_fetch):
+        results = await fetch_all_feeds((FEED,), output_dir=tmp_path, generated_at=FIXED_AT)
+
+    assert results["test"]["status"] == "written"
+    assert results["test"]["rules"] == 0
+
+
+def test_audit_external_lists_pass_and_fail(tmp_path: Path):
+    good = tmp_path / "good_adguard.txt"
+    good.write_text("! Title: G\n||evil.com^\n", encoding="utf-8")
+    bad = tmp_path / "bad_adguard.txt"
+    bad.write_text("! Title: B\n||evil.com^\n||google.com^\n", encoding="utf-8")
+    feeds = (
+        ExternalFeed(
+            "good", "https://g.example/", "lines", "good_adguard.txt", "G", "https://g.example/"
+        ),
+        ExternalFeed(
+            "bad", "https://b.example/", "lines", "bad_adguard.txt", "B", "https://b.example/"
+        ),
+    )
+    with patch("Scripts.src.external_feeds.EXTERNAL_FEEDS", feeds):
+        verdicts = audit_external_lists(tmp_path, feeds=feeds)
+    assert verdicts["good"] == {
+        "ok": True,
+        "rules": 1,
+        "violations": [],
+        "path": str(good),
+    }
+    assert verdicts["bad"]["ok"] is False
+    assert verdicts["bad"]["violations"] == ["google.com"]
+
+
+def test_audit_external_lists_missing_and_unknown_feed(tmp_path: Path):
+    with patch("Scripts.src.external_feeds.EXTERNAL_FEEDS", (FEED,)):
+        verdicts = audit_external_lists(tmp_path)
+        assert verdicts["test"]["ok"] is False
+        assert verdicts["test"]["error"] == "file missing"
+        unknown = audit_external_lists(tmp_path, feed_key="nope")
+        assert unknown["nope"]["ok"] is False

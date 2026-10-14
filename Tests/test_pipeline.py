@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from datetime import datetime
 from unittest.mock import AsyncMock, patch
 
 import pytest
@@ -9,10 +10,12 @@ import pytest
 from Scripts.src.client import AsyncAPIClient
 from Scripts.src.models import (
     AddressRecord,
+    DescriptionCategory,
     IoCType,
     NormalizedIoC,
     PipelineStats,
     ScoredIoC,
+    Source,
     ValidatedIoC,
 )
 from Scripts.src.pipeline import Pipeline, run_pipeline_sync
@@ -235,6 +238,49 @@ class TestPipelineQuality:
         # known-benign.com should be filtered out by quality scoring
         for s in scored:
             assert s.quality_score >= 50.0
+
+
+class TestPipelineSafety:
+    def _max_bonus_ioc(self, value: str, ioc_type: IoCType) -> NormalizedIoC:
+        return NormalizedIoC(
+            value=value,
+            ioc_type=ioc_type,
+            desc=DescriptionCategory.PHISHING,
+            source=Source.USOM,
+            date=datetime(2024, 1, 1),
+            criticality_level=1,
+        )
+
+    def test_benign_high_score_still_held(self, pipeline):
+        iocs = [self._max_bonus_ioc("google.com", IoCType.DOMAIN)]
+        scored, rejected = pipeline._stage_quality(iocs)
+        assert scored == []
+        assert rejected == 1
+        assert pipeline.stats.safety_rejected == 1
+
+    def test_shared_apex_held(self, pipeline):
+        iocs = [self._max_bonus_ioc("sites.google.com", IoCType.DOMAIN)]
+        scored, _rejected = pipeline._stage_quality(iocs)
+        assert [s.value for s in scored] == []
+
+    def test_malicious_subdomain_passes(self, pipeline):
+        iocs = [self._max_bonus_ioc("evil.sites.google.com", IoCType.DOMAIN)]
+        scored, _rejected = pipeline._stage_quality(iocs)
+        assert [s.value for s in scored] == ["evil.sites.google.com"]
+
+    def test_url_host_policed(self, pipeline):
+        iocs = [self._max_bonus_ioc("https://google.com/phish", IoCType.URL)]
+        scored, _rejected = pipeline._stage_quality(iocs)
+        assert scored == []
+
+    def test_ip_unaffected(self, pipeline):
+        iocs = [self._max_bonus_ioc("1.2.3.4", IoCType.IP)]
+        scored, _rejected = pipeline._stage_quality(iocs)
+        assert [s.value for s in scored] == ["1.2.3.4"]
+
+    def test_safety_hold_in_summary(self, pipeline):
+        pipeline.stats.safety_rejected = 2
+        assert "Safety-held:" in pipeline.stats.summary()
 
 
 class TestPipelineRun:

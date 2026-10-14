@@ -18,7 +18,9 @@ from .models import (
     ValidatedIoC,
 )
 from .normalizer import normalize_ioc
+from .outputs import _host_from_url
 from .quality import DEFAULT_QUALITY_THRESHOLD, score_ioc
+from .safety import Decision, decide_host
 from .validator import _infer_ioc_type, validate_ioc
 
 logger = logging.getLogger(__name__)
@@ -173,6 +175,18 @@ class Pipeline:
         result = deduplicate(scored)
         return result.kept, result.removed_count
 
+    @staticmethod
+    def _safety_hold(item: NormalizedIoC) -> bool:
+        """Hold indicators the safety policy refuses to publish wholesale."""
+        host: str | None = None
+        if item.ioc_type == IoCType.DOMAIN:
+            host = item.value
+        elif item.ioc_type == IoCType.URL:
+            host = _host_from_url(item.value)
+        if host is None:
+            return False
+        return decide_host(host, source="tc-sgb").decision != Decision.ACCEPT
+
     def _stage_quality(self, normalized: list[NormalizedIoC]) -> tuple[list[ScoredIoC], int]:
         """Stage 4: Score quality and filter."""
         logger.info("Stage 4/5: Quality scoring...")
@@ -181,6 +195,10 @@ class Pipeline:
 
         for n in normalized:
             try:
+                if self._safety_hold(n):
+                    self.stats.safety_rejected += 1
+                    rejected += 1
+                    continue
                 s = score_ioc(n)
                 if s.quality_score < self.min_quality_score:
                     rejected += 1
