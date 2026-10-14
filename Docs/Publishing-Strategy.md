@@ -74,6 +74,22 @@ order (`04` is reserved for Lithuania):
 - Slovenya: <https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/05-slovenya-certsi_adguard.txt>
 - Subscribe in Brave via `brave://adblock` → Add filter list via URL.
 
+### External safety gate
+
+Every external feed passes the publication safety policy (`Scripts/src/safety.py`)
+before rendering: exact high-impact hosts are rejected, shared user-content
+apexes go to review, and each held indicator is recorded with its reason in a
+per-feed audit file (`<feed>_audit.json` under `Output/External/`) next to a raw
+source snapshot (`<feed>_source.txt`). The list header carries both timestamps:
+`! Last updated` (generation time) and, when the source declares one,
+`! Source updated` (feed time).
+
+Before publishing, the workflow runs `tc-sgb validate-external` (usable locally
+too) and copies only gate-passing files to the branch. A feed that fails the
+gate keeps serving its last good snapshot; a file that never passed is never
+treated as safe. The main pipeline applies the same policy at its quality stage
+(`safety_rejected` in the run summary), independent of the quality score.
+
 ### Release Process
 
 ```
@@ -485,6 +501,23 @@ URL'ye göre sıralar) onları ülke sırasıyla gösterir (`04` Litvanya için 
 - Azerbaycan: <https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/03-azerbaycan-blacklist_adguard.txt>
 - Slovenya: <https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/05-slovenya-certsi_adguard.txt>
 - Brave'de `brave://adblock` → Add filter list via URL ile abone olun.
+
+### Harici güvenlik kapısı
+
+Her harici akış, oluşturulmadan önce yayımlama güvenlik politikasından
+(`Scripts/src/safety.py`) geçer: tam yüksek etkili makineler reddedilir, ortak
+kullanıcı içerik uçları incelemeye ayrılır ve tutulan her gösterge gerekçesiyle
+birlikte akış başına denetim dosyasına (`Output/External/` altında
+`<feed>_audit.json`) ve ham kaynak anlık görüntüsünün yanına
+(`<feed>_source.txt`) kaydedilir. Liste başlığı iki zaman damgasını da taşır:
+`! Last updated` (üretim zamanı) ve kaynak bildirmişse `! Source updated`
+(akış zamanı).
+
+Yayımlamadan önce iş akışı `tc-sgb validate-external` çalıştırır (yerelde de
+kullanılabilir) ve dala yalnızca kapıdan geçen dosyaları kopyalar. Kapıdan
+geçemeyen akış son iyi anlık görüntüyü sunmaya devam eder; hiç geçmemiş bir
+dosya asla güvenli kabul edilmez. Ana hat aynı politikayı kalite aşamasında
+uygular (koşu özetinde `safety_rejected`), kalite puanından bağımsızdır.
 
 ### Yayın Süreci
 

@@ -67,6 +67,9 @@ tc-sgb health
 
 # Fetch third-party threat feeds (CERT.PL, CERT.SI, blacklist.gov.az)
 tc-sgb fetch-external
+
+# Verify published external lists against the safety policy (no fetching)
+tc-sgb validate-external
 ```
 
 ### Data Download
@@ -95,6 +98,16 @@ Latest pre-generated IoC outputs are published automatically (daily, 19:00 UTC) 
 > - [03-azerbaycan-blacklist_adguard.txt](https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/03-azerbaycan-blacklist_adguard.txt)
 > - [05-slovenya-certsi_adguard.txt](https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/05-slovenya-certsi_adguard.txt)
 
+### Publication safety
+
+Syntax validation checks rule shape; the safety policy in `Scripts/src/safety.py`
+decides whether blocking a host wholesale is safe to publish. High-impact hosts
+are rejected outright, shared user-content infrastructure goes to review, and
+every held indicator lands in a per-feed audit file (`Output/External/`) with
+its reason — never silently dropped. The scheduled workflow publishes only
+lists passing `tc-sgb validate-external`; a failing feed keeps serving its last
+good snapshot.
+
 ## Project Structure
 
 ```
@@ -105,6 +118,7 @@ TC-SGB-API-to-List/
 │       ├── models.py            # Pydantic data models
 │       ├── client.py            # Async API client
 │       ├── external_feeds.py    # Third-party threat-feed mirrors
+│       ├── safety.py            # Publication safety policy (shared)
 │       ├── validator.py         # IoC validation
 │       ├── normalizer.py        # IoC normalization
 │       ├── deduplicator.py      # Deduplication
@@ -277,6 +291,9 @@ tc-sgb health
 
 # Üçüncü taraf tehdit akışlarını çek (CERT.PL, CERT.SI, blacklist.gov.az)
 tc-sgb fetch-external
+
+# Yayımlanmış harici listeleri güvenlik politikasına göre doğrula (çekme yok)
+tc-sgb validate-external
 ```
 
 ### Veri İndirme
@@ -305,6 +322,16 @@ En güncel önceden üretilmiş IoC çıktıları (her gün, 19:00 UTC) yuvarlan
 > - [03-azerbaycan-blacklist_adguard.txt](https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/03-azerbaycan-blacklist_adguard.txt)
 > - [05-slovenya-certsi_adguard.txt](https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/05-slovenya-certsi_adguard.txt)
 
+### Yayımlama güvenliği
+
+Sözdizimi doğrulaması kural biçimini denetler; `Scripts/src/safety.py` içindeki
+güvenlik politikası bir makinenin toptan engellenmesinin yayımlanmasının güvenli
+olup olmadığına karar verir. Yüksek etkili makineler doğrudan reddedilir, ortak
+kullanıcı içerik altyapısı incelemeye ayrılır ve tutulan her gösterge gerekçesiyle
+birlikte akış başına denetim dosyasına (`Output/External/`) yazılır — asla sessizce
+düşürülmez. Zamanlanmış iş akışı yalnızca `tc-sgb validate-external` geçen listeleri
+yayımlar; koşamayan akış son iyi anlık görüntüyü sunmaya devam eder.
+
 ## Proje Yapısı
 
 ```
@@ -315,6 +342,7 @@ TC-SGB-API-to-List/
 │       ├── models.py            # Pydantic veri modelleri
 │       ├── client.py             # Asenkron API istemcisi
 │       ├── external_feeds.py    # Üçüncü taraf tehdit akışı aynaları
+│       ├── safety.py            # Yayımlama güvenlik politikası (ortak)
 │       ├── validator.py         # IoC doğrulama
 │       ├── normalizer.py        # IoC normalleştirme
 │       ├── deduplicator.py      # Tekilleştirme
