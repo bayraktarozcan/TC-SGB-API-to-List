@@ -366,11 +366,12 @@ def audit_external_lists(
         hosts = _read_existing_hosts(path)
         if hosts is None:
             verdicts[feed.key] = {
-                "ok": False,
+                "ok": True,
+                "skipped": True,
                 "rules": 0,
                 "violations": [],
                 "path": str(path),
-                "error": "file missing",
+                "note": "file missing",
             }
             continue
         violations = [

@@ -585,6 +585,24 @@ class TestCmdValidateExternal:
             await cmd_validate_external(_make_args(output=None, feed="nope"))
         assert exc.value.code == 1
 
+    async def test_validate_external_missing_file_skips_without_failing(self, capsys):
+        verdicts = {
+            "blacklist-az": {
+                "ok": True,
+                "skipped": True,
+                "rules": 0,
+                "violations": [],
+                "note": "file missing",
+            },
+            "cert-pl": {"ok": True, "rules": 10, "violations": []},
+        }
+        with patch("Scripts.main.audit_external_lists", return_value=verdicts):
+            await cmd_validate_external(_make_args(output=None))
+
+        out = capsys.readouterr().out
+        assert "SKIP" in out
+        assert "PASS" in out
+
     def test_validate_external_command_dispatch(self, temp_dir: Path, capsys):
         with (
             patch.object(

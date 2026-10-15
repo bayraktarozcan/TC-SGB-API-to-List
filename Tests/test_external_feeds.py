@@ -217,8 +217,7 @@ def test_audit_external_lists_pass_and_fail(tmp_path: Path):
             "bad", "https://b.example/", "lines", "bad_adguard.txt", "B", "https://b.example/"
         ),
     )
-    with patch("Scripts.src.external_feeds.EXTERNAL_FEEDS", feeds):
-        verdicts = audit_external_lists(tmp_path, feeds=feeds)
+    verdicts = audit_external_lists(tmp_path, feeds=feeds)
     assert verdicts["good"] == {
         "ok": True,
         "rules": 1,
@@ -230,9 +229,8 @@ def test_audit_external_lists_pass_and_fail(tmp_path: Path):
 
 
 def test_audit_external_lists_missing_and_unknown_feed(tmp_path: Path):
-    with patch("Scripts.src.external_feeds.EXTERNAL_FEEDS", (FEED,)):
-        verdicts = audit_external_lists(tmp_path)
-        assert verdicts["test"]["ok"] is False
-        assert verdicts["test"]["error"] == "file missing"
-        unknown = audit_external_lists(tmp_path, feed_key="nope")
-        assert unknown["nope"]["ok"] is False
+    verdicts = audit_external_lists(tmp_path, feeds=(FEED,))
+    assert verdicts["test"]["ok"] is True
+    assert verdicts["test"]["skipped"] is True
+    unknown = audit_external_lists(tmp_path, feed_key="nope")
+    assert unknown["nope"]["ok"] is False

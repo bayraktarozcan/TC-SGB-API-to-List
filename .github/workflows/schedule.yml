@@ -159,24 +159,24 @@ jobs:
           }
           cp "${SRC}" "${WORK}/01-turkiye-sgb_adguard.txt"
           shopt -s nullglob
-          # Only files passing the safety gate are published; a failing feed
-          # keeps serving its last good snapshot instead of shipping bad rules.
+          # Only fresh files passing the safety gate are published. A missing
+          # file (unreachable feed) or a failing file keeps serving its last
+          # good snapshot instead of shipping nothing or bad rules.
           for KEY in blacklist-az cert-pl cert-si; do
+            matched=""
+            for EXT in Output/External/*_adguard.txt; do
+              base="$(basename "${EXT}")"
+              case "${KEY}:${base}" in
+                blacklist-az:03-*|cert-pl:02-*|cert-si:05-*) matched="${EXT}" ;;
+              esac
+            done
+            if [ -z "${matched}" ]; then
+              echo "::warning::filter-lists: ${KEY} produced no file; keeping previous snapshot."
+              continue
+            fi
             if python Scripts/main.py validate-external --feed "${KEY}" >/dev/null; then
-              copied=0
-              for EXT in Output/External/*_adguard.txt; do
-                base="$(basename "${EXT}")"
-                case "${KEY}:${base}" in
-                  blacklist-az:03-*|cert-pl:02-*|cert-si:05-*)
-                    if check_size "${EXT}" >/dev/null; then
-                      cp "${EXT}" "${WORK}/"
-                      copied=1
-                    fi
-                    ;;
-                esac
-              done
-              if [ "${copied}" -eq 0 ]; then
-                echo "::warning::filter-lists: ${KEY} passed the gate but no file matched; mapping stale."
+              if check_size "${matched}" >/dev/null; then
+                cp "${matched}" "${WORK}/"
               fi
             else
               echo "::warning::filter-lists: ${KEY} failed the safety gate; keeping previous snapshot."

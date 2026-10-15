@@ -407,7 +407,9 @@ async def cmd_validate_external(args: argparse.Namespace) -> None:
     print("\nExternal publish gate:")
     failed = 0
     for key, verdict in verdicts.items():
-        if verdict.get("ok"):
+        if verdict.get("skipped"):
+            print(f"  [SKIP] {key:13s} {verdict.get('note', 'file missing')}")
+        elif verdict.get("ok"):
             print(f"  [PASS] {key:13s} {verdict.get('rules', 0)} rules")
         else:
             failed += 1
