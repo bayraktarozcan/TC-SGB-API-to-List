@@ -1,10 +1,10 @@
 {
-  "bytes": 105914847,
+  "bytes": 105973940,
   "extension": ".yaml",
   "file": "threat_intel_yaml.yaml",
   "format": "yaml",
   "raw_url": "https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/download/ioc-data/threat_intel_yaml.yaml",
   "release_tag": "ioc-data",
-  "sha256": "9db1047649468956d03a229424739cef273337f178c8e5aeb92ac728d90005ad",
+  "sha256": "b0655d69391869a18e63733d9f3e42775ed90195c1e0de76b496685874633724",
   "title": "YAML sequence of all IoCs"
 }
