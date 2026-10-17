@@ -1,10 +1,10 @@
 {
-  "bytes": 24962446,
+  "bytes": 24965849,
   "extension": ".conf",
   "file": "threat_intel_unbound.conf",
   "format": "unbound",
   "raw_url": "https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/download/ioc-data/threat_intel_unbound.conf",
   "release_tag": "ioc-data",
-  "sha256": "00767feea7e2c4b2b3f308c81a732f44780c59db7c6e9c59bc6d948585863d39",
+  "sha256": "e44dea6d8b0565c77f589632eac5ae15f131b198bf26fa11f642f1a216265706",
   "title": "Unbound local-zone configuration"
 }
