@@ -1,10 +1,10 @@
 {
-  "bytes": 14514008,
+  "bytes": 14518650,
   "extension": ".zone",
   "file": "threat_intel_rpz.zone",
   "format": "rpz",
   "raw_url": "https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/download/ioc-data/threat_intel_rpz.zone",
   "release_tag": "ioc-data",
-  "sha256": "23af38a8ddd1ac6ceb263f2ba2027738befefbcab318097dcc45ec0bda5461e9",
+  "sha256": "b313403bfad40712374e00bd126cc6fb7add64ced01970f5699459bab115e385",
   "title": "RPZ response policy zone file"
 }

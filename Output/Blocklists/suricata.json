@@ -1,10 +1,10 @@
 {
-  "bytes": 220330524,
+  "bytes": 220397415,
   "extension": ".json",
   "file": "threat_intel_suricata.json",
   "format": "suricata",
   "raw_url": "https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/download/ioc-data/threat_intel_suricata.json",
   "release_tag": "ioc-data",
-  "sha256": "2313e9f74d94dc43e45efcbf547abbc33f5cae3a5e42e55c89ac15724df1d67b",
+  "sha256": "442a954a295a842776a6176e1e84c4bdf90f9c38dcd825e0befc2d0668ab6ae6",
   "title": "Suricata EVE JSON events"
 }
