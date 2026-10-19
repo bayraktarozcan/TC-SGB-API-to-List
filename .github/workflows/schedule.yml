@@ -100,6 +100,7 @@ jobs:
         continue-on-error: true
         env:
           GH_TOKEN: ${{ secrets.AUTO_MERGE_TOKEN }}
+          GITLAB_PUSH_TOKEN: ${{ secrets.GITLAB_PUSH_TOKEN }}
         run: |
           set -euo pipefail
           SRC="Output/threat_intel_adguard.txt"
@@ -137,6 +138,12 @@ jobs:
           git -C "${WORK}" config user.name "github-actions[bot]"
           git -C "${WORK}" config user.email "github-actions[bot]@users.noreply.github.com"
           git -C "${WORK}" remote add origin "https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git"
+          # Push to both hosts. The first --add --push seeds the push list with
+          # the GitHub URL (which otherwise only lives on the fetch side), the
+          # second appends GitLab, so one push keeps the branch in parity. A
+          # filter-list branch that reaches one host only drifts silently.
+          git -C "${WORK}" remote set-url --add --push origin "https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git"
+          git -C "${WORK}" remote set-url --add --push origin "https://oauth2:${GITLAB_PUSH_TOKEN}@gitlab.com/bayraktarozcan/TC-SGB-API-to-List.git"
           # Seed with the last good snapshot so a feed that fails today keeps
           # serving yesterday's file instead of 404ing for subscribers.
           if git -C "${WORK}" fetch -q origin "${BRANCH}" 2>/dev/null; then

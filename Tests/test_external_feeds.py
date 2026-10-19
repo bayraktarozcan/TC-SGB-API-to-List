@@ -275,3 +275,12 @@ def test_retired_azerbaijan_feed_is_purged_not_published():
     assert len(purge_lines) == 1, f"retired file named outside the purge loop: {purge_lines}"
     assert purge_lines[0].strip().startswith("for STALE in")
     assert RETIRED_AZ_FILE not in workflow.replace(purge_lines[0], "")
+
+
+def test_filter_list_branch_pushes_to_both_hosts():
+    pushes = re.findall(
+        r'remote set-url --add --push origin "([^"]+)"', SCHEDULE.read_text(encoding="utf-8")
+    )
+    assert len(pushes) == 2, f"expected a single push list with two URLs, got {pushes}"
+    assert sum("github.com" in url for url in pushes) == 1, pushes
+    assert sum("gitlab.com" in url for url in pushes) == 1, pushes

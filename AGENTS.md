@@ -195,6 +195,10 @@ Gates that do not hold by design, and what runs afterward instead:
 - No transitive lockfile: direct runtime/build deps are pinned exact, but a
   frozen file without regeneration automation would rot silently, so ranges
   plus Dependabot stand in until lock tooling is adopted.
+- The repository owner may push to `main` directly, bypassing the ruleset:
+  the push reports `Bypassed rule violations` and `4 of 4 required status
+  checks are expected`. CI then runs on the pushed commit afterwards instead
+  of gating it.
 
 ## Local mirror (AGENTS-TR.md)
 
@@ -845,4 +849,4 @@ Runtimes use the current LTS line (Node.js LTS, .NET LTS); build output goes thr
 - `.git/` is the **internal Git repository structure**, not a project config file.
 
 **Guiding rule:** "It looks special" does not mean "It is a standard special file." The meaning of any file is determined by the software that reads and interprets it.
-<!-- mirror-sync: sync-sha=a8b1d29af22d07fe8fba6fea586cde4d18f2989c -->
+<!-- mirror-sync: sync-sha=88cecf6034f8d47b6b618a7bc7c1cf4e38c79846 -->
