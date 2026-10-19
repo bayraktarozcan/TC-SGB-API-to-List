@@ -55,7 +55,8 @@ findings. Do not drop below it.
 - GitLab CI/CD and GitHub Actions are both active. GitLab pipelines run on GitLab
   shared runners (project-level CI is enabled); the `origin` remote pushes to
   both GitHub and GitLab, so a single `git push origin main` updates both and
-  triggers both pipelines.
+  triggers both pipelines; GitLab jobs only execute while the namespace's
+  shared-runner minutes last (see Bypasses).
 - GitLab-native pipeline/coverage badges are configured at the project level and
   mirrored in the README; GitHub Actions hosts the scheduled IoC update pipeline
   and, once each update merges, also mirrors `main` plus the GitLab `ioc-data`
@@ -199,6 +200,10 @@ Gates that do not hold by design, and what runs afterward instead:
   the push reports `Bypassed rule violations` and `4 of 4 required status
   checks are expected`. CI then runs on the pushed commit afterwards instead
   of gating it.
+- GitLab shared-runner minutes can be exhausted (`ci_quota_exceeded`): every
+  GitLab job then fails within a second with no runner assigned, so the
+  GitLab-side gates do not run. The GitHub-hosted checks stand in, and the
+  condition clears when the namespace's monthly minutes reset.
 
 ## Local mirror (AGENTS-TR.md)
 
@@ -849,4 +854,4 @@ Runtimes use the current LTS line (Node.js LTS, .NET LTS); build output goes thr
 - `.git/` is the **internal Git repository structure**, not a project config file.
 
 **Guiding rule:** "It looks special" does not mean "It is a standard special file." The meaning of any file is determined by the software that reads and interprets it.
-<!-- mirror-sync: sync-sha=d96ab3c03268aeb1e8fae500e057864c76015137 -->
+<!-- mirror-sync: sync-sha=17e5f5d87703073c9bba4c31ca621fc4b11e628f -->

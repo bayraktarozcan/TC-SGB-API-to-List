@@ -10,6 +10,9 @@
 ```
 TC-SGB-API-to-List/
 ├── .github/
+│   ├── actions/
+│   │   └── refresh-gitlab-release/
+│   │       └── action.yml              # Composite action: refresh the GitLab release
 │   ├── ISSUE_TEMPLATE/
 │   │   ├── bug_report.yaml
 │   │   ├── config.yml
@@ -18,11 +21,17 @@ TC-SGB-API-to-List/
 │   │   ├── .markdownlint.json
 │   │   └── .yamllint.yml
 │   ├── workflows/
-│   │   ├── ci.yml                     # Main CI pipeline
-│   │   ├── codeql.yml                 # CodeQL security analysis
-│   │   └── schedule.yml               # Scheduled data fetch
-│   ├── CODEOWNERS
-│   ├── dependabot.yml                  # Dependency updates
+│   │   ├── auto-merge.yml              # Auto-merge trusted PRs
+│   │   ├── ci.yml                      # Main CI pipeline
+│   │   ├── codeql.yml                  # CodeQL security analysis
+│   │   ├── dependabot-auto-merge.yml   # Auto-merge Dependabot PRs
+│   │   ├── deploy.yml                  # Deploy the static site to Pages
+│   │   ├── hygiene.yml                 # actionlint + deep mojibake scan
+│   │   ├── link-check.yml              # lychee link checking
+│   │   ├── mirror-gitlab.yml           # Mirror the rolling release to GitLab
+│   │   ├── schedule.yml                # Scheduled data fetch
+│   │   └── wiki-sync.yml               # Docs-to-wiki sync
+│   ├── dependabot.yml                   # Dependency updates
 │   ├── FUNDING.yml
 │   └── pull_request_template.md
 │
@@ -32,33 +41,64 @@ TC-SGB-API-to-List/
 │   ├── verify_mirror.py               # Mirror verifier: sync-sha + structure parity
 │   └── src/
 │       ├── __init__.py                # Source package init
+│       ├── changelog.py               # Persistent changelog: diff vs previous snapshot
 │       ├── client.py                  # Async API client (httpx)
-│       ├── models.py                  # Pydantic data models & enums
-│       ├── validator.py               # Input validation functions
-│       ├── normalizer.py              # Data normalization functions
 │       ├── deduplicator.py            # Deduplication engine
-│       ├── quality.py                 # Quality scoring & FP detection
+│       ├── external_feeds.py          # Third-party feed mirrors (Brave/AdGuard branch)
+│       ├── models.py                  # Pydantic data models & enums
+│       ├── mojibake.py                # Mojibake detection for CI gates
+│       ├── normalizer.py              # Data normalization functions
 │       ├── outputs.py                 # Output generation (16 formats)
-│       └── pipeline.py                # Pipeline orchestrator
+│       ├── pipeline.py                # Pipeline orchestrator
+│       ├── quality.py                 # Quality scoring & FP detection
+│       ├── safety.py                  # Publication safety policy
+│       └── validator.py               # Input validation functions
 │
 ├── Tests/                             # Flat test structure (no subdirs)
 │   ├── __init__.py
 │   ├── conftest.py                    # Shared fixtures
+│   ├── test_catalog.py                # manifest.json + Blocklists/*.json catalog
+│   ├── test_changelog.py              # Changelog generation & diff engine
 │   ├── test_client.py
 │   ├── test_deduplicator.py
+│   ├── test_external_feeds.py         # Third-party feed fetch/parse/render
 │   ├── test_fuzz.py
-│   ├── test_mirror_sync.py
+│   ├── test_main.py                   # CLI entry point
+│   ├── test_mirror_sync.py            # Mirror verifier contract & drift axes
 │   ├── test_models.py
+│   ├── test_mojibake.py               # Mojibake scanner
 │   ├── test_normalizer.py
 │   ├── test_outputs.py
 │   ├── test_performance.py
 │   ├── test_pipeline.py
 │   ├── test_quality.py
 │   ├── test_regression.py
+│   ├── test_repo_conventions.py       # Repository convention guards
+│   ├── test_safety.py                 # Publication safety policy
 │   └── test_validator.py
 │
 ├── Output/                            # Generated output files
 │   ├── .gitkeep
+│   ├── manifest.json                  # Tracked: release manifest
+│   ├── Blocklists/                    # Tracked: per-format blocklist catalogs
+│   │   ├── adguard.json
+│   │   ├── crowdsec.json
+│   │   ├── csv.json
+│   │   ├── dnsmasq.json
+│   │   ├── index.json                 # Catalog index
+│   │   ├── ipset.json
+│   │   ├── json.json
+│   │   ├── mikrotik.json
+│   │   ├── nextdns.json
+│   │   ├── nftables.json
+│   │   ├── pihole.json
+│   │   ├── raw_records.json
+│   │   ├── rpz.json
+│   │   ├── sqlite.json
+│   │   ├── suricata.json
+│   │   ├── technitium.json
+│   │   ├── unbound.json
+│   │   └── yaml.json
 │   ├── raw_records.json               # ⚠ Large-format files are NOT tracked in git — published to the rolling release `ioc-data`
 │   ├── threat_intel_adguard.txt
 │   ├── threat_intel_csv.csv
@@ -77,7 +117,7 @@ TC-SGB-API-to-List/
 │   ├── threat_intel_unbound.conf
 │   ├── threat_intel_yaml.yaml         # ⚠ See note above (published via `ioc-data` release)
 │   └── Logs/
-│       └── ioc_changelog.md
+│       └── fetch_<timestamp>.md       # Per-run changelog (generated)
 │
 ├── Schema/
 │   ├── address.schema.json
@@ -93,6 +133,8 @@ TC-SGB-API-to-List/
 │   └── .gitkeep
 │
 ├── Docs/
+│   ├── Planning/
+│   │   └── .gitkeep
 │   ├── Footer.md
 │   ├── Sidebar.md
 │   ├── API-Analysis.md
@@ -113,6 +155,7 @@ TC-SGB-API-to-List/
 │   ├── Security-Analysis.md
 │   ├── Test-Strategy.md
 │   ├── Threat-Model.md
+│   ├── Troubleshooting.md
 │   └── Versioning-Strategy.md
 │
 ├── pyproject.toml                     # Project metadata & build config
@@ -121,15 +164,23 @@ TC-SGB-API-to-List/
 ├── .gitignore                         # Git ignore rules
 ├── .gitattributes                     # Git attributes
 ├── .editorconfig                      # Editor config
+├── .gitlab-ci.yml                     # GitLab CI pipeline
 ├── README.md                          # Project overview
-├── CONTRIBUTING.md                    # Contribution guidelines
-├── SECURITY.md                        # Security policy
-├── CODE_OF_CONDUCT.md                 # Code of conduct
 ├── CHANGELOG.md                       # Version changelog
-├── RELEASE-NOTE-TEMPLATE.md           # Release note template
+├── CONTRIBUTING.md                    # Contribution guidelines
+├── CODE_OF_CONDUCT.md                 # Code of conduct
+├── SECURITY.md                        # Security policy
+├── SUPPORT.md                         # Support channels
+├── PRIVACY.md                         # Privacy statement
+├── NOTICE                             # Third-party attributions
 ├── LICENSE                            # License file
-├── index.html                         # Landing page
-└── bandit-report.json                 # Security scan report
+├── CODEOWNERS                         # Code owners
+├── RELEASE-NOTE-TEMPLATE.md           # Release note template
+├── AGENTS.md                          # Agent & contributor rules
+│
+└── Site/                              # GitHub Pages landing page
+    ├── .nojekyll
+    └── index.html                     # Landing page
 ```
 
 ## Key Files Description
@@ -280,6 +331,9 @@ branch = true
 ```
 TC-SGB-API-to-List/
 ├── .github/
+│   ├── actions/
+│   │   └── refresh-gitlab-release/
+│   │       └── action.yml              # Bileşik eylem: GitLab sürümünü yenile
 │   ├── ISSUE_TEMPLATE/
 │   │   ├── bug_report.yaml
 │   │   ├── config.yml
@@ -288,11 +342,17 @@ TC-SGB-API-to-List/
 │   │   ├── .markdownlint.json
 │   │   └── .yamllint.yml
 │   ├── workflows/
-│   │   ├── ci.yml                     # Ana CI hattı
-│   │   ├── codeql.yml                 # CodeQL güvenlik analizi
-│   │   └── schedule.yml               # Zamanlanmış veri çekme
-│   ├── CODEOWNERS
-│   ├── dependabot.yml                  # Bağımlılık güncellemeleri
+│   │   ├── auto-merge.yml              # Güvenilen PR'ları otomatik birleştir
+│   │   ├── ci.yml                      # Ana CI hattı
+│   │   ├── codeql.yml                  # CodeQL güvenlik analizi
+│   │   ├── dependabot-auto-merge.yml   # Dependabot PR'larını otomatik birleştir
+│   │   ├── deploy.yml                  # Statik siteyi Pages'e dağıt
+│   │   ├── hygiene.yml                 # actionlint + derin mojibake taraması
+│   │   ├── link-check.yml              # lychee bağlantı denetimi
+│   │   ├── mirror-gitlab.yml           # Yuvarlanan sürümü GitLab'a yansıt
+│   │   ├── schedule.yml                # Zamanlanmış veri çekme
+│   │   └── wiki-sync.yml               # Docs -> wiki eşitleme
+│   ├── dependabot.yml                   # Bağımlılık güncellemeleri
 │   ├── FUNDING.yml
 │   └── pull_request_template.md
 │
@@ -302,33 +362,64 @@ TC-SGB-API-to-List/
 │   ├── verify_mirror.py               # Ayna doğrulayıcı: sync-sha + yapı paritesi
 │   └── src/
 │       ├── __init__.py                # Kaynak paket başlatma
+│       ├── changelog.py               # Kalıcı değişiklik günlüğü: önceki anlık görüntüyle fark
 │       ├── client.py                  # Asenkron API istemcisi (httpx)
-│       ├── models.py                  # Pydantic veri modelleri ve enum'lar
-│       ├── validator.py               # Girdi doğrulama fonksiyonları
-│       ├── normalizer.py              # Veri normalizasyon fonksiyonları
 │       ├── deduplicator.py            # Tekilleştirme motoru
-│       ├── quality.py                 # Kalite puanlama ve FP tespiti
+│       ├── external_feeds.py          # Üçüncü taraf feed aynaları (Brave/AdGuard dalı)
+│       ├── models.py                  # Pydantic veri modelleri ve enum'lar
+│       ├── mojibake.py                # CI kapıları için mojibake tespiti
+│       ├── normalizer.py              # Veri normalizasyon fonksiyonları
 │       ├── outputs.py                 # Çıktı üretimi (16 biçim)
-│       └── pipeline.py                # Hat orkestratörü
+│       ├── pipeline.py                # Hat orkestratörü
+│       ├── quality.py                 # Kalite puanlama ve FP tespiti
+│       ├── safety.py                  # Yayın güvenliği politikası
+│       └── validator.py               # Girdi doğrulama fonksiyonları
 │
 ├── Tests/                             # Düz test yapısı (alt dizin yok)
 │   ├── __init__.py
 │   ├── conftest.py                    # Paylaşılan fixture'lar
+│   ├── test_catalog.py                # manifest.json + Blocklists/*.json kataloğu
+│   ├── test_changelog.py              # Değişiklik günlüğü üretimi ve fark motoru
 │   ├── test_client.py
 │   ├── test_deduplicator.py
+│   ├── test_external_feeds.py         # Üçüncü taraf feed çekme/ayrıştırma/render
 │   ├── test_fuzz.py
-│   ├── test_mirror_sync.py
+│   ├── test_main.py                   # CLI giriş noktası
+│   ├── test_mirror_sync.py            # Ayna doğrulayıcı sözleşmesi ve drift eksenleri
 │   ├── test_models.py
+│   ├── test_mojibake.py               # Mojibake tarayıcısı
 │   ├── test_normalizer.py
 │   ├── test_outputs.py
 │   ├── test_performance.py
 │   ├── test_pipeline.py
 │   ├── test_quality.py
 │   ├── test_regression.py
+│   ├── test_repo_conventions.py       # Depo kuralı koruyucuları
+│   ├── test_safety.py                 # Yayın güvenliği politikası
 │   └── test_validator.py
 │
 ├── Output/                            # Üretilen çıktı dosyaları
 │   ├── .gitkeep
+│   ├── manifest.json                  # İzlenir: sürüm bildirimi
+│   ├── Blocklists/                    # İzlenir: biçim başına blocklist katalogları
+│   │   ├── adguard.json
+│   │   ├── crowdsec.json
+│   │   ├── csv.json
+│   │   ├── dnsmasq.json
+│   │   ├── index.json                 # Katalog dizini
+│   │   ├── ipset.json
+│   │   ├── json.json
+│   │   ├── mikrotik.json
+│   │   ├── nextdns.json
+│   │   ├── nftables.json
+│   │   ├── pihole.json
+│   │   ├── raw_records.json
+│   │   ├── rpz.json
+│   │   ├── sqlite.json
+│   │   ├── suricata.json
+│   │   ├── technitium.json
+│   │   ├── unbound.json
+│   │   └── yaml.json
 │   ├── raw_records.json               # ⚠ Büyük biçim dosyaları git'te İZLENMEZ — `ioc-data` yuvarlanan release'i ile yayınlanır
 │   ├── threat_intel_adguard.txt
 │   ├── threat_intel_csv.csv
@@ -347,7 +438,7 @@ TC-SGB-API-to-List/
 │   ├── threat_intel_unbound.conf
 │   ├── threat_intel_yaml.yaml         # ⚠ Yukarıdaki nota bakın (`ioc-data` release'i ile yayınlanır)
 │   └── Logs/
-│       └── ioc_changelog.md
+│       └── fetch_<timestamp>.md       # Koşu başına değişiklik günlüğü (üretilir)
 │
 ├── Schema/
 │   ├── address.schema.json
@@ -363,6 +454,8 @@ TC-SGB-API-to-List/
 │   └── .gitkeep
 │
 ├── Docs/
+│   ├── Planning/
+│   │   └── .gitkeep
 │   ├── Footer.md
 │   ├── Sidebar.md
 │   ├── API-Analysis.md
@@ -383,6 +476,7 @@ TC-SGB-API-to-List/
 │   ├── Security-Analysis.md
 │   ├── Test-Strategy.md
 │   ├── Threat-Model.md
+│   ├── Troubleshooting.md
 │   └── Versioning-Strategy.md
 │
 ├── pyproject.toml                     # Proje meta verileri ve derleme yapılandırması
@@ -391,15 +485,23 @@ TC-SGB-API-to-List/
 ├── .gitignore                         # Git yok sayma kuralları
 ├── .gitattributes                     # Git nitelikleri
 ├── .editorconfig                      # Editör yapılandırması
+├── .gitlab-ci.yml                     # GitLab CI hattı
 ├── README.md                          # Proje genel bakışı
-├── CONTRIBUTING.md                    # Katkı yönergeleri
-├── SECURITY.md                        # Güvenlik politikası
-├── CODE_OF_CONDUCT.md                 # Davranış kuralları
 ├── CHANGELOG.md                       # Sürüm değişiklik günlüğü
-├── RELEASE-NOTE-TEMPLATE.md           # Sürüm notu şablonu
+├── CONTRIBUTING.md                    # Katkı yönergeleri
+├── CODE_OF_CONDUCT.md                 # Davranış kuralları
+├── SECURITY.md                        # Güvenlik politikası
+├── SUPPORT.md                         # Destek kanalları
+├── PRIVACY.md                         # Gizlilik bildirimi
+├── NOTICE                             # Üçüncü taraf atıfları
 ├── LICENSE                            # Lisans dosyası
-├── index.html                         # Landing sayfası
-└── bandit-report.json                 # Güvenlik tarama raporu
+├── CODEOWNERS                         # Kod sahipleri
+├── RELEASE-NOTE-TEMPLATE.md           # Sürüm notu şablonu
+├── AGENTS.md                          # Ajan ve katkı kuralları
+│
+└── Site/                              # GitHub Pages landing sayfası
+    ├── .nojekyll
+    └── index.html                     # Landing sayfası
 ```
 
 ## Temel Dosya Açıklamaları
