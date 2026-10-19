@@ -202,7 +202,7 @@ TC-SGB-API-to-List/
 
 ### Tests (`Tests/`)
 
-Flat structure — no subdirectories. 15 files total, 487 tests, 99% coverage.
+Flat structure — no subdirectories. 21 files total, 650 tests, 99% coverage.
 
 | File | Focus |
 |------|-------|
@@ -221,6 +221,12 @@ Flat structure — no subdirectories. 15 files total, 487 tests, 99% coverage.
 | `test_performance.py` | Throughput benchmarks |
 | `test_changelog.py` | Changelog generation & diff engine |
 | `test_main.py` | CLI entry point & pipeline wiring |
+| `test_catalog.py` | manifest.json + Blocklists/*.json catalog guards |
+| `test_external_feeds.py` | Third-party feed fetch/parse/render |
+| `test_mirror_sync.py` | Mirror verifier contract & drift axes |
+| `test_mojibake.py` | Mojibake scanner |
+| `test_repo_conventions.py` | Repository convention guards |
+| `test_safety.py` | Publication safety policy |
 
 ### Build & CI
 
@@ -523,7 +529,7 @@ TC-SGB-API-to-List/
 
 ### Testler (`Tests/`)
 
-Düz yapı — alt dizin yok. Toplam 15 dosya, 487 test, %99 kapsama.
+Düz yapı — alt dizin yok. Toplam 21 dosya, 650 test, %99 kapsama.
 
 | Dosya | Odak |
 |-------|------|
@@ -542,6 +548,12 @@ Düz yapı — alt dizin yok. Toplam 15 dosya, 487 test, %99 kapsama.
 | `test_performance.py` | Verimlilik ölçümleri |
 | `test_changelog.py` | Changelog üretimi ve fark motoru |
 | `test_main.py` | CLI giriş noktası ve hat bağlantısı |
+| `test_catalog.py` | manifest.json + Blocklists/*.json kataloğu |
+| `test_external_feeds.py` | Üçüncü taraf feed çekme/ayrıştırma/render |
+| `test_mirror_sync.py` | Ayna doğrulayıcı sözleşmesi ve drift eksenleri |
+| `test_mojibake.py` | Mojibake tarayıcı |
+| `test_repo_conventions.py` | Depo kuralı koruyucuları |
+| `test_safety.py` | Yayın güvenlik politikası |
 
 ### Derleme ve CI
 
