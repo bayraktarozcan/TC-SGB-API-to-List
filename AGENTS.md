@@ -106,6 +106,7 @@ same checks (see `.github/workflows/ci.yml`, `.gitlab-ci.yml`).
   (Python `>=3.11`; 3.15 dev-verified).
 - CLI verbs: `tc-sgb fetch | generate | index | stats | validate | health | fetch-external`.
 - Local gate = the Quality gate block (ruff, ruff format, mypy, bandit, pytest).
+- Mirror check: `Scripts/verify_mirror.py AGENTS.md AGENTS-TR.md`.
 
 ## Naming
 
@@ -142,7 +143,7 @@ Exemptions (each with its reason):
   is the Commands block (`pip install -e ".[dev]"`, then
   `pip install -r requirements.txt`).
 - Local versions at last check: Python 3.15.0; httpx 0.28.1, pydantic
-  2.14.0, python-dotenv 1.2.4, PyYAML 6.0.3; pytest 8.4.2, ruff 0.17.0,
+  2.14.1, python-dotenv 1.2.4, PyYAML 6.0.3; pytest 8.4.2, ruff 0.17.0,
   mypy 2.4.0, bandit 1.9.4, hypothesis 6.168.5, coverage 7.16.2.
 - Approved project-scope exception: `.venv/` (reason: per-project isolation
   on a shared host; recreated from the manifest, never committed).
@@ -854,4 +855,4 @@ Runtimes use the current LTS line (Node.js LTS, .NET LTS); build output goes thr
 - `.git/` is the **internal Git repository structure**, not a project config file.
 
 **Guiding rule:** "It looks special" does not mean "It is a standard special file." The meaning of any file is determined by the software that reads and interprets it.
-<!-- mirror-sync: sync-sha=17e5f5d87703073c9bba4c31ca621fc4b11e628f -->
+<!-- mirror-sync: sync-sha=9e7f703435a919391210651d26c083beeaa83f38 -->
