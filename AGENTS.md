@@ -69,7 +69,7 @@ Single-purpose directories; generated artifacts never live beside sources.
 
 | Path | Purpose |
 |------|---------|
-| `Scripts/` | CLI entry point (`main.py`) plus the pipeline package (`src/`) |
+| `Scripts/` | CLI entry point (`main.py`), the pipeline package (`src/`), and `verify_mirror.py` (mirror verifier) |
 | `Scripts/src/` | Pipeline stages: models → client → validator → normalizer → quality → dedup → outputs, plus `external_feeds` |
 | `Tests/` | Pytest suite: unit, regression, fuzz (`test_fuzz.py`), performance (`test_performance.py`, `slow`), repo guards (`test_repo_conventions.py`) |
 | `Docs/` | Tracked bilingual documentation, including troubleshooting and `Planning/` work plans; owns the wiki mirror (auto-synched by `wiki-sync.yml`) |
@@ -849,4 +849,4 @@ Runtimes use the current LTS line (Node.js LTS, .NET LTS); build output goes thr
 - `.git/` is the **internal Git repository structure**, not a project config file.
 
 **Guiding rule:** "It looks special" does not mean "It is a standard special file." The meaning of any file is determined by the software that reads and interprets it.
-<!-- mirror-sync: sync-sha=88cecf6034f8d47b6b618a7bc7c1cf4e38c79846 -->
+<!-- mirror-sync: sync-sha=d96ab3c03268aeb1e8fae500e057864c76015137 -->

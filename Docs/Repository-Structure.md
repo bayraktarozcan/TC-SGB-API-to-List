@@ -29,6 +29,7 @@ TC-SGB-API-to-List/
 ├── Scripts/
 │   ├── __init__.py                    # Package init
 │   ├── main.py                        # CLI entry point
+│   ├── verify_mirror.py               # Mirror verifier: sync-sha + structure parity
 │   └── src/
 │       ├── __init__.py                # Source package init
 │       ├── client.py                  # Async API client (httpx)
@@ -46,6 +47,7 @@ TC-SGB-API-to-List/
 │   ├── test_client.py
 │   ├── test_deduplicator.py
 │   ├── test_fuzz.py
+│   ├── test_mirror_sync.py
 │   ├── test_models.py
 │   ├── test_normalizer.py
 │   ├── test_outputs.py
@@ -297,6 +299,7 @@ TC-SGB-API-to-List/
 ├── Scripts/
 │   ├── __init__.py                    # Paket başlatma
 │   ├── main.py                        # CLI giriş noktası
+│   ├── verify_mirror.py               # Ayna doğrulayıcı: sync-sha + yapı paritesi
 │   └── src/
 │       ├── __init__.py                # Kaynak paket başlatma
 │       ├── client.py                  # Asenkron API istemcisi (httpx)
@@ -314,6 +317,7 @@ TC-SGB-API-to-List/
 │   ├── test_client.py
 │   ├── test_deduplicator.py
 │   ├── test_fuzz.py
+│   ├── test_mirror_sync.py
 │   ├── test_models.py
 │   ├── test_normalizer.py
 │   ├── test_outputs.py
