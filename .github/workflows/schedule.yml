@@ -346,7 +346,7 @@ jobs:
             echo "[wait ${i}] ${STATE}"
             case "$STATE" in
               MERGED/*) echo "✓ Merged"; exit 0 ;;
-              */BEHIND) echo "  main advanced; updating branch"; gh_retry gh pr update-branch "${PR_URL}" || true ;;
+              */BEHIND) echo "  main advanced; rebasing branch"; gh_retry gh pr update-branch --rebase "${PR_URL}" || true ;;
               *) : ;; # checks pending or failing — keep waiting
             esac
             sleep 30
