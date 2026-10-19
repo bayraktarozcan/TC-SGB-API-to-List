@@ -63,6 +63,11 @@ findings. Do not drop below it.
   release listing on GitLab.
 - `TC_SGB_LOG_LEVEL` and `TC_SGB_OUTPUT_DIR` are honored by the CLI; `.env`
   files are read via `load_dotenv`.
+- Machine time: every clock read — automation, scripts, tests, CI — determines
+  time as `TZ=Europe/Istanbul date ...`; the project is pinned to Türkiye time
+  (fixed UTC+03:00 since 2016, no DST) and accepts no other offset; any
+  timestamp exposed in commit messages or release notes is Türkiye time and
+  labels the zone in parentheses as `(UTC+03:00)`.
 
 ## Layout
 
@@ -855,4 +860,4 @@ Runtimes use the current LTS line (Node.js LTS, .NET LTS); build output goes thr
 - `.git/` is the **internal Git repository structure**, not a project config file.
 
 **Guiding rule:** "It looks special" does not mean "It is a standard special file." The meaning of any file is determined by the software that reads and interprets it.
-<!-- mirror-sync: sync-sha=9e7f703435a919391210651d26c083beeaa83f38 -->
+<!-- mirror-sync: sync-sha=3a32018b94a8be74e94e7c1b13fba8f81f991230 -->
