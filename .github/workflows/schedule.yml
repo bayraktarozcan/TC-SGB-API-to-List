@@ -248,7 +248,7 @@ jobs:
             echo "Filter lists unchanged; branch already current."
             exit 0
           fi
-          git -C "${WORK}" commit -q -m "chore: update Brave/AdGuard filter lists $(date -u +%Y%m%d-%H%M%S)"
+          git -C "${WORK}" commit -q -m "chore: update Brave/AdGuard filter lists $(TZ=Europe/Istanbul date +"%Y%m%d-%H%M%S (UTC+03:00)")"
           git -C "${WORK}" push --force origin "${BRANCH}"
           echo "Published filter lists to branch ${BRANCH}"
 
@@ -284,7 +284,7 @@ jobs:
             done
           }
 
-          TIMESTAMP=$(date -u +"%Y%m%d-%H%M%S")
+          TIMESTAMP=$(TZ=Europe/Istanbul date +"%Y%m%d-%H%M%S (UTC+03:00)")
           BRANCH="scheduled-fetch-${TIMESTAMP}"
           RUN_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
