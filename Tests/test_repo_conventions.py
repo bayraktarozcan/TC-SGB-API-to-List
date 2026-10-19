@@ -1,8 +1,9 @@
 """Repository convention guards from the AGENTS.md project layer.
 
 Each guard below pins one project-layer invariant (version parity, document
-reachability, ignore-file compliance, spelling). Every guard was seen to fail during
-development by planting the violation it exists to catch, then reverting.
+reachability, ignore-file compliance, spelling, mirror sync). Every guard was seen
+to fail during development by planting the violation it exists to catch, then
+reverting.
 """
 
 from __future__ import annotations
@@ -13,6 +14,10 @@ import subprocess
 import tomllib
 from pathlib import Path
 from typing import ClassVar
+
+import pytest
+
+from Scripts.verify_mirror import find_drift, marker_value, read_normalized, sync_sha, verify
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -309,3 +314,31 @@ class TestCaseCollision:
     def test_checker_flags_collision(self):
         assert self._find(["Output/Blocklists/a.json", "Output/blocklists/a.json"]) != []
         assert self._find(["a/b.py"]) == []
+
+
+class TestMirrorPairGuards:
+    """The AGENTS.md mirror contract verifies against the live documents.
+
+    Marker self-agreement holds on every host, including CI; structure parity
+    of the real AGENTS.md / AGENTS-TR.md pair runs the shipped verifier
+    wherever the gitignored mirror exists, and skips where it does not.
+    """
+
+    def test_marker_matches_computed_sha(self):
+        source = read_normalized(REPO_ROOT / "AGENTS.md")
+        recorded = marker_value(source)
+        assert recorded is not None, "AGENTS.md carries no mirror-sync marker"
+        assert recorded == sync_sha(source), f"marker stale: {recorded}"
+
+    def test_real_pair_verifies_when_present(self):
+        mirror = REPO_ROOT / "AGENTS-TR.md"
+        if not mirror.is_file():
+            pytest.skip("AGENTS-TR.md absent (local-only layer); parity skipped")
+        report = verify(REPO_ROOT / "AGENTS.md", mirror)
+        assert report.drift == [], f"mirror drift: {report.drift}"
+
+    def test_guard_detects_planted_drift(self):
+        planted = "## A\n\n<!-- mirror-sync: sync-sha=cafe -->\n"
+        assert marker_value(planted) == "cafe"
+        assert marker_value("no marker here") is None
+        assert find_drift("# A\n\n- rule\n", "# A\n") != []
