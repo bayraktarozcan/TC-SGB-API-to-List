@@ -63,16 +63,20 @@ Each GitHub release includes:
 Release-asset links are served as file downloads, which Brave rejects as custom
 filter lists. The AdGuard output is therefore also mirrored as plain text on the
 rolling single-commit `filter-lists` branch (no history kept, never needs Git LFS),
-refreshed daily by the Scheduled Fetch workflow. Three third-party feeds
-(Poland, Azerbaijan, Slovenia) ship on the same branch as separate lists; files
+refreshed daily by the Scheduled Fetch workflow. Two third-party feeds
+(Poland, Slovenia) ship on the same branch as separate lists; files
 are numbered so Brave (which sorts subscriptions by URL) shows them in country
-order (`04` is reserved for Lithuania):
+order (`04` is reserved for Lithuania, whose source sits behind a Cloudflare
+challenge and cannot be fetched yet):
 
 - Türkiye: <https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/01-turkiye-sgb_adguard.txt>
 - Polonya: <https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/02-polonya-certpl_adguard.txt>
-- Azerbaycan: <https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/03-azerbaycan-blacklist_adguard.txt>
-- Slovenya: <https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/05-slovenya-certsi_adguard.txt>
+- Slovenya: <https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/03-slovenya-certsi_adguard.txt>
 - Subscribe in Brave via `brave://adblock` → Add filter list via URL.
+
+The Azerbaijani `blacklist.gov.az` list is out of scope: its contents proved
+unreliable and unsuitable for a curated blocklist, so it is no longer fetched,
+validated, or published, and its file has been dropped from the branch.
 
 ### External safety gate
 
@@ -492,15 +496,19 @@ Her GitHub sürümü şunları içerir:
 Release bağlantıları dosya indirme olarak sunulur ve Brave bunları özel filtre listesi
 olarak kabul etmez. Bu yüzden AdGuard çıktısı, yuvarlanan tek-commit'lik `filter-lists`
 dalında düz metin olarak da aynalanır (tarih tutulmaz, Git LFS gerekmez); Scheduled Fetch
-workflow'u ile her gün güncellenir. Üç üçüncü taraf akış (Polonya, Azerbaycan, Slovenya)
+workflow'u ile her gün güncellenir. İki üçüncü taraf akış (Polonya, Slovenya)
 aynı dalda ayrı listeler olarak yayınlanır; dosyalar numaralıdır, böylece Brave (abonelikleri
-URL'ye göre sıralar) onları ülke sırasıyla gösterir (`04` Litvanya için ayrılmıştır):
+URL'ye göre sıralar) onları ülke sırasıyla gösterir (`04` Litvanya için ayrılmıştır;
+kaynağı bir Cloudflare doğrulamasının arkasında olduğu için henüz çekilemiyor):
 
 - Türkiye: <https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/01-turkiye-sgb_adguard.txt>
 - Polonya: <https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/02-polonya-certpl_adguard.txt>
-- Azerbaycan: <https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/03-azerbaycan-blacklist_adguard.txt>
-- Slovenya: <https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/05-slovenya-certsi_adguard.txt>
+- Slovenya: <https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/03-slovenya-certsi_adguard.txt>
 - Brave'de `brave://adblock` → Add filter list via URL ile abone olun.
+
+Azerbaycan `blacklist.gov.az` listesi kapsam dışıdır: içeriği güvenilir olmadığı ve
+seçkin bir engel listesi için uygun düşmediği için artık çekilmiyor, doğrulanmıyor
+veya yayımlanmıyor; dosyası daldan çıkarıldı.
 
 ### Harici güvenlik kapısı
 

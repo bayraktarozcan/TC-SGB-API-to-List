@@ -508,19 +508,18 @@ class TestCmdHealth:
 class TestCmdFetchExternal:
     async def test_fetch_external_reports_statuses(self, capsys):
         results = {
-            "blacklist-az": {"status": "written", "rules": 10},
-            "cert-pl": {"status": "skipped", "rules": 20},
+            "cert-pl": {"status": "written", "rules": 10},
             "cert-si": {"status": "failed", "error": "boom"},
         }
         with patch("Scripts.main.fetch_all_feeds", new_callable=AsyncMock, return_value=results):
             await cmd_fetch_external(_make_args(output=None))
 
         out = capsys.readouterr().out
-        assert "blacklist-az" in out
+        assert "cert-pl" in out
         assert "cert-si" in out
 
     async def test_fetch_external_all_failed_exits(self):
-        results = {"blacklist-az": {"status": "failed", "error": "boom"}}
+        results = {"cert-si": {"status": "failed", "error": "boom"}}
         with (
             patch("Scripts.main.fetch_all_feeds", new_callable=AsyncMock, return_value=results),
             pytest.raises(SystemExit) as exc,
@@ -536,7 +535,7 @@ class TestCmdFetchExternal:
             patch(
                 "Scripts.main.fetch_all_feeds",
                 new_callable=AsyncMock,
-                return_value={"blacklist-az": {"status": "written", "rules": 1}},
+                return_value={"cert-pl": {"status": "written", "rules": 1}},
             ),
         ):
             main()
@@ -551,18 +550,18 @@ class TestCmdFetchExternal:
 
 class TestCmdValidateExternal:
     async def test_validate_external_pass(self, capsys):
-        verdicts = {"blacklist-az": {"ok": True, "rules": 10, "violations": []}}
+        verdicts = {"cert-pl": {"ok": True, "rules": 10, "violations": []}}
         with patch("Scripts.main.audit_external_lists", return_value=verdicts) as mock_audit:
             await cmd_validate_external(_make_args(output=None))
 
         out = capsys.readouterr().out
-        assert "blacklist-az" in out
+        assert "cert-pl" in out
         assert "PASS" in out
         assert mock_audit.call_args[0][0].name == "External"
 
     async def test_validate_external_fail_exits(self, capsys):
         verdicts = {
-            "blacklist-az": {
+            "cert-si": {
                 "ok": False,
                 "rules": 2,
                 "violations": ["google.com"],
@@ -587,7 +586,7 @@ class TestCmdValidateExternal:
 
     async def test_validate_external_missing_file_skips_without_failing(self, capsys):
         verdicts = {
-            "blacklist-az": {
+            "cert-si": {
                 "ok": True,
                 "skipped": True,
                 "rules": 0,
@@ -612,7 +611,7 @@ class TestCmdValidateExternal:
             ),
             patch(
                 "Scripts.main.audit_external_lists",
-                return_value={"blacklist-az": {"ok": True, "rules": 1, "violations": []}},
+                return_value={"cert-pl": {"ok": True, "rules": 1, "violations": []}},
             ),
         ):
             main()

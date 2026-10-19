@@ -8,6 +8,13 @@
 All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [Unreleased]
+
+### Removed
+
+- **Azerbaijan feed retired from scope** — the `blacklist.gov.az` list proved unreliable and unsuitable for a curated blocklist, so it is no longer fetched, validated, or published; `03-azerbaycan-blacklist_adguard.txt` is dropped from the `filter-lists` branch. The publication safety policy, per-feed audits, and the `validate-external` gate it was introduced with keep running for the remaining feeds.
+- **List order fixed** — Slovenia takes the freed `03` slot (`05-slovenya-certsi_adguard.txt` → `03-slovenya-certsi_adguard.txt`), so numbering runs 01–03 with `04` still reserved for Lithuania, whose source sits behind a Cloudflare challenge and cannot be fetched yet.
+
 ## [v0.3.2.0] — 2026-10-12
 
 ### Added
@@ -182,6 +189,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 Bu projedeki tüm dikkat çekici değişiklikler bu dosyada belgelenecektir.
 Biçim, [Keep a Changelog](https://keepachangelog.com/)'a dayanmaktadır.
+
+## [Yayınlanmamış]
+
+### Silinen
+
+- **Azerbaycan akışı kapsamdan çıkarıldı** — `blacklist.gov.az` listesi güvenilir olmadığı ve seçkin bir engel listesi için uygun düşmediği için artık çekilmiyor, doğrulanmıyor veya yayımlanmıyor; `03-azerbaycan-blacklist_adguard.txt` dosyası `filter-lists` dalından çıkarıldı. Yayımlama güvenlik politikası, akış başına denetimler ve akışla birlikte gelen `validate-external` kapısı kalan akışlarda çalışmaya devam ediyor.
+- **Liste sırası düzeltildi** — Slovenya boşalan `03` numarasını aldı (`05-slovenya-certsi_adguard.txt` → `03-slovenya-certsi_adguard.txt`), böylece numaralandırma 01–03 arasında akıyor ve `04` hâlâ Litvanya için ayrılmış; kaynağının arkasında bir Cloudflare doğrulaması olduğu için henüz çekilemiyor.
 
 ## [v0.3.2.0] — 2026-10-12
 

@@ -162,12 +162,12 @@ jobs:
           # Only fresh files passing the safety gate are published. A missing
           # file (unreachable feed) or a failing file keeps serving its last
           # good snapshot instead of shipping nothing or bad rules.
-          for KEY in blacklist-az cert-pl cert-si; do
+          for KEY in cert-pl cert-si; do
             matched=""
             for EXT in Output/External/*_adguard.txt; do
               base="$(basename "${EXT}")"
               case "${KEY}:${base}" in
-                blacklist-az:03-*|cert-pl:02-*|cert-si:05-*) matched="${EXT}" ;;
+                cert-pl:02-*|cert-si:03-*) matched="${EXT}" ;;
               esac
             done
             if [ -z "${matched}" ]; then
@@ -180,6 +180,15 @@ jobs:
               fi
             else
               echo "::warning::filter-lists: ${KEY} failed the safety gate; keeping previous snapshot."
+            fi
+          done
+          # The Azerbaijani blacklist.gov.az feed left the project scope: its
+          # contents proved unreliable, so it is neither fetched nor published.
+          # Drop it and its old file names from the seeded snapshot so the
+          # branch stops serving it (and the pre-renumber Slovenian name).
+          for STALE in 03-azerbaycan-blacklist_adguard.txt 05-slovenya-certsi_adguard.txt; do
+            if [ -f "${WORK}/${STALE}" ]; then
+              rm -f "${WORK}/${STALE}"
             fi
           done
           shopt -u nullglob
@@ -201,16 +210,20 @@ jobs:
               https://raw.githubusercontent.com/${{ github.repository }}/filter-lists/01-turkiye-sgb_adguard.txt
           - Polonya | CERT.PL:
               https://raw.githubusercontent.com/${{ github.repository }}/filter-lists/02-polonya-certpl_adguard.txt
-          - Azerbaycan | Blacklist.gov.az:
-              https://raw.githubusercontent.com/${{ github.repository }}/filter-lists/03-azerbaycan-blacklist_adguard.txt
           - Slovenya | CERT.SI:
-              https://raw.githubusercontent.com/${{ github.repository }}/filter-lists/05-slovenya-certsi_adguard.txt
+              https://raw.githubusercontent.com/${{ github.repository }}/filter-lists/03-slovenya-certsi_adguard.txt
+
+          Azerbaycan | Blacklist.gov.az listesi kapsam dışıdır: ürettiği sonuçlar
+          güvenilir değildi, bu yüzden artık yayımlanmıyor ve `03-azerbaycan-`
+          dosyası bu daldan kaldırıldı. / The Azerbaijani blacklist.gov.az list
+          is out of scope: its contents were unreliable, so it is no longer
+          published and its file has been removed from this branch.
           EOF
           git -C "${WORK}" add -A
           # Prove full content is staged: a Git LFS pointer would stage ~130 bytes
           # instead of the source size. The branch tree carries no .gitattributes,
           # so LFS substitution is impossible by construction; this asserts it.
-          for STAGED in 01-turkiye-sgb_adguard.txt 02-polonya-certpl_adguard.txt 03-azerbaycan-blacklist_adguard.txt 05-slovenya-certsi_adguard.txt; do
+          for STAGED in 01-turkiye-sgb_adguard.txt 02-polonya-certpl_adguard.txt 03-slovenya-certsi_adguard.txt; do
             if [ -f "${WORK}/${STAGED}" ]; then
               STAGED_SIZE="$(git -C "${WORK}" cat-file -s ":${STAGED}")"
               if [ "${STAGED}" = "01-turkiye-sgb_adguard.txt" ]; then

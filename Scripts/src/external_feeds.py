@@ -6,6 +6,16 @@ change: append one :class:`ExternalFeed` entry to :data:`EXTERNAL_FEEDS`.
 
 Every source is fetched, parsed, and published independently: one unreachable
 or malformed feed never blocks the others or the TC-SGB pipeline.
+
+Retired source: the Azerbaijani `blacklist.gov.az` feed is out of scope. It is
+no longer fetched, validated, or published, because its contents proved
+unreliable and unsuitable for a curated blocklist. The publication safety
+policy, the per-feed audit files, and the ``validate-external`` gate it was
+introduced with stay in place for every source listed below.
+
+Source numbering is contiguous: ``01`` Türkiye, ``02`` Polonya, ``03``
+Slovenya. ``04`` is reserved for Lithuania (NKSC), whose source sits behind a
+Cloudflare challenge and cannot be fetched yet, so no entry may take it.
 """
 
 from __future__ import annotations
@@ -43,14 +53,6 @@ class ExternalFeed:
 
 EXTERNAL_FEEDS: tuple[ExternalFeed, ...] = (
     ExternalFeed(
-        key="blacklist-az",
-        url="https://blacklist.gov.az/download/threatfeed",
-        format="hosts",
-        output_file="03-azerbaycan-blacklist_adguard.txt",
-        title="Azerbaycan | Blacklist.gov.az Threat Feed (AdGuard)",
-        homepage="https://blacklist.gov.az/",
-    ),
-    ExternalFeed(
         key="cert-pl",
         url="https://hole.cert.pl/domains/v2/domains.txt",
         format="lines",
@@ -62,7 +64,7 @@ EXTERNAL_FEEDS: tuple[ExternalFeed, ...] = (
         key="cert-si",
         url="https://www.cert.si/misp/rpz/all.txt",
         format="csv",
-        output_file="05-slovenya-certsi_adguard.txt",
+        output_file="03-slovenya-certsi_adguard.txt",
         title="Slovenya | CERT.SI MISP RPZ Domains (AdGuard)",
         homepage="https://www.cert.si/",
     ),

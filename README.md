@@ -65,7 +65,7 @@ tc-sgb generate -i Output/raw_records.json
 # Fetch and display health status
 tc-sgb health
 
-# Fetch third-party threat feeds (CERT.PL, CERT.SI, blacklist.gov.az)
+# Fetch third-party threat feeds (CERT.PL, CERT.SI)
 tc-sgb fetch-external
 
 # Verify published external lists against the safety policy (no fetching)
@@ -90,13 +90,17 @@ Latest pre-generated IoC outputs are published automatically (daily, 19:00 UTC) 
 > Brave rejects as custom filter lists. Subscribe to the
 > [plain-text mirror](https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/01-turkiye-sgb_adguard.txt)
 > instead (`brave://adblock` → Add filter list via URL); it is refreshed daily.
-> Three more curated lists (Poland, Azerbaijan, Slovenia) are published on
+> Two more curated lists (Poland, Slovenia) are published on
 > the same branch and refreshed by the same workflow; files are numbered so
-> Brave shows them in country order (`04` is reserved for Lithuania):
+> Brave shows them in country order (`04` is reserved for Lithuania, whose
+> source sits behind a Cloudflare challenge and cannot be fetched yet):
 >
 > - [02-polonya-certpl_adguard.txt](https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/02-polonya-certpl_adguard.txt)
-> - [03-azerbaycan-blacklist_adguard.txt](https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/03-azerbaycan-blacklist_adguard.txt)
-> - [05-slovenya-certsi_adguard.txt](https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/05-slovenya-certsi_adguard.txt)
+> - [03-slovenya-certsi_adguard.txt](https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/03-slovenya-certsi_adguard.txt)
+>
+> The Azerbaijani `blacklist.gov.az` list is out of scope: its contents proved
+> unreliable and unsuitable for a curated blocklist, so it is no longer
+> fetched or published.
 
 ### Publication safety
 
@@ -289,7 +293,7 @@ tc-sgb generate -i Output/raw_records.json
 # Sağlık durumunu görüntüle
 tc-sgb health
 
-# Üçüncü taraf tehdit akışlarını çek (CERT.PL, CERT.SI, blacklist.gov.az)
+# Üçüncü taraf tehdit akışlarını çek (CERT.PL, CERT.SI)
 tc-sgb fetch-external
 
 # Yayımlanmış harici listeleri güvenlik politikasına göre doğrula (çekme yok)
@@ -314,13 +318,17 @@ En güncel önceden üretilmiş IoC çıktıları (her gün, 19:00 UTC) yuvarlan
 > Brave bunları özel filtre listesi olarak kabul etmez. Bunun yerine her gün güncellenen
 > [düz metin aynayı](https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/01-turkiye-sgb_adguard.txt)
 > kullanın (`brave://adblock` → Add filter list via URL).
-> Aynı dalda, aynı iş akışıyla güncellenen üç seçkin liste daha yayınlanır
-> (Polonya, Azerbaycan, Slovenya); dosyalar numaralıdır, böylece Brave onları
-> ülke sırasıyla gösterir (`04` Litvanya için ayrılmıştır):
+> Aynı dalda, aynı iş akışıyla güncellenen iki seçkin liste daha yayınlanır
+> (Polonya, Slovenya); dosyalar numaralıdır, böylece Brave onları
+> ülke sırasıyla gösterir (`04` Litvanya için ayrılmıştır; kaynağı bir
+> Cloudflare doğrulamasının arkasında olduğu için henüz çekilemiyor):
 >
 > - [02-polonya-certpl_adguard.txt](https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/02-polonya-certpl_adguard.txt)
-> - [03-azerbaycan-blacklist_adguard.txt](https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/03-azerbaycan-blacklist_adguard.txt)
-> - [05-slovenya-certsi_adguard.txt](https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/05-slovenya-certsi_adguard.txt)
+> - [03-slovenya-certsi_adguard.txt](https://raw.githubusercontent.com/bayraktarozcan/TC-SGB-API-to-List/filter-lists/03-slovenya-certsi_adguard.txt)
+>
+> Azerbaycan `blacklist.gov.az` listesi kapsam dışıdır: içeriği güvenilir
+> olmadığı ve seçkin bir engel listesi için uygun düşmediği için artık
+> çekilmiyor veya yayımlanmıyor.
 
 ### Yayımlama güvenliği
 

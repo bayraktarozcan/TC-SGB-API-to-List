@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 from datetime import UTC, datetime
 from pathlib import Path
 from unittest.mock import AsyncMock, patch
@@ -234,3 +235,43 @@ def test_audit_external_lists_missing_and_unknown_feed(tmp_path: Path):
     assert verdicts["test"]["skipped"] is True
     unknown = audit_external_lists(tmp_path, feed_key="nope")
     assert unknown["nope"]["ok"] is False
+
+
+# ---------------------------------------------------------------------------
+# publish-scope guards
+# ---------------------------------------------------------------------------
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
+SCHEDULE = REPO_ROOT / ".github" / "workflows" / "schedule.yml"
+RETIRED_AZ_FILE = "03-azerbaycan-blacklist_adguard.txt"
+
+
+def test_feed_scope_is_pinned():
+    assert [feed.key for feed in EXTERNAL_FEEDS] == ["cert-pl", "cert-si"]
+    numbers = []
+    for feed in EXTERNAL_FEEDS:
+        match = re.match(r"(\d{2})-", feed.output_file)
+        assert match, feed.output_file
+        numbers.append(match.group(1))
+    assert numbers == sorted(set(numbers)), f"file numbers must be unique and ordered: {numbers}"
+    assert "04" not in numbers, "04 is reserved for Lithuania (NKSC, Cloudflare-blocked)"
+
+
+def test_schedule_publishes_exactly_the_configured_feeds():
+    workflow = SCHEDULE.read_text(encoding="utf-8")
+    loop = re.search(r"for KEY in ([^;]+); do", workflow)
+    assert loop, "feed loop not found in schedule.yml"
+    assert set(loop.group(1).split()) == {feed.key for feed in EXTERNAL_FEEDS}
+    for feed in EXTERNAL_FEEDS:
+        assert f"{feed.key}:{feed.output_file[:2]}-" in workflow, feed.key
+        assert feed.output_file in workflow, feed.output_file
+
+
+def test_retired_azerbaijan_feed_is_purged_not_published():
+    assert all("blacklist.gov.az" not in feed.url for feed in EXTERNAL_FEEDS)
+    assert all(feed.key != "blacklist-az" for feed in EXTERNAL_FEEDS)
+    workflow = SCHEDULE.read_text(encoding="utf-8")
+    purge_lines = [line for line in workflow.splitlines() if RETIRED_AZ_FILE in line]
+    assert len(purge_lines) == 1, f"retired file named outside the purge loop: {purge_lines}"
+    assert purge_lines[0].strip().startswith("for STALE in")
+    assert RETIRED_AZ_FILE not in workflow.replace(purge_lines[0], "")
