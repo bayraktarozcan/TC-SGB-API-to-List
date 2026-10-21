@@ -1,10 +1,10 @@
 {
-  "bytes": 104837120,
+  "bytes": 63709184,
   "extension": ".db",
   "file": "threat_intel_sqlite.db",
   "format": "sqlite",
   "raw_url": "https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/download/ioc-data/threat_intel_sqlite.db",
   "release_tag": "ioc-data",
-  "sha256": "89331e9caf907220813e52a519fd30215c193b802a260c515245be543e3b2cd0",
+  "sha256": "43bd18df80254719159a453adffb0e1f5e04c187e2a2dcac5a2796edb98ca102",
   "title": "SQLite database of all IoCs"
 }
