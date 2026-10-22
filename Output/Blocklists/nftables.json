@@ -1,10 +1,10 @@
 {
-  "bytes": 10629364,
+  "bytes": 17354062,
   "extension": ".nft",
   "file": "threat_intel_nftables.nft",
   "format": "nftables",
   "raw_url": "https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/download/ioc-data/threat_intel_nftables.nft",
   "release_tag": "ioc-data",
-  "sha256": "016beb4b688ec7087c7f512c7adb3fa816abe93ab91a124fb2286d90795a2e04",
+  "sha256": "dca8b8328fd1033a61be0a1c036a0102428dd1525d3ea6026577017688961356",
   "title": "nftables sets"
 }
