@@ -15,6 +15,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 - **Azerbaijan feed retired from scope** — the `blacklist.gov.az` list proved unreliable and unsuitable for a curated blocklist, so it is no longer fetched, validated, or published; `03-azerbaycan-blacklist_adguard.txt` is dropped from the `filter-lists` branch. The publication safety policy, per-feed audits, and the `validate-external` gate it was introduced with keep running for the remaining feeds.
 - **List order fixed** — Slovenia takes the freed `03` slot (`05-slovenya-certsi_adguard.txt` → `03-slovenya-certsi_adguard.txt`), so numbering runs 01–03 with `04` still reserved for Lithuania, whose source sits behind a Cloudflare challenge and cannot be fetched yet.
 
+### Fixed
+
+- **S3 service roots no longer blocked wholesale** — a URL indicator could be promoted to its host (`||s3.amazonaws.com^`), blocking every bucket on the endpoint. Shared S3 service endpoints are now recognised by the safety policy, so a URL on one is never promoted to a host rule; bucket-specific hosts remain eligible.
+
 ## [v0.3.2.0] — 2026-10-12
 
 ### Added
@@ -196,6 +200,10 @@ Biçim, [Keep a Changelog](https://keepachangelog.com/)'a dayanmaktadır.
 
 - **Azerbaycan akışı kapsamdan çıkarıldı** — `blacklist.gov.az` listesi güvenilir olmadığı ve seçkin bir engel listesi için uygun düşmediği için artık çekilmiyor, doğrulanmıyor veya yayımlanmıyor; `03-azerbaycan-blacklist_adguard.txt` dosyası `filter-lists` dalından çıkarıldı. Yayımlama güvenlik politikası, akış başına denetimler ve akışla birlikte gelen `validate-external` kapısı kalan akışlarda çalışmaya devam ediyor.
 - **Liste sırası düzeltildi** — Slovenya boşalan `03` numarasını aldı (`05-slovenya-certsi_adguard.txt` → `03-slovenya-certsi_adguard.txt`), böylece numaralandırma 01–03 arasında akıyor ve `04` hâlâ Litvanya için ayrılmış; kaynağının arkasında bir Cloudflare doğrulaması olduğu için henüz çekilemiyor.
+
+### Düzeltilen
+
+- **S3 servis kökleri artık toptan engellenmiyor** — bir URL göstergesi ana makinesine yükseltilerek (`||s3.amazonaws.com^`) uçtaki tüm bucket'ları engelleyebiliyordu. Paylaşımlı S3 servis uçları artık güvenlik politikası tarafından tanınıyor; böyle bir uçtaki URL ana makine kuralına yükseltilmiyor, bucket'a özgü ana makineler kurala dönüşmeye devam ediyor.
 
 ## [v0.3.2.0] — 2026-10-12
 

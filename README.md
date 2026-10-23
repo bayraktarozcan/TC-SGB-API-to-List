@@ -107,10 +107,13 @@ Latest pre-generated IoC outputs are published automatically (daily, 19:00 UTC) 
 Syntax validation checks rule shape; the safety policy in `Scripts/src/safety.py`
 decides whether blocking a host wholesale is safe to publish. High-impact hosts
 are rejected outright, shared user-content infrastructure goes to review, and
-every held indicator lands in a per-feed audit file (`Output/External/`) with
-its reason — never silently dropped. The scheduled workflow publishes only
-lists passing `tc-sgb validate-external`; a failing feed keeps serving its last
-good snapshot.
+external feeds write every held indicator to a per-feed audit file
+(`Output/External/`) with its reason — never silently dropped. Domain indicators
+from the main feed are held at the quality stage and counted in the run summary.
+URL indicators remain URLs; when a host-wide generator promotes one, it applies
+the same policy, so a blocked or shared host never becomes a wholesale rule. The
+scheduled workflow publishes only lists passing
+`tc-sgb validate-external`; a failing feed keeps serving its last good snapshot.
 
 ## Project Structure
 
@@ -335,10 +338,15 @@ En güncel önceden üretilmiş IoC çıktıları (her gün, 19:00 UTC) yuvarlan
 Sözdizimi doğrulaması kural biçimini denetler; `Scripts/src/safety.py` içindeki
 güvenlik politikası bir makinenin toptan engellenmesinin yayımlanmasının güvenli
 olup olmadığına karar verir. Yüksek etkili makineler doğrudan reddedilir, ortak
-kullanıcı içerik altyapısı incelemeye ayrılır ve tutulan her gösterge gerekçesiyle
-birlikte akış başına denetim dosyasına (`Output/External/`) yazılır — asla sessizce
-düşürülmez. Zamanlanmış iş akışı yalnızca `tc-sgb validate-external` geçen listeleri
-yayımlar; koşamayan akış son iyi anlık görüntüyü sunmaya devam eder.
+kullanıcı içerik altyapısı incelemeye ayrılır ve harici akışlar tutulan her
+göstergeyi gerekçesiyle birlikte akış başına denetim dosyasına
+(`Output/External/`) yazar — asla sessizce düşürülmez. Ana akıştaki alan adı
+göstergeleri kalite aşamasında tutulur ve çalışma özetinde sayılır. URL
+göstergeleri URL olarak kalır; ana makineyi toptan engelleyen bir üretici bunları
+yükseltirken aynı politikayı uygular, böylece engelli veya paylaşımlı bir ana
+makine toptan kurala dönüşmez. Zamanlanmış iş akışı yalnızca
+`tc-sgb validate-external` geçen listeleri yayımlar; koşamayan akış son iyi anlık
+görüntüyü sunmaya devam eder.
 
 ## Proje Yapısı
 

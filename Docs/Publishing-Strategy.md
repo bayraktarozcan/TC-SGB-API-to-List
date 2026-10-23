@@ -91,8 +91,10 @@ source snapshot (`<feed>_source.txt`). The list header carries both timestamps:
 Before publishing, the workflow runs `tc-sgb validate-external` (usable locally
 too) and copies only gate-passing files to the branch. A feed that fails the
 gate keeps serving its last good snapshot; a file that never passed is never
-treated as safe. The main pipeline applies the same policy at its quality stage
-(`safety_rejected` in the run summary), independent of the quality score.
+treated as safe. The main pipeline applies the same policy to domain indicators
+at its quality stage (`safety_rejected` in the run summary), independent of the
+quality score. URL indicators remain URLs, and a host-wide generator applies the
+same policy before promoting one, so a held host never becomes a wholesale rule.
 
 ### Release Process
 
@@ -524,8 +526,11 @@ birlikte akış başına denetim dosyasına (`Output/External/` altında
 Yayımlamadan önce iş akışı `tc-sgb validate-external` çalıştırır (yerelde de
 kullanılabilir) ve dala yalnızca kapıdan geçen dosyaları kopyalar. Kapıdan
 geçemeyen akış son iyi anlık görüntüyü sunmaya devam eder; hiç geçmemiş bir
-dosya asla güvenli kabul edilmez. Ana hat aynı politikayı kalite aşamasında
-uygular (koşu özetinde `safety_rejected`), kalite puanından bağımsızdır.
+dosya asla güvenli kabul edilmez. Ana hat aynı politikayı alan adı göstergeleri
+için kalite aşamasında uygular (koşu özetinde `safety_rejected`), kalite puanından
+bağımsızdır. URL göstergeleri URL olarak kalır ve ana makineyi toptan engelleyen
+bir üretici yükseltmeden önce aynı politikayı uygular; böylece tutulan bir ana
+makine toptan kurala dönüşmez.
 
 ### Yayın Süreci
 

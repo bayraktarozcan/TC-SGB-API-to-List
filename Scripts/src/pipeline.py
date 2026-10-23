@@ -18,7 +18,6 @@ from .models import (
     ValidatedIoC,
 )
 from .normalizer import normalize_ioc
-from .outputs import _host_from_url
 from .quality import DEFAULT_QUALITY_THRESHOLD, score_ioc
 from .safety import Decision, decide_host
 from .validator import _infer_ioc_type, validate_ioc
@@ -177,15 +176,14 @@ class Pipeline:
 
     @staticmethod
     def _safety_hold(item: NormalizedIoC) -> bool:
-        """Hold indicators the safety policy refuses to publish wholesale."""
-        host: str | None = None
-        if item.ioc_type == IoCType.DOMAIN:
-            host = item.value
-        elif item.ioc_type == IoCType.URL:
-            host = _host_from_url(item.value)
-        if host is None:
+        """Hold domain indicators the policy refuses to block wholesale.
+
+        URL indicators are path-specific rather than wholesale host blocks, so
+        host-wide generators apply the same policy when they emit a rule.
+        """
+        if item.ioc_type != IoCType.DOMAIN:
             return False
-        return decide_host(host, source="tc-sgb").decision != Decision.ACCEPT
+        return decide_host(item.value, source="tc-sgb").decision != Decision.ACCEPT
 
     def _stage_quality(self, normalized: list[NormalizedIoC]) -> tuple[list[ScoredIoC], int]:
         """Stage 4: Score quality and filter."""

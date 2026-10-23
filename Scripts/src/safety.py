@@ -9,10 +9,17 @@ Matching is exact-host only, never substring: ``evil-google.com``,
 ``google.js.cn`` and ``google.com.evil.example.com`` share text with
 ``google.com`` but are different registrable domains, so none of them is
 affected by the ``google.com`` rule. Only an exact entry blocks or holds.
+
+Amazon S3 service endpoints are the one structural case: the whole host is
+recognised by its endpoint grammar (global, regional, dual-stack, FIPS,
+website, access point, control, tables, vectors, express, accelerate, legacy,
+multi-region access point and AWS partition forms), while a bucket host such as
+``mybucket.s3.amazonaws.com`` remains a distinct, eligible indicator.
 """
 
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass, field
 from enum import Enum
 
@@ -65,18 +72,60 @@ SHARED_APEX: frozenset[str] = frozenset(
     }
 )
 
+SHARED_SERVICE_APEX: frozenset[str] = frozenset(
+    {
+        "amazonaws.com",
+        "amazonaws.com.cn",
+        "amazonaws.eu",
+        "amazonwebservices.eu",
+        "api.aws",
+        "api.amazonwebservices.eu",
+        "c2s.ic.gov",
+        "sc2s.sgov.gov",
+        "csp.hci.ic.gov",
+        "cloud.adc-e.uk",
+    }
+)
+
+_S3_REGION = r"(?:[a-z]{2}(?:-[a-z]+){1,2}|eusc(?:-[a-z]+){1,2}|external)-\d+"
+
+_S3_DOMAIN = (
+    r"(?:amazonaws\.com(?:\.cn)?|amazonaws\.eu|api\.aws|(?:api\.)?amazonwebservices\.eu"
+    r"|c2s\.ic\.gov|sc2s\.sgov\.gov|csp\.hci\.ic\.gov|cloud\.adc-e\.uk)"
+)
+
+_S3_SERVICE_ROOT = re.compile(
+    rf"(?:"
+    rf"s3(?:-accesspoint|-control|-object-lambda|-outposts)?(?:-fips)?"
+    rf"(?:\.dualstack)?[.-]{_S3_REGION}"
+    rf"|s3tables(?:\.dualstack)?\.{_S3_REGION}"
+    rf"|s3vectors\.{_S3_REGION}"
+    rf"|s3express(?:-[a-z0-9-]+)?(?:\.dualstack)?\.{_S3_REGION}"
+    rf"|s3-website[.-]{_S3_REGION}"
+    rf"|s3-accelerate(?:\.dualstack)?"
+    rf"|s3-global(?:\.dualstack)?"
+    rf"|(?:mrap\.)?accesspoint\.s3-global(?:\.dualstack)?"
+    rf"|s3"
+    rf")\.{_S3_DOMAIN}"
+)
+
 REASON_BLOCKED = "blocked exact high-impact host"
 REASON_SHARED_APEX = "shared user-content infrastructure apex needs review"
+REASON_SHARED_SERVICE = "shared provider service endpoint needs review"
 REASON_ACCEPTED = "no policy rule matched"
 REASON_UNENCODABLE = "unencodable hostname"
 
 
 def decide_host(host: str, *, source: str) -> SafetyRecord:
     """Decide whether blocking *host* wholesale is safe to publish."""
-    text = host.strip().lower().rstrip(".")
+    text = host.strip().lower()
     try:
-        ascii_host = text.encode("idna").decode("ascii")
+        ascii_host = text.encode("idna").decode("ascii").rstrip(".")
     except UnicodeError:
+        return SafetyRecord(
+            source=source, indicator=host, decision=Decision.REJECT, reason=REASON_UNENCODABLE
+        )
+    if not ascii_host:
         return SafetyRecord(
             source=source, indicator=host, decision=Decision.REJECT, reason=REASON_UNENCODABLE
         )
@@ -90,6 +139,13 @@ def decide_host(host: str, *, source: str) -> SafetyRecord:
             indicator=ascii_host,
             decision=Decision.REVIEW,
             reason=REASON_SHARED_APEX,
+        )
+    if ascii_host in SHARED_SERVICE_APEX or _S3_SERVICE_ROOT.fullmatch(ascii_host):
+        return SafetyRecord(
+            source=source,
+            indicator=ascii_host,
+            decision=Decision.REVIEW,
+            reason=REASON_SHARED_SERVICE,
         )
     return SafetyRecord(
         source=source, indicator=ascii_host, decision=Decision.ACCEPT, reason=REASON_ACCEPTED

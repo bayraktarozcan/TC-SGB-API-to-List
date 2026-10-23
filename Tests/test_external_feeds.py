@@ -150,11 +150,18 @@ def test_generate_external_adguard_with_source_updated():
 
 def test_apply_policy_splits_verdicts():
     accepted, rejected, review = apply_policy(
-        ["evil.com", "google.com", "docs.google.com"], source="test"
+        [
+            "evil.com",
+            "google.com",
+            "docs.google.com",
+            "s3.amazonaws.com",
+            "mybucket.s3.amazonaws.com",
+        ],
+        source="test",
     )
-    assert accepted == ["evil.com"]
+    assert accepted == ["evil.com", "mybucket.s3.amazonaws.com"]
     assert [r.indicator for r in rejected] == ["google.com"]
-    assert [r.indicator for r in review] == ["docs.google.com"]
+    assert [r.indicator for r in review] == ["docs.google.com", "s3.amazonaws.com"]
     assert all(r.source == "test" for r in (*rejected, *review))
 
 

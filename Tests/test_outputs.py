@@ -121,6 +121,39 @@ class TestAdGuard:
         out = generate_adguard(scored_iocs)
         assert "||evil-phish.com^" in out
 
+    def test_domain_rule_normalized(self):
+        iocs = [
+            ScoredIoC(
+                value="Evil.Example.COM.",
+                ioc_type=IoCType.DOMAIN,
+                quality_score=90.0,
+            ),
+        ]
+        out = generate_adguard(iocs)
+        assert "||evil.example.com^" in out
+        assert "||Evil.Example.COM.^" not in out
+
+    def test_malformed_hosts_not_promoted(self):
+        iocs = [
+            ScoredIoC(
+                value=".evil.example.com",
+                ioc_type=IoCType.DOMAIN,
+                quality_score=90.0,
+            ),
+            ScoredIoC(
+                value="evil..example.com",
+                ioc_type=IoCType.DOMAIN,
+                quality_score=90.0,
+            ),
+            ScoredIoC(
+                value="https://.evil.example.com/key",
+                ioc_type=IoCType.URL,
+                quality_score=90.0,
+            ),
+        ]
+        out = generate_adguard(iocs)
+        assert [line for line in out.split("\n") if line.startswith("||")] == []
+
     def test_rule_sources(self, scored_iocs):
         out = generate_adguard(scored_iocs)
         lines = [line for line in out.split("\n") if line.startswith("||")]
@@ -157,6 +190,249 @@ class TestAdGuard:
         ]
         out = generate_adguard(iocs)
         assert "||203.0.113.7^" in out
+
+    def test_empty_or_invalid_url_not_promoted(self):
+        iocs = [
+            ScoredIoC(
+                value="",
+                ioc_type=IoCType.URL,
+                quality_score=90.0,
+            ),
+            ScoredIoC(
+                value="   ",
+                ioc_type=IoCType.URL,
+                quality_score=90.0,
+            ),
+            ScoredIoC(
+                value="http://[::1",
+                ioc_type=IoCType.URL,
+                quality_score=90.0,
+            ),
+        ]
+        out = generate_adguard(iocs)
+        assert [line for line in out.split("\n") if line.startswith("||")] == []
+
+    def test_s3_service_roots_not_promoted(self):
+        iocs = [
+            ScoredIoC(
+                value="https://s3.amazonaws.com/zonivezada/adenovirus_vector.pdf",
+                ioc_type=IoCType.URL,
+                quality_score=28.0,
+            ),
+            ScoredIoC(
+                value="https://s3.us-east-2.amazonaws.com/ethos-file-repo/Kwarantanna-Domowa.apk",
+                ioc_type=IoCType.URL,
+                quality_score=28.0,
+            ),
+            ScoredIoC(
+                value="https://s3-eu-west-1.amazonaws.com/ilbssar/zwcp/setup.exe",
+                ioc_type=IoCType.URL,
+                quality_score=33.0,
+            ),
+            ScoredIoC(
+                value="https://s3-fips.dualstack.us-east-2.amazonaws.com/bucket/key",
+                ioc_type=IoCType.URL,
+                quality_score=33.0,
+            ),
+            ScoredIoC(
+                value="https://s3-accesspoint-fips.dualstack.us-east-2.amazonaws.com/bucket/key",
+                ioc_type=IoCType.URL,
+                quality_score=33.0,
+            ),
+            ScoredIoC(
+                value="https://s3tables.us-east-1.amazonaws.com/bucket/key",
+                ioc_type=IoCType.URL,
+                quality_score=33.0,
+            ),
+            ScoredIoC(
+                value="https://s3tables.us-east-1.api.aws/bucket/key",
+                ioc_type=IoCType.URL,
+                quality_score=33.0,
+            ),
+            ScoredIoC(
+                value="https://s3vectors.us-east-1.api.aws/bucket/key",
+                ioc_type=IoCType.URL,
+                quality_score=33.0,
+            ),
+            ScoredIoC(
+                value="https://s3-outposts-fips.us-east-2.api.aws/bucket/key",
+                ioc_type=IoCType.URL,
+                quality_score=33.0,
+            ),
+            ScoredIoC(
+                value="https://s3.us-iso-east-1.c2s.ic.gov/bucket/key",
+                ioc_type=IoCType.URL,
+                quality_score=33.0,
+            ),
+            ScoredIoC(
+                value="https://s3.eusc-de-east-1.amazonaws.eu/bucket/key",
+                ioc_type=IoCType.URL,
+                quality_score=33.0,
+            ),
+            ScoredIoC(
+                value="https://s3vectors.eusc-de-east-1.api.amazonwebservices.eu/bucket/key",
+                ioc_type=IoCType.URL,
+                quality_score=33.0,
+            ),
+            ScoredIoC(
+                value="https://s3-accelerate.amazonaws.com/bucket/key",
+                ioc_type=IoCType.URL,
+                quality_score=33.0,
+            ),
+            ScoredIoC(
+                value="https://s3-global.amazonaws.com/bucket/key",
+                ioc_type=IoCType.URL,
+                quality_score=33.0,
+            ),
+            ScoredIoC(
+                value="https://accesspoint.s3-global.amazonaws.com/bucket/key",
+                ioc_type=IoCType.URL,
+                quality_score=33.0,
+            ),
+            ScoredIoC(
+                value="https://s3-external-1.amazonaws.com/bucket/key",
+                ioc_type=IoCType.URL,
+                quality_score=33.0,
+            ),
+            ScoredIoC(
+                value="https://s3-website.us-east-2.amazonaws.com/bucket/key",
+                ioc_type=IoCType.URL,
+                quality_score=33.0,
+            ),
+            ScoredIoC(
+                value="https://s3-website.eusc-de-east-1.amazonaws.eu/bucket/key",
+                ioc_type=IoCType.URL,
+                quality_score=33.0,
+            ),
+            ScoredIoC(
+                value="https://s3express-use1-az4.us-east-1.amazonaws.com/bucket/key",
+                ioc_type=IoCType.URL,
+                quality_score=33.0,
+            ),
+        ]
+        out = generate_adguard(iocs)
+        assert [line for line in out.split("\n") if line.startswith("||")] == []
+
+    def test_s3_service_root_unicode_dot_not_promoted(self):
+        iocs = [
+            ScoredIoC(
+                value="https://s3.amazonaws.com\u3002/key",
+                ioc_type=IoCType.URL,
+                quality_score=33.0,
+            ),
+        ]
+        out = generate_adguard(iocs)
+        assert [line for line in out.split("\n") if line.startswith("||")] == []
+
+    def test_unicode_trailing_dot_rule_normalized(self):
+        iocs = [
+            ScoredIoC(
+                value="https://evil.example.com\u3002/key",
+                ioc_type=IoCType.URL,
+                quality_score=33.0,
+            ),
+        ]
+        out = generate_adguard(iocs)
+        assert "||evil.example.com^" in out
+        assert "||evil.example.com.^" not in out
+
+    def test_s3_bucket_host_promoted(self):
+        iocs = [
+            ScoredIoC(
+                value="https://mybucket.s3.eu-central-1.amazonaws.com/EvdeKaliyorum.apk",
+                ioc_type=IoCType.URL,
+                quality_score=33.0,
+            ),
+            ScoredIoC(
+                value="https://mybucket.s3-fips.us-east-2.amazonaws.com/key",
+                ioc_type=IoCType.URL,
+                quality_score=33.0,
+            ),
+            ScoredIoC(
+                value="https://mybucket.s3-accelerate.amazonaws.com/key",
+                ioc_type=IoCType.URL,
+                quality_score=33.0,
+            ),
+            ScoredIoC(
+                value="https://mybucket.s3-external-1.amazonaws.com/key",
+                ioc_type=IoCType.URL,
+                quality_score=33.0,
+            ),
+            ScoredIoC(
+                value="https://mybucket.s3-website-us-east-1.amazonaws.com/key",
+                ioc_type=IoCType.URL,
+                quality_score=33.0,
+            ),
+            ScoredIoC(
+                value="https://mybucket.s3vectors.us-east-1.api.aws/key",
+                ioc_type=IoCType.URL,
+                quality_score=33.0,
+            ),
+        ]
+        out = generate_adguard(iocs)
+        for host in (
+            "mybucket.s3.eu-central-1.amazonaws.com",
+            "mybucket.s3-fips.us-east-2.amazonaws.com",
+            "mybucket.s3-accelerate.amazonaws.com",
+            "mybucket.s3-external-1.amazonaws.com",
+            "mybucket.s3-website-us-east-1.amazonaws.com",
+            "mybucket.s3vectors.us-east-1.api.aws",
+        ):
+            assert f"||{host}^" in out
+
+    def test_unnormalizable_url_hosts_not_promoted(self):
+        iocs = [
+            ScoredIoC(
+                value="https://\ud800.com/key",
+                ioc_type=IoCType.URL,
+                quality_score=90.0,
+            ),
+            ScoredIoC(
+                value="https://\u3002/key",
+                ioc_type=IoCType.URL,
+                quality_score=90.0,
+            ),
+            ScoredIoC(
+                value=f"https://{'.'.join(['a' * 63] * 4)}/key",
+                ioc_type=IoCType.URL,
+                quality_score=90.0,
+            ),
+        ]
+        out = generate_adguard(iocs)
+        assert [line for line in out.split("\n") if line.startswith("||")] == []
+
+    def test_blocked_host_url_not_promoted(self):
+        iocs = [
+            ScoredIoC(
+                value="https://google.com/phish",
+                ioc_type=IoCType.URL,
+                quality_score=90.0,
+            ),
+        ]
+        out = generate_adguard(iocs)
+        assert [line for line in out.split("\n") if line.startswith("||")] == []
+
+    def test_s3_service_root_domain_suppressed(self):
+        iocs = [
+            ScoredIoC(
+                value="s3.amazonaws.com",
+                ioc_type=IoCType.DOMAIN,
+                quality_score=20.0,
+            ),
+        ]
+        out = generate_adguard(iocs)
+        assert [line for line in out.split("\n") if line.startswith("||")] == []
+
+    def test_s3_bucket_domain_kept(self):
+        iocs = [
+            ScoredIoC(
+                value="mybucket.s3.amazonaws.com",
+                ioc_type=IoCType.DOMAIN,
+                quality_score=20.0,
+            ),
+        ]
+        out = generate_adguard(iocs)
+        assert "||mybucket.s3.amazonaws.com^" in out
 
     def test_cidr_and_garbage_skipped(self):
         iocs = [

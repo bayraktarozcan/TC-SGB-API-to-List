@@ -24,6 +24,7 @@ from urllib.parse import urlparse
 import yaml
 
 from .models import IoCType, ScoredIoC
+from .safety import Decision, decide_host
 
 logger = logging.getLogger(__name__)
 
@@ -115,14 +116,14 @@ def generate_nextdns(iocs: Sequence[ScoredIoC], path: str | Path | None = None) 
 
 def _normalize_rule_host(host: str) -> str | None:
     """Normalize a hostname for an ``||host^`` rule; None if unusable."""
-    host = host.strip().lower().rstrip(".")
+    host = host.strip().lower()
     if not host or any(char in host for char in (" ", "/", "@", "%")):
         return None
     try:
-        host = host.encode("idna").decode("ascii")
+        host = host.encode("idna").decode("ascii").rstrip(".")
     except UnicodeError:
         return None
-    if len(host) > 253:
+    if not host or len(host) > 253:
         return None
     return host
 
@@ -154,15 +155,23 @@ def _adguard_rule_hosts(iocs: Sequence[ScoredIoC]) -> list[str]:
     """Collect deduplicated, order-stable rule hosts for the AdGuard list.
 
     Sources: domain IoCs first, then hosts promoted from URL IoCs, then bare
-    IP literals. CIDR ranges are skipped (invalid rule syntax).
+    IP literals. Hosts the safety policy holds are skipped, so a URL on a
+    shared service endpoint never becomes a wholesale block. CIDR ranges are
+    skipped (invalid rule syntax).
     """
     seen: set[str] = set()
     hosts: list[str] = []
 
     def _emit(host: str) -> None:
-        if host not in seen:
-            seen.add(host)
-            hosts.append(host)
+        if host.startswith(".") or ".." in host:
+            return
+        record = decide_host(host, source="tc-sgb")
+        if record.decision != Decision.ACCEPT:
+            return
+        normalized = record.indicator
+        if normalized not in seen:
+            seen.add(normalized)
+            hosts.append(normalized)
 
     for ioc in _domains_only(iocs):
         _emit(ioc.value)

@@ -268,10 +268,22 @@ class TestPipelineSafety:
         scored, _rejected = pipeline._stage_quality(iocs)
         assert [s.value for s in scored] == ["evil.sites.google.com"]
 
-    def test_url_host_policed(self, pipeline):
+    def test_url_path_not_held(self, pipeline):
         iocs = [self._max_bonus_ioc("https://google.com/phish", IoCType.URL)]
         scored, _rejected = pipeline._stage_quality(iocs)
+        assert [s.value for s in scored] == ["https://google.com/phish"]
+
+    def test_domain_service_root_held(self, pipeline):
+        iocs = [self._max_bonus_ioc("s3.amazonaws.com", IoCType.DOMAIN)]
+        scored, rejected = pipeline._stage_quality(iocs)
         assert scored == []
+        assert rejected == 1
+        assert pipeline.stats.safety_rejected == 1
+
+    def test_url_service_root_not_held(self, pipeline):
+        iocs = [self._max_bonus_ioc("https://s3.amazonaws.com/file.pdf", IoCType.URL)]
+        scored, _rejected = pipeline._stage_quality(iocs)
+        assert [s.value for s in scored] == ["https://s3.amazonaws.com/file.pdf"]
 
     def test_ip_unaffected(self, pipeline):
         iocs = [self._max_bonus_ioc("1.2.3.4", IoCType.IP)]
