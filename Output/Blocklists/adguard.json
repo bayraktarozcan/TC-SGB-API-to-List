@@ -1,10 +1,10 @@
 {
-  "bytes": 12502691,
+  "bytes": 12506029,
   "extension": ".txt",
   "file": "threat_intel_adguard.txt",
   "format": "adguard",
   "raw_url": "https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/download/ioc-data/threat_intel_adguard.txt",
   "release_tag": "ioc-data",
-  "sha256": "977d9e8d3f8662cdd82dfa20447121fb80ac369722f154052e5d1377dd122656",
+  "sha256": "2008b8a4b1c43d9a2982aedce6a8c799ad662b85b71e26d8b9e83abde74a6da6",
   "title": "AdGuard AdBlock filter list"
 }
