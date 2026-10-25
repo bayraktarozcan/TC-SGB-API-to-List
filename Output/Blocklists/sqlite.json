@@ -5,6 +5,6 @@
   "format": "sqlite",
   "raw_url": "https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/download/ioc-data/threat_intel_sqlite.db",
   "release_tag": "ioc-data",
-  "sha256": "ca5ffc0350ffb167b76b690221d48e2e8f57b3885c00365a8a8e4afba114436e",
+  "sha256": "6148078dc2f5098d768563a53eb1b2dae43fbbf7dc15d1e050c4e5a77ab29c67",
   "title": "SQLite database of all IoCs"
 }
