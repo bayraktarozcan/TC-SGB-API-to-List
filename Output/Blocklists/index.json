@@ -1,23 +1,23 @@
 {
   "artifacts": [
     {
-      "bytes": 141027956,
+      "bytes": 141046752,
       "extension": ".json",
       "file": "raw_records.json",
       "format": "raw_records",
       "raw_url": "https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/download/ioc-data/raw_records.json",
       "release_tag": "ioc-data",
-      "sha256": "1bfdd7e4e5506bec1735cdda9cb8a45b779a4944bba840de72fd0277a2917962",
+      "sha256": "5c825a3a027ca3a009b2b27b296955d2d795f3a8dd023ea67ca25f3b57db0f91",
       "title": "Raw API snapshot with quality scores"
     },
     {
-      "bytes": 12523469,
+      "bytes": 12525105,
       "extension": ".txt",
       "file": "threat_intel_adguard.txt",
       "format": "adguard",
       "raw_url": "https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/download/ioc-data/threat_intel_adguard.txt",
       "release_tag": "ioc-data",
-      "sha256": "2d2b6e6a3de7bb199297d9b8e712dd0ecaed7278be944461075de3214e8512ec",
+      "sha256": "4c776d6c396b02e01a50a36bc53d342300c4c896e75d215478523246a78cb896",
       "title": "AdGuard AdBlock filter list"
     },
     {
@@ -31,23 +31,23 @@
       "title": "CrowdSec decision list YAML"
     },
     {
-      "bytes": 40991868,
+      "bytes": 40997283,
       "extension": ".csv",
       "file": "threat_intel_csv.csv",
       "format": "csv",
       "raw_url": "https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/download/ioc-data/threat_intel_csv.csv",
       "release_tag": "ioc-data",
-      "sha256": "5bb2f6166d27a9d9c726f2bf016f8a8819414e1886496514c4eb10d50a7e85de",
+      "sha256": "1e6fc7be2cad11ed8c632bc11fa12b0fa3fb2b05e80d54c21d92c620c92081e3",
       "title": "CSV table of all IoCs"
     },
     {
-      "bytes": 18863946,
+      "bytes": 18866506,
       "extension": ".conf",
       "file": "threat_intel_dnsmasq.conf",
       "format": "dnsmasq",
       "raw_url": "https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/download/ioc-data/threat_intel_dnsmasq.conf",
       "release_tag": "ioc-data",
-      "sha256": "0a34d481ed593673e41a2914803bff0e0693edca659959d611a76926167c00e9",
+      "sha256": "fb71cead88b2300c4fe66e158355f1c928defd35318311b8285eb18afe2e5913",
       "title": "dnsmasq configuration"
     },
     {
@@ -61,113 +61,113 @@
       "title": "ipset list"
     },
     {
-      "bytes": 141715539,
+      "bytes": 141734234,
       "extension": ".json",
       "file": "threat_intel_json.json",
       "format": "json",
       "raw_url": "https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/download/ioc-data/threat_intel_json.json",
       "release_tag": "ioc-data",
-      "sha256": "f9a0e518a4c59c595e0f8d22fcbffa569a2e6ea8f9e9dd3ec00f22eed6905e94",
+      "sha256": "1f529d78b24ba145ecb2cc351d7c2e3edb9e7ce6ad31c60e8adb4a8c768d9534",
       "title": "JSON array of all IoCs"
     },
     {
-      "bytes": 40804354,
+      "bytes": 40809752,
       "extension": ".rsc",
       "file": "threat_intel_mikrotik.rsc",
       "format": "mikrotik",
       "raw_url": "https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/download/ioc-data/threat_intel_mikrotik.rsc",
       "release_tag": "ioc-data",
-      "sha256": "b1afc2f09459cebb85c40f71d19b5d35ba8eb79755c6d4f80ac346b0d68558a1",
+      "sha256": "8001f5c599f32703f183b38353cda9ea767a82f483bcc1d9dd49c18f33a0ddc1",
       "title": "MikroTik RouterOS address-list script"
     },
     {
-      "bytes": 10757326,
+      "bytes": 10758764,
       "extension": ".txt",
       "file": "threat_intel_nextdns.txt",
       "format": "nextdns",
       "raw_url": "https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/download/ioc-data/threat_intel_nextdns.txt",
       "release_tag": "ioc-data",
-      "sha256": "a50f92d37ed0ffd4e55a68c1bb90c39062b57bf4462446a8b654cb77f4d8ac32",
+      "sha256": "8860e1a1bc96cad1a077a87f96a93a93b404500df96bddcd1cdda9ef7db582eb",
       "title": "NextDNS plain domain list"
     },
     {
-      "bytes": 17390185,
+      "bytes": 17392481,
       "extension": ".nft",
       "file": "threat_intel_nftables.nft",
       "format": "nftables",
       "raw_url": "https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/download/ioc-data/threat_intel_nftables.nft",
       "release_tag": "ioc-data",
-      "sha256": "04fc2f42b40a14ddfc0727cc0b390d587e9c76cb88790affc38371203d825a6f",
+      "sha256": "168fe0d75e30305e1146489500865cf8d3939486a13e47e064ad9aab533e30d8",
       "title": "nftables sets"
     },
     {
-      "bytes": 14572260,
+      "bytes": 14574226,
       "extension": ".txt",
       "file": "threat_intel_pihole.txt",
       "format": "pihole",
       "raw_url": "https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/download/ioc-data/threat_intel_pihole.txt",
       "release_tag": "ioc-data",
-      "sha256": "2604661c2fc7fe271b2970133a13e0801cf838badfaf424acc1268ace495ff83",
+      "sha256": "6a9ef737b40dbcf15e0e0c4b9d59379565e0848712b6f29b813150437512d32e",
       "title": "Pi-hole hosts format"
     },
     {
-      "bytes": 14572423,
+      "bytes": 14574389,
       "extension": ".zone",
       "file": "threat_intel_rpz.zone",
       "format": "rpz",
       "raw_url": "https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/download/ioc-data/threat_intel_rpz.zone",
       "release_tag": "ioc-data",
-      "sha256": "be532a41098951751eaa88d09e837ec5a4fd70adac93949d5890c86f96a2ab26",
+      "sha256": "093c10f8fe31494c1cc7518bdc0ef1cf657ded26be306889d7f3c74d12135830",
       "title": "RPZ response policy zone file"
     },
     {
-      "bytes": 105385984,
+      "bytes": 105119744,
       "extension": ".db",
       "file": "threat_intel_sqlite.db",
       "format": "sqlite",
       "raw_url": "https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/download/ioc-data/threat_intel_sqlite.db",
       "release_tag": "ioc-data",
-      "sha256": "8d3d0ff7142d709b46ef94d2901c31c49eb6338d0a580ada169f74f66c4dc2ec",
+      "sha256": "3c71aa2e7e559c415c4878a71c2cf3e753f25767d460bda996ea5d68751a1bf4",
       "title": "SQLite database of all IoCs"
     },
     {
-      "bytes": 221188000,
+      "bytes": 221217356,
       "extension": ".json",
       "file": "threat_intel_suricata.json",
       "format": "suricata",
       "raw_url": "https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/download/ioc-data/threat_intel_suricata.json",
       "release_tag": "ioc-data",
-      "sha256": "8c906eb1d1b5d3906662357508a72aa7056db83a7128aa821df92ffa4240f4db",
+      "sha256": "95f16b09e0bd7759128cf28b3396a2b67e975410a09a26b5e9896a183cad772d",
       "title": "Suricata EVE JSON events"
     },
     {
-      "bytes": 17433778,
+      "bytes": 17436140,
       "extension": ".zone",
       "file": "threat_intel_technitium.zone",
       "format": "technitium",
       "raw_url": "https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/download/ioc-data/threat_intel_technitium.zone",
       "release_tag": "ioc-data",
-      "sha256": "38a4db060410d49c1f483e3c0367be02bc746303c8cf664f2afe18a84528877e",
+      "sha256": "1a110db5ae43c06e7e9816a46bf188cd54e2edda9aa480c3954e96f6d70279ce",
       "title": "Technitium DNS server zone file"
     },
     {
-      "bytes": 25063182,
+      "bytes": 25066600,
       "extension": ".conf",
       "file": "threat_intel_unbound.conf",
       "format": "unbound",
       "raw_url": "https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/download/ioc-data/threat_intel_unbound.conf",
       "release_tag": "ioc-data",
-      "sha256": "9adb09d2ede032ee5c29a0b8d147c61dde73b4bd22dc8322c2e2d93619ebd109",
+      "sha256": "e0da763b7024d9b23a9f5786b18c897de4236e52605d9e8b6a63b323173a3bd6",
       "title": "Unbound local-zone configuration"
     },
     {
-      "bytes": 106407659,
+      "bytes": 106421722,
       "extension": ".yaml",
       "file": "threat_intel_yaml.yaml",
       "format": "yaml",
       "raw_url": "https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/download/ioc-data/threat_intel_yaml.yaml",
       "release_tag": "ioc-data",
-      "sha256": "b256afd9b9a91647b54ef6668c68fdce26254785548086ed670d844b15f98f76",
+      "sha256": "1b19bc7c3c722288a7b0b164c73ae9baafdbe91885da18a8d7be33f0c2339742",
       "title": "YAML sequence of all IoCs"
     }
   ],
