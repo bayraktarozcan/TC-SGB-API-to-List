@@ -1,0 +1,14 @@
+# Dev dependencies - source of truth for pip-compile
+# Version constraints here; exact versions generated in requirements-dev.txt
+pytest>=8.0,<10
+pytest-asyncio>=0.25,<2
+pytest-cov>=5.0,<8
+ruff>=0.5,<1
+mypy>=1.10,<3
+bandit>=1.7,<2
+pip-audit>=2.7,<3
+hypothesis>=6.100,<7
+types-PyYAML>=6.0.12.20261030,<7
+
+# Include runtime deps so dev env has everything
+-r requirements.txt
