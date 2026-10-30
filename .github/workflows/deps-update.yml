@@ -80,5 +80,6 @@ jobs:
           labels: |
             dependencies
             automated
+            auto-merge
           assignees: bayraktarozcan
           draft: false

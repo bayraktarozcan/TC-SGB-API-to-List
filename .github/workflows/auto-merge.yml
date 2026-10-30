@@ -35,6 +35,7 @@ jobs:
           cache: pip
           cache-dependency-path: |
             requirements.txt
+            requirements-dev.txt
             pyproject.toml
 
       - name: Install dependencies
@@ -48,8 +49,17 @@ jobs:
       - name: Ruff format check
         run: ruff format --check Scripts/ Tests/
 
+      - name: Mypy
+        run: mypy Scripts/
+
       - name: Run tests
         run: pytest --tb=short
+
+      - name: Bandit security scan
+        run: bandit -r Scripts/
+
+      - name: pip-audit
+        run: pip-audit
 
       - name: Approve
         if: success()
