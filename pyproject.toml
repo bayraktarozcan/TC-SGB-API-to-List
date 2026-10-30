@@ -24,7 +24,7 @@ classifiers = [
 ]
 dependencies = [
     "httpx==0.28.1",
-    "pydantic==2.14.1",
+    "pydantic==2.14.2",
     "python-dotenv==1.2.4",
     "pyyaml==6.0.3",
 ]
@@ -39,7 +39,7 @@ dev = [
     "bandit>=1.7,<2",
     "pip-audit>=2.7,<3",
     "hypothesis>=6.100,<7",
-    "types-PyYAML>=6.0.12.20260724,<7",
+    "types-PyYAML>=6.0.12.20261030,<7",
 ]
 
 [project.scripts]
