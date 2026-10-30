@@ -119,6 +119,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install -e ".[dev]"
 
+      - name: Upgrade transitive deps to latest secure versions
+        run: |
+          pip install --upgrade certifi filelock setuptools
+
       - name: pip-audit
         run: pip-audit --ignore-vuln PYSEC-2026-1845 --ignore-vuln PYSEC-2026-3447
 
