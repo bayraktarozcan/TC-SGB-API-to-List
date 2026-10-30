@@ -2,12 +2,12 @@
 """Sync dependencies using pip-tools.
 
 Usage:
-    python sync-deps.py           # Sync to locked versions
-    python sync-deps.py --upgrade # Upgrade to latest within constraints
+    python sync_deps.py           # Sync to locked versions
+    python sync_deps.py --upgrade # Upgrade to latest within constraints
 """
 
 import argparse
-import subprocess
+import subprocess  # nosec B404
 import sys
 from pathlib import Path
 
@@ -16,7 +16,7 @@ ROOT = Path(__file__).parent.parent
 
 def run(cmd: list[str]) -> int:
     print(f"$ {' '.join(cmd)}")
-    return subprocess.call(cmd, cwd=ROOT)
+    return subprocess.call(cmd, cwd=ROOT, shell=False)  # nosec S603
 
 
 def main() -> int:
@@ -24,9 +24,7 @@ def main() -> int:
     parser.add_argument(
         "--upgrade", action="store_true", help="Upgrade to latest within constraints"
     )
-    parser.add_argument(
-        "--compile-only", action="store_true", help="Only compile, don't install"
-    )
+    parser.add_argument("--compile-only", action="store_true", help="Only compile, don't install")
     args = parser.parse_args()
 
     # Compile requirements

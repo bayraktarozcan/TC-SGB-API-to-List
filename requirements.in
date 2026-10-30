@@ -1,6 +1,5 @@
-# Runtime dependencies - source of truth for pip-compile
-# Version constraints here; exact versions generated in requirements.txt
-httpx==0.28.1
-pydantic==2.14.2
-pyyaml==6.0.3
-python-dotenv==1.2.4
+# Runtime dependencies - always latest stable
+httpx
+pydantic
+pyyaml
+python-dotenv
