@@ -124,7 +124,7 @@ jobs:
           pip install --upgrade certifi filelock setuptools
 
       - name: pip-audit
-        run: pip-audit --ignore-vuln PYSEC-2026-1845 --ignore-vuln PYSEC-2026-3447
+        run: pip-audit
 
       - name: Bandit security scan
         run: bandit -r Scripts/ -f json -o bandit-report.json
