@@ -173,3 +173,6 @@ cache/
 # AGENTS-TR.md - local Turkish mirror of AGENTS.md (human review only, never committed)
 # AGENTS-TR.md - AGENTS.md yerel Türkçe yansıması (yalnızca insan denetimi, asla commit edilmez)
 AGENTS-TR.md
+
+# Project layer (local-only, never committed)
+.opencode/

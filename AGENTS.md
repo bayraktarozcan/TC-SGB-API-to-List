@@ -1,3 +1,236 @@
+# AGENTS.md
+
+> AGENTS.md does not change without the person's approval, unless they state otherwise (see Change control in the inlined rules).
+
+Guidance for AI coding agents working in this repository.
+
+> Scope note: the universal rules below are inlined (not pointed to) from D:\Repos\AGENTS.md because this runtime injects only this file, per the person's explicit instruction.
+<!-- guard-exempt: rule-quotation -->
+
+## Project overview
+
+TC-SGB threat-intelligence pipeline: fetches IoCs from the
+[T.C. Siber Güvenlik Başkanlığı](https://siberguvenlik.gov.tr) API, validates,
+normalizes, scores, and deduplicates them, then exports to 16 formats.
+
+- Python `>=3.11`, packages in `pyproject.toml`; runtime deps are `httpx`,
+  `pydantic`, `python-dotenv`, `pyyaml`.
+- Source lives in `Scripts/src/`; the CLI entry point is `Scripts/main.py`.
+- Tests live in `tests/` (pytest, `asyncio_mode = auto`).
+
+## Quality gate (always run before claiming work complete)
+
+Use the project virtualenv at `.venv`:
+
+```powershell
+& .venv\Scripts\python.exe -m ruff check Scripts/ Tests/
+& .venv\Scripts\python.exe -m ruff format --check Scripts/ Tests/
+& .venv\Scripts\python.exe -m mypy Scripts/
+& .venv\Scripts\python.exe -m bandit -r Scripts/
+& .venv\Scripts\python.exe -m pytest --cov=Scripts --cov-report=term-missing -q
+```
+
+Baseline at last check: 728 tests passing, ~97% coverage, zero ruff/mypy/bandit
+findings. Do not drop below it.
+
+## Conventions
+
+- Conventional Commits for commit messages (see `CONTRIBUTING.md`).
+- No f-string logging: `logger.*` calls use lazy `%`-style args, enforced by
+  ruff rule `G004`.
+- Test falsy-capable constructor flags with `is not None`, never `or` (a falsy
+  `rate_limit=0`, `timeout=0`, or `max_retries=0` is meaningful).
+- International domain names are IDNA-encoded to punycode before validation and
+  normalization; `xn--` TLDs are valid.
+- Prefer Path APIs over `os.path`; keep line length ≤ 100; follow existing
+  module structure (models → client → validator → normalizer → quality →
+  dedup → outputs, plus `external_feeds`).
+- Do not add comments unless asked.
+- IoC spelling: the single standard spelling is `IoC` (never `IOC`); class
+  names embed it as PascalCase (`IoCType`, `ValidatedIoC`, `NormalizedIoC`,
+  `ScoredIoC`); enforced by `Tests/test_repo_conventions.py::TestIocSpelling`.
+
+## Repository facts
+
+- GitLab CI/CD and GitHub Actions are both active. GitLab pipelines run on GitLab
+  shared runners (project-level CI is enabled); the `origin` remote pushes to
+  both GitHub and GitLab, so a single `git push origin main` updates both and
+  triggers both pipelines; GitLab jobs only execute while the namespace's
+  shared-runner minutes last (see Bypasses).
+- GitLab-native pipeline/coverage badges are configured at the project level and
+  mirrored in the README; GitHub Actions hosts the scheduled IoC update pipeline
+  and, once each update merges, also mirrors `main` plus the GitLab `ioc-data`
+  release listing on GitLab.
+- `TC_SGB_LOG_LEVEL` and `TC_SGB_OUTPUT_DIR` are honored by the CLI; `.env`
+  files are read via `load_dotenv`.
+- Machine time: every clock read — automation, scripts, tests, CI — determines
+  time as `TZ=Europe/Istanbul date ...`; the project is pinned to Türkiye time
+  (fixed UTC+03:00 since 2016, no DST) and accepts no other offset; any
+  timestamp exposed in commit messages or release notes is Türkiye time and
+  labels the zone in parentheses as `(UTC+03:00)`.
+
+## Layout
+
+Single-purpose directories; generated artifacts never live beside sources.
+
+| Path | Purpose |
+|------|---------|
+| `Scripts/` | CLI entry point (`main.py`), the pipeline package (`src/`), and `verify_mirror.py` (mirror verifier) |
+| `Scripts/src/` | Pipeline stages: models → client → validator → normalizer → quality → dedup → outputs, plus `external_feeds` |
+| `Tests/` | Pytest suite: unit, regression, fuzz (`test_fuzz.py`), performance (`test_performance.py`, `slow`), repo guards (`test_repo_conventions.py`) |
+| `Docs/` | Tracked bilingual documentation, including troubleshooting and `Planning/` work plans; owns the wiki mirror (auto-synched by `wiki-sync.yml`) |
+| `Site/` | GitHub Pages landing page (`index.html`, vanilla, no external libraries) |
+| `Schema/` | JSON Schema plus OpenAPI description of the source API |
+| `Data/` | Runtime data cache (payloads are gitignored; reserved) |
+| `Examples/` | Reserved for usage examples (currently a placeholder) |
+| `Benchmark/` | Performance benchmarks (results are gitignored) |
+| `Output/` | Generated IoC artifacts; only `manifest.json` plus `Blocklists/` are tracked, the rest is release-only |
+| `Docs/Planning/` | Assistant work plans and task tracking |
+| `.github/` | Actions workflows, Dependabot config, issue/PR templates, custom actions |
+| `.gitlab-ci.yml` | GitLab pipeline mirroring the GitHub checks |
+| `filter-lists` branch | Rolling single-commit Brave/AdGuard mirror (lives off `main`) |
+
+## Versions
+
+Four-part scheme `MAJOR.MINOR.FEATURE.FIX` with a `v` prefix on tags and
+CHANGELOG headings (evidence: `v0.2.0.0` → `v0.2.0.1` carried a fix batch,
+`v0.2.0.0` → `v0.3.0.0` a feature batch).
+
+- Current: `0.3.2.0`.
+- Stated in: `pyproject.toml` (`version`), `CHANGELOG.md` newest headings
+  (EN and TR), `Docs/Repository-Structure.md` quotes (EN and TR).
+- Pinned by `Tests/test_repo_conventions.py::TestVersionParity` (oracle:
+  `pyproject.toml`).
+
+## Commands
+
+Setup, then the quality gate above (single local gate command); CI runs the
+same checks (see `.github/workflows/ci.yml`, `.gitlab-ci.yml`).
+
+- Setup: `pip install -e ".[dev]"` then `pip install -r requirements.txt`
+  (Python `>=3.11`; 3.15 dev-verified).
+- CLI verbs: `tc-sgb fetch | generate | index | stats | validate | health | fetch-external`.
+- Local gate = the Quality gate block (ruff, ruff format, mypy, bandit, pytest).
+- Mirror check: `Scripts/verify_mirror.py AGENTS.md AGENTS-TR.md`.
+
+## Naming
+
+Source files follow their language idiom (`snake_case` Python modules,
+`test_*.py` tests); documentation files are HyphenatedPascalCase; root files
+are UPPER; all committed paths are English with no whitespace.
+
+Exemptions (each with its reason):
+
+| Name | Reason |
+|------|--------|
+| `.github/`, `.idea/`, `.venv/`, caches (`.hypothesis/`, `.pytest_cache/`, `.ruff_cache/`, `.mypy_cache/`) | Platform- or tool-owned/generated paths |
+| `Site/index.html` | Pages data contract (site root lookup) |
+| `filter-lists` branch | Rolling data mirror (single commit, force-pushed) |
+| `scheduled-fetch-*` branches | Automation working branches, deleted after merge |
+| `dependabot/*` branches | Tool-generated names |
+
+## Transport
+
+- Fetch: `origin` → GitHub over HTTPS. Push: `origin` → GitHub **and**
+  GitLab over HTTPS (dual push URLs; parity confirmed on every push).
+- A separate `gitlab` remote (fetch+push GitLab over HTTPS) exists for
+  explicit single-host operations.
+- Pinned method: HTTPS (reason: token-based CI automation and dual-host
+  pushes from runners without an SSH agent; meets the floor — encrypted
+  transport, platform secret stores, revocable credentials).
+- Credentials live in platform secret stores only (`AUTO_MERGE_TOKEN`,
+  `GITLAB_PUSH_TOKEN` on GitHub; GitLab jobs need no stored secrets);
+  nothing secret is committed (gitleaks enforced on both hosts).
+
+## Dependencies
+
+- Manifest: `pyproject.toml` + `requirements.txt` (source of truth); setup
+  is the Commands block (`pip install -e ".[dev]"`, then
+  `pip install -r requirements.txt`).
+- Local versions at last check: Python 3.15.2; httpx 0.28.1, pydantic
+  2.14.2, python-dotenv 1.2.4, PyYAML 6.0.3; pytest 9.2.0, ruff 0.17.3,
+  mypy 2.4.1, bandit 1.9.4, hypothesis 6.170.14, coverage 7.17.0.
+- Approved project-scope exception: `.venv/` (reason: per-project isolation
+  on a shared host; recreated from the manifest, never committed).
+- Audit posture: `pip-audit` + `bandit` + gitleaks in CI on both hosts, with
+  two documented `pip-audit` ignores (`PYSEC-2026-1845`, `PYSEC-2026-3447`,
+  recorded in `ci.yml` and `.gitlab-ci.yml`).
+
+## Hidden layers
+
+- Scratch directory (named once, here): `/scratch/` (pattern in `.gitignore`;
+  cleared at task end, recreated on demand, never committed).
+- `.venv/`, `Output/`, and tool caches are exempt build output: no markers, no
+  tests over them beyond the repo-convention guards.
+- No hidden layers currently exist; `AGENTS-TR.md` is a gitignored mirror file,
+  not a directory (see Local mirror).
+
+## Toolchain
+
+- Floor: Python `>=3.11` (CI runs 3.11); local dev verified on 3.15.
+- `pip` + `pyproject.toml` + `requirements.txt`; `pytest` + `coverage`;
+  `ruff` (lint and format); `mypy` (strict); `bandit`; `pip-audit`;
+  `hypothesis`.
+- Shells: `bash` on CI runners, PowerShell locally (5.1 floor; `pwsh` where
+  present, per the inlined Environment rule); `gh` CLI for GitHub operations.
+- Note: with no C compiler on 3.15, PyYAML installs pure-Python via
+  `PYYAML_FORCE_LIBYAML=0` (C sources need MSVC); CI runners use prebuilt wheels.
+
+## Releases
+
+- Rolling `ioc-data` release (daily 19:00 UTC, `schedule.yml`) plus version
+  tags `v*`; hosts are GitHub and GitLab. Git pushes sync every ref (tags
+  included) to both hosts; release *objects* sync only for the rolling
+  `ioc-data` release (`mirror-gitlab.yml` plus the `refresh-gitlab-release`
+  action rewrite its tag, title, notes, and assets); version releases are
+  published on GitHub only.
+- `filter-lists` branch refreshes on every fetch; release notes are bilingual.
+
+## Bypasses
+
+Gates that do not hold by design, and what runs afterward instead:
+
+- Scheduled-fetch `continue-on-error` steps (release upload, branch publish):
+  the pipeline stays green and the branch keeps serving its last good snapshot;
+  `::warning::` annotations fire instead of failing.
+- Auto-merge arming on labeled/scheduled PRs runs the workflow's own test gate
+  instead of human review (same-repo heads only).
+- The CONTRIBUTING-documented AI-scan visual failure lets auto-merge proceed
+  instead of blocking on a check that cannot pass.
+- Dependabot `deps()`/`ci()` prefixes are tool-controlled; squash titles are
+  normalized to Conventional Commits on merge instead.
+- No transitive lockfile: direct runtime/build deps are pinned exact, but a
+  frozen file without regeneration automation would rot silently, so ranges
+  plus Dependabot stand in until lock tooling is adopted.
+- The repository owner may push to `main` directly, bypassing the ruleset:
+  the push reports `Bypassed rule violations` and `4 of 4 required status
+  checks are expected`. CI then runs on the pushed commit afterwards instead
+  of gating it.
+- GitLab shared-runner minutes can be exhausted (`ci_quota_exceeded`): every
+  GitLab job then fails within a second with no runner assigned, so the
+  GitLab-side gates do not run. The GitHub-hosted checks stand in, and the
+  condition clears when the namespace's monthly minutes reset.
+
+## Local mirror (AGENTS-TR.md)
+
+AGENTS-TR.md is the one-to-one Turkish translation of this file, kept only for
+human review. It is gitignored and never committed, pushed, or staged; the only
+committed source of truth is this English file.
+
+Rule: whenever this file changes, AGENTS-TR.md must be refreshed in the same
+session per the universal mirror rules below (refresh the mirror, re-run the
+mirror verifier, write the reported value into the `sync-sha` marker of both
+files; never edit one marker to match the other).
+
+Standing exception: this section names `AGENTS-TR.md`, although the universal
+hidden-layer protection says a private layer is never named or quoted. Reason:
+the mirror workflow (refresh plus verifier plus `sync-sha` markers) is only
+auditable when the mirror file is identified by name; the file itself stays
+gitignored, uncommitted, and unstaged. Recorded here once so the deviation is
+explicit instead of silent.
+
+---
+
 # Agent Guide
 
 Universal operating rules for humans and AI agents, written once and valid for every project. This file holds standards, never project facts: layout, versions, commands, release steps, and naming exemptions live in the project layer (see "Project Layer Contract") and are not copied here. English is the single source of operational truth.
@@ -488,7 +721,7 @@ Single page: OLED-friendly true black (`#000000`) background, low-blue-light sof
 - The verifier takes both paths as parameters and names neither, and a flag allows a missing mirror where it is intentionally absent, such as CI. A fixture suite pins the behavior: a clean pair, a CRLF mirror, each class of drift, the tolerated granularity, an ordered checklist that keeps, loses, reorders, and drops an anchor, and an absent mirror.
 - A mismatch means drift. Fix it by refreshing the mirror, then setting the reported value in both markers; never by editing one marker to match the other.
 
-<!-- mirror-sync: sync-sha=130b4683ab24f06f1472fd436246e715d09621ad -->
+<!-- mirror-sync: sync-sha=d492016e0b1862cb623961803facf9e3b27cfa16 -->
 
 ---
 
