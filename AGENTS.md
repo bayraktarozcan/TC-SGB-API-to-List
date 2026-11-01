@@ -721,7 +721,6 @@ Single page: OLED-friendly true black (`#000000`) background, low-blue-light sof
 - The verifier takes both paths as parameters and names neither, and a flag allows a missing mirror where it is intentionally absent, such as CI. A fixture suite pins the behavior: a clean pair, a CRLF mirror, each class of drift, the tolerated granularity, an ordered checklist that keeps, loses, reorders, and drops an anchor, and an absent mirror.
 - A mismatch means drift. Fix it by refreshing the mirror, then setting the reported value in both markers; never by editing one marker to match the other.
 
-<!-- mirror-sync: sync-sha=d492016e0b1862cb623961803facf9e3b27cfa16 -->
 
 ---
 
@@ -875,3 +874,4 @@ Runtimes use the current LTS line (Node.js LTS, .NET LTS); build output goes thr
 - `.git/` is the **internal Git repository structure**, not a project config file.
 
 **Guiding rule:** "It looks special" does not mean "It is a standard special file." The meaning of any file is determined by the software that reads and interprets it.
+<!-- mirror-sync: sync-sha=d492016e0b1862cb623961803facf9e3b27cfa16 -->
