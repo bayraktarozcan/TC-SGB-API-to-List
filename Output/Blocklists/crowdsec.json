@@ -1,10 +1,10 @@
 {
-  "bytes": 2390719,
+  "bytes": 2392678,
   "extension": ".yaml",
   "file": "threat_intel_crowdsec.yaml",
   "format": "crowdsec",
   "raw_url": "https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/download/ioc-data/threat_intel_crowdsec.yaml",
   "release_tag": "ioc-data",
-  "sha256": "40b5e51b8d7ff372007d5eafff521f1bd3041f765f6e3470b962cf8f7abe48c0",
+  "sha256": "5702fc8c3a6fa4e225ef1a896dfca2ba10b58df7689716ecf6467d120ccdd63b",
   "title": "CrowdSec decision list YAML"
 }
