@@ -1,10 +1,10 @@
 {
-  "bytes": 41049841,
+  "bytes": 41063742,
   "extension": ".csv",
   "file": "threat_intel_csv.csv",
   "format": "csv",
   "raw_url": "https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/download/ioc-data/threat_intel_csv.csv",
   "release_tag": "ioc-data",
-  "sha256": "0976bc4a12721294965a6d95399507068c5f9f93891f48ec6618e81d9d305bf3",
+  "sha256": "79fb03d6f84419a8c202a66f2cca00085a21303119270ff27d585dd30800625e",
   "title": "CSV table of all IoCs"
 }
