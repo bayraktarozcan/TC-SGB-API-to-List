@@ -33,5 +33,8 @@ jobs:
           args: >-
             --no-progress --verbose --max-retries 2 --exclude '^file://'
             --exclude 'compare/%7B'
+            --exclude 'iso.org/standard/77520'
+            --exclude 'iso.org/standard/86308'
+            --exclude 'iso.org/standard/86612'
             './**/*.md'
           fail: true
