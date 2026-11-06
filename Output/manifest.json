@@ -1,72 +1,72 @@
 {
   "formats": {
     "raw_records.json": {
-      "bytes": 141273647,
-      "sha256": "1ae85b8b724d29f47cb247184263867d2af302590f2bbc57a703b1f70a49ccc6"
+      "bytes": 141463396,
+      "sha256": "8ccd24bc2e39533b2e97660150610ebb5f6ebe81ffddf44d10b173b5abf2dcbd"
     },
     "threat_intel_adguard.txt": {
-      "bytes": 12545159,
-      "sha256": "220f2babb387f9e23b86f0e1dca4ad3d170ce7b0b9d401d8e08579e9fc0da4ca"
+      "bytes": 12560185,
+      "sha256": "468021b35c05c98096e5af0e509dd96f38c8b5b6c44c6f38e3a89b1c4523fd35"
     },
     "threat_intel_crowdsec.yaml": {
-      "bytes": 2393580,
-      "sha256": "53dc1001da710865c2dd60238e3b038e751bdad1007829745af9d511742c6f02"
+      "bytes": 2431818,
+      "sha256": "a463f3d57ea511f7f41f5ca5390499e39d3166ff6679b7b5a3796ec80dd468ac"
     },
     "threat_intel_csv.csv": {
-      "bytes": 41063742,
-      "sha256": "79fb03d6f84419a8c202a66f2cca00085a21303119270ff27d585dd30800625e"
+      "bytes": 41124149,
+      "sha256": "4bcb80985441b41ba608970a70c8dba815c95d7e1d354c7ac47864cd0792f52c"
     },
     "threat_intel_dnsmasq.conf": {
-      "bytes": 18896888,
-      "sha256": "5b43bd3cf3ae636b3f0a04663da9aa9406ba3ec07369e88c44455e81934cc6e6"
+      "bytes": 18913366,
+      "sha256": "73d5c409aef3ecb80d40f9551c8f55be7a242e38b1c633efeaa04ed88441013b"
     },
     "threat_intel_ipset.ipset": {
-      "bytes": 497818,
-      "sha256": "5c1d4f7ad1addbc027d7c7d7e4b1d4e237101dc511fab651685e5f3d48788fee"
+      "bytes": 505830,
+      "sha256": "d9002cea8690c6335a180c530a6d522e077d664be9d40f334117d6dfa60b63ce"
     },
     "threat_intel_json.json": {
-      "bytes": 141961609,
-      "sha256": "8bebb3f3af08f120477934aace5e10f0f40915c2a6f2b1d6ca3130eb612d2555"
+      "bytes": 142163958,
+      "sha256": "7144ecb4cd82bd5c32708a4b517d16fd5acb84dc234af3e4ff75c7e29ad12be6"
     },
     "threat_intel_mikrotik.rsc": {
-      "bytes": 40875594,
-      "sha256": "e6983fb473d893a71f0724705fa99143439c76067eaa42485fa8ebe538aa1a34"
+      "bytes": 40933216,
+      "sha256": "74de003a804f146cf92fa3b5cfee028661192addaf725144431d97088c60af8e"
     },
     "threat_intel_nextdns.txt": {
-      "bytes": 10776056,
-      "sha256": "f6f04f7640f484076ca9964bf6f6c536716d6b8f0a40fd98a661a8195710365b"
+      "bytes": 10785360,
+      "sha256": "97a7597fb086907ca9f6518817ff5624c12259061d06e50ec77f5bb986b6af43"
     },
     "threat_intel_nftables.nft": {
-      "bytes": 17420495,
-      "sha256": "f5fa64013db68d8c264d15886ccd7a5e3e5cd9f5fc63a0ff30aabf0e266d05e0"
+      "bytes": 17442281,
+      "sha256": "99285509d8236a564835120b31fc17a5032fcee0ffb2b3740d8c133804f775a9"
     },
     "threat_intel_pihole.txt": {
-      "bytes": 14597678,
-      "sha256": "990e9c8771c5d82e1bd5d61a0090c965e1845b78d457e1f5c97af69c59fe60be"
+      "bytes": 14610358,
+      "sha256": "b5f5e0a50715df4d029d90f659355cb0b1648fb2a07cbd73e72ee49c0c3b79ba"
     },
     "threat_intel_rpz.zone": {
-      "bytes": 14597841,
-      "sha256": "e591d45de7fa0278b060c6ec66b18b5d8768c65db8df212af6eb55c544c09812"
+      "bytes": 14610521,
+      "sha256": "afa6b5a2673ecd5229eeb2c1132835f41996df3b5997a79625d6be82fb1ce747"
     },
     "threat_intel_sqlite.db": {
-      "bytes": 105508864,
-      "sha256": "8b6e6c90d63e018d280772e0824f9d6c0761927614d7f1a8cf28850e9cefaa05"
+      "bytes": 105668608,
+      "sha256": "4cf7fbdc7861066f404999099da3740f7f2aba824c7d86ad010baf9346586070"
     },
     "threat_intel_suricata.json": {
-      "bytes": 221571778,
-      "sha256": "95fc0795aceb318091b6165dfdcfb8a2cfdc3ff7bb2aceb0fac8ef6a4eb42af8"
+      "bytes": 221871349,
+      "sha256": "999c8418099be469647135c6b8375e6605bf990e5d7ed429aec3b8d6c27fdeab"
     },
     "threat_intel_technitium.zone": {
-      "bytes": 17464212,
-      "sha256": "f7b40e50da04763a2e42bc26859247ee728e26cbd7c82f4eb84628410a4e1d9c"
+      "bytes": 17479424,
+      "sha256": "60dd6b5f197a30e2ed84e19c82309cb816ecaaee68f4ac9cd76ac5088b1560d7"
     },
     "threat_intel_unbound.conf": {
-      "bytes": 25106992,
-      "sha256": "fed9d5aee939dd25a492226f4c4fe5c70bb34bd2ae1ae86909446bf194857702"
+      "bytes": 25128956,
+      "sha256": "b5fa2bd461007daf01fbcbf80586960c23f71769538f75ceb5e71f7343c1340e"
     },
     "threat_intel_yaml.yaml": {
-      "bytes": 106592659,
-      "sha256": "cf11e74bce8d958024361b0b7ae0c76ba347d90bc85db8f37a6cb9fe7dee4118"
+      "bytes": 106743178,
+      "sha256": "ec5d4d9282a86aed093f74d5466d93ba745cfa09eee08da8cd5f58a7dc44e7c7"
     }
   }
 }
