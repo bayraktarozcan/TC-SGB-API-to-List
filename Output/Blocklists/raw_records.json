@@ -1,10 +1,10 @@
 {
-  "bytes": 141522392,
+  "bytes": 141548126,
   "extension": ".json",
   "file": "raw_records.json",
   "format": "raw_records",
   "raw_url": "https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/download/ioc-data/raw_records.json",
   "release_tag": "ioc-data",
-  "sha256": "c577c664789801387f5e2a87ecae937f9ef1f297bcf143008065f1f4e2f7e92f",
+  "sha256": "6b76b4d13090c42e4f921226d3d257be9c73c1ba66897074a8601d19a809c98f",
   "title": "Raw API snapshot with quality scores"
 }

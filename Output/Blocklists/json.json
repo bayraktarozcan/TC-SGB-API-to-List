@@ -1,10 +1,10 @@
 {
-  "bytes": 142225302,
+  "bytes": 142250887,
   "extension": ".json",
   "file": "threat_intel_json.json",
   "format": "json",
   "raw_url": "https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/download/ioc-data/threat_intel_json.json",
   "release_tag": "ioc-data",
-  "sha256": "c131321988fcd9c8288a2805f59236ceebd08afd2268e64b84b07c3c7bd4b065",
+  "sha256": "5651fdc7eca9bb693ba7856c088bd629e595e673aeaf2b578543bdf2d244adea",
   "title": "JSON array of all IoCs"
 }
