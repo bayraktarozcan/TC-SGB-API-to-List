@@ -20,7 +20,7 @@ This report analyzes adding **PhishTank** (phishtank.org) and **abuse.ch** platf
 |--------|------|---------------|--------|--------------|----------------|------------------|
 | PhishTank | Phishing URLs → Domains | API Key (free) | CSV/JSON/XML | Hourly | ~5,000–15,000 | 04-phishtank |
 | URLhaus (abuse.ch) | Malware URLs → Domains | Auth-Key (free) | CSV/Host-file | 5 min | ~10,000–30,000 | 05-urlhaus |
-| ThreatFox (abuse.ch) | Malware IOCs (domains/IPs/URLs) | Auth-Key (free) | CSV/JSON/Host-file | 5 min | ~5,000–20,000 | 06-threatfox |
+| ThreatFox (abuse.ch) | Malware IoCs (domains/IPs/URLs) | Auth-Key (free) | CSV/JSON/Host-file | 5 min | ~5,000–20,000 | 06-threatfox |
 
 **Key finding:** All three sources require free registration for an API/Auth key. The pipeline already supports keyed fetches via environment variables. Integration is straightforward using the existing `ExternalFeed` framework.
 
@@ -147,19 +147,19 @@ abuse.ch operates **six platforms**; two are directly relevant for domain/IP blo
 
 **Volume:** ~10,000–30,000 active malware domains in hostfile
 
-### 3.2 ThreatFox — Malware IOCs
+### 3.2 ThreatFox — Malware IoCs
 
 | Attribute | Details |
 |-----------|---------|
-| **Focus** | IOCs associated with malware (domains, IPs, URLs, hashes) |
-| **Data scope** | Global, 6-month retention (expired IOCs excluded) |
+| **Focus** | IoCs associated with malware (domains, IPs, URLs, hashes) |
+| **Data scope** | Global, 6-month retention (expired IoCs excluded) |
 | **Access** | Same Auth-Key as URLhaus |
 | **Rate limits** | Fetch exports no more than every 5 minutes |
-| **Expiration** | IOCs older than 6 months excluded (since 2025-05-01) |
+| **Expiration** | IoCs older than 6 months excluded (since 2025-05-01) |
 
 **Relevant exports (require Auth-Key in URL):**
 - `https://threatfox-api.abuse.ch/v2/files/exports/<KEY>/hostfile.txt` — **Domains only** (payload delivery + botnet C2), last 6 months
-- `https://threatfox-api.abuse.ch/v2/files/exports/<KEY>/full.csv.zip` — All IOC types (domain, ip:port, url, hash)
+- `https://threatfox-api.abuse.ch/v2/files/exports/<KEY>/full.csv.zip` — All IoC types (domain, ip:port, url, hash)
 - `https://threatfox-api.abuse.ch/v2/files/exports/<KEY>/rpz.txt` — DNS RPZ format
 
 **Host-file format:** One domain per line, perfect for `parse_lines`
@@ -183,13 +183,13 @@ ExternalFeed(
     homepage="https://urlhaus.abuse.ch/",
 ),
 
-# Slot 06: ThreatFox malware IOC domains
+# Slot 06: ThreatFox malware IoC domains
 ExternalFeed(
     key="threatfox",
     url="https://threatfox-api.abuse.ch/v2/files/exports/${ABUSE_CH_KEY}/hostfile.txt",
     format="lines",
     output_file="06-threatfox_adguard.txt",
-    title="Global | ThreatFox Malware IOC Domains (AdGuard)",
+    title="Global | ThreatFox Malware IoC Domains (AdGuard)",
     homepage="https://threatfox.abuse.ch/",
 ),
 ```
@@ -277,7 +277,7 @@ done
 Add to the Brave subscription list:
 - `04-phishtank_adguard.txt` — PhishTank Verified Phishing
 - `05-urlhaus_adguard.txt` — URLhaus Malware Distribution
-- `06-threatfox_adguard.txt` — ThreatFox Malware IOCs
+- `06-threatfox_adguard.txt` — ThreatFox Malware IoCs
 
 ---
 
@@ -304,7 +304,7 @@ Add to the Brave subscription list:
 | CERT.SI (03) | Malware, botnet, phishing | Slovenia/EU | Low |
 | **PhishTank (04)** | **Phishing (verified)** | **Global** | **Complements PH/BP** |
 | **URLhaus (05)** | **Malware distribution** | **Global** | **Complements MD/MU/MC** |
-| **ThreatFox (06)** | **Malware IOCs (domains)** | **Global** | **Complements MD/MC/BC** |
+| **ThreatFox (06)** | **Malware IoCs (domains)** | **Global** | **Complements MD/MC/BC** |
 
 **No significant overlap** — each source has distinct vantage points and curation methodologies.
 
@@ -364,7 +364,7 @@ After merge, trigger `workflow_dispatch` on `schedule.yml` and verify:
 | **Integration Effort** | Low (new parser) | Very Low (existing parser) | Very Low (existing parser) |
 | **Maintenance Burden** | Low (stable CSV) | Low (stable hostfile) | Low (stable hostfile) |
 | **False Positive Risk** | Low (verified+online only) | Low (Tranco Top 1M excluded) | Low (6mo expiry, confidence scores) |
-| **Complementarity** | High (global phishing) | High (global malware URLs) | High (global malware IOCs) |
+| **Complementarity** | High (global phishing) | High (global malware URLs) | High (global malware IoCs) |
 | **Cost** | Free (registration) | Free (registration) | Free (same key) |
 | **Recommendation** | **ADD (slot 04)** | **ADD (slot 05)** | **ADD (slot 06)** |
 
@@ -595,7 +595,7 @@ ExternalFeed(
     url="https://threatfox-api.abuse.ch/v2/files/exports/${ABUSE_CH_KEY}/hostfile.txt",
     format="lines",
     output_file="06-threatfox_adguard.txt",
-    title="Global | ThreatFox Malware IOC Domains (AdGuard)",
+    title="Global | ThreatFox Malware IoC Domains (AdGuard)",
     homepage="https://threatfox.abuse.ch/",
 ),
 ```
