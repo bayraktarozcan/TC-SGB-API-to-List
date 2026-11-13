@@ -108,6 +108,32 @@ deep-mojibake:
   script:
     - python Scripts/src/mojibake.py --scope history
 
+# Mirror of .github/workflows/link-check.yml (lychee). Runs on MR/default-branch
+# doc changes, weekly schedules, and web (manual) pipelines.
+link-check:
+  stage: lint
+  needs: []
+  image: lycheeverse/lychee:0.24.2
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
+        - "**/*.md"
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+    - if: $CI_PIPELINE_SOURCE == "web"
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      changes:
+        - "**/*.md"
+    - when: never
+  script:
+    - >-
+      lychee --no-progress --verbose --max-retries 2
+      --exclude '^file://'
+      --exclude 'compare/%7B'
+      --exclude '^https://www\.iso\.org/standard/77520\.html$'
+      --exclude '^https://www\.iso\.org/standard/86308\.html$'
+      --exclude '^https://www\.iso\.org/standard/86612\.html$'
+      './**/*.md'
+
 build:
   stage: build
   needs:
