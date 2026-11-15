@@ -1,72 +1,72 @@
 {
   "formats": {
     "raw_records.json": {
-      "bytes": 141868952,
-      "sha256": "c4c2fcb044fc8535606dc45d0a0f92d17c49ae0fbb7779bfe2132a3fb43bf070"
+      "bytes": 141891340,
+      "sha256": "e26ddacea50668b91c86315358faec940221f87fc459a70d3b4d02ee1e695ce3"
     },
     "threat_intel_adguard.txt": {
-      "bytes": 12596724,
-      "sha256": "b2dea8d4cca39b0ba455e47f32ee5a5b6028cbd427c6724ebd5baa3e69219e7d"
+      "bytes": 12598832,
+      "sha256": "e36c5e1a0cceb1757fa399c27783411e06a401e952709adb4114962fab0a3c4c"
     },
     "threat_intel_crowdsec.yaml": {
       "bytes": 2453782,
       "sha256": "196ca9d5a934e9273f3e90818dc1906473a34343ed904f30e3766b31b4955707"
     },
     "threat_intel_csv.csv": {
-      "bytes": 41246957,
-      "sha256": "5b70e32e36689de21be0a782f3a8830fea245217dbd8eca2503831e99f1029cf"
+      "bytes": 41253579,
+      "sha256": "1a9deae38ff34daebf77454c439002c3361c43a6f8b26a0b93bf1842ba1d72f1"
     },
     "threat_intel_dnsmasq.conf": {
-      "bytes": 18965223,
-      "sha256": "d6dc5ecc677a700ee96634ae7f660de4d3c7a7ef149cd63ee0374c2b7a54d8d6"
+      "bytes": 18968423,
+      "sha256": "ccbe5b57458c083ac79aa21f30a897ac5ee586d511e2ecd78c63b533d4ff1207"
     },
     "threat_intel_ipset.ipset": {
       "bytes": 510420,
       "sha256": "fada88f9c9d3f99af94d371659d9cb6009afdf71a96823a5c17442bef5c31bc5"
     },
     "threat_intel_json.json": {
-      "bytes": 142577363,
-      "sha256": "b3177d620c4e9ac111cdd98cbd93043c12cf4a3bbb8c03ed2dda98435085585e"
+      "bytes": 142599719,
+      "sha256": "957cd7c6dba65526957e0f04ea3cf09e6b318fc7ffe42b1966439e0583549c08"
     },
     "threat_intel_mikrotik.rsc": {
-      "bytes": 41053145,
-      "sha256": "855cd8fa2cd991b35d7703a69fdc529f68eae97b2a2bb4f45a5c3e63c88309c1"
+      "bytes": 41059699,
+      "sha256": "7488ea1b30a86927f11669170370d14a17c2b7cabf7714713e689e37ef82bafc"
     },
     "threat_intel_nextdns.txt": {
-      "bytes": 10815525,
-      "sha256": "faaab915dd4481ed8133783215e7238ff7f65aa4ab17e695359f66670c1bf45e"
+      "bytes": 10817399,
+      "sha256": "7c9765532f7d4ad585255d7d33efbf9a8b061d9fc31a2ad0448307c60630e9e8"
     },
     "threat_intel_nftables.nft": {
-      "bytes": 17493040,
-      "sha256": "c1b78acc23aac75b59fabd5cffb7234a5c943856527585452e4c070751719a19"
+      "bytes": 17495928,
+      "sha256": "cf1149a13542650aced027d50e25cbc84950e449f0903eab0cc49dfa9fbfdaed"
     },
     "threat_intel_pihole.txt": {
-      "bytes": 14650731,
-      "sha256": "0bec7e8e7a1c0b3a1dc422b5395ea98e452ee3dda45b02081c7f727d5cfe30fd"
+      "bytes": 14653229,
+      "sha256": "c79d574cee269b3424ff1cdd1270c6a1bb8cb9a22536f3e9415f0b693b24937d"
     },
     "threat_intel_rpz.zone": {
-      "bytes": 14650894,
-      "sha256": "4ba4e2d5b9bf95e2e0e358969ee3aa9433b29a90caefa2394af2ab7ae2355b87"
+      "bytes": 14653392,
+      "sha256": "9b137bb5d9a1bce25394f9c84081d0932d471a09e5451c38194ab2830e544ea8"
     },
     "threat_intel_sqlite.db": {
-      "bytes": 105914368,
-      "sha256": "563f02a1a9e5385e167a66526bf009b57261ab6f3d6de1b05a0a543fcb64a5f0"
+      "bytes": 105832448,
+      "sha256": "a73336c67d6a7a251600ac2b657673c733928d802899868483829b5640f57eea"
     },
     "threat_intel_suricata.json": {
-      "bytes": 222505365,
-      "sha256": "3db1dcbc4224bd81748cfcda40499f1f8ec144bb1d60730de9b6ab0b2009b089"
+      "bytes": 222540233,
+      "sha256": "48cdfad29ddcadd108401f2b89cf1afa2238005da00b55c0366f175e9c7008c8"
     },
     "threat_intel_technitium.zone": {
-      "bytes": 17527453,
-      "sha256": "3e2d7fef7ba44bcdf0c606ae8ee3bafae63be09708788b008f719a003fa1d49e"
+      "bytes": 17530419,
+      "sha256": "b55c0998d1c21a886c17cf5677dbcc8c30d6972190c90ce54fe89d6429cac3f5"
     },
     "threat_intel_unbound.conf": {
-      "bytes": 25197401,
-      "sha256": "5418aa4a28bb396d04b5d7d55d97dd10edb9b9aceacf808bdb854a728f397295"
+      "bytes": 25201615,
+      "sha256": "21466449fe01a5be5a010054df4dba576bf1aac9b55bc707b88b7f350ebf1afa"
     },
     "threat_intel_yaml.yaml": {
-      "bytes": 107053436,
-      "sha256": "7c12b2c96f9c9cec9cbc4be8c93ecda81e13a793bd9ac3dcea6f2817a46e46d8"
+      "bytes": 107070284,
+      "sha256": "72b19943a6b3eb12d00ef3fee32616b58c1324f266dbfeb2bfa5eb9c76771025"
     }
   }
 }
