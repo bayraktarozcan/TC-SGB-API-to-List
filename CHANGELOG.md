@@ -15,6 +15,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 - **CI dependency policy: always-latest** — version pinning was removed from `AGENTS.md`; third-party GitHub Actions now use `@main`/`@master` or floating major tags, Docker images use `latest`, and the repository setting `sha_pinning_required` is `false` so non-SHA refs pass workflow validation. The same rule is recorded in the Turkish mirror with a matching `sync-sha`.
 - **Python CI matrix** — CI now tests Python 3.11 (compatibility floor) plus the latest 3.x on both GitHub Actions and GitLab; the floor in `pyproject.toml` is unchanged.
 - **Dependency-update PRs without third-party action** — `deps-update.yml` creates its PR with `gh` CLI instead of `peter-evans/create-pull-request`, so no action outside the repository's allowed pattern list is required; missing `automated`/`auto-merge` labels are created on demand before PR creation.
+- **Runtime dependencies unpinned in `pyproject.toml`** — `httpx`, `pydantic`, `python-dotenv`, and `pyyaml` no longer carry `==` pins; `pip install -e .` resolves to the latest compatible versions, matching the always-latest policy. `requirements.in` already stated "always latest stable" and `requirements.txt` remains the compiled snapshot.
+- **Dependabot/branch-ref clarification** — `AGENTS.md` no longer claims Dependabot bumps branch-based action refs (Dependabot updates version numbers/commit identifiers, not `@main`); branch refs self-update from upstream, while the `github-actions` ecosystem stays configured for any future version-pinned ref.
 
 ### Fixed
 
@@ -213,6 +215,8 @@ Biçim, [Keep a Changelog](https://keepachangelog.com/)'a dayanmaktadır.
 - **CI bağımlılık politikası: her daim en güncel** — `AGENTS.md`'den sürüm sabitleme kuralı kaldırıldı; üçüncü taraf GitHub Actions artık `@main`/`@master` veya kayan büyük sürüm etiketleri, Docker görüntüleri `latest` kullanıyor ve depo ayarı `sha_pinning_required` değeri `false`, böylece SHA olmayan ref'ler iş akışı doğrulamasından geçiyor. Aynı kural Türkçe aynada eşleşen `sync-sha` ile kayıtlı.
 - **Python CI matrisi** — CI artık hem GitHub Actions hem GitLab'da Python 3.11 (uyumluluk alt sınırı) ve en güncel 3.x sürümünü sınıyor; `pyproject.toml` içindeki alt sınır değişmedi.
 - **Bağımlılık güncelleme PR'ı üçüncü taraf eylem olmadan** — `deps-update.yml` PR'ı `peter-evans/create-pull-request` yerine `gh` CLI ile oluşturuyor, böylece deponun izinli eylem desenlerinin dışında bir eylem gerekmiyor; eksik `automated`/`auto-merge` etiketleri PR oluşturulmadan önce talep üzerine oluşturuluyor.
+- **Çalışma zamanı bağımlılıkları `pyproject.toml`'da sabitlenmedi** — `httpx`, `pydantic`, `python-dotenv` ve `pyyaml` artık `==` pin'i taşımıyor; `pip install -e .` en güncel uyumlu sürümleri çözüyor, bu da her daim en güncel politikasıyla eşleşiyor. `requirements.in` zaten "always latest stable" diyordu ve `requirements.txt` derlenmiş anlık görüntü olarak kalıyor.
+- **Dependabot/dal-ref açıklaması** — `AGENTS.md` artık Dependabot'ın dal tabanlı eylem ref'lerini yükselttiğini iddia etmiyor (Dependabot sürüm numarası/commit tanıtıcısı günceller, `@main`'i değil); dal ref'leri yukarı akıştan kendiliğinden güncellenir, `github-actions` ekosistemi ise gelecekteki sürüm sabitli ref'ler için yapılandırılmış kalır.
 
 ### Düzeltilen
 
