@@ -36,5 +36,6 @@ jobs:
             --exclude '^https://www\.iso\.org/standard/77520\.html$'
             --exclude '^https://www\.iso\.org/standard/86308\.html$'
             --exclude '^https://www\.iso\.org/standard/86612\.html$'
+            --exclude '^https://www\.cisco\.com/c/en/us/about/legal/cloud-and-software/end_user_license_agreement\.html$'
             './**/*.md'
           fail: true
