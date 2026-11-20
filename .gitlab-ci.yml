@@ -1,5 +1,5 @@
 ---
-image: python:3.11-slim@sha256:9534e5a8e315485d4061ed659af0fd78a284c015f9b73661b41d6bab25604534
+image: python:3.11-slim
 
 variables:
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
@@ -51,10 +51,18 @@ lint:
     - python Scripts/src/mojibake.py
 
 test:
-  <<: *deps_base
   stage: test
+  parallel:
+    matrix:
+      - PYTHON_VERSION: "3.11"
+      - PYTHON_VERSION: "latest"
+  image: python:${PYTHON_VERSION}
   needs:
     - lint
+  before_script:
+    - apt-get update && apt-get install -y --no-install-recommends git && rm -rf /var/lib/apt/lists/*
+    - python -m pip install --upgrade pip setuptools wheel
+    - pip install -e ".[dev]"
   coverage: '/(?:^|\s)TOTAL\s+\d+\s+\d+\s+(\d+(?:\.\d+)?)%/'
   script:
     - pytest -m "not slow" --cov=Scripts --cov-report=xml --cov-report=term-missing -v
@@ -113,7 +121,9 @@ deep-mojibake:
 link-check:
   stage: lint
   needs: []
-  image: lycheeverse/lychee:0.24.2
+  image:
+    name: lycheeverse/lychee:latest
+    entrypoint: [""]
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
@@ -141,7 +151,7 @@ build:
     - security
   before_script:
     - python -m pip install --upgrade pip setuptools wheel
-    - pip install build==1.6.1
+    - pip install build
   script:
     - python -m build
   artifacts:
