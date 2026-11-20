@@ -147,9 +147,10 @@ Exemptions (each with its reason):
 - Manifest: `pyproject.toml` + `requirements.txt` (source of truth); setup
   is the Commands block (`pip install -e ".[dev]"`, then
   `pip install -r requirements.txt`).
-- Local versions at last check: Python 3.15.2; httpx 0.28.1, pydantic
-  2.14.2, python-dotenv 1.2.4, PyYAML 6.0.3; pytest 9.2.0, ruff 0.17.3,
-  mypy 2.4.1, bandit 1.9.4, hypothesis 6.170.14, coverage 7.17.0.
+- Installed versions: resolved at install time from the manifests below (the
+  local `.venv` is regenerated from them, never pinned here). The source of
+  truth for exact versions is `pyproject.toml` + `requirements.txt`; read the
+  live environment with `python -m pip freeze` when a concrete number is needed.
 - Approved project-scope exception: `.venv/` (reason: per-project isolation
   on a shared host; recreated from the manifest, never committed).
 - Audit posture: `pip-audit` + `bandit` + gitleaks in CI on both hosts, with
@@ -875,4 +876,4 @@ Runtimes use the current LTS line (Node.js LTS, .NET LTS); build output goes thr
 - `.git/` is the **internal Git repository structure**, not a project config file.
 
 **Guiding rule:** "It looks special" does not mean "It is a standard special file." The meaning of any file is determined by the software that reads and interprets it.
-<!-- mirror-sync: sync-sha=4540f50b1b8f492f40e51d60edcc158604bc3e25 -->
+<!-- mirror-sync: sync-sha=11b266672010071f81d5cf36e9ed174bc076a951 -->
