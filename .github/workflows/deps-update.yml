@@ -18,11 +18,11 @@ jobs:
     name: Update Dependencies
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/checkout@main
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7
+      - uses: actions/setup-python@main
         with:
           python-version: "3.11"
           cache: pip
@@ -62,7 +62,7 @@ jobs:
 
       - name: Create PR
         if: steps.changes.outputs.changed == 'true'
-        uses: peter-evans/create-pull-request@271a8d0340265f705314b6d63b34416be5749e4c # v7
+        uses: peter-evans/create-pull-request@main
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: deps/update-dependencies-${{ github.run_id }}
