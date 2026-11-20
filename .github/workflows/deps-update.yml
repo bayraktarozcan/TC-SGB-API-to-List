@@ -62,24 +62,33 @@ jobs:
 
       - name: Create PR
         if: steps.changes.outputs.changed == 'true'
-        uses: peter-evans/create-pull-request@main
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          branch: deps/update-dependencies-${{ github.run_id }}
-          delete-branch: true
-          title: "deps: update dependencies ($(date +'%Y-%m-%d'))"
-          body: |
-            Automated dependency update via pip-tools.
-            
-            Changes:
-            - `requirements.txt` (runtime)
-            - `requirements-dev.txt` (dev)
-            
-            All quality gates passed in CI.
-
-          labels: |
-            dependencies
-            automated
-            auto-merge
-          assignees: bayraktarozcan
-          draft: false
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          BRANCH="deps/update-dependencies-${{ github.run_id }}"
+          STAMP=$(TZ=Europe/Istanbul date +'%Y-%m-%d')
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$BRANCH"
+          git add requirements.txt requirements-dev.txt
+          git commit -m "deps: update dependencies"
+          git push origin "$BRANCH"
+          {
+            echo "Automated dependency update via pip-tools."
+            echo
+            echo "Changes:"
+            echo '- `requirements.txt` (runtime)'
+            echo '- `requirements-dev.txt` (dev)'
+            echo
+            echo "All quality gates passed in CI."
+          } > /tmp/pr-body.md
+          gh pr create \
+            --base main \
+            --head "$BRANCH" \
+            --title "deps: update dependencies ($STAMP)" \
+            --body-file /tmp/pr-body.md \
+            --label dependencies \
+            --label automated \
+            --label auto-merge \
+            --assignee bayraktarozcan
