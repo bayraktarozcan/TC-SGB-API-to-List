@@ -10,6 +10,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+### Changed
+
+- **CI dependency policy: always-latest** — version pinning was removed from `AGENTS.md`; third-party GitHub Actions now use `@main`/`@master` or floating major tags, Docker images use `latest`, and the repository setting `sha_pinning_required` is `false` so non-SHA refs pass workflow validation. The same rule is recorded in the Turkish mirror with a matching `sync-sha`.
+- **Python CI matrix** — CI now tests Python 3.11 (compatibility floor) plus the latest 3.x on both GitHub Actions and GitLab; the floor in `pyproject.toml` is unchanged.
+- **Dependency-update PRs without third-party action** — `deps-update.yml` creates its PR with `gh` CLI instead of `peter-evans/create-pull-request`, so no action outside the repository's allowed pattern list is required; missing `automated`/`auto-merge` labels are created on demand before PR creation.
+
+### Fixed
+
+- **GitHub Actions `startup_failure` on non-SHA refs** — resolved by disabling `sha_pinning_required`; every workflow (CI, CodeQL, Mirror, Deploy, scheduled fetch, link check) now starts and completes.
+- **GitLab `link-check` job** — lychee runs with an empty entrypoint (the GitLab-generated shell script was being read as a config file); the Cisco EULA URL, which returns 403 to bots, is excluded in both the GitHub and GitLab link-check configurations.
+- **Dependency-update quality gate** — setuptools is upgraded before `pip-audit`, matching the CI security job, so the known setuptools advisories no longer block the update PR.
+
 ### Removed
 
 - **Azerbaijan feed retired from scope** — the `blacklist.gov.az` list proved unreliable and unsuitable for a curated blocklist, so it is no longer fetched, validated, or published; `03-azerbaycan-blacklist_adguard.txt` is dropped from the `filter-lists` branch. The publication safety policy, per-feed audits, and the `validate-external` gate it was introduced with keep running for the remaining feeds.
@@ -195,6 +207,18 @@ Bu projedeki tüm dikkat çekici değişiklikler bu dosyada belgelenecektir.
 Biçim, [Keep a Changelog](https://keepachangelog.com/)'a dayanmaktadır.
 
 ## [Yayınlanmamış]
+
+### Değiştirilen
+
+- **CI bağımlılık politikası: her daim en güncel** — `AGENTS.md`'den sürüm sabitleme kuralı kaldırıldı; üçüncü taraf GitHub Actions artık `@main`/`@master` veya kayan büyük sürüm etiketleri, Docker görüntüleri `latest` kullanıyor ve depo ayarı `sha_pinning_required` değeri `false`, böylece SHA olmayan ref'ler iş akışı doğrulamasından geçiyor. Aynı kural Türkçe aynada eşleşen `sync-sha` ile kayıtlı.
+- **Python CI matrisi** — CI artık hem GitHub Actions hem GitLab'da Python 3.11 (uyumluluk alt sınırı) ve en güncel 3.x sürümünü sınıyor; `pyproject.toml` içindeki alt sınır değişmedi.
+- **Bağımlılık güncelleme PR'ı üçüncü taraf eylem olmadan** — `deps-update.yml` PR'ı `peter-evans/create-pull-request` yerine `gh` CLI ile oluşturuyor, böylece deponun izinli eylem desenlerinin dışında bir eylem gerekmiyor; eksik `automated`/`auto-merge` etiketleri PR oluşturulmadan önce talep üzerine oluşturuluyor.
+
+### Düzeltilen
+
+- **SHA olmayan ref'lerde GitHub Actions `startup_failure`** — `sha_pinning_required` kapatılarak çözüldü; tüm iş akışları (CI, CodeQL, Mirror, Deploy, zamanlanmış çekim, bağlantı denetimi) artık başlıyor ve tamamlanıyor.
+- **GitLab `link-check` işi** — lychee boş entrypoint ile çalışıyor (GitLab'in ürettiği kabuk betiği yapılandırma dosyası olarak okunuyordu); botlara 403 döndüren Cisco EULA URL'si hem GitHub hem GitLab bağlantı denetimi yapılandırmalarında hariç tutuluyor.
+- **Bağımlılık güncelleme kalite kapısı** — `pip-audit` öncesinde setuptools yükseltiliyor (CI güvenlik işiyle aynı), böylece bilinen setuptools uyarıları güncelleme PR'ını engellemiyor.
 
 ### Silinen
 
