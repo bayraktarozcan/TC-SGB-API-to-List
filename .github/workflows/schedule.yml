@@ -18,12 +18,12 @@ jobs:
     name: Fetch & Validate IoCs
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@main
+      - uses: actions/checkout@v7
         with:
           token: ${{ secrets.AUTO_MERGE_TOKEN }}
           fetch-depth: 0
 
-      - uses: actions/setup-python@main
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.11"
           cache: pip

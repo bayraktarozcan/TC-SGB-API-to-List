@@ -25,16 +25,16 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@main
+      - uses: actions/checkout@v7
 
       - name: Setup Pages
-        uses: actions/configure-pages@main
+        uses: actions/configure-pages@v6
 
       - name: Upload site artifact (Site/ only)
-        uses: actions/upload-pages-artifact@main
+        uses: actions/upload-pages-artifact@v5
         with:
           path: Site
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@main
+        uses: actions/deploy-pages@v5

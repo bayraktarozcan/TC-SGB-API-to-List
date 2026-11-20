@@ -24,9 +24,9 @@ jobs:
     name: Check Links
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@main
+      - uses: actions/checkout@v7
       - name: Check links
-        uses: lycheeverse/lychee-action@master
+        uses: lycheeverse/lychee-action@v2
         with:
           # file:// = author-machine absolute paths, never valid in CI
           # compare/{...} = release-note template placeholders, filled per release
