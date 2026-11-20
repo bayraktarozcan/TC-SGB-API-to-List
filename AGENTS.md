@@ -167,7 +167,7 @@ Exemptions (each with its reason):
 
 ## Toolchain
 
-- Floor: Python `>=3.11` (CI runs 3.11); local dev verified on 3.15.
+- Floor: Python `>=3.11` (CI runs a matrix of 3.11 + latest); local dev verified on 3.15.
 - `pip` + `pyproject.toml` + `requirements.txt`; `pytest` + `coverage`;
   `ruff` (lint and format); `mypy` (strict); `bandit`; `pip-audit`;
   `hypothesis`.
@@ -199,7 +199,7 @@ Gates that do not hold by design, and what runs afterward instead:
   instead of blocking on a check that cannot pass.
 - Dependabot `deps()`/`ci()` prefixes are tool-controlled; squash titles are
   normalized to Conventional Commits on merge instead.
-- No transitive lockfile: direct runtime/build deps are pinned exact, but a
+- No transitive lockfile: direct runtime/build deps use the latest version, but a
   frozen file without regeneration automation would rot silently, so ranges
   plus Dependabot stand in until lock tooling is adopted.
 - The repository owner may push to `main` directly, bypassing the ruleset:
@@ -622,9 +622,9 @@ Repository management and dependency conventions.
 - **Dependabot.** Configured in `.github/dependabot.yml`; a weekly cadence is preferred to avoid daily PR pile-ups; commit messages follow Conventional Commits (`chore(deps)`).
 - **CodeQL.** A `.github/workflows/codeql.yml` runs on every push and weekly. It is free for public repositories; private repositories need GitHub's paid code-security product. Where CodeQL is unavailable, a secret scanner (for example gitleaks) and the language's own static analysis stand in.
 - **Auto-approve.** Only trusted usernames may be auto-approved, after status checks pass, logged, with minimal permissions (`contents: write`, `pull-requests: write`).
-- **Workflow hardening.** Every workflow sets the narrowest `permissions:` it needs. Third-party actions are pinned to a full commit SHA (with the tag in a comment) and kept current by Dependabot.
-- **Dependency pinning.** Runtime and build dependencies are locked to an exact version; dev dependencies may use flexible ranges (`>=`, `^`); lockfiles are committed; updates go through Dependabot. A new dependency is justified (need, maintenance state, license) before it is added. Types: **Runtime** (needed to run the app, for example flask, react), **Dev** (development-time only, for example pytest, eslint), **Build** (compile-time only, for example typescript, webpack).
-- **Currency without exception.** Everything is kept current at all times, and there is no exception: dependencies, runtimes, toolchains, build and CI tooling, third-party actions, base images, and the host software the project relies on. A new version is accepted without further question: the build and the tests are the only gate. If it breaks CI, the fix goes forward (adapt the code, replace the component), never back: no pinning to an older version and no rolling the bump back. Exact pins and lockfiles fix what is in use now and move forward through the automated update process; pinning is never a reason to stand still. Security fixes do not wait for the update cadence. Currency is verified by a scheduled check, not discovered by an incident. Nothing old stays in the project, and a component that cannot be brought current is a defect to be fixed, not an exception to be recorded.
+- **Workflow hardening.** Every workflow sets the narrowest `permissions:` it needs. Third-party actions use the latest version and are kept current by Dependabot.
+- **Dependency currency.** Runtime and build dependencies use the latest version; dev dependencies may use flexible ranges (`>=`, `^`); lockfiles are committed; updates go through Dependabot. A new dependency is justified (need, maintenance state, license) before it is added. Types: **Runtime** (needed to run the app, for example flask, react), **Dev** (development-time only, for example pytest, eslint), **Build** (compile-time only, for example typescript, webpack).
+- **Currency without exception.** Everything is kept current at all times, and there is no exception: dependencies, runtimes, toolchains, build and CI tooling, third-party actions, base images, and the host software the project relies on. A new version is accepted without further question: the build and the tests are the only gate. If it breaks CI, the fix goes forward (adapt the code, replace the component), never back: no rolling back a bump. Security fixes do not wait for the update cadence. Currency is verified by a scheduled check, not discovered by an incident. Nothing old stays in the project, and a component that cannot be brought current is a defect to be fixed, not an exception to be recorded.
 - **Standard workflow triggers.** Test on `push` and `pull_request` (unit tests, lint, type check); Build on `push` to `main`; Release on tag `v*`; CodeQL on push and weekly; Dependabot weekly.
 - **Machine-maintained logs.** Recurring git and audit events (dependency updates, PR journals, version checks) are logged by the workflow itself via API, never by hand; human intervention is not required.
 - **New-repository checklist.** The bootstrap order is the rule, not a suggestion: the ignore file comes first so nothing private is swept into the first commit, then the root documents, then the landing page, then the hidden layers, and only then version control.
@@ -875,4 +875,4 @@ Runtimes use the current LTS line (Node.js LTS, .NET LTS); build output goes thr
 - `.git/` is the **internal Git repository structure**, not a project config file.
 
 **Guiding rule:** "It looks special" does not mean "It is a standard special file." The meaning of any file is determined by the software that reads and interprets it.
-<!-- mirror-sync: sync-sha=c96e5db541936901f24b064f060bafc46e5fa199 -->
+<!-- mirror-sync: sync-sha=bee748c3bbd471411338a66d404c4a2ca2445a65 -->
