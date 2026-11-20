@@ -52,6 +52,7 @@ jobs:
       - name: Install updated deps and test
         if: steps.changes.outputs.changed == 'true'
         run: |
+          pip install --upgrade certifi filelock setuptools
           pip install -r requirements-dev.txt
           pytest --tb=short -q
           ruff check Scripts/ Tests/
