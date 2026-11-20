@@ -1,10 +1,10 @@
 {
-  "bytes": 517603,
+  "bytes": 517758,
   "extension": ".ipset",
   "file": "threat_intel_ipset.ipset",
   "format": "ipset",
   "raw_url": "https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/download/ioc-data/threat_intel_ipset.ipset",
   "release_tag": "ioc-data",
-  "sha256": "8f0334b5f9f295ff2246491733778694a649b0e1748b6fd0a51c8574d82102e4",
+  "sha256": "6955ecbe9989c5a9651bfe1b50f8ebbec04e631bb6b14fad52de07bfd36fd38a",
   "title": "ipset list"
 }
