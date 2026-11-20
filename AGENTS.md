@@ -167,7 +167,7 @@ Exemptions (each with its reason):
 
 ## Toolchain
 
-- Floor: Python `>=3.11` (CI runs a matrix of 3.11 + latest); local dev verified on 3.15.
+- Floor: Python `>=3.11` (compatibility floor tested in CI matrix alongside latest); local dev uses the latest stable Python.
 - `pip` + `pyproject.toml` + `requirements.txt`; `pytest` + `coverage`;
   `ruff` (lint and format); `mypy` (strict); `bandit`; `pip-audit`;
   `hypothesis`.
@@ -875,4 +875,4 @@ Runtimes use the current LTS line (Node.js LTS, .NET LTS); build output goes thr
 - `.git/` is the **internal Git repository structure**, not a project config file.
 
 **Guiding rule:** "It looks special" does not mean "It is a standard special file." The meaning of any file is determined by the software that reads and interprets it.
-<!-- mirror-sync: sync-sha=c93f76639a2601bb578bfc7fbc7826f3a723ce8a -->
+<!-- mirror-sync: sync-sha=4540f50b1b8f492f40e51d60edcc158604bc3e25 -->
