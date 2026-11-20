@@ -84,6 +84,8 @@ jobs:
             echo
             echo "All quality gates passed in CI."
           } > /tmp/pr-body.md
+          gh label create automated --description "Automated pull request" --color "ededed" 2>/dev/null || true
+          gh label create auto-merge --description "Arm native auto-merge" --color "0e8a16" 2>/dev/null || true
           gh pr create \
             --base main \
             --head "$BRANCH" \
