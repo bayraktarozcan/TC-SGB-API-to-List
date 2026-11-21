@@ -102,7 +102,7 @@ class TestReleaseBodies:
             line[2:].strip() for line in section.splitlines() if line.startswith("- ")
         ]
         body = (BODIES / f"{tag}.md").read_text(encoding="utf-8")
-        for bullet in source_bullets[:3]:
+        for bullet in source_bullets:
             key = re.sub(r"\s+", " ", re.sub(r"\s*\(?#\d+\)?", "", bullet)).strip().rstrip(" .")
             assert key[:40] in body, f"{tag}: bullet not represented: {key[:60]}"
 

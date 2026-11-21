@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 - **EOL-aware Python floor automation** — `.github/workflows/python-floor.yml` reads the Python core team's release calendar (`https://peps.python.org/api/release-cycle.json`) weekly and opens an auto-merge PR when the oldest supported minor advances beyond the declared floor. `Scripts/bump_python_floor.py` resolves the floor, refuses downgrades, retries transient network failures, and updates every declaration; `Tests/test_python_floor.py` pins parity across the manifest, CI matrices, mypy target and documentation.
 - **Canonical release records** — `.github/release-bodies/` holds the title and bilingual body for every release, generated from this changelog; `Tests/test_release_notes.py` pins title shape, section parity and absence of bare issue tokens. All nine releases on both hosts were rewritten to this source.
+- **Text hygiene guards** — every tracked text file now ends with LF, enforced by `Tests/test_repo_conventions.py::TestFinalNewline`; the release-note guard now checks every changelog bullet, not only the first three.
 
 ## [v0.3.2.2] — 2026-11-21
 
@@ -238,6 +239,7 @@ Biçim, [Keep a Changelog](https://keepachangelog.com/)'a dayanmaktadır.
 
 - **Python alt sınırı için EOL otomasyonu** — `.github/workflows/python-floor.yml`, Python çekirdek ekibinin yayın takvimini (`https://peps.python.org/api/release-cycle.json`) haftalık okur ve desteklenen en eski küçük sürüm bildirilen alt sınırı geçtiğinde otomatik birleştirme PR'ı açar. `Scripts/bump_python_floor.py` alt sınırı çözer, düşürmeyi reddeder, geçici ağ hatalarını yeniden dener ve tüm bildirimleri günceller; `Tests/test_python_floor.py` bildirim, CI matrisleri, mypy hedefi ve dokümantasyon arasındaki pariteyi sabitler.
 - **Kanonik yayın kayıtları** — `.github/release-bodies/`, bu değişiklik günlüğünden üretilen her yayının başlığını ve iki dilli gövdesini tutar; `Tests/test_release_notes.py` başlık biçimini, bölüm eşliğini ve çıplak issue belirteçlerinin olmamasını sabitler. İki hosttaki dokuz yayın da bu kaynağa göre yeniden yazıldı.
+- **Metin hijyen bekçileri** — izlenen her metin dosyası artık LF ile bitiyor; `Tests/test_repo_conventions.py::TestFinalNewline` bunu sabitler. Yayın notu bekçisi artık değişiklik günlüğündeki yalnızca ilk üç maddeyi değil, tüm maddeleri denetler.
 
 ## [v0.3.2.2] — 2026-11-21
 

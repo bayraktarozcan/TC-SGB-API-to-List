@@ -325,6 +325,41 @@ class TestCaseCollision:
         assert self._find(["a/b.py"]) == []
 
 
+class TestFinalNewline:
+    """Every tracked text file ends with LF, even when nothing else edits it."""
+
+    @staticmethod
+    def _find(files: list[str]) -> list[str]:
+        bad: list[str] = []
+        for name in files:
+            path = REPO_ROOT / name
+            try:
+                data = path.read_bytes()
+            except OSError:
+                continue
+            if data and not data.endswith(b"\n"):
+                bad.append(name)
+        return bad
+
+    def test_all_tracked_files_end_with_lf(self):
+        out = subprocess.run(
+            [shutil.which("git") or "git", "ls-files", "-z"],
+            cwd=REPO_ROOT,
+            capture_output=True,
+            check=True,
+        )
+        files = [p for p in out.stdout.decode("utf-8").split("\0") if p]
+        assert self._find(files) == []
+
+    def test_checker_flags_missing_newline(self):
+        planted = REPO_ROOT / "x.md"
+        try:
+            planted.write_bytes(b"body")
+            assert self._find([planted.name]) == ["x.md"]
+        finally:
+            planted.unlink(missing_ok=True)
+
+
 class TestMirrorPairGuards:
     """The AGENTS.md mirror contract verifies against the live documents.
 
