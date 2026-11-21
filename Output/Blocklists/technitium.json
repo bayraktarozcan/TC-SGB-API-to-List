@@ -1,10 +1,10 @@
 {
-  "bytes": 17571052,
+  "bytes": 4555994,
   "extension": ".zone",
   "file": "threat_intel_technitium.zone",
   "format": "technitium",
   "raw_url": "https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/download/ioc-data/threat_intel_technitium.zone",
   "release_tag": "ioc-data",
-  "sha256": "d27d3bf862bc271a9add8571eca0e67023581e14b39233140714bef1a5bc33e8",
+  "sha256": "c1635c65eccd01cf539afba474073ce8665cf229c8298789d8279be65489d2ca",
   "title": "Technitium DNS server zone file"
 }
