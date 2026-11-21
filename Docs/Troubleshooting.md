@@ -19,15 +19,15 @@ Fix, pick one:
 - Install Microsoft C++ Build Tools, then reinstall.
 - Install the pure-Python build: `PYYAML_FORCE_LIBYAML=0 pip install --no-build-isolation pyyaml==6.0.3` from the sdist. Parsing works identically; only large YAML dumps run slower.
 
-## PyCharm Console Fails with "did Not Find Executable"
+## PyCharm Console Fails with "did not find executable"
 
 The Python console exits with code 103 and reports the base interpreter path as missing.
 
 Cause: the project `.venv` was created from a Python installation that was later deleted; the venv cannot resolve its base executable anymore.
 
-Fix: delete `.venv` and recreate it from the installed Python (`python -m venv .venv`), then reinstall with `pip install -e ".[dev]"` and `pip install -r requirements.txt`. The PyCharm project SDK path (`.venv\Scripts\python.exe`) stays the same, so no IDE reconfiguration is needed.
+Fix: delete `.venv` and recreate it from the installed Python (`python -m venv .venv`), then reinstall with `pip install -e ".[dev]"`. The PyCharm project SDK path (`.venv\Scripts\python.exe`) stays the same, so no IDE reconfiguration is needed.
 
-## `tc-sgb generate` reports "Input file not found"
+## `tc-sgb generate` Reports "Input file not found"
 
 Cause: the `--input` path does not exist.
 
@@ -71,15 +71,15 @@ Düzeltme, birini seçin:
 - Microsoft C++ Build Tools kurup yeniden yükleyin.
 - Saf-Python derlemeyi kurun: sdist üzerinden `PYYAML_FORCE_LIBYAML=0 pip install --no-build-isolation pyyaml==6.0.3`. Çözümleme aynı çalışır; yalnızca büyük YAML dökümleri yavaşlar.
 
-## PyCharm Konsolu "did Not Find Executable" Hatası Veriyor
+## PyCharm Konsolu "did not find executable" Hatası Veriyor
 
 Python konsolu 103 koduyla çıkar ve taban yorumlayıcı yolunun eksik olduğunu bildirir.
 
 Neden: proje `.venv`'i sonradan silinen bir Python kurulumundan üretilmiştir; venv taban çalıştırılabilir dosyayı artık çözemez.
 
-Düzeltme: `.venv`'yi silip kurulu Python ile yeniden oluşturun (`python -m venv .venv`), sonra `pip install -e ".[dev]"` ve `pip install -r requirements.txt` ile kurun. PyCharm proje SDK yolu (`.venv\Scripts\python.exe`) aynı kalır; IDE'yi yeniden yapılandırmak gerekmez.
+Düzeltme: `.venv`'yi silip kurulu Python ile yeniden oluşturun (`python -m venv .venv`), sonra `pip install -e ".[dev]"` ile kurun. PyCharm proje SDK yolu (`.venv\Scripts\python.exe`) aynı kalır; IDE'yi yeniden yapılandırmak gerekmez.
 
-## `tc-sgb generate` "Input file not found" diyor
+## `tc-sgb generate` "Input file not found" Diyor
 
 Neden: `--input` yolu yoktur.
 
