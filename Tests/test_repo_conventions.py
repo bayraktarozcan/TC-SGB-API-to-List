@@ -29,6 +29,15 @@ def _read(name: str) -> str:
 EXEMPT_FILES: dict[str, str] = {
     "CHANGELOG.md": "<!-- guard-exempt: historical-record -->",
     "AGENTS.md": "<!-- guard-exempt: rule-quotation -->",
+    ".github/release-bodies/ioc-data.md": "<!-- guard-exempt: historical-record -->",
+    ".github/release-bodies/v0.1.0.0.md": "<!-- guard-exempt: historical-record -->",
+    ".github/release-bodies/v0.2.0.0.md": "<!-- guard-exempt: historical-record -->",
+    ".github/release-bodies/v0.2.0.1.md": "<!-- guard-exempt: historical-record -->",
+    ".github/release-bodies/v0.3.0.0.md": "<!-- guard-exempt: historical-record -->",
+    ".github/release-bodies/v0.3.1.0.md": "<!-- guard-exempt: historical-record -->",
+    ".github/release-bodies/v0.3.2.0.md": "<!-- guard-exempt: historical-record -->",
+    ".github/release-bodies/v0.3.2.1.md": "<!-- guard-exempt: historical-record -->",
+    ".github/release-bodies/v0.3.2.2.md": "<!-- guard-exempt: historical-record -->",
 }
 """Files exempt from spelling/rename guards, each with its scoped marker.
 
