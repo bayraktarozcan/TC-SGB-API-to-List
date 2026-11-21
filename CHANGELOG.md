@@ -8,6 +8,12 @@
 All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [Unreleased]
+
+### Added
+
+- **EOL-aware Python floor automation** — `.github/workflows/python-floor.yml` reads the Python core team's release calendar (`https://peps.python.org/api/release-cycle.json`) weekly and opens an auto-merge PR when the oldest supported minor advances beyond the declared floor. `Scripts/bump_python_floor.py` resolves the floor, refuses downgrades, retries transient network failures, and updates every declaration; `Tests/test_python_floor.py` pins parity across the manifest, CI matrices, mypy target and documentation.
+
 ## [v0.3.2.2] — 2026-11-21
 
 ### Changed
@@ -224,6 +230,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 Bu projedeki tüm dikkat çekici değişiklikler bu dosyada belgelenecektir.
 Biçim, [Keep a Changelog](https://keepachangelog.com/)'a dayanmaktadır.
+
+## [Yayınlanmamış]
+
+### Eklenen
+
+- **Python alt sınırı için EOL otomasyonu** — `.github/workflows/python-floor.yml`, Python çekirdek ekibinin yayın takvimini (`https://peps.python.org/api/release-cycle.json`) haftalık okur ve desteklenen en eski küçük sürüm bildirilen alt sınırı geçtiğinde otomatik birleştirme PR'ı açar. `Scripts/bump_python_floor.py` alt sınırı çözer, düşürmeyi reddeder, geçici ağ hatalarını yeniden dener ve tüm bildirimleri günceller; `Tests/test_python_floor.py` bildirim, CI matrisleri, mypy hedefi ve dokümantasyon arasındaki pariteyi sabitler.
 
 ## [v0.3.2.2] — 2026-11-21
 
