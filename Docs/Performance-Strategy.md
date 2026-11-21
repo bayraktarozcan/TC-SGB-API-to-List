@@ -434,7 +434,7 @@ jobs:
           python-version: "3.x"
 
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: pip install -e ".[dev]"
 
       - name: Run benchmarks
         run: pytest -m slow --tb=short -v
@@ -879,7 +879,7 @@ jobs:
           python-version: "3.x"
 
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: pip install -e ".[dev]"
 
       - name: Run benchmarks
         run: pytest -m slow --tb=short -v

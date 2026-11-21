@@ -159,7 +159,7 @@ TC-SGB-API-to-List/
 │   └── Versioning-Strategy.md
 │
 ├── pyproject.toml                     # Project metadata & build config
-├── requirements.txt                   # Pinned dependencies
+├── requirements.txt                   # Unpinned @latest dependencies
 ├── .env.example                       # Environment variable template
 ├── .gitignore                         # Git ignore rules
 ├── .gitattributes                     # Git attributes
@@ -233,7 +233,7 @@ Flat structure — no subdirectories. 21 files total, 650 tests, 99% coverage.
 | File | Purpose |
 |------|---------|
 | `pyproject.toml` | Package metadata, dependencies, tool config (ruff, mypy, pytest) |
-| `requirements.txt` | Pinned dependency versions |
+| `requirements.txt` | Unpinned @latest dependency versions |
 | `.github/workflows/ci.yml` | Lint, type check, test on PR |
 | `.github/workflows/codeql.yml` | CodeQL security analysis |
 | `.github/workflows/schedule.yml` | Scheduled automated data fetch |
@@ -486,7 +486,7 @@ TC-SGB-API-to-List/
 │   └── Versioning-Strategy.md
 │
 ├── pyproject.toml                     # Proje meta verileri ve derleme yapılandırması
-├── requirements.txt                   # Sabitlenmiş bağımlılıklar
+├── requirements.txt                   # Pin'siz @latest bağımlılıkları
 ├── .env.example                       # Ortam değişkenleri şablonu
 ├── .gitignore                         # Git yok sayma kuralları
 ├── .gitattributes                     # Git nitelikleri
@@ -560,7 +560,7 @@ Düz yapı — alt dizin yok. Toplam 21 dosya, 650 test, %99 kapsama.
 | Dosya | Amaç |
 |-------|------|
 | `pyproject.toml` | Paket meta verileri, bağımlılıklar, araç yapılandırması (ruff, mypy, pytest) |
-| `requirements.txt` | Sabitlenmiş bağımlılık sürümleri |
+| `requirements.txt` | Pin'siz @latest bağımlılık sürümleri |
 | `.github/workflows/ci.yml` | PR üzerinde lint, tür kontrolü, test |
 | `.github/workflows/codeql.yml` | CodeQL güvenlik analizi |
 | `.github/workflows/schedule.yml` | Zamanlanmış otomatik veri çekme |

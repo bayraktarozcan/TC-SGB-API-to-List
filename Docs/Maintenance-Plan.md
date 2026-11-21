@@ -73,20 +73,13 @@ This document defines the ongoing maintenance procedures for the TC-SGB-API-to-L
 ### Dependency Updates
 
 ```bash
-# Check for dependency updates
+# Dependencies are unpinned (@latest); they resolve at install time.
+# Check for newer releases:
 pip list --outdated
 
-# Update dependencies (one at a time)
-pip install --upgrade httpx
-pip install --upgrade pydantic
-
-# Run tests after each update
+# Apply a dependency change in pyproject.toml, then reinstall and verify:
+pip install -e ".[dev]"
 pytest
-
-# Commit updated requirements
-pip freeze > requirements.txt
-git add requirements.txt
-git commit -m "chore: update dependencies"
 ```
 
 ### Performance Review
@@ -168,20 +161,13 @@ pytest -m performance --benchmark-json=monthly-benchmark.json
 ### Major Dependency Updates
 
 ```bash
-# Update all dependencies
+# Update all dependencies (unpinned, resolves @latest from pyproject.toml)
 pip install --upgrade pip
-pip install --upgrade -r requirements.txt
+pip install -e ".[dev]"
 
-# Update dev dependencies
-pip install --upgrade pytest mypy ruff
-
-# Full test suite
+# Verify
 pytest
-
-# Type check
 mypy Scripts/
-
-# Lint
 ruff check Scripts/ Tests/
 ```
 
@@ -519,20 +505,13 @@ Bu belge, TC-SGB-API-to-List projesi için devam eden bakım prosedürlerini, d�
 ### Bağımlılık Güncellemeleri
 
 ```bash
-# Bağımlılık güncellemelerini kontrol et
+# Bağımlılıklar pin'sizdir (@latest); kurulum anında çözülür.
+# Yeni sürümleri kontrol et:
 pip list --outdated
 
-# Bağımlılıkları güncelle (birer birer)
-pip install --upgrade httpx
-pip install --upgrade pydantic
-
-# Her güncellemeden sonra testleri çalıştır
+# pyproject.toml'da bir bağımlılık değişikliği yap, sonra yeniden kur ve doğrula:
+pip install -e ".[dev]"
 pytest
-
-# Güncellenmiş gereksinimleri commit et
-pip freeze > requirements.txt
-git add requirements.txt
-git commit -m "chore: update dependencies"
 ```
 
 ### Performans İncelemesi
@@ -614,20 +593,13 @@ pytest -m performance --benchmark-json=monthly-benchmark.json
 ### Büyük Bağımlılık Güncellemeleri
 
 ```bash
-# Tüm bağımlılıkları güncelle
+# Tüm bağımlılıkları güncelle (pin'siz, pyproject.toml'dan @latest çözülür)
 pip install --upgrade pip
-pip install --upgrade -r requirements.txt
+pip install -e ".[dev]"
 
-# Geliştirme bağımlılıklarını güncelle
-pip install --upgrade pytest mypy ruff
-
-# Tam test paketi
+# Doğrula
 pytest
-
-# Tip kontrolü
 mypy Scripts/
-
-# Lint
 ruff check Scripts/ Tests/
 ```
 
