@@ -144,18 +144,18 @@ Exemptions (each with its reason):
 
 ## Dependencies
 
-- Manifest: `pyproject.toml` + `requirements.txt` (source of truth); setup
-  is the Commands block (`pip install -e ".[dev]"`, then
-  `pip install -r requirements.txt`).
-- Installed versions: resolved at install time from the manifests below (the
-  local `.venv` is regenerated from them, never pinned here). The source of
-  truth for exact versions is `pyproject.toml` + `requirements.txt`; read the
-  live environment with `python -m pip freeze` when a concrete number is needed.
+- Editable manifests: `requirements.in` + `requirements-dev.in` (unpinned,
+  "always latest stable"); `requirements.txt` / `requirements-dev.txt` are
+  compiled snapshots, not the source of truth. Setup is the Commands block
+  (`pip install -e ".[dev]"`, which resolves from `pyproject.toml`).
+- Installed versions: resolved at install time from the manifests above (the
+  local `.venv` is regenerated from them, never pinned here). For a concrete
+  number, read the live environment with `python -m pip freeze`.
 - Approved project-scope exception: `.venv/` (reason: per-project isolation
   on a shared host; recreated from the manifest, never committed).
-- Audit posture: `pip-audit` + `bandit` + gitleaks in CI on both hosts, with
-  two documented `pip-audit` ignores (`PYSEC-2026-1845`, `PYSEC-2026-3447`,
-  recorded in `ci.yml` and `.gitlab-ci.yml`).
+- Audit posture: `pip-audit` + `bandit` + gitleaks in CI on both hosts. The
+  project carries no `pip-audit` ignore list; a newly published advisory is
+  fixed by upgrading the dependency, not by suppressing the finding.
 
 ## Hidden layers
 
@@ -200,9 +200,11 @@ Gates that do not hold by design, and what runs afterward instead:
   instead of blocking on a check that cannot pass.
 - Dependabot `deps()`/`ci()` prefixes are tool-controlled; squash titles are
   normalized to Conventional Commits on merge instead.
-- No transitive lockfile: direct runtime/build deps use the latest version, but a
-  frozen file without regeneration automation would rot silently, so ranges
-  plus Dependabot stand in until lock tooling is adopted.
+- Compiled lockfile with automated regeneration: `requirements.txt` /
+  `requirements-dev.txt` are pip-compile outputs with pinned transitive
+  versions, regenerated weekly by `deps-update.yml`, so a frozen file never
+  rots silently; the editable sources are the unpinned `requirements.in` /
+  `requirements-dev.in`. No frozen-file-without-automation exception exists.
 - The repository owner may push to `main` directly, bypassing the ruleset:
   the push reports `Bypassed rule violations` and `4 of 4 required status
   checks are expected`. CI then runs on the pushed commit afterwards instead
@@ -876,4 +878,4 @@ Runtimes use the current LTS line (Node.js LTS, .NET LTS); build output goes thr
 - `.git/` is the **internal Git repository structure**, not a project config file.
 
 **Guiding rule:** "It looks special" does not mean "It is a standard special file." The meaning of any file is determined by the software that reads and interprets it.
-<!-- mirror-sync: sync-sha=11b266672010071f81d5cf36e9ed174bc076a951 -->
+<!-- mirror-sync: sync-sha=af7c2c300f5b316d8d4ddc6b75d00300be1b334c -->
