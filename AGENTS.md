@@ -18,7 +18,7 @@ normalizes, scores, and deduplicates them, then exports to 16 formats.
 - Source lives in `Scripts/src/`; the CLI entry point is `Scripts/main.py`.
 - Tests live in `tests/` (pytest, `asyncio_mode = auto`).
 
-## Quality Gate (always Run before Claiming Work Complete)
+## Quality Gate (Always Run before Claiming Work Complete)
 
 Use the project virtualenv at `.venv`:
 
@@ -875,4 +875,4 @@ Runtimes use the current LTS line (Node.js LTS, .NET LTS); build output goes thr
 - `.git/` is the **internal Git repository structure**, not a project config file.
 
 **Guiding rule:** "It looks special" does not mean "It is a standard special file." The meaning of any file is determined by the software that reads and interprets it.
-<!-- mirror-sync: sync-sha=7e231824e65c55d3d4a5f470e567e890b7f222d1 -->
+<!-- mirror-sync: sync-sha=23bcb6cb61ad86e7e474204170b52f04a3b802b7 -->
