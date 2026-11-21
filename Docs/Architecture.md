@@ -102,7 +102,7 @@ The TC-SGB-API-to-List system is an automated threat intelligence pipeline that 
 | HTTP Client      | httpx          | 0.27+    | Async HTTP with connection pool |
 | Data Validation  | Pydantic       | 2.9+     | Schema validation & serialization |
 | Async Runtime    | asyncio        | stdlib   | Concurrent I/O operations      |
-| CLI Output       | rich           | 13.0+    | Terminal formatting & spinners  |
+| CLI Output       | print          | stdlib   | Structured text output          |
 
 ### Development & Testing
 
@@ -317,7 +317,7 @@ TC-SGB-API-to-List sistemi, T.C. Siber Güvenlik Başkanlığı kamu API'sinden 
 | HTTP İstemcisi   | httpx          | 0.27+    | Bağlantı havuzlu asenkron HTTP   |
 | Veri Doğrulama   | Pydantic       | 2.9+     | Şema doğrulama ve serializasyon  |
 | Asenkron Çalışma | asyncio        | stdlib   | Eşzamanlı I/O işlemleri          |
-| CLI Çıktısı      | rich           | 13.0+    | Terminal biçimlendirme ve döndürme |
+| CLI Çıktısı      | print          | stdlib   | Yapılandırılmış metin çıktısı   |
 
 ### Geliştirme ve Test
 

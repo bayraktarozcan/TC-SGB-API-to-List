@@ -184,9 +184,10 @@ classifiers = [
     "Topic :: Security",
 ]
 dependencies = [
-    "httpx>=0.27,<1",
-    "pydantic>=2.0,<3",
-    "rich>=13.0,<14",
+    "httpx",
+    "pydantic",
+    "python-dotenv",
+    "pyyaml",
 ]
 
 [project.scripts]
@@ -620,9 +621,10 @@ classifiers = [
     "Topic :: Security",
 ]
 dependencies = [
-    "httpx>=0.27,<1",
-    "pydantic>=2.0,<3",
-    "rich>=13.0,<14",
+    "httpx",
+    "pydantic",
+    "python-dotenv",
+    "pyyaml",
 ]
 
 [project.scripts]

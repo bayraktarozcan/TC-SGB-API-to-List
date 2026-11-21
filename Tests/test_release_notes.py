@@ -102,9 +102,18 @@ class TestReleaseBodies:
             line[2:].strip() for line in section.splitlines() if line.startswith("- ")
         ]
         body = (BODIES / f"{tag}.md").read_text(encoding="utf-8")
+        en, tr = body.split('<a id="-türkçe"></a>', 1)
         for bullet in source_bullets:
             key = re.sub(r"\s+", " ", re.sub(r"\s*\(?#\d+\)?", "", bullet)).strip().rstrip(" .")
-            assert key[:40] in body, f"{tag}: bullet not represented: {key[:60]}"
+            assert key[:40] in en, f"{tag}: EN bullet not represented: {key[:60]}"
+        if tag == "ioc-data":
+            return
+        tr_changelog = CHANGELOG.read_text(encoding="utf-8").split('<a id="-türkçe"></a>', 1)[1]
+        tr_section = tr_changelog.split(f"## [{tag}]", 1)[1].split("\n## [", 1)[0]
+        tr_bullets = [line[2:].strip() for line in tr_section.splitlines() if line.startswith("- ")]
+        for bullet in tr_bullets:
+            key = re.sub(r"\s+", " ", re.sub(r"\s*\(?#\d+\)?", "", bullet)).strip().rstrip(" .")
+            assert key[:40] in tr, f"{tag}: TR bullet not represented: {key[:60]}"
 
     @pytest.mark.parametrize("tag", TAGS)
     def test_equal_bullet_counts(self, tag: str):
