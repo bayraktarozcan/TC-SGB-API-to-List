@@ -1,0 +1,26 @@
+#!/bin/sh
+# Tracked pre-push gate. Install with: python Scripts/install_hooks.py
+set -eu
+
+repo=$(git rev-parse --show-toplevel)
+cd "$repo"
+
+if [ -x .venv/Scripts/python.exe ]; then
+    python_bin=.venv/Scripts/python.exe
+elif [ -x .venv/bin/python ]; then
+    python_bin=.venv/bin/python
+else
+    python_bin=python
+fi
+
+printf '%s\n' 'pre-push: ruff check'
+"$python_bin" -m ruff check Scripts/ Tests/
+printf '%s\n' 'pre-push: ruff format'
+"$python_bin" -m ruff format --check Scripts/ Tests/
+printf '%s\n' 'pre-push: mypy'
+"$python_bin" -m mypy Scripts/
+printf '%s\n' 'pre-push: bandit'
+"$python_bin" -m bandit -r Scripts/ -q
+printf '%s\n' 'pre-push: pytest'
+"$python_bin" -m pytest -q
+printf '%s\n' 'pre-push: gate passed'

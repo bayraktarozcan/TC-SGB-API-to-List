@@ -383,6 +383,27 @@ class TestActionRefs:
         "gitleaks/gitleaks-action": "master",
     }
     REF_RE = re.compile(r"^\s*(?:-\s*)?uses:\s*([^/\s]+/[^@\s]+)@([A-Za-z0-9._-]+)\s*(?:#.*)?$")
+    PIN_PATTERNS: ClassVar[dict[str, re.Pattern[str]]] = {
+        "pip pin": re.compile(r"==\s*\d"),
+        "versioned ref": re.compile(r"@v\d"),
+        "pinned image": re.compile(r"image:\s*[^\s]+:\d+\.\d+"),
+    }
+    PIN_EXEMPT = re.compile(r"^\s*#|python-version:|PYTHON_VERSION:")
+
+    @classmethod
+    def _find_pins(cls) -> list[str]:
+        bad: list[str] = []
+        paths = [*sorted((REPO_ROOT / ".github").rglob("*.yml")), REPO_ROOT / ".gitlab-ci.yml"]
+        for path in paths:
+            if not path.exists():
+                continue
+            for lineno, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+                if cls.PIN_EXEMPT.search(line):
+                    continue
+                for name, pattern in cls.PIN_PATTERNS.items():
+                    if pattern.search(line):
+                        bad.append(f"{path.name}:{lineno}: {name}")
+        return bad
 
     @classmethod
     def _find(cls) -> list[str]:
@@ -404,6 +425,14 @@ class TestActionRefs:
 
     def test_every_action_ref_matches_upstream_default(self):
         assert self._find() == []
+
+    def test_no_pinned_tool_versions(self):
+        assert self._find_pins() == []
+
+    def test_checker_flags_pinned_tool(self):
+        planted = "      pip install ruff==1.2.3\n"
+        assert self.PIN_PATTERNS["pip pin"].search(planted) is not None
+        assert self.PIN_EXEMPT.search(planted) is None
 
     def test_checker_flags_wrong_ref(self):
         line = "      - uses: lycheeverse/lychee-action@main"
