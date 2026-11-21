@@ -224,7 +224,7 @@ jobs:
         run: pytest Tests/ --cov=Scripts --cov-report=xml
 
       - name: Upload coverage
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@main
 ```
 
 ---
@@ -354,7 +354,7 @@ class IoCRecord(BaseModel):
 - [ ] Type checking passes (`mypy --strict`)
 - [ ] Linting passes (`ruff check`)
 - [ ] All tests pass (`pytest`)
-- [ ] Security scan passes (CodeQL/Snyk)
+- [ ] Security scan passes (CodeQL/bandit/pip-audit)
 
 ### Runtime
 
@@ -632,7 +632,7 @@ jobs:
         run: pytest Tests/ --cov=Scripts --cov-report=xml
 
       - name: Upload coverage
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@main
 ```
 
 ---
@@ -762,7 +762,7 @@ class IoCRecord(BaseModel):
 - [ ] Tür kontrolü geçiyor (`mypy --strict`)
 - [ ] Kod denetleme geçiyor (`ruff check`)
 - [ ] Tüm testler geçiyor (`pytest`)
-- [ ] Güvenlik taraması geçiyor (CodeQL/Snyk)
+- [ ] Güvenlik taraması geçiyor (CodeQL/bandit/pip-audit)
 
 ### Çalışma Zamanı
 

@@ -332,7 +332,7 @@ Bu belge, TC-SGB-API-to-List projesi için kapsamlı bir risk matrisi sunmakta; 
 
 | ID | Risk | Olasılık | Etki | Puan | Seviye | Azaltma |
 |----|------|----------|------|------|--------|---------|
-| S-01 | Tedarik zinciri saldırısı (bağımlılık) | 2 | 5 | 10 | YÜKSEK | En günceli çözme, denetim, Dependabot |
+| S-01 | Tedarik zinciri saldırısı (bağımlılık) | 2 | 5 | 10 | YÜKSEK | En günceli çözme, denetim, deps-update |
 | S-02 | Ele geçirilmiş GitHub Actions | 1 | 5 | 5 | ORTA | Dal tabanlı eylem ref'leri, asgari izinler |
 | S-03 | API taklidi/MITM | 1 | 5 | 5 | ORTA | TLS doğrulama, sertifika sabitleme |
 | S-04 | Günlükler aracılığıyla veri sızıntısı | 2 | 3 | 6 | ORTA | Günlük temizleme, yapılandırılmış günlük kaydı |

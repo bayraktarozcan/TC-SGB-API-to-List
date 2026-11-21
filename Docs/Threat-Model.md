@@ -191,7 +191,7 @@ This document presents a STRIDE-based threat model for the TC-SGB-API-to-List th
 1. **Input Validation**: All API responses validated through Pydantic models
 2. **TLS Enforcement**: HTTPS-only with certificate verification
 3. **Rate Limiting**: Bounded concurrency and request throttling
-4. **Dependency Auditing**: Automated vulnerability scanning via deps-updatet
+4. **Dependency Auditing**: Automated vulnerability scanning via deps-update
 5. **Secure Coding**: No eval/exec, safe YAML loading, template escaping
 6. **Path Validation**: All file operations use resolved paths
 
@@ -420,7 +420,7 @@ Bu belge, TC-SGB-API-to-List tehdit istihbaratı hattı için STRIDE tabanlı bi
 1. **Giriş Doğrulaması**: Tüm API yanıtları Pydantic modelleri aracılığıyla doğrulanır
 2. **TLS Zorunlu Kılma**: Yalnızca HTTPS ve sertifika doğrulaması
 3. **Hız Sınırı**: Sınırlı eşzamanlılık ve istek kısıtlama
-4. **Bağımlılık Denetimi**: deps-updatet aracılığıyla otomatik zafiyet taraması
+4. **Bağımlılık Denetimi**: deps-update aracılığıyla otomatik zafiyet taraması
 5. **Güvenli Kodlama**: eval/exec yok, güvenli YAML yükleme, şablon kaçışı
 6. **Yol Doğrulaması**: Tüm dosya işlemleri çözülmüş yollar kullanır
 

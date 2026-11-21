@@ -227,7 +227,7 @@ async def benchmark_concurrent_fetch():
 |  Performance Benchmark Report                                        |
 +=====================================================================+
 | Date: YYYY-MM-DD                                                   |
-|  Python: 3.11.7                                                     |
+|  Python: 3.11 (compat floor) / 3.x                                                     |
 |  Platform: Linux x86_64                                             |
 +=====================================================================+
 
@@ -672,7 +672,7 @@ async def benchmark_concurrent_fetch():
 |  Performans Karşılaştırma Raporu                                    |
 +=====================================================================+
 |  Tarih: YYYY-AA-GG                                                  |
-|  Python: 3.11.7                                                     |
+|  Python: 3.11 (compat floor) / 3.x                                                     |
 |  Platform: Linux x86_64                                             |
 +=====================================================================+
 

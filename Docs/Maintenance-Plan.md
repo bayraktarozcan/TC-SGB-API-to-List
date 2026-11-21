@@ -126,7 +126,7 @@ gh run view <run-id> --log
 pip-audit
 
 # Check for vulnerable dependencies
-safety check
+pip-audit
 
 # Review GitHub security advisories
 gh api repos/{owner}/{repo}/security-advisories
@@ -572,7 +572,7 @@ gh run view <run-id> --log
 pip-audit
 
 # Güvenlik açığı olan bağımlılıkları kontrol et
-safety check
+pip-audit
 
 # GitHub güvenlik uyarılarını incele
 gh api repos/{owner}/{repo}/security-advisories
