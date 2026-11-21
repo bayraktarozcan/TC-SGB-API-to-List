@@ -202,7 +202,7 @@ Gates that do not hold by design, and what runs afterward instead:
 - Dependabot `deps()`/`ci()` prefixes are tool-controlled; squash titles are
   normalized to Conventional Commits on merge instead.
 - The repository owner may push to `main` directly, bypassing the ruleset:
-  the push reports `Bypassed rule violations` and `4 of 4 required status
+  the push reports `Bypassed rule violations` and `6 of 6 required status
   checks are expected`. CI then runs on the pushed commit afterwards instead
   of gating it.
 - GitLab shared-runner minutes can be exhausted (`ci_quota_exceeded`): every
@@ -875,4 +875,4 @@ Runtimes use the current LTS line (Node.js LTS, .NET LTS); build output goes thr
 - `.git/` is the **internal Git repository structure**, not a project config file.
 
 **Guiding rule:** "It looks special" does not mean "It is a standard special file." The meaning of any file is determined by the software that reads and interprets it.
-<!-- mirror-sync: sync-sha=f639e0f744c670b7c14828e8de6acd818da35c0d -->
+<!-- mirror-sync: sync-sha=e097d0ea82784719802b22bba81848f6c3a025ab -->
