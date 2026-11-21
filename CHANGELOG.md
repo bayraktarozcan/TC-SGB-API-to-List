@@ -54,13 +54,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 ### Changed
 
 - **IoC is the single standard spelling** — `IOCType` → `IoCType`, `ValidatedIOC` → `ValidatedIoC`, `NormalizedIOC` → `NormalizedIoC`, `ScoredIOC` → `ScoredIoC` (plus test classes, doc snippets, JSON Schema descriptions, and issue/PR templates); `AGENTS.md` now records the rule so the spelling holds by convention and by test
-
-### Changed
-
-- **Daily schedule** — the scheduled fetch pipeline now runs every day at 19:00 UTC (`cron: "0 19 * * *"`).
-
 - **GitLab CI re-enabled with badges** — after completing the account-level identity verification, project-level CI/CD is on again, so `.gitlab-ci.yml` pipelines run on GitLab shared runners; the GitLab-native pipeline and coverage badges were restored in the project and in the README
-- **Weekday schedule** — the scheduled fetch pipeline now runs weekdays at 06:00 UTC (`cron: "0 6 * * 1-5"`) instead of Friday 22:00 UTC; the repo diet removed the LFS/storage pressure that motivated the weekly cadence, so IoC feeds refresh ~5× more often
+- **Daily schedule** — the scheduled fetch pipeline now runs every day at 19:00 UTC (`cron: "0 19 * * *"`), superseding the weekday 06:00 UTC cadence (`cron: "0 6 * * 1-5"`) introduced earlier in this release cycle.
 - **`health --retries` aligned** — now defaults to 5, matching `fetch`/`stats`/`validate`
 - **Privacy statement strengthened** — `PRIVACY.md` now states explicitly that the project collects, stores, sells, or shares no user data and is committed to maintaining that stance, and asks users to review the SGB website's policies periodically as rules can change
 - **Governance files** — `NOTICE` added with dependency license attributions; `CODEOWNERS` (moved to the repository root) now also requires owner review for `tests/` and root-level docs
@@ -265,13 +260,8 @@ Biçim, [Keep a Changelog](https://keepachangelog.com/)'a dayanmaktadır.
 ### Değiştirilen
 
 - **IoC tek standart yazımdır** — `IOCType` → `IoCType`, `ValidatedIOC` → `ValidatedIoC`, `NormalizedIOC` → `NormalizedIoC`, `ScoredIOC` → `ScoredIoC` (test sınıfları, doküman parçacıkları, JSON Schema açıklamaları ve issue/PR şablonları dahil); `AGENTS.md` artık kuralı kaydeder, böylece yazım hem gelenekle hem testle korunur
-
-### Değiştirilen
-
-- **Günlük zamanlama** — zamanlanmış çekim hattı artık her gün 19:00 UTC'de çalışır (`cron: "0 19 * * *"`).
-
+- **Günlük zamanlama** — zamanlanmış çekim hattı artık her gün 19:00 UTC'de çalışır (`cron: "0 19 * * *"`), bu da aynı sürüm döngüsünde daha önce getirilen hafta içi 06:00 UTC düzenini (`cron: "0 6 * * 1-5"`) geçersiz kılar.
 - **GitLab CI rozetlerle yeniden etkin** — hesap düzeyindeki kimlik doğrulama tamamlandıktan sonra proje düzeyi CI/CD yeniden açıldı, böylece `.gitlab-ci.yml` hatları GitLab paylaşımlı koşucularında çalışır; GitLab yerel hat ve kapsama rozetleri projede ve README'de geri getirildi
-- **Hafta içi zamanlama** — zamanlanmış çekim hattı, Cuma 22:00 UTC yerine artık hafta içi 06:00 UTC'de çalışır (`cron: "0 6 * * 1-5"`); repo diyeti haftalık düzeni gerektiren LFS/depolama baskısını kaldırdığı için IoC akışları ~5 kat daha sık tazelenir
 - **`health --retries` hizalandı** — artık `fetch`/`stats`/`validate` ile eşleşecek şekilde varsayılan olarak 5
 - **Gizlilik bildirimi güçlendirildi** — `PRIVACY.md` artık projenin hiçbir kullanıcı verisi toplamadığını, depolamadığını, satmadığını veya paylaşmadığını ve bu tutumu sürdürme taahhüdünü açıkça belirtir; kurallar değişebileceği için kullanıcılardan SGB web sitesinin politikalarını düzenli olarak gözden geçirmelerini ister
 - **Yönetişim dosyaları** — bağımlılık lisansı atıflarıyla `NOTICE` eklendi; (depo köküne taşınan) `CODEOWNERS` artık `tests/` ve kök düzeyindeki dokümanlar için de sahip incelemesi gerektirir
