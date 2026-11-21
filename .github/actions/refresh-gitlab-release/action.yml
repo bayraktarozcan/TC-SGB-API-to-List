@@ -49,7 +49,7 @@ runs:
 
         BODY=$(jq -n --argjson links "$LINKS" \
           --arg description "$(
-            sed -n '1,$p' .github/release-bodies/ioc-data.md
+            sed '1{/^<!-- guard-exempt: historical-record -->$/d;}' .github/release-bodies/ioc-data.md
           )" '{
           tag_name: "ioc-data",
           name: "IoC Data (Large Formats)",
