@@ -73,7 +73,7 @@ listelerine dönüştürür.
   bu bildirim güncellenip [CHANGELOG](CHANGELOG.md) üzerinden duyurulur. Asla
   sessizce değiştirmeyiz.
 
-## Bu Araç Verilerle ne Yapar
+## Bu Araç Verilerle Ne Yapar
 
 - **Kaynak veriler** — SGB API'sine yalnızca yayımlanmış siber tehdit
   göstergelerini indirmek için istek gönderilir. Hesap, giriş veya kişisel veri

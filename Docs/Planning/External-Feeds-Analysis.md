@@ -312,7 +312,7 @@ Add to the Brave subscription list:
 
 ## 7. Testing Strategy
 
-### 7.1 Unit Tests (add to `test_external_feeds.py`)
+### 7.1 Unit Tests (Add to `test_external_feeds.py`)
 
 ```python
 def test_parse_phishtank_csv():
@@ -670,7 +670,7 @@ done
 
 ## 7. Test Stratejisi
 
-### 7.1 Birim Testleri (`test_external_feeds.py` dosyasına eklenecek)
+### 7.1 Birim Testleri (`test_external_feeds.py` Dosyasına Eklenecek)
 
 ```python
 def test_parse_phishtank_csv():
