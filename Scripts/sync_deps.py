@@ -2,8 +2,8 @@
 """Sync dependencies using pip-tools.
 
 Usage:
-    python sync_deps.py           # Sync to locked versions
-    python sync_deps.py --upgrade # Upgrade to latest within constraints
+    python sync_deps.py           # Sync to compiled snapshots
+    python sync_deps.py --upgrade # Recompile snapshots at latest versions
 """
 
 import argparse
@@ -22,7 +22,7 @@ def run(cmd: list[str]) -> int:
 def main() -> int:
     parser = argparse.ArgumentParser(description="Sync dependencies with pip-tools")
     parser.add_argument(
-        "--upgrade", action="store_true", help="Upgrade to latest within constraints"
+        "--upgrade", action="store_true", help="Recompile snapshots at latest versions"
     )
     parser.add_argument("--compile-only", action="store_true", help="Only compile, don't install")
     args = parser.parse_args()

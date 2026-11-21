@@ -190,7 +190,7 @@ ruff check Scripts/ Tests/
 ```yaml
 Security Checklist:
   - [ ] Review GitHub Actions workflows
-  - [ ] Verify dependency pinning
+  - [ ] Verify editable manifests are unpinned (always-latest)
   - [ ] Check for new CVEs in dependencies
   - [ ] Review access controls
   - [ ] Update security policy
@@ -636,7 +636,7 @@ ruff check Scripts/ Tests/
 ```yaml
 Güvenlik Kontrol Listesi:
   - [ ] GitHub Actions iş akışlarını incele
-  - [ ] Bağımlılık sabitlemelerini doğrula
+  - [ ] Düzenlenebilir bildirimlerin pin'siz olduğunu doğrula (her daim en güncel)
   - [ ] Bağımlılıklardaki yeni CVE'leri kontrol et
   - [ ] Erişim kontrollerini incele
   - [ ] Güvenlik politikasını güncelle

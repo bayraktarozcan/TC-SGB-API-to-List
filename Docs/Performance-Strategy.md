@@ -428,19 +428,19 @@ jobs:
   benchmark:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v4
+      - uses: actions/checkout@main
+      - uses: actions/setup-python@main
         with:
-          python-version: "3.11"
+          python-version: "3.x"
 
       - name: Install dependencies
         run: pip install -r requirements.txt
 
       - name: Run benchmarks
-        run: pytest -m performance --benchmark-json=benchmark.json
+        run: pytest -m slow --tb=short -v
 
       - name: Upload results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@main
         with:
           name: benchmark-results
           path: benchmark.json
@@ -873,19 +873,19 @@ jobs:
   benchmark:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v4
+      - uses: actions/checkout@main
+      - uses: actions/setup-python@main
         with:
-          python-version: "3.11"
+          python-version: "3.x"
 
       - name: Install dependencies
         run: pip install -r requirements.txt
 
       - name: Run benchmarks
-        run: pytest -m performance --benchmark-json=benchmark.json
+        run: pytest -m slow --tb=short -v
 
       - name: Upload results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@main
         with:
           name: benchmark-results
           path: benchmark.json

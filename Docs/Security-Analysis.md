@@ -17,9 +17,9 @@ This document provides a comprehensive security analysis of the TC-SGB-API-to-Li
 
 | Package | Version | Purpose | Risk Level |
 |---------|---------|---------|------------|
-| httpx | 0.27+ | Async HTTP client | LOW |
-| pydantic | 2.9+ | Data validation | LOW |
-| rich | 13.0+ | Terminal formatting | LOW |
+| httpx | latest | Async HTTP client | LOW |
+| pydantic | latest | Data validation | LOW |
+
 
 #### Development Dependencies
 
@@ -49,60 +49,51 @@ This document provides a comprehensive security analysis of the TC-SGB-API-to-Li
   +------------------+     +------------------------------------------+
   | Maintainer Trust  |     | HIGH (well-known packages)              |
   +------------------+     +------------------------------------------+
-  | Pinning Strategy  |     | MEDIUM (version ranges in pyproject)    |
+  | Version Policy   |     | LOW  (unpinned, resolve latest)         |
   +------------------+     +------------------------------------------+
-  | Update Frequency  |     | LOW  (automated via Dependabot)         |
+  | Update Frequency  |     | LOW  (automated via deps-update)        |
   +------------------+     +------------------------------------------+
   | Attack Surface    |     | LOW  (minimal dependency set)           |
   +------------------+     +------------------------------------------+
 ```
 
-### Mitigation: Dependency Pinning
+### Mitigation: Always-Latest Dependencies
+
+Editors (`requirements.in`, `requirements-dev.in`) and `pyproject.toml` are
+unpinned; the latest compatible versions resolve at install time. Compiled
+snapshots (`requirements.txt`, `requirements-dev.txt`) are regenerated weekly
+by `deps-update.yml`, so they never rot silently.
 
 ```toml
-# pyproject.toml - Recommended pinning strategy
+# pyproject.toml - always-latest policy (no version pins)
 [project]
 dependencies = [
-    "httpx>=0.27,<1",
-    "pydantic>=2.0,<3",
-    "rich>=13.0,<14",
-]
-
-[project.optional-dependencies]
-dev = [
-    "pytest>=8.0,<9",
-    "pytest-asyncio>=0.23,<1",
-    "pytest-cov>=5.0,<6",
-    "ruff>=0.5,<1",
-    "mypy>=1.10,<2",
-    "bandit>=1.7,<2",
-    "pip-audit>=2.7,<3",
-    "hypothesis>=6.100,<7",
+    "httpx",
+    "pydantic",
+    "python-dotenv",
+    "pyyaml",
 ]
 ```
 
-### Mitigation: Lock File
+### Mitigation: Regenerated Lock Snapshots
 
 ```bash
-# Generate lock file
-pip-compile pyproject.toml --output-file=requirements.txt
+# Regenerate compiled snapshots to latest (weekly automation)
+python Scripts/sync_deps.py --upgrade --compile-only
 
-# Install from lock
-pip install -r requirements.txt
+# Install latest into the local environment
+pip install -e ".[dev]"
 ```
 
 ### Mitigation: Dependency Scanning
 
 ```yaml
-# .github/workflows/security.yml
-- name: Run Safety Check
+# .github/workflows/ci.yml + .gitlab-ci.yml (security job)
+- name: pip-audit
   run: pip-audit
 
-- name: Run Snyk
-  uses: snyk/actions/python@master
-
-- name: Check for known vulnerabilities
-  run: safety check --full-report
+- name: Bandit security scan
+  run: bandit -r Scripts/
 ```
 
 ---
@@ -151,23 +142,24 @@ permissions:
 |                                                   |
 |  MITIGATION:                                      |
 |  - Require PR approval from maintainers           |
-|  - Lock workflow files (require approval)         |
-|  - Use pinned action versions                     |
+|  - Use branch-based action refs (@main/@master)   |
 |  - Run untrusted code in sandbox                  |
 +---------------------------------------------------+
 ```
 
-#### 2. Action Version Pinning
+#### 2. Action Version Policy
 
 ```yaml
-# BAD: Floating tag (vulnerable to tag hijacking)
-- uses: actions/checkout@v4
-- uses: actions/setup-python@v5
+# Current policy: branch-based refs self-update from upstream
+- uses: actions/checkout@main
+- uses: actions/setup-python@main
 
-# GOOD: Pinned to commit SHA
-- uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11  # v4.1.1
-- uses: actions/setup-python@0a5c61591de30f1073f4f3e1d665f48f8f78f701  # v5.0.0
+# Floating major tags where the upstream has no branch ref
+- uses: lycheeverse/lychee-action@master
 ```
+
+With `sha_pinning_required=false` these refs pass workflow validation;
+branch refs always resolve to the current upstream default-branch commit.
 
 #### 3. Secrets Management
 
@@ -210,17 +202,17 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
+        uses: actions/checkout@main
 
       - name: Setup Python
-        uses: actions/setup-python@0a5c61591de30f1073f4f3e1d665f48f8f78f701
+        uses: actions/setup-python@main
         with:
-          python-version: "3.11"
+          python-version: "3.x"
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install -e ".[dev]"
 
       - name: Lint
         run: ruff check Scripts/ Tests/
@@ -352,9 +344,9 @@ class IoCRecord(BaseModel):
 
 ### Pre-Deployment
 
-- [ ] All dependencies pinned and locked
+- [ ] Unpinned editable manifests (always-latest policy)
 - [ ] No known vulnerabilities in dependencies (`pip-audit`)
-- [ ] All GitHub Actions pinned to commit SHAs
+- [ ] Actions use branch refs (@main/@master), sha_pinning_required=false
 - [ ] Workflow permissions set to minimum required
 - [ ] Secrets stored in GitHub Secrets (not in code)
 - [ ] Branch protection enabled on main branch
@@ -391,11 +383,11 @@ class IoCRecord(BaseModel):
 1. **Enable TLS verification** — Never disable certificate validation
 2. **Input validation** — All API data validated before processing
 3. **No code execution** — Never eval/exec on input data
-4. **Dependency pinning** — Lock all dependency versions
+4. **Always-latest dependencies** — unpinned editors + regenerated lock snapshots
 
 ### Priority 2: High
 
-5. **GitHub Actions hardening** — Pin actions to SHAs, minimal permissions
+5. **GitHub Actions hardening** — branch refs + minimal permissions
 6. **Secret management** — Use GitHub Secrets, rotate regularly
 7. **Audit logging** — Track all pipeline operations
 8. **Output integrity** — Generate checksums for all outputs
@@ -432,9 +424,9 @@ Bu belge, TC-SGB-API-to-List sisteminin kapsamlı bir güvenlik analizini sunmak
 
 | Paket | Sürüm | Amaç | Risk Seviyesi |
 |-------|-------|------|---------------|
-| httpx | 0.27+ | Eşzamansız HTTP istemcisi | DÜŞÜK |
-| pydantic | 2.9+ | Veri doğrulama | DÜŞÜK |
-| rich | 13.0+ | Terminal biçimlendirme | DÜŞÜK |
+| httpx | latest | Eşzamansız HTTP istemcisi | DÜŞÜK |
+| pydantic | latest | Veri doğrulama | DÜŞÜK |
+
 
 #### Geliştirme Bağımlılıkları
 
@@ -464,60 +456,51 @@ Bu belge, TC-SGB-API-to-List sisteminin kapsamlı bir güvenlik analizini sunmak
   +------------------+     +------------------------------------------+
   | Bakıcı Güveni     |    | YÜKSEK (bilinen paketler)              |
   +------------------+     +------------------------------------------+
-  | Sabitleme Stratejisi|  | ORTA   (pyproject'te sürüm aralıkları) |
+  | Sürüm Politikası    |     | DÜŞÜK  (pin'siz, en güncel çözülür)         |
   +------------------+     +------------------------------------------+
-  | Güncelleme Sıklığı |   | DÜŞÜK  (Dependabot ile otomatik)       |
+  | Güncelleme Sıklığı |   | DÜŞÜK  (deps-update ile otomatik)      |
   +------------------+     +------------------------------------------+
   | Saldırı Yüzeyi    |    | DÜŞÜK  (minimal bağımlılık kümesi)     |
   +------------------+     +------------------------------------------+
 ```
 
-### Azaltma: Bağımlılık Sabitleme
+### Azaltma: Her Daim Güncel Bağımlılıklar
+
+Düzenlenebilir bildirimler (`requirements.in`, `requirements-dev.in`) ve
+`pyproject.toml` pin'sizdir; en güncel uyumlu sürümler kurulum anında çözülür.
+Derlenmiş anlık görüntüler (`requirements.txt`, `requirements-dev.txt`) haftalık
+olarak `deps-update.yml` ile yenilenir, böylece sessizce çürümez.
 
 ```toml
-# pyproject.toml - Önerilen sabitleme stratejisi
+# pyproject.toml - her daim en güncel politikası (sürüm pin'i yok)
 [project]
 dependencies = [
-    "httpx>=0.27,<1",
-    "pydantic>=2.0,<3",
-    "rich>=13.0,<14",
-]
-
-[project.optional-dependencies]
-dev = [
-    "pytest>=8.0,<9",
-    "pytest-asyncio>=0.23,<1",
-    "pytest-cov>=5.0,<6",
-    "ruff>=0.5,<1",
-    "mypy>=1.10,<2",
-    "bandit>=1.7,<2",
-    "pip-audit>=2.7,<3",
-    "hypothesis>=6.100,<7",
+    "httpx",
+    "pydantic",
+    "python-dotenv",
+    "pyyaml",
 ]
 ```
 
-### Azaltma: Kilitleme Dosyası
+### Azaltma: Yenilenen Kilit Anlık Görüntüleri
 
 ```bash
-# Kilitleme dosyası oluşturma
-pip-compile pyproject.toml --output-file=requirements.txt
+# Derlenmiş anlık görüntüleri en güncel sürüme yenile (haftalık otomasyon)
+python Scripts/sync_deps.py --upgrade --compile-only
 
-# Kilitten yükleme
-pip install -r requirements.txt
+# En güncel sürümleri yerel ortama kur
+pip install -e ".[dev]"
 ```
 
 ### Azaltma: Bağımlılık Taraması
 
 ```yaml
-# .github/workflows/security.yml
-- name: Run Safety Check
+# .github/workflows/ci.yml + .gitlab-ci.yml (security işi)
+- name: pip-audit
   run: pip-audit
 
-- name: Run Snyk
-  uses: snyk/actions/python@master
-
-- name: Check for known vulnerabilities
-  run: safety check --full-report
+- name: Bandit güvenlik denetimi
+  run: bandit -r Scripts/
 ```
 
 ---
@@ -566,23 +549,24 @@ permissions:
 |                                                   |
 |  AZALTMA:                                         |
 |  - Bakıcılardan PR onayı zorunlu kılma           |
-|  - İş akışı dosyalarını kilitleme (onay gerektir) |
-|  - Sabitlenmiş eylem sürümleri kullanma            |
+|  - Dal tabanlı eylem ref'leri (@main/@master)     |
 |  - Güvenilmez kodu sandıkta çalıştırma            |
 +---------------------------------------------------+
 ```
 
-#### 2. Eylem Sürümü Sabitleme
+#### 2. Eylem Sürümü Politikası
 
 ```yaml
-# KÖTÜ: Yüzen etiket (etiket ele geçirmeye karşı savunmasız)
-- uses: actions/checkout@v4
-- uses: actions/setup-python@v5
+# Mevcut politika: dal tabanlı ref'ler yukarı akıştan kendiliğinden güncellenir
+- uses: actions/checkout@main
+- uses: actions/setup-python@main
 
-# İYİ: Commit SHA'sına sabitlenmiş
-- uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11  # v4.1.1
-- uses: actions/setup-python@0a5c61591de30f1073f4f3e1d665f48f8f78f701  # v5.0.0
+# Yukarı akışta dal ref'i yoksa kayan büyük sürüm etiketi
+- uses: lycheeverse/lychee-action@master
 ```
+
+`sha_pinning_required=false` ile bu ref'ler iş akışı doğrulamasından geçer;
+dal ref'leri her zaman yukarı akışın güncel varsayılan dal commit'ini çözer.
 
 #### 3. Gizli Anahtar Yönetimi
 
@@ -626,17 +610,17 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
+        uses: actions/checkout@main
 
       - name: Setup Python
-        uses: actions/setup-python@0a5c61591de30f1073f4f3e1d665f48f8f78f701
+        uses: actions/setup-python@main
         with:
-          python-version: "3.11"
+          python-version: "3.x"
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install -e ".[dev]"
 
       - name: Lint
         run: ruff check Scripts/ Tests/
@@ -768,9 +752,9 @@ class IoCRecord(BaseModel):
 
 ### Dağıtım Öncesi
 
-- [ ] Tüm bağımlılıklar sabitlenmiş ve kilitlenmiş
+- [ ] Pin'siz düzenlenebilir bildirimler (her daim en güncel politikası)
 - [ ] Bağımlılıklarda bilinen zafiyet yok (`pip-audit`)
-- [ ] Tüm GitHub Actions commit SHA'larına sabitlenmiş
+- [ ] Eylemler dal ref'leri kullanıyor (@main/@master), sha_pinning_required=false
 - [ ] İş akışı izinleri gerekli asgari düzeye ayarlanmış
 - [ ] Gizli anahtarlar GitHub Secrets'ta saklanıyor (kodda değil)
 - [ ] Ana dalda dal koruması etkinleştirilmiş
@@ -807,11 +791,11 @@ class IoCRecord(BaseModel):
 1. **TLS doğrulamasını etkinleştirme** — Sertifika doğrulamasını asla devre dışı bırakma
 2. **Giriş doğrulaması** — Tüm API verileri işlenmeden önce doğrulanır
 3. **Kod çalıştırma yok** — Giriş verileri üzerinde asla eval/exec çalıştırma
-4. **Bağımlılık sabitleme** — Tüm bağımlılık sürümlerini kilitle
+4. **Her daim en güncel bağımlılıklar** — pin'siz düzenleyiciler + yenilenen kilit anlık görüntüleri
 
 ### Öncelik 2: Yüksek
 
-5. **GitHub Actions güçlendirme** — Eylemleri SHA'lara sabitleme, minimum izinler
+5. **GitHub Actions güçlendirme** — dal ref'leri + minimum izinler
 6. **Gizli anahtar yönetimi** — GitHub Secrets kullanma, düzenli olarak değiştirme
 7. **Denetim kaydı** — Tüm hat işlemlerini izleme
 8. **Çıktı bütünlüğü** — Tüm çıktılar için kontrol toplamları üretme

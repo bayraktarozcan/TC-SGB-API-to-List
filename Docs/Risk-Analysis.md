@@ -44,13 +44,13 @@ This document presents a comprehensive risk matrix for the TC-SGB-API-to-List pr
 
 | ID | Risk | Likelihood | Impact | Score | Level | Mitigation |
 |----|------|------------|--------|-------|-------|------------|
-| T-01 | API endpoint changes without notice | 3 | 4 | 12 | HIGH | Version pinning, API monitoring, graceful degradation |
+| T-01 | API endpoint changes without notice | 3 | 4 | 12 | HIGH | Always-latest resolution, API monitoring, graceful degradation |
 | T-02 | API downtime/availability issues | 3 | 3 | 9 | MEDIUM | Retry logic, caching, fallback to previous data |
 | T-03 | Rate limiting introduced by API | 2 | 3 | 6 | MEDIUM | Conservative rate limits, backoff, caching |
 | T-04 | Response format changes | 2 | 4 | 8 | MEDIUM | Strict schema validation, early detection |
 | T-05 | Dataset size grows beyond capacity | 2 | 3 | 6 | MEDIUM | Streaming processing, chunked memory management |
 | T-06 | Python version incompatibility | 2 | 2 | 4 | LOW | Support 2+ versions, CI matrix testing |
-| T-07 | Dependency vulnerability discovered | 3 | 3 | 9 | MEDIUM | Dependabot, pinning, regular audits |
+| T-07 | Dependency vulnerability discovered | 3 | 3 | 9 | MEDIUM | deps-update, pip-audit, regular audits |
 | T-08 | Memory exhaustion on large datasets | 2 | 3 | 6 | MEDIUM | Streaming, generators, memory limits |
 | T-09 | Disk space exhaustion | 1 | 2 | 2 | LOW | Disk space checks, output rotation |
 | T-10 | Network connectivity issues | 3 | 2 | 6 | MEDIUM | Retry, exponential backoff, offline mode |
@@ -76,8 +76,8 @@ This document presents a comprehensive risk matrix for the TC-SGB-API-to-List pr
 
 | ID | Risk | Likelihood | Impact | Score | Level | Mitigation |
 |----|------|------------|--------|-------|-------|------------|
-| S-01 | Supply chain attack (dependency) | 2 | 5 | 10 | HIGH | Pin dependencies, audit, Dependabot |
-| S-02 | Compromised GitHub Actions | 1 | 5 | 5 | MEDIUM | Pin action SHAs, minimal permissions |
+| S-01 | Supply chain attack (dependency) | 2 | 5 | 10 | HIGH | Resolve latest, audit, deps-update |
+| S-02 | Compromised GitHub Actions | 1 | 5 | 5 | MEDIUM | Branch-based action refs, minimal permissions |
 | S-03 | API impersonation/MITM | 1 | 5 | 5 | MEDIUM | TLS verification, certificate pinning |
 | S-04 | Data exfiltration via logs | 2 | 3 | 6 | MEDIUM | Sanitize logs, structured logging |
 | S-05 | Code injection via IoC values | 1 | 5 | 5 | MEDIUM | Input validation, no eval/exec |
@@ -202,10 +202,10 @@ Response Plan:
 3. Remediation
    - Update to patched version
    - Verify no compromise occurred
-   - Update lock file
+   - Regenerate lock snapshots (weekly)
 
 4. Prevention
-   - Pin all dependencies
+   - Keep editable manifests unpinned
    - Regular security audits
    - Use trusted sources only
 ```
@@ -300,13 +300,13 @@ Bu belge, TC-SGB-API-to-List projesi için kapsamlı bir risk matrisi sunmakta; 
 
 | ID | Risk | Olasılık | Etki | Puan | Seviye | Azaltma |
 |----|------|----------|------|------|--------|---------|
-| T-01 | Bildirim yapılmadan API uç noktası değişiklikleri | 3 | 4 | 12 | YÜKSEK | Sürüm sabitleme, API izleme, zarif bozulma |
+| T-01 | Bildirim yapılmadan API uç noktası değişiklikleri | 3 | 4 | 12 | YÜKSEK | Her daim en güncel çözüm, API izleme, zarif bozulma |
 | T-02 | API kesinti süresi/erişilebilirlik sorunları | 3 | 3 | 9 | ORTA | Yeniden deneme mantığı, önbellekleme, önceki verilere geri dönüş |
 | T-03 | API tarafından hız kısıtlaması uygulanması | 2 | 3 | 6 | ORTA | Muhafazakar hız limitleri, geri çekilme, önbellekleme |
 | T-04 | Yanıt biçimi değişiklikleri | 2 | 4 | 8 | ORTA | Katı şema doğrulama, erken tespit |
 | T-05 | Veri seti boyutunun kapasiteyi aşması | 2 | 3 | 6 | ORTA | Akış işleme, parçalı bellek yönetimi |
 | T-06 | Python sürüm uyumsuzluğu | 2 | 2 | 4 | DÜŞÜK | 2+ sürüm desteği, CI matris testi |
-| T-07 | Bağımlılık açığının keşfedilmesi | 3 | 3 | 9 | ORTA | Dependabot, sabitleme, düzenli denetimler |
+| T-07 | Bağımlılık açığının keşfedilmesi | 3 | 3 | 9 | ORTA | deps-update, pip-audit, düzenli denetimler |
 | T-08 | Büyük veri setlerinde tükenme | 2 | 3 | 6 | ORTA | Akış, üreteçler, bellek limitleri |
 | T-09 | Disk alanı tükenmesi | 1 | 2 | 2 | DÜŞÜK | Disk alanı kontrolleri, çıktı döndürme |
 | T-10 | Ağ bağlantısı sorunları | 3 | 2 | 6 | ORTA | Yeniden deneme, üstel geri çekilme, çevrimdışı mod |
@@ -332,8 +332,8 @@ Bu belge, TC-SGB-API-to-List projesi için kapsamlı bir risk matrisi sunmakta; 
 
 | ID | Risk | Olasılık | Etki | Puan | Seviye | Azaltma |
 |----|------|----------|------|------|--------|---------|
-| S-01 | Tedarik zinciri saldırısı (bağımlılık) | 2 | 5 | 10 | YÜKSEK | Bağımlılıkları sabitleme, denetim, Dependabot |
-| S-02 | Ele geçirilmiş GitHub Actions | 1 | 5 | 5 | ORTA | Action SHA'larını sabitleme, asgari izinler |
+| S-01 | Tedarik zinciri saldırısı (bağımlılık) | 2 | 5 | 10 | YÜKSEK | En günceli çözme, denetim, Dependabot |
+| S-02 | Ele geçirilmiş GitHub Actions | 1 | 5 | 5 | ORTA | Dal tabanlı eylem ref'leri, asgari izinler |
 | S-03 | API taklidi/MITM | 1 | 5 | 5 | ORTA | TLS doğrulama, sertifika sabitleme |
 | S-04 | Günlükler aracılığıyla veri sızıntısı | 2 | 3 | 6 | ORTA | Günlük temizleme, yapılandırılmış günlük kaydı |
 | S-05 | IoC değerleri üzerinden kod enjeksiyonu | 1 | 5 | 5 | ORTA | Girdi doğrulaması, eval/exec kullanmama |
@@ -458,10 +458,10 @@ Yanıt Planı:
 3. Çözüm
    - Yamalanmış sürüme güncelleme
    - Herhangi bir ihlalin gerçekleşmediğini doğrulama
-   - Kilit dosyasını güncelleme
+   - Kilit anlık görüntülerini yenileme (haftalık)
 
 4. Önleme
-   - Tüm bağımlılıkları sabitleme
+   - Düzenlenebilir bildirimleri pin'siz tutma
    - Düzenli güvenlik denetimleri
    - Yalnızca güvenilir kaynakları kullanma
 ```

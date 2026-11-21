@@ -126,7 +126,7 @@ This document presents a STRIDE-based threat model for the TC-SGB-API-to-List th
 
 | ID | Threat | Description | Likelihood | Impact | Mitigation |
 |----|--------|-------------|------------|--------|------------|
-| E-01 | Dependency Vulnerability | Malicious or vulnerable dependency installed | MEDIUM | HIGH | Dependabot, pin versions, audit dependencies |
+| E-01 | Dependency Vulnerability | Malicious or vulnerable dependency installed | MEDIUM | HIGH | Always-latest resolution, pip-audit, dependency audit |
 | E-02 | Code Injection via IoC | IoC value causes code execution during processing | LOW | CRITICAL | No eval/exec, safe string handling, input validation |
 | E-03 | Path Traversal | IoC value or config causes file access outside boundaries | LOW | HIGH | Validate paths, use Path objects, sandboxing |
 | E-04 | YAML Deserialization | Malicious YAML config causes code execution | LOW | HIGH | Use safe YAML loader only |
@@ -138,7 +138,7 @@ This document presents a STRIDE-based threat model for the TC-SGB-API-to-List th
 - Validate file paths using `pathlib.Path.resolve()`
 - Use `yaml.safe_load()` only
 - Enable Jinja2 auto-escaping
-- Pin all dependency versions
+- Keep editable manifests unpinned (always-latest)
 - Run with minimal OS permissions
 
 ---
@@ -191,7 +191,7 @@ This document presents a STRIDE-based threat model for the TC-SGB-API-to-List th
 1. **Input Validation**: All API responses validated through Pydantic models
 2. **TLS Enforcement**: HTTPS-only with certificate verification
 3. **Rate Limiting**: Bounded concurrency and request throttling
-4. **Dependency Auditing**: Automated vulnerability scanning via Dependabot
+4. **Dependency Auditing**: Automated vulnerability scanning via deps-updatet
 5. **Secure Coding**: No eval/exec, safe YAML loading, template escaping
 6. **Path Validation**: All file operations use resolved paths
 
@@ -355,7 +355,7 @@ Bu belge, TC-SGB-API-to-List tehdit istihbaratı hattı için STRIDE tabanlı bi
 
 | ID | Tehdit | Açıklama | Olasılık | Etki | Azaltma |
 |----|--------|----------|----------|------|---------|
-| E-01 | Bağımlılık Zafiyeti | Kötü amaçlı veya zafiyet içeren bağımlılık yüklenir | ORTA | YÜKSEK | Dependabot, sürüm sabitleme, bağımlılık denetimi |
+| E-01 | Bağımlılık Zafiyeti | Kötü amaçlı veya zafiyet içeren bağımlılık yüklenir | ORTA | YÜKSEK | Her daim en güncel çözüm, pip-audit, bağımlılık denetimi |
 | E-02 | IoC Üzerinden Kod Enjeksiyonu | IoC değeri işleme sırasında kod çalıştırılmasına neden olur | DÜŞÜK | KRİTİK | eval/exec yok, güvenli dize işleme, giriş doğrulama |
 | E-03 | Yol Geçişi | IoC değeri veya yapılandırma sınırlar dışında dosya erişimine neden olur | DÜŞÜK | YÜKSEK | Yolları doğrulama, Nesne sınıfları kullanma, sandık oluşturma |
 | E-04 | YAML Serileştirme | Kötü amaçlı YAML yapılandırması kod çalıştırılmasına neden olur | DÜŞÜK | YÜKSEK | Yalnızca güvenli YAML yükleyici kullanma |
@@ -367,7 +367,7 @@ Bu belge, TC-SGB-API-to-List tehdit istihbaratı hattı için STRIDE tabanlı bi
 - Dosya yollarını `pathlib.Path.resolve()` kullanarak doğrulama
 - Yalnızca `yaml.safe_load()` kullanma
 - Jinja2 otomatik kaçışını etkinleştirme
-- Tüm bağımlılık sürümlerini sabitleme
+- Düzenlenebilir bildirimleri pin'siz tutma (her daim en güncel)
 - Minimum işletim sistemi izinleriyle çalıştırma
 
 ---
@@ -420,7 +420,7 @@ Bu belge, TC-SGB-API-to-List tehdit istihbaratı hattı için STRIDE tabanlı bi
 1. **Giriş Doğrulaması**: Tüm API yanıtları Pydantic modelleri aracılığıyla doğrulanır
 2. **TLS Zorunlu Kılma**: Yalnızca HTTPS ve sertifika doğrulaması
 3. **Hız Sınırı**: Sınırlı eşzamanlılık ve istek kısıtlama
-4. **Bağımlılık Denetimi**: Dependabot aracılığıyla otomatik zafiyet taraması
+4. **Bağımlılık Denetimi**: deps-updatet aracılığıyla otomatik zafiyet taraması
 5. **Güvenli Kodlama**: eval/exec yok, güvenli YAML yükleme, şablon kaçışı
 6. **Yol Doğrulaması**: Tüm dosya işlemleri çözülmüş yollar kullanır
 
