@@ -18,7 +18,7 @@ This is an open-source project maintained on a best-effort basis. There is no
 formal support SLA. We aim to respond to issues and pull requests promptly, but
 response times are not guaranteed.
 
-## Before Opening an İssue
+## Before Opening an Issue
 
 1. Check the [README](README.md), [CHANGELOG](CHANGELOG.md), existing issues,
    and pull requests for a known answer.
