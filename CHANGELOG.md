@@ -19,7 +19,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 - **Gitleaks resolves the latest release at runtime** — the GitLab `secret-scan` job queries the GitHub releases API for the newest tag, downloads that release's binary, and verifies it against the release's own `checksums.txt`; no static version or hash is embedded, so the scan stays current for the lifetime of the project.
 - **Python toolchain follows latest** — single-version jobs (lint, auto-merge, deps-update, scheduled fetch) now use `3.x`; the GitLab default image is `python:slim`; the `3.11` entry remains only as the deliberate compatibility-floor leg of the test/build matrix.
 - **Dependabot/branch-ref clarification** — `AGENTS.md` no longer claims Dependabot bumps branch-based action refs (Dependabot updates version numbers/commit identifiers, not `@main`); branch refs self-update from upstream, while the `github-actions` ecosystem stays configured for any future version-pinned ref.
-- **Audit-consistency sweep across docs/manifests** — removed stale pinning prescriptions from `AGENTS.md` (obsolete pip-audit ignores, "no transitive lockfile" bypass, source-of-truth pointers) and from `Docs/Security-Analysis.md`, `Risk-Analysis.md`, `Threat-Model.md`, `Maintenance-Plan.md`, `Performance-Strategy.md` (EN+TR): always-latest policy, branch-based action refs, regenerated lock snapshots, removed retired `rich` dependency and non-existent Snyk/safety tooling examples; `sync_deps.py` wording aligned. Merged duplicate `Fixed`/`Düzeltilen` headings in this changelog.
+- **Audit-consistency sweep across docs/manifests** — removed stale pinning prescriptions from `AGENTS.md` (obsolete pip-audit ignores, "no transitive lockfile" bypass, source-of-truth pointers) and from `Docs/Security-Analysis.md`, `Risk-Analysis.md`, `Threat-Model.md`, `Maintenance-Plan.md`, `Performance-Strategy.md` (EN+TR): always-latest policy, branch-based action refs, regenerated lock snapshots, removed retired `rich` dependency and non-existent Snyk/safety tooling examples; `sync_deps.py` wording aligned. Merged duplicate `Fixed`/`Düzeltilen` headings in this changelog and restored Keep a Changelog section order. Follow-up sweep fixed residual artifacts from that pass (`deps-updatet` token, half-updated EN/TR parity rows, leftover Snyk/`safety check` references, `@v3` codecov example, specific `3.11.7` patch in samples).
+
+### Removed
+
+- **Azerbaijan feed retired from scope** — the `blacklist.gov.az` list proved unreliable and unsuitable for a curated blocklist, so it is no longer fetched, validated, or published; `03-azerbaycan-blacklist_adguard.txt` is dropped from the `filter-lists` branch. The publication safety policy, per-feed audits, and the `validate-external` gate it was introduced with keep running for the remaining feeds.
+- **List order fixed** — Slovenia takes the freed `03` slot (`05-slovenya-certsi_adguard.txt` → `03-slovenya-certsi_adguard.txt`), so numbering runs 01–03 with `04` still reserved for Lithuania, whose source sits behind a Cloudflare challenge and cannot be fetched yet.
 
 ### Fixed
 
@@ -27,11 +32,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 - **GitLab `link-check` job** — lychee runs with an empty entrypoint (the GitLab-generated shell script was being read as a config file); the Cisco EULA URL, which returns 403 to bots, is excluded in both the GitHub and GitLab link-check configurations.
 - **Dependency-update quality gate** — setuptools is upgraded before `pip-audit`, matching the CI security job, so the known setuptools advisories no longer block the update PR.
 - **S3 service roots no longer blocked wholesale** — a URL indicator could be promoted to its host (`||s3.amazonaws.com^`), blocking every bucket on the endpoint. Shared S3 service endpoints are now recognised by the safety policy, so a URL on one is never promoted to a host rule; bucket-specific hosts remain eligible.
-
-### Removed
-
-- **Azerbaijan feed retired from scope** — the `blacklist.gov.az` list proved unreliable and unsuitable for a curated blocklist, so it is no longer fetched, validated, or published; `03-azerbaycan-blacklist_adguard.txt` is dropped from the `filter-lists` branch. The publication safety policy, per-feed audits, and the `validate-external` gate it was introduced with keep running for the remaining feeds.
-- **List order fixed** — Slovenia takes the freed `03` slot (`05-slovenya-certsi_adguard.txt` → `03-slovenya-certsi_adguard.txt`), so numbering runs 01–03 with `04` still reserved for Lithuania, whose source sits behind a Cloudflare challenge and cannot be fetched yet.
 
 ## [v0.3.2.0] — 2026-10-12
 
@@ -219,7 +219,12 @@ Biçim, [Keep a Changelog](https://keepachangelog.com/)'a dayanmaktadır.
 - **Gitleaks en güncel sürümü çalışma zamanında çözüyor** — GitLab `secret-scan` işi GitHub releases API'sinden en yeni etiketi sorgular, o sürümün ikilisini indirir ve sürümün kendi `checksums.txt` dosyasıyla doğrular; statik sürüm veya hash gömülmediği için tarama projenin tüm yaşam döngüsü boyunca güncel kalır.
 - **Python araç zinciri en günceli izliyor** — tek sürümlü işler (lint, auto-merge, deps-update, zamanlanmış çekim) artık `3.x` kullanıyor; GitLab varsayılan görüntüsü `python:slim`; `3.11` girişi yalnızca test/derleme matrisindeki kasıtlı uyumluluk-alt-sınır bacağı olarak kalıyor.
 - **Dependabot/dal-ref açıklaması** — `AGENTS.md` artık Dependabot'ın dal tabanlı eylem ref'lerini yükselttiğini iddia etmiyor (Dependabot sürüm numarası/commit tanıtıcısı günceller, `@main`'i değil); dal ref'leri yukarı akıştan kendiliğinden güncellenir, `github-actions` ekosistemi ise gelecekteki sürüm sabitli ref'ler için yapılandırılmış kalır.
-- **Doküman/bildirim denetim uyumu** — `AGENTS.md` (bayat pip-audit ignore'ları, "geçişli kilit dosyası yok" bypass'ı, doğruluk kaynağı işaretleri) ve `Docs/Security-Analysis.md`, `Risk-Analysis.md`, `Threat-Model.md`, `Maintenance-Plan.md`, `Performance-Strategy.md` dosyalarındaki (EN+TR) sabitleme talimatları her daim en güncel politikasıyla uyumlu hale getirildi: dal tabanlı eylem ref'leri, yenilenen kilit anlık görüntüleri, kaldırılmış `rich` bağımlılığı ve var olmayan Snyk/safety örnekleri temizlendi; `sync_deps.py` ifadeleri hizalandı. Bu günlükteki yinelenen `Düzeltilen` başlıkları birleştirildi.
+- **Doküman/bildirim denetim uyumu** — `AGENTS.md` (bayat pip-audit ignore'ları, "geçişli kilit dosyası yok" bypass'ı, doğruluk kaynağı işaretleri) ve `Docs/Security-Analysis.md`, `Risk-Analysis.md`, `Threat-Model.md`, `Maintenance-Plan.md`, `Performance-Strategy.md` dosyalarındaki (EN+TR) sabitleme talimatları her daim en güncel politikasıyla uyumlu hale getirildi: dal tabanlı eylem ref'leri, yenilenen kilit anlık görüntüleri, kaldırılmış `rich` bağımlılığı ve var olmayan Snyk/safety örnekleri temizlendi; `sync_deps.py` ifadeleri hizalandı. Bu günlükteki yinelenen `Düzeltilen` başlıkları birleştirildi ve Keep a Changelog bölüm sırası düzeltildi. Takip taramasında o geçişin kalıntıları temizlendi (`deps-updatet` belirteci, yarım kalmış EN/TR parite satırları, kalan Snyk/`safety check` atıfları, `@v3` codecov örneği, örneklerdeki spesifik `3.11.7` yama sürümü).
+
+### Silinen
+
+- **Azerbaycan akışı kapsamdan çıkarıldı** — `blacklist.gov.az` listesi güvenilir olmadığı ve seçkin bir engel listesi için uygun düşmediği için artık çekilmiyor, doğrulanmıyor veya yayımlanmıyor; `03-azerbaycan-blacklist_adguard.txt` dosyası `filter-lists` dalından çıkarıldı. Yayımlama güvenlik politikası, akış başına denetimler ve akışla birlikte gelen `validate-external` kapısı kalan akışlarda çalışmaya devam ediyor.
+- **Liste sırası düzeltildi** — Slovenya boşalan `03` numarasını aldı (`05-slovenya-certsi_adguard.txt` → `03-slovenya-certsi_adguard.txt`), böylece numaralandırma 01–03 arasında akıyor ve `04` hâlâ Litvanya için ayrılmış; kaynağının arkasında bir Cloudflare doğrulaması olduğu için henüz çekilemiyor.
 
 ### Düzeltilen
 
@@ -227,11 +232,6 @@ Biçim, [Keep a Changelog](https://keepachangelog.com/)'a dayanmaktadır.
 - **GitLab `link-check` işi** — lychee boş entrypoint ile çalışıyor (GitLab'in ürettiği kabuk betiği yapılandırma dosyası olarak okunuyordu); botlara 403 döndüren Cisco EULA URL'si hem GitHub hem GitLab bağlantı denetimi yapılandırmalarında hariç tutuluyor.
 - **Bağımlılık güncelleme kalite kapısı** — `pip-audit` öncesinde setuptools yükseltiliyor (CI güvenlik işiyle aynı), böylece bilinen setuptools uyarıları güncelleme PR'ını engellemiyor.
 - **S3 servis kökleri artık toptan engellenmiyor** — bir URL göstergesi ana makinesine yükseltilerek (`||s3.amazonaws.com^`) uçtaki tüm bucket'ları engelleyebiliyordu. Paylaşımlı S3 servis uçları artık güvenlik politikası tarafından tanınıyor; böyle bir uçtaki URL ana makine kuralına yükseltilmiyor, bucket'a özgü ana makineler kurala dönüşmeye devam ediyor.
-
-### Silinen
-
-- **Azerbaycan akışı kapsamdan çıkarıldı** — `blacklist.gov.az` listesi güvenilir olmadığı ve seçkin bir engel listesi için uygun düşmediği için artık çekilmiyor, doğrulanmıyor veya yayımlanmıyor; `03-azerbaycan-blacklist_adguard.txt` dosyası `filter-lists` dalından çıkarıldı. Yayımlama güvenlik politikası, akış başına denetimler ve akışla birlikte gelen `validate-external` kapısı kalan akışlarda çalışmaya devam ediyor.
-- **Liste sırası düzeltildi** — Slovenya boşalan `03` numarasını aldı (`05-slovenya-certsi_adguard.txt` → `03-slovenya-certsi_adguard.txt`), böylece numaralandırma 01–03 arasında akıyor ve `04` hâlâ Litvanya için ayrılmış; kaynağının arkasında bir Cloudflare doğrulaması olduğu için henüz çekilemiyor.
 
 ## [v0.3.2.0] — 2026-10-12
 
