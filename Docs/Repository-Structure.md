@@ -298,7 +298,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "tc-sgb-api-list"
-version = "0.3.2.1"
+version = "0.3.2.2"
 description = "Threat Intelligence Pipeline for TC SGB API — IoC fetcher, validator, and multi-format exporter"
 requires-python = ">=3.11"
 license = "MIT"
@@ -625,7 +625,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "tc-sgb-api-list"
-version = "0.3.2.1"
+version = "0.3.2.2"
 description = "Threat Intelligence Pipeline for TC SGB API — IoC fetcher, validator, and multi-format exporter"
 requires-python = ">=3.11"
 license = "MIT"

@@ -8,6 +8,17 @@
 All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [v0.3.2.2] — 2026-11-21
+
+### Changed
+
+- **Documentation consistency (EN+TR)** — corrected heading title case in troubleshooting, planning and privacy docs, refreshed stale test counts (`487`/`650` → `728`) and the agent-guide coverage baseline (`~97%` → `~99%`), and mirrored the agent-guide corrections with a refreshed `sync-sha`.
+- **Release records completed** — the v0.3.2.1 changelog now covers the full tag diff (`Added` section plus the missing fetch, feed, automation and housekeeping fixes), and the published release notes now declare the `filter-lists` URL move as a breaking change and record the Azerbaijani feed retirement.
+
+### Fixed
+
+- **Historical CHANGELOG defect** — the duplicate `### Changed` heading in v0.3.2.0 was merged and the superseded weekday schedule entry was folded into the final daily-schedule bullet, with the transition documented in both languages.
+
 ## [v0.3.2.1] — 2026-11-21
 
 ### Added
@@ -213,6 +224,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 Bu projedeki tüm dikkat çekici değişiklikler bu dosyada belgelenecektir.
 Biçim, [Keep a Changelog](https://keepachangelog.com/)'a dayanmaktadır.
+
+## [v0.3.2.2] — 2026-11-21
+
+### Değiştirilen
+
+- **Dokümantasyon tutarlılığı (EN+TR)** — sorun giderme, planlama ve gizlilik belgelerindeki başlık büyütmesi düzeltildi; bayat test sayıları (`487`/`650` → `728`) ve ajan kılavuzu kapsama temel değeri (`~%97` → `~%99`) güncellendi; ajan kılavuzu düzeltmeleri aynaya yansıtılıp `sync-sha` yenilendi.
+- **Sürüm kayıtları tamamlandı** — v0.3.2.1 günlüğü artık tüm etiket farkını kapsıyor (`Eklenen` bölümü ve eksik çekme, akış, otomasyon ve temizlik düzeltmeleri); yayımlanan sürüm notları `filter-lists` URL taşınmasını kırıcı değişiklik olarak bildiriyor ve Azerbaycan akışının kaldırılmasını kaydediyor.
+
+### Düzeltilen
+
+- **Tarihsel CHANGELOG kusuru** — v0.3.2.0'daki yinelenen `### Değiştirilen` başlığı birleştirildi ve geçersiz kılınan hafta içi zamanlama maddesi nihai günlük zamanlama maddesine dahil edilip geçiş her iki dilde belgelendi.
 
 ## [v0.3.2.1] — 2026-11-21
 

@@ -96,7 +96,7 @@ Four-part scheme `MAJOR.MINOR.FEATURE.FIX` with a `v` prefix on tags and
 CHANGELOG headings (evidence: `v0.2.0.0` → `v0.2.0.1` carried a fix batch,
 `v0.2.0.0` → `v0.3.0.0` a feature batch).
 
-- Current: `0.3.2.1`.
+- Current: `0.3.2.2`.
 - Stated in: `pyproject.toml` (`version`), `CHANGELOG.md` newest headings
   (EN and TR), `Docs/Repository-Structure.md` quotes (EN and TR).
 - Pinned by `Tests/test_repo_conventions.py::TestVersionParity` (oracle:
@@ -875,4 +875,4 @@ Runtimes use the current LTS line (Node.js LTS, .NET LTS); build output goes thr
 - `.git/` is the **internal Git repository structure**, not a project config file.
 
 **Guiding rule:** "It looks special" does not mean "It is a standard special file." The meaning of any file is determined by the software that reads and interprets it.
-<!-- mirror-sync: sync-sha=6366a52c101b2079ad38c736071f64180c6cf32f -->
+<!-- mirror-sync: sync-sha=f639e0f744c670b7c14828e8de6acd818da35c0d -->
