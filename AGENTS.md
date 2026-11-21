@@ -108,8 +108,8 @@ Setup, then the quality gate above (single local gate command); CI runs the
 same checks (see `.github/workflows/ci.yml`, `.gitlab-ci.yml`).
 
 - Setup: `pip install -e ".[dev]"` (resolves latest compatible versions from
-  `pyproject.toml`); compiled snapshots in `requirements*.txt` are for the
-  reproducible CI/test gate, not for setup.
+  `pyproject.toml`). `requirements.txt` is an unpinned `@latest` list, not a
+  compiled snapshot.
 - CLI verbs: `tc-sgb fetch | generate | index | stats | validate | health | fetch-external`.
 - Local gate = the Quality gate block (ruff, ruff format, mypy, bandit, pytest).
 - Mirror check: `Scripts/verify_mirror.py AGENTS.md AGENTS-TR.md`.
@@ -145,12 +145,12 @@ Exemptions (each with its reason):
 
 ## Dependencies
 
-- Editable manifests: `requirements.in` + `requirements-dev.in` (unpinned,
-  "always latest stable"); `requirements.txt` / `requirements-dev.txt` are
-  compiled snapshots, not the source of truth. Setup is the Commands block
-  (`pip install -e ".[dev]"`, which resolves from `pyproject.toml`).
-- Installed versions: resolved at install time from the manifests above (the
-  local `.venv` is regenerated from them, never pinned here). For a concrete
+- Source of truth: `pyproject.toml` (runtime + dev dependencies, unpinned) and
+  `requirements.txt` (runtime list, unpinned — `@latest` semantics). Setup is
+  the Commands block (`pip install -e ".[dev]"`, which resolves the latest
+  compatible versions). No compiled lockfile or secondary manifest is kept.
+- Installed versions: resolved at install time from the source above (the
+  local `.venv` is regenerated from it, never pinned here). For a concrete
   number, read the live environment with `python -m pip freeze`.
 - Approved project-scope exception: `.venv/` (reason: per-project isolation
   on a shared host; recreated from the manifest, never committed).
@@ -201,11 +201,6 @@ Gates that do not hold by design, and what runs afterward instead:
   instead of blocking on a check that cannot pass.
 - Dependabot `deps()`/`ci()` prefixes are tool-controlled; squash titles are
   normalized to Conventional Commits on merge instead.
-- Compiled lockfile with automated regeneration: `requirements.txt` /
-  `requirements-dev.txt` are pip-compile outputs with pinned transitive
-  versions, regenerated weekly by `deps-update.yml`, so a frozen file never
-  rots silently; the editable sources are the unpinned `requirements.in` /
-  `requirements-dev.in`. No frozen-file-without-automation exception exists.
 - The repository owner may push to `main` directly, bypassing the ruleset:
   the push reports `Bypassed rule violations` and `4 of 4 required status
   checks are expected`. CI then runs on the pushed commit afterwards instead
@@ -627,7 +622,7 @@ Repository management and dependency conventions.
 - **CodeQL.** A `.github/workflows/codeql.yml` runs on every push and weekly. It is free for public repositories; private repositories need GitHub's paid code-security product. Where CodeQL is unavailable, a secret scanner (for example gitleaks) and the language's own static analysis stand in.
 - **Auto-approve.** Only trusted usernames may be auto-approved, after status checks pass, logged, with minimal permissions (`contents: write`, `pull-requests: write`).
 - **Workflow hardening.** Every workflow sets the narrowest `permissions:` it needs. Third-party actions use the latest version (`@main`/`@master` for branch-based refs, floating major tags where no branch exists); branch refs self-update from the upstream default branch, so no Dependabot bump is needed for them. Dependabot's `github-actions` ecosystem stays configured for any future version-pinned ref. Because branch/tag refs are not full commit SHAs, the repository setting `sha_pinning_required` must remain `false` (`PUT /repos/{owner}/{repo}/actions/permissions`); otherwise GitHub rejects every non-SHA action ref at workflow validation with `startup_failure`.
-- **Dependency currency.** Runtime and build dependencies use the latest version; dev dependencies may use flexible ranges (`>=`, `^`); lockfiles are committed; updates go through Dependabot. A new dependency is justified (need, maintenance state, license) before it is added. Types: **Runtime** (needed to run the app, for example flask, react), **Dev** (development-time only, for example pytest, eslint), **Build** (compile-time only, for example typescript, webpack).
+- **Dependency currency.** Runtime and build dependencies use the latest version; dev dependencies may use flexible ranges (`>=`, `^`); no compiled lockfile is kept — `requirements.txt` is an unpinned `@latest` list. Updates flow through Dependabot. A new dependency is justified (need, maintenance state, license) before it is added. Types: **Runtime** (needed to run the app, for example flask, react), **Dev** (development-time only, for example pytest, eslint), **Build** (compile-time only, for example typescript, webpack).
 - **Currency without exception.** Everything is kept current at all times, and there is no exception: dependencies, runtimes, toolchains, build and CI tooling, third-party actions, base images, and the host software the project relies on. A new version is accepted without further question: the build and the tests are the only gate. If it breaks CI, the fix goes forward (adapt the code, replace the component), never back: no rolling back a bump. Security fixes do not wait for the update cadence. Currency is verified by a scheduled check, not discovered by an incident. Nothing old stays in the project, and a component that cannot be brought current is a defect to be fixed, not an exception to be recorded.
 - **Standard workflow triggers.** Test on `push` and `pull_request` (unit tests, lint, type check); Build on `push` to `main`; Release on tag `v*`; CodeQL on push and weekly; Dependabot weekly.
 - **Machine-maintained logs.** Recurring git and audit events (dependency updates, PR journals, version checks) are logged by the workflow itself via API, never by hand; human intervention is not required.
@@ -842,7 +837,7 @@ Runtimes use the current LTS line (Node.js LTS, .NET LTS); build output goes thr
 | Ecosystem | Files |
 |-----------|-------|
 | Node.js / JavaScript | `package.json`, `package-lock.json`, `yarn.lock`, `pnpm-lock.yaml`, `bun.lock` (older Bun: `bun.lockb`), `.npmrc`, `.npmignore`, `.nvmrc`, `.prettierrc*`, `eslint.config.*` (flat config; `.eslintrc*` is the legacy form), `.stylelintrc*` |
-| Python | `pyproject.toml`, `requirements.txt`, `requirements-dev.txt`, `Pipfile`, `Pipfile.lock`, `poetry.lock`, `uv.lock`, `.python-version`, `.flake8`, `.mypy.ini` (or `mypy.ini`), `pytest.ini` |
+| Python | `pyproject.toml`, `requirements.txt`, `Pipfile`, `Pipfile.lock`, `poetry.lock`, `uv.lock`, `.python-version`, `.flake8`, `.mypy.ini` (or `mypy.ini`), `pytest.ini` |
 | Java / JVM | `pom.xml`, `build.gradle`, `build.gradle.kts`, `settings.gradle*`, `gradlew`, `gradlew.bat`, `.mvn/`, `.gradle/` |
 | .NET | `*.sln` (also `*.slnx`), `*.csproj`, `*.fsproj`, `*.vbproj`, `global.json`, `NuGet.config`, `Directory.Build.props`, `Directory.Build.targets` |
 | Rust | `Cargo.toml`, `Cargo.lock`, `rust-toolchain*`, `.rustfmt.toml`, `.cargo/` |
@@ -880,4 +875,4 @@ Runtimes use the current LTS line (Node.js LTS, .NET LTS); build output goes thr
 - `.git/` is the **internal Git repository structure**, not a project config file.
 
 **Guiding rule:** "It looks special" does not mean "It is a standard special file." The meaning of any file is determined by the software that reads and interprets it.
-<!-- mirror-sync: sync-sha=c2da8688df4e4faf266283022cae604e60c6248b -->
+<!-- mirror-sync: sync-sha=7e231824e65c55d3d4a5f470e567e890b7f222d1 -->

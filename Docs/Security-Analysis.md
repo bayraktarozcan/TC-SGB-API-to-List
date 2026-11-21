@@ -51,7 +51,7 @@ This document provides a comprehensive security analysis of the TC-SGB-API-to-Li
   +------------------+     +------------------------------------------+
   | Version Policy   |     | LOW  (unpinned, resolve latest)         |
   +------------------+     +------------------------------------------+
-  | Update Frequency  |     | LOW  (automated via deps-update)        |
+  | Update Frequency  |     | LOW  (Dependabot + latest at install)   |
   +------------------+     +------------------------------------------+
   | Attack Surface    |     | LOW  (minimal dependency set)           |
   +------------------+     +------------------------------------------+
@@ -59,10 +59,9 @@ This document provides a comprehensive security analysis of the TC-SGB-API-to-Li
 
 ### Mitigation: Always-Latest Dependencies
 
-Editors (`requirements.in`, `requirements-dev.in`) and `pyproject.toml` are
-unpinned; the latest compatible versions resolve at install time. Compiled
-snapshots (`requirements.txt`, `requirements-dev.txt`) are regenerated weekly
-by `deps-update.yml`, so they never rot silently.
+`pyproject.toml` and `requirements.txt` are unpinned (`@latest` semantics);
+the latest compatible versions resolve at install time. No compiled lockfile
+is kept.
 
 ```toml
 # pyproject.toml - always-latest policy (no version pins)
@@ -75,13 +74,10 @@ dependencies = [
 ]
 ```
 
-### Mitigation: Regenerated Lock Snapshots
+### Mitigation: Latest at Install
 
 ```bash
-# Regenerate compiled snapshots to latest (weekly automation)
-python Scripts/sync_deps.py --upgrade --compile-only
-
-# Install latest into the local environment
+# Install latest compatible versions from pyproject.toml
 pip install -e ".[dev]"
 ```
 
@@ -458,7 +454,7 @@ Bu belge, TC-SGB-API-to-List sisteminin kapsamlı bir güvenlik analizini sunmak
   +------------------+     +------------------------------------------+
   | Sürüm Politikası    |     | DÜŞÜK  (pin'siz, en güncel çözülür)         |
   +------------------+     +------------------------------------------+
-  | Güncelleme Sıklığı |   | DÜŞÜK  (deps-update ile otomatik)      |
+  | Güncelleme Sıklığı |   | DÜŞÜK  (Dependabot + kurulumda latest)  |
   +------------------+     +------------------------------------------+
   | Saldırı Yüzeyi    |    | DÜŞÜK  (minimal bağımlılık kümesi)     |
   +------------------+     +------------------------------------------+
@@ -466,10 +462,8 @@ Bu belge, TC-SGB-API-to-List sisteminin kapsamlı bir güvenlik analizini sunmak
 
 ### Azaltma: Her Daim Güncel Bağımlılıklar
 
-Düzenlenebilir bildirimler (`requirements.in`, `requirements-dev.in`) ve
-`pyproject.toml` pin'sizdir; en güncel uyumlu sürümler kurulum anında çözülür.
-Derlenmiş anlık görüntüler (`requirements.txt`, `requirements-dev.txt`) haftalık
-olarak `deps-update.yml` ile yenilenir, böylece sessizce çürümez.
+`pyproject.toml` ve `requirements.txt` pin'sizdir (`@latest` semantiği); en
+güncel uyumlu sürümler kurulum anında çözülür. Derlenmiş kilit dosyası tutulmaz.
 
 ```toml
 # pyproject.toml - her daim en güncel politikası (sürüm pin'i yok)
@@ -482,13 +476,10 @@ dependencies = [
 ]
 ```
 
-### Azaltma: Yenilenen Kilit Anlık Görüntüleri
+### Azaltma: Kurulumda Latest
 
 ```bash
-# Derlenmiş anlık görüntüleri en güncel sürüme yenile (haftalık otomasyon)
-python Scripts/sync_deps.py --upgrade --compile-only
-
-# En güncel sürümleri yerel ortama kur
+# pyproject.toml'dan en güncel uyumlu sürümleri kur
 pip install -e ".[dev]"
 ```
 
