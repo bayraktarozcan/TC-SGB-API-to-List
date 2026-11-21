@@ -107,8 +107,9 @@ CHANGELOG headings (evidence: `v0.2.0.0` → `v0.2.0.1` carried a fix batch,
 Setup, then the quality gate above (single local gate command); CI runs the
 same checks (see `.github/workflows/ci.yml`, `.gitlab-ci.yml`).
 
-- Setup: `pip install -e ".[dev]"` then `pip install -r requirements.txt`
-  (Python `>=3.11`; 3.15 dev-verified).
+- Setup: `pip install -e ".[dev]"` (resolves latest compatible versions from
+  `pyproject.toml`); compiled snapshots in `requirements*.txt` are for the
+  reproducible CI/test gate, not for setup.
 - CLI verbs: `tc-sgb fetch | generate | index | stats | validate | health | fetch-external`.
 - Local gate = the Quality gate block (ruff, ruff format, mypy, bandit, pytest).
 - Mirror check: `Scripts/verify_mirror.py AGENTS.md AGENTS-TR.md`.
@@ -174,7 +175,7 @@ Exemptions (each with its reason):
   `hypothesis`.
 - Shells: `bash` on CI runners, PowerShell locally (5.1 floor; `pwsh` where
   present, per the inlined Environment rule); `gh` CLI for GitHub operations.
-- Note: with no C compiler on 3.15, PyYAML installs pure-Python via
+- Note: on hosts without a C compiler, PyYAML installs pure-Python via
   `PYYAML_FORCE_LIBYAML=0` (C sources need MSVC); CI runners use prebuilt wheels.
 
 ## Releases
@@ -878,4 +879,4 @@ Runtimes use the current LTS line (Node.js LTS, .NET LTS); build output goes thr
 - `.git/` is the **internal Git repository structure**, not a project config file.
 
 **Guiding rule:** "It looks special" does not mean "It is a standard special file." The meaning of any file is determined by the software that reads and interprets it.
-<!-- mirror-sync: sync-sha=af7c2c300f5b316d8d4ddc6b75d00300be1b334c -->
+<!-- mirror-sync: sync-sha=8f32f1a6200e624e928cd60b03c913680486519b -->
