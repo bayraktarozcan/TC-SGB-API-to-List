@@ -201,10 +201,11 @@ Gates that do not hold by design, and what runs afterward instead:
   instead of blocking on a check that cannot pass.
 - Dependabot `deps()`/`ci()` prefixes are tool-controlled; squash titles are
   normalized to Conventional Commits on merge instead.
-- The repository owner may push to `main` directly, bypassing the ruleset:
-  the push reports `Bypassed rule violations` and `6 of 6 required status
-  checks are expected`. CI then runs on the pushed commit afterwards instead
-  of gating it.
+- The repository owner is a `bypass_actors` entry on the `main-guard` ruleset
+  (`User`, `always`) and may push to `main` directly: the ruleset rules are
+  skipped for that actor. Unlike classic branch protection, the push no longer
+  prints `Bypassed rule violations` / `6 of 6 required status checks are
+  expected`. CI then runs on the pushed commit afterwards instead of gating it.
 - GitLab shared-runner minutes can be exhausted (`ci_quota_exceeded`): every
   GitLab job then fails within a second with no runner assigned, so the
   GitLab-side gates do not run. The GitHub-hosted checks stand in, and the
@@ -876,4 +877,4 @@ Runtimes use the current LTS line (Node.js LTS, .NET LTS); build output goes thr
 - `.git/` is the **internal Git repository structure**, not a project config file.
 
 **Guiding rule:** "It looks special" does not mean "It is a standard special file." The meaning of any file is determined by the software that reads and interprets it.
-<!-- mirror-sync: sync-sha=d572812c33e8de7ec4f0bf78660a36cc2031f53b -->
+<!-- mirror-sync: sync-sha=4db1efd731868d65a03ff5ee5b6f07502baaa407 -->
