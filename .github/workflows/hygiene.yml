@@ -53,3 +53,17 @@ jobs:
           fetch-depth: 0
       - name: Scan full repository history
         run: python Scripts/src/mojibake.py --scope history
+
+  releases:
+    name: Audit Published Releases
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@main
+      - uses: actions/setup-python@main
+        with:
+          python-version: "3.x"
+      - name: Audit titles and notes on every host
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLAB_PUSH_TOKEN: ${{ secrets.GITLAB_PUSH_TOKEN }}
+        run: python Scripts/check_release_hygiene.py

@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 - **Canonical release records** — `.github/release-bodies/` holds the title and bilingual body for every release, generated from this changelog; `Tests/test_release_notes.py` pins title shape, section parity and absence of bare issue tokens. All nine releases on both hosts were rewritten to this source.
 - **Text hygiene guards** — every tracked text file now ends with LF, enforced by `Tests/test_repo_conventions.py::TestFinalNewline`; the release-note guard now checks every changelog bullet, not only the first three.
 - **Action currency guards and pre-push gate** — `TestActionRefs` pins each third-party action to its upstream default branch and rejects pinned tool versions in CI files; `Scripts/pre-push` runs the local gate before a push and `Scripts/install_hooks.py` installs it with a backup of any existing hook.
+- **Live release hygiene audit** — `Scripts/check_release_hygiene.py` audits published releases on GitHub and GitLab via API (pair count, title format, bilingual structure, no garbage, cross-host byte parity) and runs weekly in the Hygiene workflow; `TestActionRefs` now also checks ref count, full-SHA pins, image digests and documented `@master` exceptions.
 
 ## [v0.3.2.2] — 2026-11-21
 
@@ -242,6 +243,7 @@ Biçim, [Keep a Changelog](https://keepachangelog.com/)'a dayanmaktadır.
 - **Kanonik yayın kayıtları** — `.github/release-bodies/`, bu değişiklik günlüğünden üretilen her yayının başlığını ve iki dilli gövdesini tutar; `Tests/test_release_notes.py` başlık biçimini, bölüm eşliğini ve çıplak issue belirteçlerinin olmamasını sabitler. İki hosttaki dokuz yayın da bu kaynağa göre yeniden yazıldı.
 - **Metin hijyen bekçileri** — izlenen her metin dosyası artık LF ile bitiyor; `Tests/test_repo_conventions.py::TestFinalNewline` bunu sabitler. Yayın notu bekçisi artık değişiklik günlüğündeki yalnızca ilk üç maddeyi değil, tüm maddeleri denetler.
 - **Eylem güncelliği bekçileri ve pre-push kapısı** — `TestActionRefs` her üçüncü taraf eylemi yukarı akış varsayılan dalına sabitler ve CI dosyalarındaki sürüm pinlerini reddeder; `Scripts/pre-push` itmeden önce yerel kapıyı çalıştırır, `Scripts/install_hooks.py` ise mevcut hook'u yedekleyerek kurar.
+- **Canlı yayın hijyeni denetimi** — `Scripts/check_release_hygiene.py`, yayımlanmış yayınları API üzerinden GitHub ve GitLab'da denetler (çift sayısı, başlık biçimi, iki dilli yapı, çöp taraması, hostlar arası bayt eşliği) ve haftalık Hygiene iş akışında çalışır; `TestActionRefs` artık ref sayısını, tam SHA pinlerini, image digest'lerini ve belgelenmiş `@master` istisnalarını da denetler.
 
 ## [v0.3.2.2] — 2026-11-21
 

@@ -387,8 +387,34 @@ class TestActionRefs:
         "pip pin": re.compile(r"==\s*\d"),
         "versioned ref": re.compile(r"@v\d"),
         "pinned image": re.compile(r"image:\s*[^\s]+:\d+\.\d+"),
+        "image digest": re.compile(r"@sha256:"),
     }
     PIN_EXEMPT = re.compile(r"^\s*#|python-version:|PYTHON_VERSION:")
+    SHA_RE = re.compile(r"^([0-9a-f]{40}|[0-9a-f]{64})$")
+    MASTER_NOTE = "master, not main"
+
+    @classmethod
+    def _references(cls) -> list[tuple[str, str, str]]:
+        found: list[tuple[str, str, str]] = []
+        for path in sorted((REPO_ROOT / ".github").rglob("*.yml")):
+            for line in path.read_text(encoding="utf-8").splitlines():
+                match = cls.REF_RE.match(line)
+                if match:
+                    found.append((path.name, match.group(1), match.group(2)))
+        return found
+
+    @classmethod
+    def _exception_docs(cls) -> list[str]:
+        bad: list[str] = []
+        for path in sorted((REPO_ROOT / ".github").rglob("*.yml")):
+            lines = path.read_text(encoding="utf-8").splitlines()
+            for lineno, line in enumerate(lines):
+                if "@master" not in line:
+                    continue
+                nearby = " ".join(lines[max(0, lineno - 2) : lineno + 1])
+                if cls.MASTER_NOTE not in nearby:
+                    bad.append(f"{path.name}:{lineno + 1}: undocumented @master")
+        return bad
 
     @classmethod
     def _find_pins(cls) -> list[str]:
@@ -425,6 +451,20 @@ class TestActionRefs:
 
     def test_every_action_ref_matches_upstream_default(self):
         assert self._find() == []
+
+    def test_ref_count_is_nonzero(self):
+        assert len(self._references()) >= 10, "no action references inspected"
+
+    def test_no_commit_sha_pins(self):
+        shas = [
+            f"{name}: {action}@{ref}"
+            for name, action, ref in self._references()
+            if self.SHA_RE.fullmatch(ref)
+        ]
+        assert shas == [], f"full-commit SHA pins: {shas}"
+
+    def test_master_exceptions_are_documented(self):
+        assert self._exception_docs() == []
 
     def test_no_pinned_tool_versions(self):
         assert self._find_pins() == []
