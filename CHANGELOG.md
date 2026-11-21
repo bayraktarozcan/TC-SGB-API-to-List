@@ -8,7 +8,7 @@
 All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
-## [Unreleased]
+## [v0.3.2.1] — 2026-11-21
 
 ### Changed
 
@@ -208,7 +208,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 Bu projedeki tüm dikkat çekici değişiklikler bu dosyada belgelenecektir.
 Biçim, [Keep a Changelog](https://keepachangelog.com/)'a dayanmaktadır.
 
-## [Yayınlanmamış]
+## [v0.3.2.1] — 2026-11-21
 
 ### Değiştirilen
 
