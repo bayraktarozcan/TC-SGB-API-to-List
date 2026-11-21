@@ -202,7 +202,7 @@ TC-SGB-API-to-List/
 
 ### Tests (`Tests/`)
 
-Flat structure — no subdirectories. 21 files total, 728 tests, 99% coverage.
+Flat structure — no subdirectories. 21 files total, 847 tests, 99% coverage.
 
 | File | Focus |
 |------|-------|
@@ -529,7 +529,7 @@ TC-SGB-API-to-List/
 
 ### Testler (`Tests/`)
 
-Düz yapı — alt dizin yok. Toplam 21 dosya, 728 test, %99 kapsama.
+Düz yapı — alt dizin yok. Toplam 21 dosya, 847 test, %99 kapsama.
 
 | Dosya | Odak |
 |-------|------|
