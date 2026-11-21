@@ -58,7 +58,7 @@ Each GitHub release includes:
 | Checksums | SHA-256 for all artifacts | ~1 KB |
 | Release notes | Auto-generated from PRs | ~10 KB |
 
-### Brave / AdGuard filter list
+### Brave / AdGuard Filter List
 
 Release-asset links are served as file downloads, which Brave rejects as custom
 filter lists. The AdGuard output is therefore also mirrored as plain text on the
@@ -78,7 +78,7 @@ The Azerbaijani `blacklist.gov.az` list is out of scope: its contents proved
 unreliable and unsuitable for a curated blocklist, so it is no longer fetched,
 validated, or published, and its file has been dropped from the branch.
 
-### External safety gate
+### External Safety Gate
 
 Every external feed passes the publication safety policy (`Scripts/src/safety.py`)
 before rendering: exact high-impact hosts are rejected, shared user-content
@@ -493,7 +493,7 @@ Her GitHub sürümü şunları içerir:
 | Doğrulama toplamları | Tüm artifactlar için SHA-256 | ~1 KB |
 | Sürüm notları | PR'lardan otomatik oluşturulmuş | ~10 KB |
 
-### Brave / AdGuard filtre listesi
+### Brave / AdGuard Filtre Listesi
 
 Release bağlantıları dosya indirme olarak sunulur ve Brave bunları özel filtre listesi
 olarak kabul etmez. Bu yüzden AdGuard çıktısı, yuvarlanan tek-commit'lik `filter-lists`
@@ -512,7 +512,7 @@ Azerbaycan `blacklist.gov.az` listesi kapsam dışıdır: içeriği güvenilir o
 seçkin bir engel listesi için uygun düşmediği için artık çekilmiyor, doğrulanmıyor
 veya yayımlanmıyor; dosyası daldan çıkarıldı.
 
-### Harici güvenlik kapısı
+### Harici Güvenlik Kapısı
 
 Her harici akış, oluşturulmadan önce yayımlama güvenlik politikasından
 (`Scripts/src/safety.py`) geçer: tam yüksek etkili makineler reddedilir, ortak

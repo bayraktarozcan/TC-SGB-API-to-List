@@ -102,7 +102,7 @@ Latest pre-generated IoC outputs are published automatically (daily, 19:00 UTC) 
 > unreliable and unsuitable for a curated blocklist, so it is no longer
 > fetched or published.
 
-### Publication safety
+### Publication Safety
 
 Syntax validation checks rule shape; the safety policy in `Scripts/src/safety.py`
 decides whether blocking a host wholesale is safe to publish. High-impact hosts
@@ -165,7 +165,7 @@ TC-SGB-API-to-List/
 | [Roadmap](Docs/Roadmap.md) | Development roadmap |
 | [Legal Notices](Docs/Legal-Notices.md) | Legal and compliance notices |
 
-### Project documents
+### Project Documents
 
 | Document | Description |
 |----------|-------------|
@@ -333,7 +333,7 @@ En güncel önceden üretilmiş IoC çıktıları (her gün, 19:00 UTC) yuvarlan
 > olmadığı ve seçkin bir engel listesi için uygun düşmediği için artık
 > çekilmiyor veya yayımlanmıyor.
 
-### Yayımlama güvenliği
+### Yayımlama Güvenliği
 
 Sözdizimi doğrulaması kural biçimini denetler; `Scripts/src/safety.py` içindeki
 güvenlik politikası bir makinenin toptan engellenmesinin yayımlanmasının güvenli
@@ -398,7 +398,7 @@ TC-SGB-API-to-List/
 | [Yol Haritası](Docs/Roadmap.md) | Geliştirme yol haritası |
 | [Yasal Bildirimler](Docs/Legal-Notices.md) | Hukuki ve uyum bildirimleri |
 
-### Proje belgeleri
+### Proje Belgeleri
 
 | Belge | Açıklama |
 |-------|----------|

@@ -9,7 +9,7 @@ This project is a threat-intelligence tool. It fetches **public IoC
 [T.C. Siber Güvenlik Başkanlığı (SGB)](https://siberguvenlik.gov.tr) API and
 converts it into filtering/blocking lists.
 
-## Our commitment to you
+## Our Commitment to You
 
 - **This project does not collect, store, sell, or share any user data — and it
   never will.**
@@ -24,7 +24,7 @@ converts it into filtering/blocking lists.
   source code, and this statement would be updated and announced through the
   [CHANGELOG](CHANGELOG.md). We would never change it silently.
 
-## What this tool does with data
+## What This Tool Does with Data
 
 - **Source data** — requests are sent to the SGB API to download publicly
   published cyber-threat indicators. No account, login, or personal data is
@@ -37,7 +37,7 @@ converts it into filtering/blocking lists.
 - **Logs** — application logs may include IoC values (domains, IPs, URLs) for
   debugging; these are written where you run the tool.
 
-## About the SGB API and changing rules
+## About the SGB API and Changing Rules
 
 - Queries to the SGB API are governed by the SGB website's terms of use and any
   applicable public-data policies.
@@ -58,7 +58,7 @@ Başkanlığı](https://siberguvenlik.gov.tr) API'si tarafından yayımlanan
 **kamuya açık IoC (tehdit göstergesi) verilerini** indirir ve filtreleme/engelleme
 listelerine dönüştürür.
 
-## Size verdiğimiz söz
+## Size Verdiğimiz Söz
 
 - **Bu proje hiçbir kullanıcı verisini toplamaz, saklamaz, satmaz veya
   paylaşmaz — ve asla paylaşmayacaktır.**
@@ -73,7 +73,7 @@ listelerine dönüştürür.
   bu bildirim güncellenip [CHANGELOG](CHANGELOG.md) üzerinden duyurulur. Asla
   sessizce değiştirmeyiz.
 
-## Bu araç verilerle ne yapar
+## Bu Araç Verilerle ne Yapar
 
 - **Kaynak veriler** — SGB API'sine yalnızca yayımlanmış siber tehdit
   göstergelerini indirmek için istek gönderilir. Hesap, giriş veya kişisel veri
@@ -87,7 +87,7 @@ listelerine dönüştürür.
   (alan adları, IP'ler, URL'ler) içerebilir; bunlar aracı çalıştırdığınız yere
   yazılır.
 
-## SGB API'si ve değişen kurallar hakkında
+## SGB API'si ve Değişen Kurallar Hakkında
 
 - SGB API'sine yapılan sorgular, SGB web sitesinin kullanım koşullarına ve
   geçerli kamuya-açık veri politikalarına tabidir.

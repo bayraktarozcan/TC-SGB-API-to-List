@@ -4,7 +4,7 @@
 
 # Support
 
-## Where to get help
+## Where to Get Help
 
 - **Bugs and feature requests** — open a [GitHub issue](https://github.com/bayraktarozcan/TC-SGB-API-to-List/issues).
 - **Security vulnerabilities** — **do not** open a public issue; follow
@@ -18,7 +18,7 @@ This is an open-source project maintained on a best-effort basis. There is no
 formal support SLA. We aim to respond to issues and pull requests promptly, but
 response times are not guaranteed.
 
-## Before opening an issue
+## Before Opening an İssue
 
 1. Check the [README](README.md), [CHANGELOG](CHANGELOG.md), existing issues,
    and pull requests for a known answer.
@@ -33,7 +33,7 @@ response times are not guaranteed.
 
 # Destek
 
-## Nasıl yardım alınır
+## Nasıl Yardım Alınır
 
 - **Hatalar ve özellik istekleri** — bir [GitHub sorunu](https://github.com/bayraktarozcan/TC-SGB-API-to-List/issues) açın.
 - **Güvenlik açıkları** — herkese açık bir sorun açmayın; [SECURITY.md](SECURITY.md) dosyasındaki (GitHub özel güvenlik açığı bildirimi) yönergeleri izleyin.
@@ -45,7 +45,7 @@ Bu, gönüllülük esasına dayalı olarak bakımı yapılan açık kaynaklı bi
 Resmi bir destek SLA'sı yoktur. Sorun ve pull request'lere hızlıca yanıt vermeyi
 hedefliyoruz ancak yanıt süreleri garanti edilmez.
 
-## Sorun açmadan önce
+## Sorun Açmadan Önce
 
 1. Bilinen bir yanıt için [README](README.md), [CHANGELOG](CHANGELOG.md), mevcut
    sorunları ve pull request'leri inceleyin.

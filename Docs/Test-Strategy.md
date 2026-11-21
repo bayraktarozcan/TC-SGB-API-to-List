@@ -105,7 +105,7 @@ Integration coverage is achieved through `test_pipeline.py` which exercises the 
 
 ## Test Configuration
 
-### pytest Configuration
+### Pytest Configuration
 
 ```toml
 # pyproject.toml
@@ -418,7 +418,7 @@ Entegrasyon kapsamı `test_pipeline.py` aracılığıyla sağlanır; bu dosya sa
 
 ## Test Yapılandırması
 
-### pytest Yapılandırması
+### Pytest Yapılandırması
 
 ```toml
 # pyproject.toml

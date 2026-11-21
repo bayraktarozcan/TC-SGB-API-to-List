@@ -107,7 +107,7 @@ test(client): add retry logic unit tests
 - [ ] Documentation updated (if applicable)
 - [ ] CHANGELOG.md updated (if applicable)
 
-### Known GitHub environment quirk
+### Known GitHub Environment Quirk
 
 > **Note:** the automated `scheduled-fetch` IoC update PRs may show a failed
 > `Code scanning AI findings` / `GitHub Advanced Security` run even though the
@@ -236,7 +236,7 @@ test(client): yeniden deneme mantığı birim testleri ekle
 - [ ] Dokümantasyon güncellendi (gerekirse)
 - [ ] CHANGELOG.md güncellendi (gerekirse)
 
-### Bilinen GitHub ortam tuhaflığı
+### Bilinen GitHub Ortam Tuhaflığı
 
 > **Not:** otomatik `scheduled-fetch` IoC güncelleme PR'larında depo sağlıklı
 > olsa bile `Code scanning AI findings` / `GitHub Advanced Security` run'u
