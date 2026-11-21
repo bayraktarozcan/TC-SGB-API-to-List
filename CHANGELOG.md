@@ -10,6 +10,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [v0.3.2.1] — 2026-11-21
 
+### Added
+
+- **Publication safety policy** — `Scripts/src/safety.py` applies a shared verdict gate (`decide_host`) to both the main TC-SGB line and the external-feed mirrors, with `Tests/test_safety.py` pinning the verdicts; high-impact hosts are rejected, shared user-content infrastructure is held for review, and every held indicator is written to a per-feed audit file instead of being dropped silently.
+- **Third-party feed mirrors** — CERT.PL (Poland) and CERT.SI (Slovenia) lists are fetched, validated, and published to the `filter-lists` branch; the existing TC-SGB list is `01`, and the mirrors use country-prefixed, ordered filenames.
+- **Country-prefixed titles** — external filter-list entries carry pipe-separated country titles and ordered filenames instead of the former `Blocklist` suffix.
+- **Local mirror verifier** — `Scripts/verify_mirror.py` checks the EN/TR agent-guide pair mechanically (hash marker, section count, heading depth sequence, code fences, tables, action-checklist order) and ships a fixture suite for the drift classes.
+
 ### Changed
 
 - **CI dependency policy: always-latest** — version pinning was removed from `AGENTS.md`; third-party GitHub Actions now use `@main`/`@master` or floating major tags, Docker images use `latest`, and the repository setting `sha_pinning_required` is `false` so non-SHA refs pass workflow validation. The same rule is recorded in the Turkish mirror with a matching `sync-sha`.
@@ -24,7 +31,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 ### Removed
 
 - **Azerbaijan feed retired from scope** — the `blacklist.gov.az` list proved unreliable and unsuitable for a curated blocklist, so it is no longer fetched, validated, or published; `03-azerbaycan-blacklist_adguard.txt` is dropped from the `filter-lists` branch. The publication safety policy, per-feed audits, and the `validate-external` gate it was introduced with keep running for the remaining feeds.
-- **List order fixed** — Slovenia takes the freed `03` slot (`05-slovenya-certsi_adguard.txt` → `03-slovenya-certsi_adguard.txt`), so numbering runs 01–03 with `04` still reserved for Lithuania, whose source sits behind a Cloudflare challenge and cannot be fetched yet.
+- **BREAKING (data mirror): list order fixed** — Slovenia takes the freed `03` slot (`05-slovenya-certsi_adguard.txt` → `03-slovenya-certsi_adguard.txt`), so numbering runs 01–03 with `04` still reserved for Lithuania, whose source sits behind a Cloudflare challenge and cannot be fetched yet. Subscribers to the raw `filter-lists` branch must update the Slovenian URL; the package API is unchanged.
 
 ### Fixed
 
@@ -32,6 +39,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 - **GitLab `link-check` job** — lychee runs with an empty entrypoint (the GitLab-generated shell script was being read as a config file); the Cisco EULA URL, which returns 403 to bots, is excluded in both the GitHub and GitLab link-check configurations.
 - **CI `pip-audit` gate** — setuptools is upgraded before `pip-audit` in the CI security job so known advisories do not block the build. The weekly update PR that originally needed this was later removed with the compiled-snapshot tooling.
 - **S3 service roots no longer blocked wholesale** — a URL indicator could be promoted to its host (`||s3.amazonaws.com^`), blocking every bucket on the endpoint. Shared S3 service endpoints are now recognised by the safety policy, so a URL on one is never promoted to a host rule; bucket-specific hosts remain eligible.
+- **Fetch pagination** — the server's `pageCount`/`totalCount` metadata is no longer trusted, so every API page is fetched even when the server reports a smaller count.
+- **Missing external feed files** — an unreachable or absent feed file is skipped with a `skipped` verdict instead of failing the whole publish gate.
+- **Scheduled automation hardening** — valid `scheduled-fetch-*` branch names, rebase instead of merge for scheduled and Dependabot PR branches, Türkiye-time labels in commit messages, and the `filter-lists` branch mirrored to GitLab.
+- **Housekeeping** — the duplicate lowercase `Output/blocklists` tree was removed, and best-effort validator parsing now uses `contextlib.suppress`.
 
 ## [v0.3.2.0] — 2026-10-12
 
@@ -210,6 +221,13 @@ Biçim, [Keep a Changelog](https://keepachangelog.com/)'a dayanmaktadır.
 
 ## [v0.3.2.1] — 2026-11-21
 
+### Eklenen
+
+- **Yayımlama güvenlik politikası** — `Scripts/src/safety.py`, hem TC-SGB ana hattına hem harici akış aynalarına paylaşılı karar kapısı (`decide_host`) uygular; `Tests/test_safety.py` kararları sabitledir. Yüksek etkili ana makineler reddedilir, paylaşımlı kullanıcı içeriği altyapısı incelemeye alınır ve tutulan her gösterge sessizce düşürülmek yerine akış başına denetim dosyasına yazılır.
+- **Üçüncü taraf akış aynaları** — CERT.PL (Polonya) ve CERT.SI (Slovenya) listeleri çekilir, doğrulanır ve `filter-lists` dalında yayımlanır; mevcut TC-SGB listesi `01`'dir ve aynalar ülke önekli, sıralı dosya adları kullanır.
+- **Ülke önekli başlıklar** — harici filtre listesi girdileri artık eski `Blocklist` son eki yerine boru ayracıyla ayrılmış ülke başlıkları ve sıralı dosya adları taşır.
+- **Yerel ayna doğrulayıcısı** — `Scripts/verify_mirror.py`, EN/TR ajan kılavuzu çiftini mekanik olarak denetler (sağlama işareti, bölüm sayısı, başlık derinliği sırası, kod blokları, tablolar, eylem denetim listesi sırası) ve süren sınıfı sabitleme dosyalarıyla birlikte gelir.
+
 ### Değiştirilen
 
 - **CI bağımlılık politikası: her daim en güncel** — `AGENTS.md`'den sürüm sabitleme kuralı kaldırıldı; üçüncü taraf GitHub Actions artık `@main`/`@master` veya kayan büyük sürüm etiketleri, Docker görüntüleri `latest` kullanıyor ve depo ayarı `sha_pinning_required` değeri `false`, böylece SHA olmayan ref'ler iş akışı doğrulamasından geçiyor. Aynı kural Türkçe aynada eşleşen `sync-sha` ile kayıtlı.
@@ -224,7 +242,7 @@ Biçim, [Keep a Changelog](https://keepachangelog.com/)'a dayanmaktadır.
 ### Silinen
 
 - **Azerbaycan akışı kapsamdan çıkarıldı** — `blacklist.gov.az` listesi güvenilir olmadığı ve seçkin bir engel listesi için uygun düşmediği için artık çekilmiyor, doğrulanmıyor veya yayımlanmıyor; `03-azerbaycan-blacklist_adguard.txt` dosyası `filter-lists` dalından çıkarıldı. Yayımlama güvenlik politikası, akış başına denetimler ve akışla birlikte gelen `validate-external` kapısı kalan akışlarda çalışmaya devam ediyor.
-- **Liste sırası düzeltildi** — Slovenya boşalan `03` numarasını aldı (`05-slovenya-certsi_adguard.txt` → `03-slovenya-certsi_adguard.txt`), böylece numaralandırma 01–03 arasında akıyor ve `04` hâlâ Litvanya için ayrılmış; kaynağının arkasında bir Cloudflare doğrulaması olduğu için henüz çekilemiyor.
+- **KIRICI (veri aynası): liste sırası düzeltildi** — Slovenya boşalan `03` numarasını aldı (`05-slovenya-certsi_adguard.txt` → `03-slovenya-certsi_adguard.txt`), böylece numaralandırma 01–03 arasında akıyor ve `04` hâlâ Litvanya için ayrılmış; kaynağının arkasında bir Cloudflare doğrulaması olduğu için henüz çekilemiyor. Ham `filter-lists` dalına abone olanlar Slovenya URL'sini güncellemeli; paket API'si değişmedi.
 
 ### Düzeltilen
 
@@ -232,6 +250,10 @@ Biçim, [Keep a Changelog](https://keepachangelog.com/)'a dayanmaktadır.
 - **GitLab `link-check` işi** — lychee boş entrypoint ile çalışıyor (GitLab'in ürettiği kabuk betiği yapılandırma dosyası olarak okunuyordu); botlara 403 döndüren Cisco EULA URL'si hem GitHub hem GitLab bağlantı denetimi yapılandırmalarında hariç tutuluyor.
 - **CI `pip-audit` kapısı** — CI güvenlik işinde `pip-audit` öncesinde setuptools yükseltiliyor, böylece bilinen uyarılar derlemeyi engellemiyor. Başlangıçta bunu gerektiren haftalık güncelleme PR'ı, derlenmiş anlık görüntü araçlarıyla birlikte daha sonra kaldırıldı.
 - **S3 servis kökleri artık toptan engellenmiyor** — bir URL göstergesi ana makinesine yükseltilerek (`||s3.amazonaws.com^`) uçtaki tüm bucket'ları engelleyebiliyordu. Paylaşımlı S3 servis uçları artık güvenlik politikası tarafından tanınıyor; böyle bir uçtaki URL ana makine kuralına yükseltilmiyor, bucket'a özgü ana makineler kurala dönüşmeye devam ediyor.
+- **Çekme sayfalaması** — sunucunun `pageCount`/`totalCount` üst verisi artık güvenilmez; sunucu daha küçük bir sayı bildirse de tüm API sayfaları çekilir.
+- **Eksik harici akış dosyaları** — erişilemeyen veya var olmayan bir akış dosyası, tüm yayımlama kapısını başarısız kılmak yerine `skipped` kararıyla atlanır.
+- **Zamanlanmış otomasyon sağlamlaştırması** — geçerli `scheduled-fetch-*` dal adları, zamanlanmış ve Dependabot PR dallarında birleştirme yerine rebase, commit iletilerinde Türkiye saati etiketi ve `filter-lists` dalının GitLab'a aynalanması.
+- **Düzeltme** — yinelenen küçük harfli `Output/blocklists` ağacı kaldırıldı ve iyimser doğrulayıcı ayrıştırması `contextlib.suppress` kullanacak şekilde değiştirildi.
 
 ## [v0.3.2.0] — 2026-10-12
 
