@@ -107,7 +107,7 @@ Output/
 Test-output/
 
 # Scratch space (named once in the AGENTS.md project layer; cleared at task end)
-/scratch/
+/Scratch/
 
 # Runtime data cache
 Data/*.json

@@ -113,7 +113,7 @@ class TestIgnoreCompliance:
         assert idx_reinclude > idx_pattern, "re-include must follow the pattern it narrows"
 
     def test_scratch_pattern_present(self):
-        assert "/scratch/" in _read(".gitignore").splitlines()
+        assert "/Scratch/" in _read(".gitignore").splitlines()
 
     def test_no_markers_in_tracked_tree(self):
         found = [

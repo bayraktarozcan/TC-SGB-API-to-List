@@ -160,7 +160,7 @@ Exemptions (each with its reason):
 
 ## Hidden Layers
 
-- Scratch directory (named once, here): `/scratch/` (pattern in `.gitignore`;
+- Scratch directory (named once, here): `/Scratch/` (pattern in `.gitignore`;
   cleared at task end, recreated on demand, never committed).
 - `.venv/`, `Output/`, and tool caches are exempt build output: no markers, no
   tests over them beyond the repo-convention guards.
@@ -876,4 +876,4 @@ Runtimes use the current LTS line (Node.js LTS, .NET LTS); build output goes thr
 - `.git/` is the **internal Git repository structure**, not a project config file.
 
 **Guiding rule:** "It looks special" does not mean "It is a standard special file." The meaning of any file is determined by the software that reads and interprets it.
-<!-- mirror-sync: sync-sha=5d4ab38f765385685dc962bcdb609664b40fa4a0 -->
+<!-- mirror-sync: sync-sha=d572812c33e8de7ec4f0bf78660a36cc2031f53b -->
