@@ -40,7 +40,6 @@ dev = [
     "pip-audit",
     "hypothesis",
     "types-PyYAML",
-    "pip-tools>=7.6",
 ]
 
 [project.scripts]
