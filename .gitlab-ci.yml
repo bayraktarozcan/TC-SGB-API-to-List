@@ -101,7 +101,7 @@ secret-scan:
   needs: []
   script:
     - apt-get update && apt-get install -y --no-install-recommends curl ca-certificates git && rm -rf /var/lib/apt/lists/*
-    - VER=$(curl -sSL https://api.github.com/repos/gitleaks/gitleaks/releases/latest | grep -oE 'tag_name[^,]+' | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+')
+    - VER=$(curl -sSL https://api.github.com/repos/gitleaks/gitleaks/releases/latest | grep -oE '"tag_name"[[:space:]]*:[[:space:]]*"v[0-9]+(\.[0-9]+)*"' | grep -oE 'v[0-9]+(\.[0-9]+)*')
     - NUM=$(echo "$VER" | sed 's/^v//')
     - echo "Latest gitleaks: $VER"
     - curl -sSL -o /tmp/gitleaks.tar.gz "https://github.com/gitleaks/gitleaks/releases/download/${VER}/gitleaks_${NUM}_linux_x64.tar.gz"
