@@ -47,10 +47,13 @@ runs:
           --arg repo "${{ github.repository }}" --arg tag "${TAG}" '
           $names | map({name: ., url: ("https://github.com/" + $repo + "/releases/download/" + $tag + "/" + .), link_type: "other"})')
 
-        BODY=$(jq -n --argjson links "$LINKS" '{
+        BODY=$(jq -n --argjson links "$LINKS" \
+          --arg description "$(
+            sed -n '1,$p' .github/release-bodies/ioc-data.md
+          )" '{
           tag_name: "ioc-data",
-          name: "IoC Data (all formats)",
-          description: "Rolling release: all IoC outputs (16 formats + raw_records.json + fetch logs) mirrored to this GitLab release after each push to GitHub main.",
+          name: "IoC Data (Large Formats)",
+          description: $description,
           assets: { links: $links }
         }')
 
