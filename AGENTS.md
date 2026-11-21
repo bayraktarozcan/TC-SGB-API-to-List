@@ -16,7 +16,7 @@ normalizes, scores, and deduplicates them, then exports to 16 formats.
 - Python `>=3.11`, packages in `pyproject.toml`; runtime deps are `httpx`,
   `pydantic`, `python-dotenv`, `pyyaml`.
 - Source lives in `Scripts/src/`; the CLI entry point is `Scripts/main.py`.
-- Tests live in `tests/` (pytest, `asyncio_mode = auto`).
+- Tests live in `Tests/` (pytest, `asyncio_mode = auto`).
 
 ## Quality Gate (Always Run before Claiming Work Complete)
 
@@ -30,7 +30,7 @@ Use the project virtualenv at `.venv`:
 & .venv\Scripts\python.exe -m pytest --cov=Scripts --cov-report=term-missing -q
 ```
 
-Baseline at last check: 847 tests passing, ~99% coverage, zero ruff/mypy/bandit
+Baseline at last check: 848 tests passing, ~99% coverage, zero ruff/mypy/bandit
 findings. Do not drop below it.
 
 ## Conventions
@@ -110,7 +110,7 @@ same checks (see `.github/workflows/ci.yml`, `.gitlab-ci.yml`).
 - Setup: `pip install -e ".[dev]"` (resolves latest compatible versions from
   `pyproject.toml`). `requirements.txt` is an unpinned `@latest` list, not a
   compiled snapshot.
-- CLI verbs: `tc-sgb fetch | generate | index | stats | validate | health | fetch-external`.
+- CLI verbs: `tc-sgb fetch | generate | index | stats | validate | health | fetch-external | validate-external`.
 - Local gate = the Quality gate block (ruff, ruff format, mypy, bandit, pytest).
 - Mirror check: `Scripts/verify_mirror.py AGENTS.md AGENTS-TR.md`.
 
@@ -876,4 +876,4 @@ Runtimes use the current LTS line (Node.js LTS, .NET LTS); build output goes thr
 - `.git/` is the **internal Git repository structure**, not a project config file.
 
 **Guiding rule:** "It looks special" does not mean "It is a standard special file." The meaning of any file is determined by the software that reads and interprets it.
-<!-- mirror-sync: sync-sha=7e3a54ca080787ffb45d132a8e354b9bd0294bcb -->
+<!-- mirror-sync: sync-sha=5d4ab38f765385685dc962bcdb609664b40fa4a0 -->

@@ -58,7 +58,7 @@ This document defines the comprehensive testing strategy for the TC-SGB-API-to-L
 | performance.py | test_performance.py | 18 | Throughput benchmarks |
 | changelog.py | test_changelog.py | 15 | Changelog generation & diff engine |
 | main.py | test_main.py | 34 | CLI entry point & pipeline wiring |
-| **Total** | 13 test files | **487** | — |
+| **Total** | 26 test files | **848** | — |
 
 **Example Unit Test**:
 
@@ -276,7 +276,7 @@ pytest -m performance --benchmark-only
 |  Fuzz:               5 passed, 0 crashes                            |
 |  Performance:        6 passed, 0 regressions                        |
 |                                                                     |
-|  Total: 847 tests, 0 failed                                          |
+|  Total: 848 tests, 0 failed                                          |
 |                                                                     |
 |  Coverage: 99% (branch)                                             |
 |                                                                     |
@@ -561,7 +561,7 @@ pytest Tests/test_validator.py::test_valid_record_passes
 |  Test Raporu Biçimi                                                  |
 +=====================================================================+
 |                                                                     |
-|  Toplam: 847 test, 0 başarısız                                     |
+|  Toplam: 848 test, 0 başarısız                                     |
 |                                                                     |
 |  Kapsam: %99 (testlerin kodun her satırını çalıştırıp               |
 |  çalıştırmadığını ölçer)                                           |
