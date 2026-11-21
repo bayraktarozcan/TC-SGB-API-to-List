@@ -2,7 +2,22 @@
 
 from __future__ import annotations
 
+from pathlib import Path
+
+import pytest
+
 from Scripts import check_release_hygiene as module
+
+
+@pytest.fixture(autouse=True)
+def _canonical_fixture(tmp_path: Path, monkeypatch):
+    monkeypatch.setattr(module, "ROOT", tmp_path)
+    (tmp_path / "pyproject.toml").write_text('version = "0.3.2.2"\n', encoding="utf-8")
+    (tmp_path / "CHANGELOG.md").write_text(
+        "## [v1.0.0.0] — 2026-11-21\n\n### Added\n\n- item\n"
+        '<a id="-türkçe"></a>\n\n## [v1.0.0.0] — 2026-11-21\n\n### Eklenen\n\n- madde\n',
+        encoding="utf-8",
+    )
 
 
 def release(tag: str, title: str, body: str) -> dict[str, str]:

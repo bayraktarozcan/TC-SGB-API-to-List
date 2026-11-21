@@ -43,7 +43,6 @@ class TestReleaseFetch:
 
         monkeypatch.setattr(module.subprocess, "run", fake_run)
         monkeypatch.setattr(module.urllib.request, "urlopen", fake_urlopen)
-        monkeypatch.setenv("GITLAB_PUSH_TOKEN", "token")
         gh, gl = module.releases()
         assert set(gh) == {"v1"}
         assert set(gl) == {"v1"}
@@ -56,8 +55,11 @@ class TestReleaseFetch:
         def fake_run(*_args, **_kwargs):
             return FakeRun(json.dumps([{"tag_name": "v1"}]))
 
+        def fail_urlopen(*_args, **_kwargs):
+            raise OSError("network blocked")
+
         monkeypatch.setattr(module.subprocess, "run", fake_run)
-        monkeypatch.delenv("GITLAB_PUSH_TOKEN", raising=False)
+        monkeypatch.setattr(module.urllib.request, "urlopen", fail_urlopen)
         gh, gl = module.releases()
         assert set(gh) == {"v1"}
         assert set(gl) == {"v1"}
@@ -113,3 +115,16 @@ class TestGarbageAndParity:
 
     def test_cross_host_body_mismatch(self, monkeypatch):
         assert any("cross-host" in f for f in self._run(monkeypatch, BODY, BODY + "extra\n"))
+
+    def test_changelog_coverage_detects_missing_bullet(self, monkeypatch, tmp_path: Path):
+        changelog = (
+            "## [v1.0.0.0] — 2026-11-21\n\n### Added\n\n- missing bullet\n"
+            '<a id="-türkçe"></a>\n\n## [v1.0.0.0] — 2026-11-21\n\n### Eklenen\n\n- eksik madde\n'
+        )
+        (tmp_path / "CHANGELOG.md").write_text(changelog, encoding="utf-8")
+        monkeypatch.setattr(module, "ROOT", tmp_path)
+        gh = {"v1.0.0.0": release("v1.0.0.0", "v1.0.0.0 — Good Title", BODY)}
+        gl = {"v1.0.0.0": gl_release("v1.0.0.0", "v1.0.0.0 — Good Title", BODY)}
+        monkeypatch.setattr(module, "releases", lambda: (gh, gl))
+        monkeypatch.setattr(module, "current_version", lambda: "v1.0.0.0")
+        assert any("changelog-coverage" in f for f in module.check())

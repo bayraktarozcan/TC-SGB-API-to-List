@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import json
-import os
 import re
 import subprocess  # nosec B404
 import urllib.request
@@ -46,15 +45,16 @@ def releases() -> tuple[dict[str, dict[str, str]], dict[str, dict[str, str]]]:
         check=True,
     ).stdout
     gh = {r["tag_name"]: r for r in json.loads(gh_raw)}
-    token = os.environ.get("GITLAB_PUSH_TOKEN", "")
-    if token:
+    # Read-only audit: the public REST endpoint needs no credential. glab is
+    # only a local fallback for machines where the network blocks the API.
+    try:
         request = urllib.request.Request(
             f"https://gitlab.com/api/v4/projects/{GL_PROJECT}/releases?per_page=100",
-            headers={"PRIVATE-TOKEN": token},
+            headers={"User-Agent": "release-hygiene-audit"},
         )
         with urllib.request.urlopen(request, timeout=30) as response:  # nosec B310  # noqa: S310
             gl_data = json.load(response)
-    else:
+    except OSError:
         gl_data = json.loads(
             subprocess.run(  # noqa: S603  # nosec B603, B607
                 ["glab", "api", f"projects/{GL_PROJECT}/releases"],  # noqa: S607  # nosec B607
@@ -139,6 +139,37 @@ def check() -> list[str]:
         failures.append("cross-host: " + ", ".join(mismatches))
     else:
         print("PASS cross-host: titles and bodies byte-identical after LF normalization")
+
+    coverage = []
+    changelog = (ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
+    en_changelog, tr_changelog = changelog.split('<a id="-türkçe"></a>', 1)
+    checked = 0
+    for tag, record in gh.items():
+        if tag == "ioc-data":
+            continue
+        body = (record.get("body") or "").replace("\r\n", "\n")
+        if '<a id="-türkçe"></a>' not in body:
+            coverage.append(f"{tag}: no bilingual body")
+            continue
+        en_body, tr_body = body.split('<a id="-türkçe"></a>', 1)
+        for half, source in ((en_body, en_changelog), (tr_body, tr_changelog)):
+            parts = source.split(f"## [{tag}]", 1)
+            if len(parts) < 2:
+                coverage.append(f"{tag}: no changelog section")
+                continue
+            section = parts[1].split("\n## [", 1)[0]
+            for line in section.splitlines():
+                if not line.startswith("- "):
+                    continue
+                key = re.sub(r"\s*\(?#\d+\)?", "", line[2:])
+                key = re.sub(r"\s+", " ", key).strip().rstrip(" .")[:40]
+                checked += 1
+                if key not in half:
+                    coverage.append(f"{tag}: bullet missing: {key[:50]}")
+    if coverage:
+        failures.append("changelog-coverage: " + ", ".join(coverage[:10]))
+    else:
+        print(f"PASS changelog-coverage: {checked} bullets present on both hosts")
     return failures
 
 
