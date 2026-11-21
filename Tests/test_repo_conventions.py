@@ -360,6 +360,61 @@ class TestFinalNewline:
             planted.unlink(missing_ok=True)
 
 
+class TestActionRefs:
+    """Third-party actions use a ref that exists upstream, never a guess.
+
+    The map is local and deterministic so the gate never depends on the
+    network. It records each upstream default branch read on 2026-11-21; a
+    future upstream rename is a code change that updates this map.
+    """
+
+    DEFAULT_BRANCH: ClassVar[dict[str, str]] = {
+        "actions/checkout": "main",
+        "actions/setup-python": "main",
+        "actions/upload-artifact": "main",
+        "actions/configure-pages": "main",
+        "actions/upload-pages-artifact": "main",
+        "actions/deploy-pages": "main",
+        "github/codeql-action/init": "main",
+        "github/codeql-action/autobuild": "main",
+        "github/codeql-action/analyze": "main",
+        "lycheeverse/lychee-action": "master",
+        "rhysd/actionlint": "main",
+        "gitleaks/gitleaks-action": "master",
+    }
+    REF_RE = re.compile(r"^\s*(?:-\s*)?uses:\s*([^/\s]+/[^@\s]+)@([A-Za-z0-9._-]+)\s*(?:#.*)?$")
+
+    @classmethod
+    def _find(cls) -> list[str]:
+        bad: list[str] = []
+        for path in sorted((REPO_ROOT / ".github").rglob("*.yml")):
+            for lineno, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+                match = cls.REF_RE.match(line)
+                if not match:
+                    continue
+                action, ref = match.group(1), match.group(2)
+                if action.startswith("./"):
+                    continue
+                expected = cls.DEFAULT_BRANCH.get(action)
+                if expected is None:
+                    bad.append(f"{path.name}:{lineno}: unlisted action {action}")
+                elif ref != expected:
+                    bad.append(f"{path.name}:{lineno}: {action}@{ref} != @{expected}")
+        return bad
+
+    def test_every_action_ref_matches_upstream_default(self):
+        assert self._find() == []
+
+    def test_checker_flags_wrong_ref(self):
+        line = "      - uses: lycheeverse/lychee-action@main"
+        match = self.REF_RE.match(line)
+        assert match is not None
+        assert match.group(2) != self.DEFAULT_BRANCH[match.group(1)]
+
+    def test_checker_flags_unlisted_action(self):
+        assert self.REF_RE.match("      - uses: unknown/action@main") is not None
+
+
 class TestMirrorPairGuards:
     """The AGENTS.md mirror contract verifies against the live documents.
 
