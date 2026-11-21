@@ -30,7 +30,7 @@ Use the project virtualenv at `.venv`:
 & .venv\Scripts\python.exe -m pytest --cov=Scripts --cov-report=term-missing -q
 ```
 
-Baseline at last check: 728 tests passing, ~97% coverage, zero ruff/mypy/bandit
+Baseline at last check: 728 tests passing, ~99% coverage, zero ruff/mypy/bandit
 findings. Do not drop below it.
 
 ## Conventions
@@ -707,11 +707,11 @@ This section is the single owner of the line-endings rule; the bullet under "Lan
 - **Testing quality bar.** The test suite must pass before any commit. Coverage target: at least 80% overall, 100% for critical business logic. Pre-commit gates: lint and format, secret scan, `.gitignore` compliance, unit tests. Levels: unit, integration, end-to-end, performance; each level gets its own suite and CI job. Every guard is first seen to fail (see Root principles).
 - **Service security.** API keys, tokens, and passwords never live in code; a running service receives them at run time from a secret store or the environment (see "Transport, protocols & credentials"). Every endpoint defines authentication and authorization (least privilege), input validation, rate limiting, and a CORS policy.
 
-### Landing Page (when the project Has One)
+### Landing Page (When the Project Has One)
 
 Single page: OLED-friendly true black (`#000000`) background, low-blue-light soft contrast, dark theme, minimal JS with no external libraries; carries the project name, description, links, and technical facts. 16px-base `system-ui` font stack, CSS Grid or Flexbox layout, gzip footprint under 10 KB.
 
-### Local human-language Mirror
+### Local Human-Language Mirror
 
 - An untracked, gitignored mirror of this file in the human's reading language may be kept for auditing. It is never committed or pushed and is not named anywhere in committed output.
 - Whenever this file changes (after approval), refresh the mirror content, then re-run the project's mirror verifier and write the value it reports into the `sync-sha` marker of both files. The check is mechanical on purpose: a hand-remembered hash drifts silently the moment this file is edited twice without the mirror being revisited.
@@ -757,7 +757,7 @@ The project layer is where project facts live. It declares at least the items be
 
 Runtimes use the current LTS line (Node.js LTS, .NET LTS); build output goes through the language's standard build command (`dotnet build`, `go build`, `cargo build`). Dependency scope follows "Local dependencies": global by default; a virtual environment (Python: `.venv/`) or any other project-scope install is an exception that needs the person's approval, recorded in the project layer.
 
-### Supplemental `.gitignore` patterns (by project type)
+### Supplemental `.gitignore` Patterns (by Project Type)
 
 - Python: `__pycache__/`, `*.pyc`, `.venv/`, `*.egg-info/`, `.mypy_cache/`, `.pytest_cache/`, `.ruff_cache/`
 - Node.js: `node_modules/`, `dist/`, `.next/`, `*.tsbuildinfo`
@@ -875,4 +875,4 @@ Runtimes use the current LTS line (Node.js LTS, .NET LTS); build output goes thr
 - `.git/` is the **internal Git repository structure**, not a project config file.
 
 **Guiding rule:** "It looks special" does not mean "It is a standard special file." The meaning of any file is determined by the software that reads and interprets it.
-<!-- mirror-sync: sync-sha=4a36cf1a8b34c229ef9926ddbf958a5ebdc771e0 -->
+<!-- mirror-sync: sync-sha=6366a52c101b2079ad38c736071f64180c6cf32f -->
