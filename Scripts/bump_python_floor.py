@@ -66,6 +66,7 @@ SUPPORTED_METADATA: dict[str, tuple[str, ...]] = {
 REPLACEMENTS = {**FLOOR_DECLARATIONS, **SUPPORTED_METADATA}
 
 MARKER_RE = re.compile(r"<!-- mirror-sync: sync-sha=[0-9a-fA-F]+ -->")
+OPTIONAL_FILES = frozenset({"AGENTS-TR.md"})
 
 
 def read_floor(root: Path) -> str:
@@ -140,7 +141,8 @@ def find_drift(root: Path) -> list[str]:
     for name, templates in FLOOR_DECLARATIONS.items():
         path = root / name
         if not path.exists():
-            problems.append(f"{name}: missing file")
+            if name not in OPTIONAL_FILES:
+                problems.append(f"{name}: missing file")
             continue
         text = path.read_bytes().decode("utf-8")
         for template in templates:
@@ -154,7 +156,8 @@ def find_drift(root: Path) -> list[str]:
     for name, templates in SUPPORTED_METADATA.items():
         path = root / name
         if not path.exists():
-            problems.append(f"{name}: missing file")
+            if name not in OPTIONAL_FILES:
+                problems.append(f"{name}: missing file")
             continue
         text = path.read_bytes().decode("utf-8")
         for template in templates:

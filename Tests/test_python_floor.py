@@ -7,6 +7,8 @@ from datetime import date
 from io import BytesIO
 from pathlib import Path
 
+import pytest
+
 from Scripts import bump_python_floor as module
 from Scripts.bump_python_floor import (
     FLOOR_DECLARATIONS,
@@ -20,6 +22,7 @@ from Scripts.bump_python_floor import (
 from Scripts.verify_mirror import marker_value
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
+MIRROR = "AGENTS-TR.md"
 
 CYCLES = {
     "3.15": {"status": "bugfix", "end_of_life": "2031-10"},
@@ -29,6 +32,12 @@ CYCLES = {
     "3.11": {"status": "security", "end_of_life": "2027-10"},
     "3.10": {"status": "end-of-life", "end_of_life": "2026-10-01"},
 }
+
+
+def _payload():
+    import json
+
+    return BytesIO(json.dumps({f"3.{n}": {"status": "security"} for n in range(5, 20)}).encode())
 
 
 class TestResolveFloor:
@@ -61,16 +70,8 @@ class TestResolveFloor:
         assert resolve_floor(cycles, date(2026, 11, 21)) == "3.11"
 
     def test_empty_calendar_rejected(self):
-        import pytest
-
         with pytest.raises(ValueError, match="no supported"):
             resolve_floor({}, date(2026, 11, 21))
-
-
-def _payload():
-    import json
-
-    return BytesIO(json.dumps({f"3.{n}": {"status": "security"} for n in range(5, 20)}).encode())
 
 
 class TestFetchCycles:
@@ -89,7 +90,7 @@ class TestFetchCycles:
 
         monkeypatch.setattr(module.urllib.request, "urlopen", fake_urlopen)
         monkeypatch.setattr(module.time, "sleep", lambda _n: None)
-        assert module.fetch_cycles(attempts=2) == module.fetch_cycles(attempts=1)
+        assert len(module.fetch_cycles(attempts=2)) == 15
         assert len(calls) >= 2
 
     def test_exhausted_retries_raise(self, monkeypatch):
@@ -98,8 +99,6 @@ class TestFetchCycles:
 
         monkeypatch.setattr(module.urllib.request, "urlopen", fail)
         monkeypatch.setattr(module.time, "sleep", lambda _n: None)
-        import pytest
-
         with pytest.raises(RuntimeError, match="could not fetch"):
             module.fetch_cycles(attempts=2)
 
@@ -110,8 +109,6 @@ class TestFetchCycles:
             lambda *_a, **_k: BytesIO(b'{"a": 1}'),
         )
         monkeypatch.setattr(module.time, "sleep", lambda _n: None)
-        import pytest
-
         with pytest.raises(RuntimeError, match="could not fetch"):
             module.fetch_cycles(attempts=1)
 
@@ -125,12 +122,10 @@ class TestFloorParity:
 
     def test_guard_flags_planted_drift(self, tmp_path: Path):
         _copy_declarations(tmp_path)
-        (tmp_path / "pyproject.toml").write_text(
+        (tmp_path / "pyproject.toml").write_bytes(
             (tmp_path / "pyproject.toml")
             .read_bytes()
-            .decode("utf-8")
-            .replace('requires-python = ">=3.11"', 'requires-python = ">=3.12"', 1),
-            encoding="utf-8",
+            .replace(b'requires-python = ">=3.11"', b'requires-python = ">=3.12"', 1)
         )
         assert find_drift(tmp_path), "planting a drift must be detected"
 
@@ -148,8 +143,6 @@ class TestFloorParity:
         assert any("missing metadata" in problem for problem in find_drift(tmp_path))
 
     def test_read_floor_raises_without_declaration(self, tmp_path: Path):
-        import pytest
-
         (tmp_path / "pyproject.toml").write_text("[project]\n", encoding="utf-8")
         with pytest.raises(ValueError, match="requires-python not found"):
             read_floor(tmp_path)
@@ -174,7 +167,7 @@ class TestApplyBump:
         after = marker_value((tmp_path / "AGENTS.md").read_bytes().decode("utf-8"))
         assert after is not None
         assert after != before
-        mirror_after = marker_value((tmp_path / "AGENTS-TR.md").read_bytes().decode("utf-8"))
+        mirror_after = marker_value((tmp_path / MIRROR).read_bytes().decode("utf-8"))
         assert mirror_after == after
 
     def test_classifier_dedup_on_bump(self, tmp_path: Path):
@@ -234,8 +227,6 @@ class TestApplyBump:
         assert module.main() == 0
 
     def test_main_rejects_bad_version(self, monkeypatch):
-        import pytest
-
         monkeypatch.setattr("sys.argv", ["prog", "apply", "python3"])
         with pytest.raises(SystemExit):
             module.main()
@@ -246,4 +237,12 @@ def _copy_declarations(destination: Path) -> None:
         source = REPO_ROOT / name
         target = destination / name
         target.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copyfile(source, target)
+        if source.exists():
+            shutil.copyfile(source, target)
+        elif name == MIRROR:
+            # The Turkish mirror is gitignored and absent in a clean CI checkout.
+            # Synthesize a minimal stand-in so marker refresh remains testable.
+            target.write_bytes(
+                b"<!-- mirror-sync: sync-sha=0000000000000000000000000000000000000000 -->\n"
+                b"- Python `>=3.11`\n"
+            )
