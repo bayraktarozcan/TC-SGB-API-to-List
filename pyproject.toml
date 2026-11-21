@@ -94,7 +94,6 @@ ignore = [
 [tool.ruff.lint.per-file-ignores]
 "Tests/**" = ["S101", "ARG", "T20", "S311", "F841", "E501", "E741", "RUF059", "RUF001", "S404", "S603"]
 "Scripts/main.py" = ["E402"]
-"Scripts/sync_deps.py" = ["S603"]
 # PascalCase package roots mandated by the project Naming section.
 "Scripts/__init__.py" = ["N999"]
 "Scripts/src/__init__.py" = ["N999"]

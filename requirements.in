@@ -1,5 +1,0 @@
-# Runtime dependencies - always latest stable
-httpx
-pydantic
-pyyaml
-python-dotenv
