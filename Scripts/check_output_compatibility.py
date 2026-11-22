@@ -185,6 +185,8 @@ def run_checks(require_tools: bool = False) -> list[str]:
                     require_tools,
                 )
             )
+        elif require_tools:
+            results.append("[FAIL] suricata: no system suricata.yaml found")
         else:
             results.append("[SKIP] suricata: no system suricata.yaml found")
 

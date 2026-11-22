@@ -126,6 +126,14 @@ class TestRunChecks:
             lines = run_checks()
         assert any(line.startswith("[SKIP] suricata") for line in lines)
 
+    def test_missing_suricata_config_fails_when_required(self):
+        with (
+            patch("Scripts.check_output_compatibility.shutil.which", return_value=None),
+            patch.object(Path, "is_file", return_value=False),
+        ):
+            lines = run_checks(require_tools=True)
+        assert any(line.startswith("[FAIL] suricata") for line in lines)
+
 
 class TestCli:
     def test_parser_flag(self):

@@ -142,7 +142,7 @@ The TC-SGB-API-to-List system is an automated threat intelligence pipeline that 
 |  PR       |    -------->  |  4. Lint (ruff)  |
 |           |               |  5. Type Check   |
 |  Tag      |    -------->  |  6. Test (pytest)|
-|  v*       |               |  7. Compatibility|
+|  v*       |               |  7. Compat check |
 |           |               |  8. Build        |
 +-----------+               +------------------+
                                      |
@@ -196,16 +196,14 @@ The TC-SGB-API-to-List system is an automated threat intelligence pipeline that 
 
   Event Loop (asyncio)
   +---------------------------------------------------------+
-  |                                                         |
-  |  Fetch page 1 [=====] -> page 2 [=====] -> page N      |
-  |                                                         |
-  |                                                         |
+  |  Fetch page 1 -> page 2 -> ... -> page N                |
+  |  Lock-guarded rate limit + exponential backoff          |
   +---------------------------------------------------------+
                           |
                           v
   +---------------------------------------------------------+
   |  Sequential Processing Pipeline                         |
-  |  Fetch -> Validate -> Normalize -> Quality -> Dedup -> Output |
+  |  Fetch -> Validate -> Normalize -> Quality -> Dedup     |
   +---------------------------------------------------------+
 ```
 
@@ -352,7 +350,7 @@ TC-SGB-API-to-List sistemi, T.C. Siber Güvenlik Başkanlığı kamu API'sinden 
 |  PR       |    -------->  |  4. Lint (ruff)  |
 |           |               |  5. Type Check   |
 |  Tag      |    -------->  |  6. Test (pytest)|
-|  v*       |               |  7. Compatibility|
+|  v*       |               |  7. Compat check |
 |           |               |  8. Build        |
 +-----------+               +------------------+
                                      |
@@ -406,16 +404,14 @@ TC-SGB-API-to-List sistemi, T.C. Siber Güvenlik Başkanlığı kamu API'sinden 
 
   Event Loop (asyncio)
   +---------------------------------------------------------+
-  |                                                         |
-  |  Fetch page 1 [=====] -> page 2 [=====] -> page N      |
-  |                                                         |
-  |                                                         |
+  |  Fetch page 1 -> page 2 -> ... -> page N                |
+  |  Lock-guarded rate limit + exponential backoff          |
   +---------------------------------------------------------+
                           |
                           v
   +---------------------------------------------------------+
   |  Sequential Processing Pipeline                         |
-  |  Fetch -> Validate -> Normalize -> Quality -> Dedup -> Output |
+  |  Fetch -> Validate -> Normalize -> Quality -> Dedup     |
   +---------------------------------------------------------+
 ```
 
