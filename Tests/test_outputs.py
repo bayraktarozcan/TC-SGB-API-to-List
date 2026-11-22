@@ -600,7 +600,7 @@ class TestSuricataRules:
     def test_ip_rule_and_dataset(self, scored_iocs, temp_dir):
         rules = temp_dir / "threat_intel_suricata.rules"
         generate_suricata_rules(scored_iocs, path=rules)
-        assert "ip.dst; dataset:isset,tc_sgb_ips, type ip" in rules.read_text(encoding="utf-8")
+        assert "ip.dst; dataset:isset,tc_sgb_ips, type ipv4" in rules.read_text(encoding="utf-8")
         ips = (temp_dir / "threat_intel_suricata_ips.lst").read_text(encoding="utf-8")
         assert "192.0.2.1" in ips.splitlines()
 

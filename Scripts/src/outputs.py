@@ -508,7 +508,7 @@ def generate_suricata_rules(
     Domain matching follows the documented ``dns.query`` + ``dotprefix`` +
     ``dataset`` pattern; dataset strings are base64 encoded with a leading dot
     so ``match subdomain`` walks the label hierarchy. IP matching uses the
-    documented ``ip.dst`` sticky buffer with a ``type ip`` dataset, which
+    documented ``ip.dst`` sticky buffer with a ``type ipv4`` dataset, which
     covers IPv4 only because Suricata documents no IPv6 destination buffer.
     The three files are written beside ``path`` and the rules content returned.
     """
@@ -536,7 +536,7 @@ def generate_suricata_rules(
         lines.append(
             "drop ip any any -> any any "
             '(msg:"TC-SGB Intel blocked IP"; ip.dst; '
-            f"dataset:isset,tc_sgb_ips, type ip, load {ips_path.name}; "
+            f"dataset:isset,tc_sgb_ips, type ipv4, load {ips_path.name}; "
             f"sid:{SURICATA_RULE_SID_BASE + 2}; rev:1;)"
         )
 
