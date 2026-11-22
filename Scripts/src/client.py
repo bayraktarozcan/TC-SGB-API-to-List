@@ -6,6 +6,8 @@ import asyncio
 import logging
 import os
 import time
+from datetime import UTC, datetime
+from email.utils import parsedate_to_datetime
 from typing import Any
 
 import httpx
@@ -23,6 +25,26 @@ logger = logging.getLogger(__name__)
 
 # Real API base URL (verified from OpenAPI spec and live calls)
 BASE_URL = os.getenv("TC_SGB_API_BASE_URL") or "https://siberguvenlik.gov.tr"
+
+MAX_RETRY_WAIT = 60.0
+
+
+def _retry_after_seconds(response: httpx.Response) -> float | None:
+    """Parse RFC 9110 Retry-After (delay-seconds or HTTP-date), clamped by caller."""
+    value = response.headers.get("Retry-After")
+    if not value:
+        return None
+    try:
+        return max(0.0, float(value.strip()))
+    except ValueError:
+        pass
+    try:
+        when = parsedate_to_datetime(value)
+    except (TypeError, ValueError):
+        return None
+    if when.tzinfo is None:
+        when = when.replace(tzinfo=UTC)
+    return max(0.0, (when - datetime.now(UTC)).total_seconds())
 
 
 class APIError(Exception):
@@ -64,6 +86,7 @@ class AsyncAPIClient:
         self._last_request_time: float = 0.0
         self._request_count: int = 0
         self._client: httpx.AsyncClient | None = None
+        self._lock = asyncio.Lock()
 
     async def _get_client(self) -> httpx.AsyncClient:
         """Get or create a persistent httpx.AsyncClient."""
@@ -85,14 +108,15 @@ class AsyncAPIClient:
         await self.close()
 
     async def _rate_limit_wait(self) -> None:
-        """Enforce rate limiting between requests."""
+        """Enforce rate limiting between requests, including concurrent callers."""
         if self.rate_limit <= 0:
             return
-        min_interval = 1.0 / self.rate_limit
-        elapsed = time.monotonic() - self._last_request_time
-        if elapsed < min_interval:
-            await asyncio.sleep(min_interval - elapsed)
-        self._last_request_time = time.monotonic()
+        async with self._lock:
+            min_interval = 1.0 / self.rate_limit
+            elapsed = time.monotonic() - self._last_request_time
+            if elapsed < min_interval:
+                await asyncio.sleep(min_interval - elapsed)
+            self._last_request_time = time.monotonic()
 
     async def _request(
         self,
@@ -115,7 +139,9 @@ class AsyncAPIClient:
                     return response.json()  # type: ignore[no-any-return]
                 if response.status_code == 429:
                     last_response = response
-                    wait = 2 ** (attempt + 1)
+                    announced = _retry_after_seconds(response)
+                    wait = announced if announced is not None else 2 ** (attempt + 1)
+                    wait = min(wait, MAX_RETRY_WAIT)
                     logger.warning("Rate limited (429). Waiting %s before retry...", wait)
                     await asyncio.sleep(wait)
                     continue

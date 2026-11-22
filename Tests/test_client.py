@@ -2,13 +2,15 @@
 
 from __future__ import annotations
 
+import asyncio
+import time
 from typing import Any
 from unittest.mock import AsyncMock, patch
 
 import httpx
 import pytest
 
-from Scripts.src.client import APIError, AsyncAPIClient
+from Scripts.src.client import APIError, AsyncAPIClient, _retry_after_seconds
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -159,6 +161,75 @@ async def test_rate_limit_retries():
     ):
         result = await client._request("/test")
         assert result["totalCount"] == 0
+
+
+@pytest.mark.asyncio
+async def test_retry_after_delay_seconds_is_honored():
+    rate_resp = _make_json_response(429, {})
+    rate_resp.headers["Retry-After"] = "42"
+    ok_resp = _make_json_response(200, {"totalCount": 0})
+    calls = 0
+
+    async def mock_get(*args: Any, **kwargs: Any) -> httpx.Response:
+        nonlocal calls
+        calls += 1
+        return rate_resp if calls == 1 else ok_resp
+
+    client = AsyncAPIClient(max_retries=3, rate_limit=0)
+    with (
+        patch("httpx.AsyncClient.get", side_effect=mock_get),
+        patch("Scripts.src.client.asyncio.sleep", new_callable=AsyncMock) as sleep_mock,
+    ):
+        await client._request("/test")
+    sleep_mock.assert_awaited_once_with(42.0)
+
+
+@pytest.mark.asyncio
+async def test_retry_after_http_date_is_clamped():
+    rate_resp = _make_json_response(429, {})
+    rate_resp.headers["Retry-After"] = "Wed, 31 Dec 2999 23:59:59 GMT"
+    ok_resp = _make_json_response(200, {"totalCount": 0})
+    calls = 0
+
+    async def mock_get(*args: Any, **kwargs: Any) -> httpx.Response:
+        nonlocal calls
+        calls += 1
+        return rate_resp if calls == 1 else ok_resp
+
+    client = AsyncAPIClient(max_retries=3, rate_limit=0)
+    with (
+        patch("httpx.AsyncClient.get", side_effect=mock_get),
+        patch("Scripts.src.client.asyncio.sleep", new_callable=AsyncMock) as sleep_mock,
+    ):
+        await client._request("/test")
+    sleep_mock.assert_awaited_once_with(60.0)
+
+
+def test_retry_after_invalid_header_is_ignored():
+    response = _make_json_response(429, {})
+    response.headers["Retry-After"] = "not-a-date"
+    assert _retry_after_seconds(response) is None
+    assert _retry_after_seconds(_make_json_response(200, {})) is None
+
+
+@pytest.mark.asyncio
+async def test_concurrent_rate_limit_is_serialized():
+    client = AsyncAPIClient(rate_limit=5)
+    client._last_request_time = time.monotonic()
+    real_sleep = asyncio.sleep
+    active = 0
+    peak = 0
+
+    async def tracked_sleep(delay: float) -> None:
+        nonlocal active, peak
+        active += 1
+        peak = max(peak, active)
+        await real_sleep(0)
+        active -= 1
+
+    with patch("Scripts.src.client.asyncio.sleep", new=tracked_sleep):
+        await asyncio.gather(*[client._rate_limit_wait() for _ in range(3)])
+    assert peak == 1
 
 
 # ---------------------------------------------------------------------------
