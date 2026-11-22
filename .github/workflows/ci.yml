@@ -105,6 +105,8 @@ jobs:
           sudo apt-get install -y --no-install-recommends nftables unbound dnsmasq suricata
 
       - name: Validate outputs with real tools
+        env:
+          TC_SGB_NFT_COMMAND: "sudo -n nft"
         run: python Scripts/check_output_compatibility.py --require-tools
 
   perf:

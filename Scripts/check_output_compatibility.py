@@ -4,12 +4,15 @@ Each generator is exercised on a small deterministic IoC set. Tools found on
 PATH are invoked for real (``nft -c``, ``unbound-checkconf``, ``dnsmasq --test``,
 ``suricata -T``); CrowdSec and MikroTik are checked against their documented
 data shape because no importable CLI is available in CI. Use --require-tools
-in CI so a missing binary fails instead of silently skipping a check.
+in CI so a missing binary fails instead of silently skipping a check. On
+runners where nft -c cannot initialize its netlink cache unprivileged, set
+TC_SGB_NFT_COMMAND to a prefixed command such as "sudo -n nft".
 """
 
 from __future__ import annotations
 
 import argparse
+import os
 import shutil
 import subprocess  # nosec B404
 import sys
@@ -147,6 +150,7 @@ def _structural(label: str, violations: list[str]) -> str:
 def run_checks(require_tools: bool = False) -> list[str]:
     """Generate sample outputs and validate them; return one line per check."""
     iocs = _sample_iocs()
+    nft_command = os.getenv("TC_SGB_NFT_COMMAND", "nft").split()
     suricata_config = SURICATA_CONFIG
     results: list[str] = []
     with tempfile.TemporaryDirectory() as temp:
@@ -161,7 +165,7 @@ def run_checks(require_tools: bool = False) -> list[str]:
         generate_suricata_rules(iocs, path=rules_path)
 
         results.append(
-            _run_tool("nftables", ["nft", "-c", "-f", nft_path.name], out, require_tools)
+            _run_tool("nftables", [*nft_command, "-c", "-f", nft_path.name], out, require_tools)
         )
         results.append(
             _run_tool("unbound", ["unbound-checkconf", unbound_path.name], out, require_tools)
@@ -180,6 +184,8 @@ def run_checks(require_tools: bool = False) -> list[str]:
                         str(suricata_config),
                         "-S",
                         rules_path.name,
+                        "-l",
+                        str(out),
                     ],
                     out,
                     require_tools,

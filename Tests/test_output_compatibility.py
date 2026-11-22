@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import os
 import sys
 from pathlib import Path
 from unittest.mock import patch
@@ -133,6 +134,24 @@ class TestRunChecks:
         ):
             lines = run_checks(require_tools=True)
         assert any(line.startswith("[FAIL] suricata") for line in lines)
+
+    def test_nft_command_override(self):
+        with (
+            patch.dict(os.environ, {"TC_SGB_NFT_COMMAND": "sudo -n nft"}),
+            patch("Scripts.check_output_compatibility._run_tool", return_value="[OK] x") as run,
+        ):
+            run_checks()
+        call = next(item for item in run.call_args_list if item.args[0] == "nftables")
+        assert call.args[1][:3] == ["sudo", "-n", "nft"]
+
+    def test_suricata_uses_writable_log_dir(self):
+        with (
+            patch.object(Path, "is_file", return_value=True),
+            patch("Scripts.check_output_compatibility._run_tool", return_value="[OK] x") as run,
+        ):
+            run_checks()
+        call = next(item for item in run.call_args_list if item.args[0] == "suricata")
+        assert "-l" in call.args[1]
 
 
 class TestCli:

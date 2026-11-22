@@ -31,6 +31,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 - **Concurrent rate limiting** — `_rate_limit_wait()` now holds an `asyncio.Lock`, so `asyncio.gather` callers cannot issue simultaneous requests.
 - **HTTP 429 backoff** — `Retry-After` is parsed in both delay-seconds and HTTP-date forms and capped at 60 seconds before the existing exponential fallback.
+- **Compatibility gate on CI runners** — `nft -c` is invoked as `sudo -n nft` on GitHub runners because it cannot initialize its netlink cache unprivileged; the Suricata check uses a writable temporary log directory (`-l`).
 
 ## [v0.3.2.2] — 2026-11-21
 
@@ -272,6 +273,7 @@ Biçim, [Keep a Changelog](https://keepachangelog.com/)'a dayanmaktadır.
 
 - **Eşzamanlı hız sınırlama** — `_rate_limit_wait()` artık `asyncio.Lock` tutuyor; `asyncio.gather` çağrıları aynı anda istek gönderemiyor.
 - **HTTP 429 geri çekilmesi** — `Retry-After` hem saniye hem HTTP-tarih biçiminde ayrıştırılıp 60 saniye ile sınırlandırılıyor, ardından mevcut üstel geri çekilmeye düşülüyor.
+- **Uyumluluk kapısının CI çalıştırması** — `nft -c`, netlink önbelleğini ayrıcalıksız başlatamadığı için GitHub runner'da `sudo -n nft` ile çağrılıyor; Suricata denetimi yazılabilir bir geçici günlük dizini (`-l`) kullanıyor.
 
 ## [v0.3.2.2] — 2026-11-21
 

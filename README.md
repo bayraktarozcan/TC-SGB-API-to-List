@@ -35,7 +35,7 @@ TC-SGB-API-to-List fetches IoC (Indicator of Compromise) data from the TC SGB pu
   - Firewall: nftables, ipset
   - IDS/IPS: Suricata, CrowdSec
   - Data: CSV, JSON, YAML, SQLite
-- **Tool-validated Output** — CI checks generated samples with `nft -c`, `unbound-checkconf`, `dnsmasq --test` and `suricata -T`. nftables emits IP address sets only; Suricata emits synthetic EVE events for SIEM plus loadable `dns.query` rules with datasets; CrowdSec emits a `cscli decisions import` JSON document.
+- **Tool-validated Output** — CI checks generated samples with `nft -c`, `unbound-checkconf`, `dnsmasq --test` and `suricata -T` (nft runs via `sudo -n` on GitHub runners; Suricata uses a writable temp log directory). nftables emits IP address sets only; Suricata emits synthetic EVE events for SIEM plus loadable `dns.query` rules with datasets; CrowdSec emits a `cscli decisions import` JSON document.
 - **Scheduled Pipeline** — GitHub Actions cron for automated updates every day (19:00 UTC)
 - **Bilingual Documentation** — Full English and Turkish documentation
 
@@ -266,7 +266,7 @@ TC-SGB-API-to-List, TC SGB kamu API'sinden (`https://siberguvenlik.gov.tr/api/`)
   - Güvenlik Duvarı: nftables, ipset
   - IDS/IPS: Suricata, CrowdSec
   - Veri: CSV, JSON, YAML, SQLite
-- **Araçla Doğrulanmış Çıktı** — CI, üretilen örnekleri `nft -c`, `unbound-checkconf`, `dnsmasq --test` ve `suricata -T` ile sınar. nftables yalnızca IP adres kümeleri üretir; Suricata SIEM için sentetik EVE olayları ve yüklenebilir `dns.query` kuralları ile veri kümeleri üretir; CrowdSec `cscli decisions import` JSON belgesi üretir.
+- **Araçla Doğrulanmış Çıktı** — CI, üretilen örnekleri `nft -c`, `unbound-checkconf`, `dnsmasq --test` ve `suricata -T` ile sınar (GitHub runner'da nft `sudo -n` ile, Suricata yazılabilir geçici günlük diziniyle çalışır). nftables yalnızca IP adres kümeleri üretir; Suricata SIEM için sentetik EVE olayları ve yüklenebilir `dns.query` kuralları ile veri kümeleri üretir; CrowdSec `cscli decisions import` JSON belgesi üretir.
 - **Zamanlanmış Hat** — Her gün (19:00 UTC) otomatik güncellemeler için GitHub Actions cron zamanlayıcısı
 - **Çift Dilli Dokümantasyon** — Tam İngilizce ve Türkçe dokümantasyon
 
