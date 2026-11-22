@@ -7,7 +7,7 @@
 
 ## Overview
 
-This document defines performance benchmarks, measurement methodology, and optimization targets for the TC-SGB-API-to-List system across various data volumes.
+This document defines performance benchmarks, measurement methodology, and optimization targets for the TC-SGB-API-to-List system across various data volumes. Concurrency snippets below are illustrative benchmarks; the shipped client fetches pages sequentially with a lock-guarded rate limiter.
 
 ## Performance Targets
 
@@ -452,7 +452,7 @@ jobs:
 
 ## Genel Bakış
 
-Bu belge, TC-SGB-API-to-List sistemi için çeşitli veri hacimlerinde performans karşılaştırmalarını, ölçüm yöntemlerini ve optimizasyon hedeflerini tanımlar.
+Bu belge, TC-SGB-API-to-List sistemi için çeşitli veri hacimlerinde performans karşılaştırmalarını, ölçüm yöntemlerini ve optimizasyon hedeflerini tanımlar. Eşzamanlılık kod parçaları örnek kıyaslama amaçlıdır; gönderilen istemci sayfaları kilit korumalı hız sınırlamasıyla sırayla çeker.
 
 ## Performans Hedefleri
 

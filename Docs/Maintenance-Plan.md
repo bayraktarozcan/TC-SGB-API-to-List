@@ -406,7 +406,7 @@ tc-sgb fetch  # Run pipeline
 | Scheduled maintenance | GitHub Issues | Users |
 | Security patches | GitHub Security Advisories | Users |
 | Breaking changes | GitHub Discussions + Issues | Users |
-| New releases | GitHub Releases + PyPI | Users |
+| New releases | GitHub Releases + GitLab mirror | Users |
 | Incidents | GitHub Issues | Users |
 
 ### Release Communication
@@ -839,7 +839,7 @@ tc-sgb fetch  # Hattı çalıştır
 | Planlı bakım | GitHub Issues | Kullanıcılar |
 | Güvenlik yamaları | GitHub Security Advisories | Kullanıcılar |
 | Kırıcı değişiklikler | GitHub Discussions + Issues | Kullanıcılar |
-| Yeni sürümler | GitHub Releases + PyPI | Kullanıcılar |
+| Yeni sürümler | GitHub Releases + GitLab aynası | Kullanıcılar |
 | Olaylar | GitHub Issues | Kullanıcılar |
 
 ### Yayın İletişimi

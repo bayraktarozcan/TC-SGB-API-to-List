@@ -50,7 +50,7 @@ This document outlines the phased development roadmap for the TC-SGB-API-to-List
 - [x] 16 output formats (NextDNS, AdGuard, Pi-hole, dnsmasq, Unbound, RPZ, Technitium, MikroTik, nftables, ipset, Suricata, CrowdSec, CSV, JSON, YAML, SQLite)
 - [x] Unit test suite (99% coverage)
 - [x] CI/CD pipeline (GitHub Actions)
-- [x] PyPI packaging
+- [ ] PyPI publishing
 - [x] CLI interface
 
 ### In Progress
@@ -506,7 +506,7 @@ Bu belge, TC-SGB-API-to-List projesinin aşamalı geliştirme yol haritasını �
 - [x] 16 çıktı biçimi (NextDNS, AdGuard, Pi-hole, dnsmasq, Unbound, RPZ, Technitium, MikroTik, nftables, ipset, Suricata, CrowdSec, CSV, JSON, YAML, SQLite)
 - [x] Birim test paketi (%99 kapsama)
 - [x] CI/CD hattı (GitHub Actions)
-- [x] PyPI paketleme
+- [ ] PyPI yayınlama
 - [x] CLI arayüzü
 
 ### Devam Eden

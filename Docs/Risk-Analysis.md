@@ -62,7 +62,7 @@ This document presents a comprehensive risk matrix for the TC-SGB-API-to-List pr
 | ID | Risk | Likelihood | Impact | Score | Level | Mitigation |
 |----|------|------------|--------|-------|-------|------------|
 | O-01 | CI/CD pipeline failure | 3 | 2 | 6 | MEDIUM | Manual fallback, pipeline monitoring |
-| O-02 | PyPI publish failure | 2 | 2 | 4 | LOW | Retry, manual upload, test PyPI first |
+| O-02 | Release publish failure | 2 | 2 | 4 | LOW | Retry the workflow; the last good release keeps serving |
 | O-03 | Configuration error | 2 | 3 | 6 | MEDIUM | Config validation, schema checks |
 | O-04 | Log data loss | 1 | 1 | 1 | LOW | Multiple log destinations |
 | O-05 | Incorrect output format | 2 | 2 | 4 | LOW | Format validation, snapshot tests |
@@ -318,7 +318,7 @@ Bu belge, TC-SGB-API-to-List projesi için kapsamlı bir risk matrisi sunmakta; 
 | ID | Risk | Olasılık | Etki | Puan | Seviye | Azaltma |
 |----|------|----------|------|------|--------|---------|
 | O-01 | CI/CD hattı arızası | 3 | 2 | 6 | ORTA | Manuel geri dönüş, hattı izleme |
-| O-02 | PyPI yayımlama hatası | 2 | 2 | 4 | DÜŞÜK | Yeniden deneme, manuel yükleme, önce test PyPI |
+| O-02 | Yayın yayımlama hatası | 2 | 2 | 4 | DÜŞÜK | İş akışını yeniden dene; son iyi yayın hizmet vermeye devam eder |
 | O-03 | Yapılandırma hatası | 2 | 3 | 6 | ORTA | Yapılandırma doğrulama, şema kontrolleri |
 | O-04 | Günlük veri kaybı | 1 | 1 | 1 | DÜŞÜK | Çoklu günlük hedefi |
 | O-05 | Yanlış çıktı biçimi | 2 | 2 | 4 | DÜŞÜK | Biçim doğrulama, anlık görüntü testleri |
