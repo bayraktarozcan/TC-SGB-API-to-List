@@ -80,6 +80,17 @@ perf:
   script:
     - pytest -m slow --tb=short -v
 
+compatibility:
+  stage: test
+  needs:
+    - lint
+  before_script:
+    - apt-get update && apt-get install -y --no-install-recommends git nftables unbound dnsmasq suricata && rm -rf /var/lib/apt/lists/*
+    - python -m pip install --upgrade pip setuptools wheel
+    - pip install -e ".[dev]"
+  script:
+    - python Scripts/check_output_compatibility.py --require-tools
+
 security:
   <<: *deps_base
   stage: security
