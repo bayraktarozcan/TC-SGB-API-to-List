@@ -60,6 +60,13 @@ def output_dir(temp_dir: Path, scored_iocs: list[ScoredIoC]) -> Path:
 
 def _expected_artifact_names() -> set[str]:
     names = {f"threat_intel_{fmt}{ext}" for fmt, ext in FORMAT_EXTENSIONS.items()}
+    names.update(
+        {
+            "threat_intel_suricata.rules",
+            "threat_intel_suricata_domains.lst",
+            "threat_intel_suricata_ips.lst",
+        }
+    )
     names.add("raw_records.json")
     return names
 

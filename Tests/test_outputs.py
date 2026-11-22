@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import base64
 import csv
 import io
 import json
@@ -31,6 +32,7 @@ from Scripts.src.outputs import (
     generate_rpz,
     generate_sqlite,
     generate_suricata,
+    generate_suricata_rules,
     generate_technitium,
     generate_unbound,
     generate_yaml,
@@ -539,6 +541,13 @@ class TestNftables:
     def test_set_definition(self, scored_iocs):
         out = generate_nftables(scored_iocs)
         assert "set threat_intel" in out
+        assert "type ipv4_addr" in out
+
+    def test_no_unsupported_domain_set(self, scored_iocs):
+        out = generate_nftables(scored_iocs)
+        assert "dns_name" not in out
+        assert "evil-phish.com" not in out
+        assert "threat_intel_domains" not in out
 
 
 class TestIpset:
@@ -573,6 +582,39 @@ class TestSuricata:
         assert '"event_type": "alert"' in out
 
 
+class TestSuricataRules:
+    def test_domain_rule_uses_documented_keywords(self, scored_iocs):
+        out = generate_suricata_rules(scored_iocs)
+        assert "dns.query; dotprefix" in out
+        assert "match subdomain" in out
+        assert "dataset:isset,tc_sgb_domains, type string" in out
+
+    def test_dataset_entries_are_base64_dotted_domains(self, scored_iocs, temp_dir):
+        rules = temp_dir / "threat_intel_suricata.rules"
+        generate_suricata_rules(scored_iocs, path=rules)
+        data = (temp_dir / "threat_intel_suricata_domains.lst").read_text(encoding="utf-8")
+        decoded = {base64.b64decode(line.strip()).decode() for line in data.splitlines()}
+        assert ".evil-phish.com" in decoded
+        assert ".malware-cnc.evil.net" in decoded
+
+    def test_ip_rule_and_dataset(self, scored_iocs, temp_dir):
+        rules = temp_dir / "threat_intel_suricata.rules"
+        generate_suricata_rules(scored_iocs, path=rules)
+        assert "ip.dst; dataset:isset,tc_sgb_ips, type ip" in rules.read_text(encoding="utf-8")
+        ips = (temp_dir / "threat_intel_suricata_ips.lst").read_text(encoding="utf-8")
+        assert "192.0.2.1" in ips.splitlines()
+
+    def test_sids_are_unique(self, scored_iocs):
+        out = generate_suricata_rules(scored_iocs)
+        sids = [part.split(";")[0] for part in out.split("sid:")[1:]]
+        assert len(sids) == len(set(sids)) == 2
+
+    def test_empty_iocs_emit_no_rules(self):
+        out = generate_suricata_rules([])
+        assert "dns.query" not in out
+        assert "ip.dst" not in out
+
+
 class TestCrowdSec:
     def test_ip_list(self, scored_iocs):
         out = generate_crowdsec(scored_iocs)
@@ -581,6 +623,13 @@ class TestCrowdSec:
     def test_no_domains(self, scored_iocs):
         out = generate_crowdsec(scored_iocs)
         assert "evil-phish.com" not in out
+
+    def test_import_schema(self, scored_iocs):
+        decisions = json.loads(generate_crowdsec(scored_iocs))
+        assert isinstance(decisions, list)
+        required = {"duration", "reason", "scope", "type", "value"}
+        assert all(required <= set(row) for row in decisions)
+        assert all(row["scope"] == "ip" and row["type"] == "ban" for row in decisions)
 
 
 class TestCSV:
@@ -777,9 +826,16 @@ class TestWriteToPath:
         assert path.read_text(encoding="utf-8") == out
 
     def test_crowdsec_write(self, scored_iocs, temp_dir):
-        path = temp_dir / "crowdsec.yaml"
+        path = temp_dir / "crowdsec.json"
         out = generate_crowdsec(scored_iocs, path=path)
         assert path.read_text(encoding="utf-8") == out
+
+    def test_suricata_rules_write(self, scored_iocs, temp_dir):
+        path = temp_dir / "threat_intel_suricata.rules"
+        out = generate_suricata_rules(scored_iocs, path=path)
+        assert path.read_text(encoding="utf-8") == out
+        assert (temp_dir / "threat_intel_suricata_domains.lst").is_file()
+        assert (temp_dir / "threat_intel_suricata_ips.lst").is_file()
 
     def test_csv_write(self, scored_iocs, temp_dir):
         path = temp_dir / "out.csv"

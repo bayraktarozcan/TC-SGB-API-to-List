@@ -7,6 +7,7 @@ for the SQLite database which needs a file path.
 
 from __future__ import annotations
 
+import base64
 import csv
 import hashlib
 import io
@@ -43,7 +44,7 @@ FORMAT_EXTENSIONS: dict[str, str] = {
     "nftables": ".nft",
     "ipset": ".ipset",
     "suricata": ".json",
-    "crowdsec": ".yaml",
+    "crowdsec": ".json",
     "csv": ".csv",
     "json": ".json",
     "yaml": ".yaml",
@@ -59,10 +60,13 @@ FORMAT_TITLES: dict[str, str] = {
     "rpz": "RPZ response policy zone file",
     "technitium": "Technitium DNS server zone file",
     "mikrotik": "MikroTik RouterOS address-list script",
-    "nftables": "nftables sets",
+    "nftables": "nftables IP address sets",
     "ipset": "ipset list",
-    "suricata": "Suricata EVE JSON events",
-    "crowdsec": "CrowdSec decision list YAML",
+    "suricata": "Suricata EVE JSON events (SIEM export)",
+    "suricata_rules": "Suricata detect rules",
+    "suricata_domains": "Suricata domain dataset",
+    "suricata_ips": "Suricata IP dataset",
+    "crowdsec": "CrowdSec decisions import (JSON)",
     "csv": "CSV table of all IoCs",
     "json": "JSON array of all IoCs",
     "yaml": "YAML sequence of all IoCs",
@@ -364,22 +368,24 @@ def generate_mikrotik(iocs: Sequence[ScoredIoC], path: str | Path | None = None)
 
 
 def generate_nftables(iocs: Sequence[ScoredIoC], path: str | Path | None = None) -> str:
-    """Generate nftables set for blocking."""
+    """Generate nftables IPv4/IPv6 address sets.
+
+    Domain indicators are deliberately absent: nft defines no portable DNS-name
+    set type, and storing a name in a set is not a DNS-query match. DNS filtering
+    is covered by the dedicated domain-list formats instead.
+    """
     header = (
-        "# TC-SGB Threat Intelligence — nftables set\n"
-        "# Add this to your nftables.conf or import as a set\n\n"
+        "# TC-SGB Threat Intelligence — nftables IP address sets\n"
+        "# Add these sets to your nftables.conf and reference them from rules\n\n"
         "table inet filter {\n"
     )
     ipv4_lines: list[str] = []
     ipv6_lines: list[str] = []
-    domain_lines: list[str] = []
     for ioc in iocs:
         if ioc.ioc_type == IoCType.IP:
             ipv4_lines.append(f"            {ioc.value},")
         elif ioc.ioc_type == IoCType.IP6:
             ipv6_lines.append(f"            {ioc.value},")
-        elif ioc.ioc_type == IoCType.DOMAIN:
-            domain_lines.append(f"            {ioc.value},")
 
     content = header
     if ipv4_lines:
@@ -400,16 +406,6 @@ def generate_nftables(iocs: Sequence[ScoredIoC], path: str | Path | None = None)
             "        elements = {\n"
         )
         content += "\n".join(ipv6_lines) + "\n"
-        content += "        }\n    }\n"
-
-    if domain_lines:
-        content += (
-            "    set threat_intel_domains {\n"
-            "        type dns_name\n"
-            "        flags interval\n"
-            "        elements = {\n"
-        )
-        content += "\n".join(domain_lines) + "\n"
         content += "        }\n    }\n"
 
     content += "}\n"
@@ -452,7 +448,11 @@ def generate_suricata(
     *,
     generated_at: datetime | None = None,
 ) -> str:
-    """Generate Suricata EVE-format JSON lines for IoCs."""
+    """Generate synthetic Suricata EVE-style JSON events for SIEM ingestion.
+
+    EVE is an engine output channel, not a loadable blocklist. Detection rules
+    and their datasets are emitted by ``generate_suricata_rules`` instead.
+    """
     fallback_ts = _resolve_timestamp(iocs, generated_at)
     lines: list[str] = []
     ip_placeholder = "0.0.0.0"  # nosec B104 — EVE placeholder, not a bind address
@@ -492,38 +492,91 @@ def generate_suricata(
 
 
 # ---------------------------------------------------------------------------
-# 12. CrowdSec — Decision list YAML
+# 11b. Suricata — loadable detect rules and datasets
+# ---------------------------------------------------------------------------
+
+
+SURICATA_RULE_SID_BASE = 9900000
+
+
+def generate_suricata_rules(
+    iocs: Sequence[ScoredIoC],
+    path: str | Path | None = None,
+) -> str:
+    """Generate Suricata rules with the datasets they load.
+
+    Domain matching follows the documented ``dns.query`` + ``dotprefix`` +
+    ``dataset`` pattern; dataset strings are base64 encoded with a leading dot
+    so ``match subdomain`` walks the label hierarchy. IP matching uses the
+    documented ``ip.dst`` sticky buffer with a ``type ip`` dataset, which
+    covers IPv4 only because Suricata documents no IPv6 destination buffer.
+    The three files are written beside ``path`` and the rules content returned.
+    """
+    rules_path = Path(path) if path is not None else Path("threat_intel_suricata.rules")
+    domains_path = rules_path.with_name(f"{rules_path.stem}_domains.lst")
+    ips_path = rules_path.with_name(f"{rules_path.stem}_ips.lst")
+
+    domains = sorted(
+        {ioc.value.strip().lower().rstrip(".") for ioc in iocs if ioc.ioc_type == IoCType.DOMAIN}
+    )
+    ips = sorted({ioc.value.strip().lower() for ioc in iocs if ioc.ioc_type == IoCType.IP})
+
+    lines = [
+        "# TC-SGB Threat Intelligence — Suricata detect rules",
+        "# Load with: suricata -T -c suricata.yaml -S threat_intel_suricata.rules",
+    ]
+    if domains:
+        lines.append(
+            "reject dns any any -> any any "
+            '(msg:"TC-SGB Intel blocked domain"; dns.query; dotprefix; '
+            f"dataset:isset,tc_sgb_domains, type string, match subdomain, "
+            f"load {domains_path.name}; sid:{SURICATA_RULE_SID_BASE + 1}; rev:1;)"
+        )
+    if ips:
+        lines.append(
+            "drop ip any any -> any any "
+            '(msg:"TC-SGB Intel blocked IP"; ip.dst; '
+            f"dataset:isset,tc_sgb_ips, type ip, load {ips_path.name}; "
+            f"sid:{SURICATA_RULE_SID_BASE + 2}; rev:1;)"
+        )
+
+    domain_rows = [base64.b64encode(f".{domain}".encode()).decode("ascii") for domain in domains]
+    content = "\n".join(lines) + "\n"
+    if path is not None:
+        rules_path.write_text(content, encoding="utf-8")
+        domains_path.write_text(
+            "\n".join(domain_rows) + ("\n" if domain_rows else ""), encoding="utf-8"
+        )
+        ips_path.write_text("\n".join(ips) + ("\n" if ips else ""), encoding="utf-8")
+    return content
+
+
+# ---------------------------------------------------------------------------
+# 12. CrowdSec — decision import (JSON)
 # ---------------------------------------------------------------------------
 
 
 def generate_crowdsec(iocs: Sequence[ScoredIoC], path: str | Path | None = None) -> str:
-    """Generate CrowdSec decision list YAML format."""
-    decisions: list[dict[str, Any]] = []
-    for ioc in iocs:
-        if ioc.ioc_type not in (IoCType.IP, IoCType.IP6):
-            continue
-        decisions.append(
-            {
-                "decisions": [
-                    {
-                        "duration": "168h",  # 7 days
-                        "type": "ban",
-                        "value": ioc.value,
-                        "scope": "IP",
-                        "origin": "TC-SGB-Intel",
-                        "scenario": (
-                            f"Threat intelligence: {ioc.desc.value if ioc.desc else 'malicious'}"
-                        ),
-                    }
-                ]
-            }
-        )
-    content: str = yaml.dump(
-        decisions,
-        Dumper=_yaml_dumper,
-        default_flow_style=False,
-        allow_unicode=True,
-    )
+    """Generate a CrowdSec ``cscli decisions import`` JSON document.
+
+    The import command expects a flat JSON array of decision objects with
+    duration, reason, scope, type and value; the previous nested YAML shape was
+    not importable.
+    """
+    decisions = [
+        {
+            "duration": "168h",
+            "reason": f"tc-sgb-{ioc.desc.value.lower() if ioc.desc else 'intel'}",
+            "scope": "ip",
+            "type": "ban",
+            "value": ioc.value,
+        }
+        for ioc in iocs
+        if ioc.ioc_type in (IoCType.IP, IoCType.IP6)
+    ]
+    content = json.dumps(decisions, indent=2, ensure_ascii=False)
+    if decisions:
+        content += "\n"
     if path:
         Path(path).write_text(content, encoding="utf-8")
     return content
@@ -798,6 +851,8 @@ def generate_all(
                 results[fmt] = result_path
             else:
                 gen_func(iocs, path=filepath)
+                if fmt == "suricata":
+                    generate_suricata_rules(iocs, path=filepath.with_suffix(".rules"))
                 results[fmt] = str(filepath)
             logger.info("Generated %s → %s", fmt, filepath)
         except Exception as exc:
