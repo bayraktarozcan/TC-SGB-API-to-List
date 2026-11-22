@@ -30,7 +30,7 @@ Use the project virtualenv at `.venv`:
 & .venv\Scripts\python.exe -m pytest --cov=Scripts --cov-report=term-missing -q
 ```
 
-Baseline at last check: 848 tests passing, ~99% coverage, zero ruff/mypy/bandit
+Baseline at last check: 884 tests passing, ~99% coverage, zero ruff/mypy/bandit
 findings. Do not drop below it.
 
 ## Conventions
@@ -877,4 +877,4 @@ Runtimes use the current LTS line (Node.js LTS, .NET LTS); build output goes thr
 - `.git/` is the **internal Git repository structure**, not a project config file.
 
 **Guiding rule:** "It looks special" does not mean "It is a standard special file." The meaning of any file is determined by the software that reads and interprets it.
-<!-- mirror-sync: sync-sha=4db1efd731868d65a03ff5ee5b6f07502baaa407 -->
+<!-- mirror-sync: sync-sha=70d27ff02b62da00812f7e29c083344c030bce80 -->
