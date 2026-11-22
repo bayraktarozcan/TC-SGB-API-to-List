@@ -26,6 +26,8 @@ from Scripts.src.outputs import (
     generate_unbound,
 )
 
+SURICATA_CONFIG = Path("/etc/suricata/suricata.yaml")
+
 
 def _sample_iocs() -> list[ScoredIoC]:
     return [
@@ -145,7 +147,7 @@ def _structural(label: str, violations: list[str]) -> str:
 def run_checks(require_tools: bool = False) -> list[str]:
     """Generate sample outputs and validate them; return one line per check."""
     iocs = _sample_iocs()
-    suricata_config = Path("/etc/suricata/suricata.yaml")
+    suricata_config = SURICATA_CONFIG
     results: list[str] = []
     with tempfile.TemporaryDirectory() as temp:
         out = Path(temp)

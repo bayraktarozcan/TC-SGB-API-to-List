@@ -3,10 +3,16 @@
 from __future__ import annotations
 
 import json
+import sys
 from pathlib import Path
+from unittest.mock import patch
 
 from Scripts.check_output_compatibility import (
     _run_tool,
+    _structural,
+    build_parser,
+    main,
+    run_checks,
     validate_crowdsec_json,
     validate_mikrotik,
     validate_suricata_rules,
@@ -55,6 +61,22 @@ class TestMikrotikShape:
         assert validate_mikrotik("/ip firewall filter add chain=input") != []
 
 
+class TestStructuralValidators:
+    def test_crowdsec_rejects_non_object_rows(self):
+        assert validate_crowdsec_json("[[]]") != []
+
+    def test_crowdsec_rejects_missing_keys(self):
+        assert validate_crowdsec_json('[{"value": "192.0.2.1"}]') != []
+
+    def test_suricata_rejects_empty_and_missing_sid(self):
+        assert validate_suricata_rules("") != []
+        text = "drop ip any any -> any any (dataset:isset,x, load x.lst;)"
+        assert validate_suricata_rules(text) != []
+
+    def test_mikrotik_rejects_empty(self):
+        assert validate_mikrotik("") != []
+
+
 class TestToolPresence:
     def test_missing_tool_skips_by_default(self, tmp_path: Path):
         line = _run_tool("fake", ["definitely-not-a-real-binary-xyz"], tmp_path, False)
@@ -63,3 +85,56 @@ class TestToolPresence:
     def test_missing_tool_fails_when_required(self, tmp_path: Path):
         line = _run_tool("fake", ["definitely-not-a-real-binary-xyz"], tmp_path, True)
         assert line.startswith("[FAIL]")
+
+    def test_successful_tool(self, tmp_path: Path):
+        line = _run_tool("python", [sys.executable, "-c", "pass"], tmp_path, False)
+        assert line == "[OK] python"
+
+    def test_failing_tool(self, tmp_path: Path):
+        line = _run_tool(
+            "python", [sys.executable, "-c", "import sys; sys.exit(2)"], tmp_path, False
+        )
+        assert line.startswith("[FAIL]")
+
+    def test_os_error_is_reported(self, tmp_path: Path):
+        with (
+            patch("Scripts.check_output_compatibility.shutil.which", return_value="python"),
+            patch("Scripts.check_output_compatibility.subprocess.run", side_effect=OSError("boom")),
+        ):
+            line = _run_tool("python", ["python"], tmp_path, False)
+        assert "boom" in line
+
+
+class TestStructuralResult:
+    def test_pass_and_fail_lines(self):
+        assert _structural("x", []) == "[OK] x"
+        assert _structural("x", ["bad"]).startswith("[FAIL]")
+
+
+class TestRunChecks:
+    def test_missing_tools_are_skipped(self):
+        with patch("Scripts.check_output_compatibility.shutil.which", return_value=None):
+            lines = run_checks()
+        assert any(line.startswith("[SKIP]") for line in lines)
+        assert any(line.startswith("[OK] crowdsec") for line in lines)
+
+    def test_suricata_config_branch(self):
+        with (
+            patch("Scripts.check_output_compatibility.shutil.which", return_value=None),
+            patch.object(Path, "is_file", return_value=True),
+        ):
+            lines = run_checks()
+        assert any(line.startswith("[SKIP] suricata") for line in lines)
+
+
+class TestCli:
+    def test_parser_flag(self):
+        assert build_parser().parse_args(["--require-tools"]).require_tools is True
+
+    def test_main_clean(self):
+        with patch("Scripts.check_output_compatibility.run_checks", return_value=["[OK] x"]):
+            assert main([]) == 0
+
+    def test_main_failure(self):
+        with patch("Scripts.check_output_compatibility.run_checks", return_value=["[FAIL] x"]):
+            assert main(["--require-tools"]) == 1
