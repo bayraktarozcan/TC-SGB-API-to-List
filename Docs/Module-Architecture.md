@@ -439,10 +439,10 @@ def generate_all(scored: list[ScoredIoC], output_dir: Path, formats: list[str] |
 | RPZ | `rpz.zone` | Response Policy Zone |
 | Technitium | `technitium.txt` | Technitium DNS blocklist |
 | MikroTik | `mikrotik.rsc` | MikroTik RouterOS script (IP + IPv6) |
-| nftables | `nftables.nft` | nftables rules (IPv4 + IPv6) |
+| nftables | `nftables.nft` | nftables IP address sets (IPv4 + IPv6) |
 | ipset | `ipset.sh` | ipset/ip6set shell script |
-| Suricata | `suricata.rules` | Suricata IDS rules |
-| CrowdSec | `crowdsec.yaml` | CrowdSec scenario YAML |
+| Suricata | `suricata.json`, `suricata.rules` + datasets | EVE SIEM export plus loadable rules |
+| CrowdSec | `crowdsec.json` | CrowdSec decisions import JSON |
 | CSV | `ioc_data.csv` | Comma-separated values |
 | JSON | `ioc_data.json` | Structured JSON |
 | YAML | `ioc_data.yaml` | YAML format |
@@ -991,10 +991,10 @@ def generate_all(scored: list[ScoredIoC], output_dir: Path, formats: list[str] |
 | RPZ | `rpz.zone` | Response Policy Zone |
 | Technitium | `technitium.txt` | Technitium DNS engelleme listesi |
 | MikroTik | `mikrotik.rsc` | MikroTik RouterOS betigi (IP + IPv6) |
-| nftables | `nftables.nft` | nftables kuralları (IPv4 + IPv6) |
+| nftables | `nftables.nft` | nftables IP adres kümeleri (IPv4 + IPv6) |
 | ipset | `ipset.sh` | ipset/ip6set shell betigi |
-| Suricata | `suricata.rules` | Suricata IDS kuralları |
-| CrowdSec | `crowdsec.yaml` | CrowdSec senaryo YAML'i |
+| Suricata | `suricata.json`, `suricata.rules` + veri kümeleri | EVE SIEM dışa aktarımı + yüklenebilir kurallar |
+| CrowdSec | `crowdsec.json` | CrowdSec karar içe aktarma JSON'u |
 | CSV | `ioc_data.csv` |virgulle ayrılmış degerler |
 | JSON | `ioc_data.json` | Yapilandirilmis JSON |
 | YAML | `ioc_data.yaml` | YAML biçimi |

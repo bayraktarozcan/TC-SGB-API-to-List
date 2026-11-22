@@ -7,7 +7,7 @@
 
 ## Overview
 
-This document defines the distribution and publishing strategy for the TC-SGB-API-to-List project, including GitHub releases, PyPI distribution, and output file management.
+This document describes distribution and publishing, including the PyPI route that is still planned. The live channels are the `ioc-data` rolling release on GitHub, its GitLab mirror, the `filter-lists` branch and the tracked `Output/` catalog; PyPI publishing is listed as unfinished in the README roadmap.
 
 ## Distribution Channels
 
@@ -443,7 +443,7 @@ Docs/
 
 ## Genel Bakış
 
-Bu belge, TC-SGB-API-to-List projesi için dağıtım ve yayın stratejisini, GitHub sürümleri, PyPI dağıtımı ve çıkış dosyası yönetimini tanımlar.
+Bu belge, dağıtım ve yayınlamayı, henüz plan aşamasındaki PyPI yönünü de içerek anlatır. Etkin kanallar GitHub'daki `ioc-data` yuvarlanan yayını, GitLab aynası, `filter-lists` dalı ve izlenen `Output/` kataloğudur; PyPI yayınlama README yol haritasında tamamlanmamış olarak listelenir.
 
 ## Dağıtım Kanalları
 

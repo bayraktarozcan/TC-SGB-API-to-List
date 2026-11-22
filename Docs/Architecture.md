@@ -122,9 +122,9 @@ The TC-SGB-API-to-List system is an automated threat intelligence pipeline that 
 | Component        | Technology     | Purpose                        |
 |------------------|----------------|--------------------------------|
 | CI/CD            | GitHub Actions | Automated pipeline             |
-| Versioning       | SemVer         | Release management             |
-| Packaging        | setuptools     | Package building               |
-| Registry         | PyPI           | Package distribution           |
+| Versioning       | Four-part      | MAJOR.MINOR.FEATURE.FIX tags    |
+| Packaging        | setuptools     | Local build and install        |
+| Registry         | Releases       | GitHub + GitLab mirrors        |
 
 ## Deployment Model
 
@@ -142,14 +142,14 @@ The TC-SGB-API-to-List system is an automated threat intelligence pipeline that 
 |  PR       |    -------->  |  4. Lint (ruff)  |
 |           |               |  5. Type Check   |
 |  Tag      |    -------->  |  6. Test (pytest)|
-|  v*.*.*   |               |  7. Build        |
-|           |               |  8. Publish      |
+|  v*       |               |  7. Compatibility|
+|           |               |  8. Build        |
 +-----------+               +------------------+
                                      |
                                      v
                             +------------------+
                             |                  |
-                            |  PyPI Registry   |
+                            |  GitLab mirror   |
                             |  GitHub Release  |
                             |  Artifact Upload |
                             |                  |
@@ -159,17 +159,17 @@ The TC-SGB-API-to-List system is an automated threat intelligence pipeline that 
 ### Release Flow
 
 ```
-  Developer               GitHub                  PyPI
+  Developer               GitHub                 GitLab
      |                      |                       |
      |  git push --tags     |                       |
-     |  v1.2.0              |                       |
+     |  v0.3.2.2            |                       |
      |--------------------->|                       |
      |                      |  Trigger Actions      |
      |                      |  Run Test Suite       |
      |                      |  Build Package        |
      |                      |---------------------->|
-     |                      |  twine upload         |
-     |                      |  pip install tc-sgb   |
+     |                      |  Mirror refs and      |
+     |                      |  release objects      |
      |                      |                       |
      |  Create Release      |                       |
      |  Upload Artifacts    |                       |
@@ -197,24 +197,19 @@ The TC-SGB-API-to-List system is an automated threat intelligence pipeline that 
   Event Loop (asyncio)
   +---------------------------------------------------------+
   |                                                         |
-  |  Task 1: Fetch Page 1     [=====]                      |
-  |  Task 2: Fetch Page 2     [=====]                      |
-  |  Task 3: Fetch Page 3     [=====]                      |
-  |  ...                                                    |
-  |  Task N: Fetch Page N     [=====]                      |
+  |  Fetch page 1 [=====] -> page 2 [=====] -> page N      |
   |                                                         |
-  |  Semaphore(max_concurrent=5)                            |
   |                                                         |
   +---------------------------------------------------------+
                           |
                           v
   +---------------------------------------------------------+
   |  Sequential Processing Pipeline                         |
-  |  Fetch -> Validate -> Normalize -> Dedup -> Output      |
+  |  Fetch -> Validate -> Normalize -> Quality -> Dedup -> Output |
   +---------------------------------------------------------+
 ```
 
-The system uses asyncio with bounded concurrency to respect rate limits while maximizing throughput. Pages are fetched concurrently with a semaphore limiting in-flight requests, then processed sequentially to maintain data integrity.
+The system uses an async HTTP client with a lock-guarded rate limiter and exponential backoff. Pages are fetched sequentially to respect the API limit, then processed through validation, normalization, quality scoring (including the publication safety hold) and deduplication.
 
 <a id="-türkçe"></a>
 
@@ -337,9 +332,9 @@ TC-SGB-API-to-List sistemi, T.C. Siber Güvenlik Başkanlığı kamu API'sinden 
 | Bileşen          | Teknoloji      | Amaç                            |
 |------------------|----------------|----------------------------------|
 | CI/CD            | GitHub Actions | Otomatik Hat                   |
-| Sürümleme        | SemVer         | Yayın yönetimi                   |
-| Paketleme        | setuptools     | Paket oluşturma                  |
-| Kayıt Defteri    | PyPI           | Paket dağıtımı                   |
+| Sürümleme        | Dört parçalı   | MAJOR.MINOR.FEATURE.FIX etiketleri |
+| Paketleme        | setuptools     | Yerel derleme ve kurulum         |
+| Kayıt Defteri    | Yayınlar       | GitHub + GitLab aynaları         |
 
 ## Dağıtım Modeli
 
@@ -357,14 +352,14 @@ TC-SGB-API-to-List sistemi, T.C. Siber Güvenlik Başkanlığı kamu API'sinden 
 |  PR       |    -------->  |  4. Lint (ruff)  |
 |           |               |  5. Type Check   |
 |  Tag      |    -------->  |  6. Test (pytest)|
-|  v*.*.*   |               |  7. Build        |
-|           |               |  8. Publish      |
+|  v*       |               |  7. Compatibility|
+|           |               |  8. Build        |
 +-----------+               +------------------+
                                      |
                                      v
                             +------------------+
                             |                  |
-                            |  PyPI Registry   |
+                            |  GitLab mirror   |
                             |  GitHub Release  |
                             |  Artifact Upload |
                             |                  |
@@ -374,17 +369,17 @@ TC-SGB-API-to-List sistemi, T.C. Siber Güvenlik Başkanlığı kamu API'sinden 
 ### Yayın Akışı
 
 ```
-  Developer               GitHub                  PyPI
+  Developer               GitHub                 GitLab
      |                      |                       |
      |  git push --tags     |                       |
-     |  v1.2.0              |                       |
+     |  v0.3.2.2            |                       |
      |--------------------->|                       |
      |                      |  Trigger Actions      |
      |                      |  Run Test Suite       |
      |                      |  Build Package        |
      |                      |---------------------->|
-     |                      |  twine upload         |
-     |                      |  pip install tc-sgb   |
+     |                      |  Mirror refs and      |
+     |                      |  release objects      |
      |                      |                       |
      |  Create Release      |                       |
      |  Upload Artifacts    |                       |
@@ -412,21 +407,16 @@ TC-SGB-API-to-List sistemi, T.C. Siber Güvenlik Başkanlığı kamu API'sinden 
   Event Loop (asyncio)
   +---------------------------------------------------------+
   |                                                         |
-  |  Task 1: Fetch Page 1     [=====]                      |
-  |  Task 2: Fetch Page 2     [=====]                      |
-  |  Task 3: Fetch Page 3     [=====]                      |
-  |  ...                                                    |
-  |  Task N: Fetch Page N     [=====]                      |
+  |  Fetch page 1 [=====] -> page 2 [=====] -> page N      |
   |                                                         |
-  |  Semaphore(max_concurrent=5)                            |
   |                                                         |
   +---------------------------------------------------------+
                           |
                           v
   +---------------------------------------------------------+
   |  Sequential Processing Pipeline                         |
-  |  Fetch -> Validate -> Normalize -> Dedup -> Output      |
+  |  Fetch -> Validate -> Normalize -> Quality -> Dedup -> Output |
   +---------------------------------------------------------+
 ```
 
-Sistem, verimliliği en üst düzeye çıkarırken hız sınırlamalarına uymak için sınırlı eşzamanlılık ile asyncio kullanır. Sayfalar, eşzamanlı istekleri sınırlayan bir semafor ile eşzamanlı olarak getirilir, ardından veri bütünlüğünü korumak için sıralı olarak işlenir.
+Sistem, API hız sınırına uymak için kilit ile korunan bir hız sınırlayıcı ve üstel geri çekilme kullanan asenkron bir HTTP istemcisi kullanır. Sayfalar sırayla çekilir; ardından doğrulama, normalleştirme, kalite puanlama (yayın güvenliği kontrolü dâhil) ve tekilleştirme uygulanır.

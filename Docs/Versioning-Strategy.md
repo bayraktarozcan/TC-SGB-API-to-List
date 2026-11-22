@@ -7,7 +7,7 @@
 
 ## Overview
 
-This document defines the versioning strategy for the TC-SGB-API-to-List project using Semantic Versioning (SemVer) and the associated release note conventions.
+This document describes release-note conventions and the project's version history. The canonical scheme is the four-part `MAJOR.MINOR.FEATURE.FIX` declared in `AGENTS.md` and pinned by `pyproject.toml`; the SemVer examples below are historical guidance and do not override it.
 
 ## Semantic Versioning
 
@@ -294,7 +294,7 @@ jobs:
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+and this project uses its declared four-part MAJOR.MINOR.FEATURE.FIX scheme.
 
 ## [Unreleased]
 
@@ -406,7 +406,7 @@ v2.0.0  Feature removed
 
 ## Genel Bakış
 
-Bu belge, TC-SGB-API-to-List projesi için Anlamsal Sürüm Numaralandırması (SemVer) ve ilişkili sürüm notu kurallarını kullanan sürüm numaralandırma stratejisini tanımlar.
+Bu belge, sürüm notu kurallarını ve projenin sürüm geçmişini anlatır. Geçerli şema, `AGENTS.md`'de bildirilen ve `pyproject.toml` ile sabitlenen dört parçalı `MAJOR.MINOR.FEATURE.FIX` biçimidir; aşağıdaki SemVer örnekleri tarihsel rehberdir, onu geçersiz kılmaz.
 
 ## Anlamsal Sürüm Numaralandırması
 
@@ -693,7 +693,7 @@ jobs:
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+and this project uses its declared four-part MAJOR.MINOR.FEATURE.FIX scheme.
 
 ## [Unreleased]
 

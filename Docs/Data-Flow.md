@@ -54,7 +54,7 @@ This document describes the complete data flow through the TC-SGB-API-to-List th
                               |          |     | Report   |
                               | GitHub   |     |          |
                               | Release  |     | Metrics  |
-                              | PyPI     |     | Dashboard|
+                              | GitLab   |     | Dashboard|
                               |          |     |          |
                               +----------+     +----------+
 ```
@@ -73,11 +73,11 @@ This document describes the complete data flow through the TC-SGB-API-to-List th
 |  1. Resolve API base URL                          |
 |  2. Query total record count                      |
 |  3. Calculate pagination (ceil(total/per_page))   |
-|  4. Fetch all pages concurrently (semaphore=5)    |
+|  4. Fetch pages sequentially with rate limiting   |
 |  5. Store raw responses                           |
 |                                                   |
 |  Rate Limiting:                                   |
-|  - Max 5 concurrent requests                      |
+|  - Lock-guarded rate limiting (default 5 rps)     |
 |  - Min 100ms between sequential requests          |
 |  - Exponential backoff on 429/503                 |
 |                                                   |
@@ -308,10 +308,10 @@ This document describes the complete data flow through the TC-SGB-API-to-List th
 |  | RPZ            | .zone      | DNS RPZ zone    |
 |  | Technitium     | .zone      | DNS blocking    |
 |  | MikroTik       | .rsc       | RouterOS import |
-|  | nftables       | .nft       | Firewall rules  |
+|  | nftables       | .nft       | Firewall IP sets|
 |  | ipset          | .ipset     | Kernel firewall |
-|  | Suricata       | .json      | IDS/IPS         |
-|  | CrowdSec       | .yaml      | CrowdSec        |
+|  | Suricata       | .json      | EVE SIEM export |
+|  | CrowdSec       | .json      | Decision import |
 |  | CSV            | .csv       | Spreadsheet     |
 |  | JSON           | .json      | General         |
 |  | YAML           | .yaml      | Config/CI       |
@@ -379,7 +379,7 @@ This document describes the complete data flow through the TC-SGB-API-to-List th
 |  +------------------------------------------------+
 |  | GitHub Release   | Tag push     | All formats |
 |  | GitHub Actions   | On success   | Artifacts   |
-|  | PyPI             | Tag push     | Package     |
+|  | GitLab mirror    | Tag push     | Git refs    |
 |  | Local filesystem | Always       | All formats |
 |  +------------------------------------------------+
 |                                                   |
@@ -517,7 +517,7 @@ Bu belge, TC-SGB-API-to-List tehdit istihbaratı hattındaki API alımından nih
                               |          |     | Report   |
                               | GitHub   |     |          |
                               | Release  |     | Metrics  |
-                              | PyPI     |     | Dashboard|
+                              | GitLab   |     | Dashboard|
                               |          |     |          |
                               +----------+     +----------+
 ```
@@ -536,11 +536,11 @@ Bu belge, TC-SGB-API-to-List tehdit istihbaratı hattındaki API alımından nih
 |  1. Resolve API base URL                          |
 |  2. Query total record count                      |
 |  3. Calculate pagination (ceil(total/per_page))   |
-|  4. Fetch all pages concurrently (semaphore=5)    |
+|  4. Fetch pages sequentially with rate limiting   |
 |  5. Store raw responses                           |
 |                                                   |
 |  Rate Limiting:                                   |
-|  - Max 5 concurrent requests                      |
+|  - Lock-guarded rate limiting (default 5 rps)     |
 |  - Min 100ms between sequential requests          |
 |  - Exponential backoff on 429/503                 |
 |                                                   |
@@ -771,10 +771,10 @@ Bu belge, TC-SGB-API-to-List tehdit istihbaratı hattındaki API alımından nih
 |  | RPZ            | .zone      | DNS RPZ zone    |
 |  | Technitium     | .zone      | DNS blocking    |
 |  | MikroTik       | .rsc       | RouterOS import |
-|  | nftables       | .nft       | Firewall rules  |
+|  | nftables       | .nft       | Firewall IP sets|
 |  | ipset          | .ipset     | Kernel firewall |
-|  | Suricata       | .json      | IDS/IPS         |
-|  | CrowdSec       | .yaml      | CrowdSec        |
+|  | Suricata       | .json      | EVE SIEM export |
+|  | CrowdSec       | .json      | Decision import |
 |  | CSV            | .csv       | Spreadsheet     |
 |  | JSON           | .json      | General         |
 |  | YAML           | .yaml      | Config/CI       |
@@ -842,7 +842,7 @@ Bu belge, TC-SGB-API-to-List tehdit istihbaratı hattındaki API alımından nih
 |  +------------------------------------------------+
 |  | GitHub Release   | Tag push     | All formats |
 |  | GitHub Actions   | On success   | Artifacts   |
-|  | PyPI             | Tag push     | Package     |
+|  | GitLab mirror    | Tag push     | Git refs    |
 |  | Local filesystem | Always       | All formats |
 |  +------------------------------------------------+
 |                                                   |

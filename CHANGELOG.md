@@ -18,6 +18,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 - **Action currency guards and pre-push gate** — `TestActionRefs` pins each third-party action to its upstream default branch and rejects pinned tool versions in CI files; `Scripts/pre-push` runs the local gate before a push and `Scripts/install_hooks.py` installs it with a backup of any existing hook.
 - **Live release hygiene audit** — `Scripts/check_release_hygiene.py` audits published releases on GitHub and GitLab via API (pair count, title format, bilingual structure, no garbage, cross-host byte parity, and changelog coverage of all EN/TR bullets) and runs weekly in the Hygiene workflow. GitLab is read through the public REST endpoint without a write-capable token; `glab` remains a local fallback. `TestActionRefs` now also checks ref count, full-SHA pins, image digests and documented `@master` exceptions.
 - **Convention guards and stale dependency cleanup** — `Tests/test_heading_case.py` pins heading title case with exemptions for code, paths, versions, domains and quoted output; `Tests/test_expression_boundary.py` forbids user-controlled workflow expressions in shell `run:` blocks; the release-note guard now checks TR changelog bullets too. Stale `rich` entries and pinned dependency examples were removed from architecture and publishing docs.
+- **Loadable Suricata rules and datasets** — the Suricata format now also emits a `.rules` file with documented `dns.query` + `dotprefix` + `dataset` domain matching and an `ip.dst` IPv4 dataset, while the existing EVE JSON is labeled as a synthetic SIEM export rather than a blocklist.
+- **Real-tool compatibility gate** — `Scripts/check_output_compatibility.py` exercises generated samples with `nft -c`, `unbound-checkconf`, `dnsmasq --test` and `suricata -T`, plus documented-shape checks for CrowdSec and MikroTik; it runs in both CI hosts with `--require-tools`.
+
+### Changed
+
+- **CrowdSec export is now a `cscli decisions import` JSON array** instead of nested YAML; the output extension changed from `.yaml` to `.json`.
+- **nftables output is IP-only** — the invalid `dns_name` interval set was removed; domain filtering remains in the dedicated DNS-list formats.
+- **Architecture and data-flow documentation** now describe the four-part version scheme, GitHub/GitLab release mirrors and the sequential lock-guarded fetch instead of PyPI, SemVer and semaphore-based concurrency.
+
+### Fixed
+
+- **Concurrent rate limiting** — `_rate_limit_wait()` now holds an `asyncio.Lock`, so `asyncio.gather` callers cannot issue simultaneous requests.
+- **HTTP 429 backoff** — `Retry-After` is parsed in both delay-seconds and HTTP-date forms and capped at 60 seconds before the existing exponential fallback.
 
 ## [v0.3.2.2] — 2026-11-21
 
@@ -246,6 +259,19 @@ Biçim, [Keep a Changelog](https://keepachangelog.com/)'a dayanmaktadır.
 - **Eylem güncelliği bekçileri ve pre-push kapısı** — `TestActionRefs` her üçüncü taraf eylemi yukarı akış varsayılan dalına sabitler ve CI dosyalarındaki sürüm pinlerini reddeder; `Scripts/pre-push` itmeden önce yerel kapıyı çalıştırır, `Scripts/install_hooks.py` ise mevcut hook'u yedekleyerek kurar.
 - **Canlı yayın hijyeni denetimi** — `Scripts/check_release_hygiene.py`, yayımlanmış yayınları API üzerinden GitHub ve GitLab'da denetler (çift sayısı, başlık biçimi, iki dilli yapı, çöp taraması, hostlar arası bayt eşliği ve tüm EN/TR değişiklik günlüğü maddelerinin kapsanması) ve haftalık Hygiene iş akışında çalışır. GitLab, yazma yetkili token olmadan herkese açık REST üzerinden okunur; `glab` yerel yedektir. `TestActionRefs` artık ref sayısını, tam SHA pinlerini, image digest'lerini ve belgelenmiş `@master` istisnalarını da denetler.
 - **Kural bekçileri ve bayat bağımlılık temizliği** — `Tests/test_heading_case.py` başlık büyütmesini sabitler (kod, yol, sürüm, alan adı ve alıntı çıktı muaf); `Tests/test_expression_boundary.py` kullanıcı kaynaklı workflow ifadelerinin shell `run:` bloklarına girmesini yasaklar; yayın notu bekçisi artık TR değişiklik günlüğü maddelerini de denetler. Mimari ve yayın belgelerindeki bayat `rich` girdileri ve pinli bağımlılık örnekleri kaldırıldı.
+- **Yüklenebilir Suricata kuralları ve veri kümeleri** — Suricata biçimi artık belgelenmiş `dns.query` + `dotprefix` + `dataset` alan adı eşleştirmesi ve `ip.dst` IPv4 veri kümesi içeren bir `.rules` dosyası da üretir; mevcut EVE JSON, engel listesi değil sentetik SIEM dışa aktarımı olarak adlandırıldı.
+- **Gerçek araç uyumluluk kapısı** — `Scripts/check_output_compatibility.py`, üretilen örnekleri `nft -c`, `unbound-checkconf`, `dnsmasq --test` ve `suricata -T` ile sınar; CrowdSec ve MikroTik için belgelenmiş şema denetimi yapar ve iki CI hostunda `--require-tools` ile çalışır.
+
+### Değiştirilen
+
+- **CrowdSec çıktısı artık `cscli decisions import` JSON dizisi** — iç içe YAML yerine; dosya uzantısı `.yaml`'den `.json`'a değişti.
+- **nftables çıktısı yalnızca IP** — geçersiz `dns_name` aralık kümesi kaldırıldı; alan adı filtreleme özel DNS listesi biçimlerinde kalıyor.
+- **Mimari ve veri akışı belgeleri** — dört parçalı sürüm şemasını, GitHub/GitLab yayın aynalarını ve semaphore tabanlı eşzamanlı çekme yerine sıralı, kilit korumalı çekmeyi anlatıyor.
+
+### Düzeltilen
+
+- **Eşzamanlı hız sınırlama** — `_rate_limit_wait()` artık `asyncio.Lock` tutuyor; `asyncio.gather` çağrıları aynı anda istek gönderemiyor.
+- **HTTP 429 geri çekilmesi** — `Retry-After` hem saniye hem HTTP-tarih biçiminde ayrıştırılıp 60 saniye ile sınırlandırılıyor, ardından mevcut üstel geri çekilmeye düşülüyor.
 
 ## [v0.3.2.2] — 2026-11-21
 
