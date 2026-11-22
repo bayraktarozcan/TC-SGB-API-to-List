@@ -594,8 +594,8 @@ class TestSuricataRules:
         generate_suricata_rules(scored_iocs, path=rules)
         data = (temp_dir / "threat_intel_suricata_domains.lst").read_text(encoding="utf-8")
         decoded = {base64.b64decode(line.strip()).decode() for line in data.splitlines()}
-        assert ".evil-phish.com" in decoded
-        assert ".malware-cnc.evil.net" in decoded
+        expected = {f".{ioc.value}" for ioc in scored_iocs if ioc.ioc_type == IoCType.DOMAIN}
+        assert decoded == expected
 
     def test_ip_rule_and_dataset(self, scored_iocs, temp_dir):
         rules = temp_dir / "threat_intel_suricata.rules"
