@@ -276,7 +276,7 @@ pytest -m performance --benchmark-only
 |  Fuzz:               5 passed, 0 crashes                            |
 |  Performance:        6 passed, 0 regressions                        |
 |                                                                     |
-|  Total: 848 tests, 0 failed                                          |
+|  Total: all tests pass, 0 failed                                     |
 |                                                                     |
 |  Coverage: 99% (branch)                                             |
 |                                                                     |
@@ -561,7 +561,7 @@ pytest Tests/test_validator.py::test_valid_record_passes
 |  Test Raporu Biçimi                                                  |
 +=====================================================================+
 |                                                                     |
-|  Toplam: 848 test, 0 başarısız                                     |
+|  Toplam: tüm testler geçer, 0 başarısız                            |
 |                                                                     |
 |  Kapsam: %99 (testlerin kodun her satırını çalıştırıp               |
 |  çalıştırmadığını ölçer)                                           |

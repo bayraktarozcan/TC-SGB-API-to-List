@@ -96,13 +96,15 @@ TC-SGB-API-to-List/
 │   │   ├── rpz.json
 │   │   ├── sqlite.json
 │   │   ├── suricata.json
+│   │   ├── suricata_domains.json
+│   │   ├── suricata_ips.json
 │   │   ├── technitium.json
 │   │   ├── unbound.json
 │   │   └── yaml.json
 │   ├── raw_records.json               # ⚠ Large-format files are NOT tracked in git — published to the rolling release `ioc-data`
 │   ├── threat_intel_adguard.txt
 │   ├── threat_intel_csv.csv
-│   ├── threat_intel_crowdsec.yaml
+│   ├── threat_intel_crowdsec.json
 │   ├── threat_intel_dnsmasq.conf
 │   ├── threat_intel_ipset.ipset
 │   ├── threat_intel_json.json         # ⚠ See note above (published via `ioc-data` release)
@@ -113,6 +115,9 @@ TC-SGB-API-to-List/
 │   ├── threat_intel_rpz.zone
 │   ├── threat_intel_sqlite.db         # ⚠ See note above (published via `ioc-data` release)
 │   ├── threat_intel_suricata.json     # ⚠ See note above (published via `ioc-data` release)
+│   ├── threat_intel_suricata.rules
+│   ├── threat_intel_suricata_domains.lst
+│   ├── threat_intel_suricata_ips.lst
 │   ├── threat_intel_technitium.zone
 │   ├── threat_intel_unbound.conf
 │   ├── threat_intel_yaml.yaml         # ⚠ See note above (published via `ioc-data` release)
@@ -202,7 +207,7 @@ TC-SGB-API-to-List/
 
 ### Tests (`Tests/`)
 
-Flat structure — no subdirectories. 21 files total, 848 tests, 99% coverage.
+Flat structure — no subdirectories. Test counts and coverage are read from the latest CI run; no number is pinned here.
 
 | File | Focus |
 |------|-------|
@@ -423,13 +428,15 @@ TC-SGB-API-to-List/
 │   │   ├── rpz.json
 │   │   ├── sqlite.json
 │   │   ├── suricata.json
+│   │   ├── suricata_domains.json
+│   │   ├── suricata_ips.json
 │   │   ├── technitium.json
 │   │   ├── unbound.json
 │   │   └── yaml.json
 │   ├── raw_records.json               # ⚠ Büyük biçim dosyaları git'te İZLENMEZ — `ioc-data` yuvarlanan release'i ile yayınlanır
 │   ├── threat_intel_adguard.txt
 │   ├── threat_intel_csv.csv
-│   ├── threat_intel_crowdsec.yaml
+│   ├── threat_intel_crowdsec.json
 │   ├── threat_intel_dnsmasq.conf
 │   ├── threat_intel_ipset.ipset
 │   ├── threat_intel_json.json         # ⚠ Yukarıdaki nota bakın (`ioc-data` release'i ile yayınlanır)
@@ -440,6 +447,9 @@ TC-SGB-API-to-List/
 │   ├── threat_intel_rpz.zone
 │   ├── threat_intel_sqlite.db         # ⚠ Yukarıdaki nota bakın (`ioc-data` release'i ile yayınlanır)
 │   ├── threat_intel_suricata.json     # ⚠ Yukarıdaki nota bakın (`ioc-data` release'i ile yayınlanır)
+│   ├── threat_intel_suricata.rules
+│   ├── threat_intel_suricata_domains.lst
+│   ├── threat_intel_suricata_ips.lst
 │   ├── threat_intel_technitium.zone
 │   ├── threat_intel_unbound.conf
 │   ├── threat_intel_yaml.yaml         # ⚠ Yukarıdaki nota bakın (`ioc-data` release'i ile yayınlanır)
@@ -529,7 +539,7 @@ TC-SGB-API-to-List/
 
 ### Testler (`Tests/`)
 
-Düz yapı — alt dizin yok. Toplam 21 dosya, 848 test, %99 kapsama.
+Düz yapı — alt dizin yok. Test sayısı ve kapsama son CI çalışmasından okunur; burada sayı sabitlenmez.
 
 | Dosya | Odak |
 |-------|------|
