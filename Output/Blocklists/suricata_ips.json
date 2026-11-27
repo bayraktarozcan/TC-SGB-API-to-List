@@ -1,10 +1,10 @@
 {
-  "bytes": 241120,
+  "bytes": 241457,
   "extension": ".lst",
   "file": "threat_intel_suricata_ips.lst",
   "format": "suricata_ips",
   "raw_url": "https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/download/ioc-data/threat_intel_suricata_ips.lst",
   "release_tag": "ioc-data",
-  "sha256": "fc23ee8b60132b81220ea3c5ced283fc713ad378a78769110645fea5ea10d771",
+  "sha256": "8dcaed092c2eac0d87e9b0d5a8113c779e6f4ae50613ac5631d4a25907c80fd1",
   "title": "Suricata IP dataset"
 }

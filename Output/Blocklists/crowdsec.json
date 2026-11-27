@@ -1,10 +1,10 @@
 {
-  "bytes": 2156350,
+  "bytes": 2159399,
   "extension": ".json",
   "file": "threat_intel_crowdsec.json",
   "format": "crowdsec",
   "raw_url": "https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/download/ioc-data/threat_intel_crowdsec.json",
   "release_tag": "ioc-data",
-  "sha256": "cce3cf02cad6679215215177444a949f57ab9fe6805dfc7f1c0a6f2a293a9fe7",
+  "sha256": "9a73af1bf24d15593234bf1e2ee2206d22fe73153ac1a924162c043f66115703",
   "title": "CrowdSec decisions import (JSON)"
 }
