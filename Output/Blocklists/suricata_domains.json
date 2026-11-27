@@ -1,10 +1,10 @@
 {
-  "bytes": 15612599,
+  "bytes": 15628153,
   "extension": ".lst",
   "file": "threat_intel_suricata_domains.lst",
   "format": "suricata_domains",
   "raw_url": "https://github.com/bayraktarozcan/TC-SGB-API-to-List/releases/download/ioc-data/threat_intel_suricata_domains.lst",
   "release_tag": "ioc-data",
-  "sha256": "b0e04ad8c9ca4a4cf169ca1e638f8fbb165881e880b1a73a26d17c54e295df5c",
+  "sha256": "758ac5fc6498726df511e1c43f8a4ca3879fc55d44d5c9d73e190940919dbd7f",
   "title": "Suricata domain dataset"
 }
